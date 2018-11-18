@@ -1,0 +1,327 @@
+
+obj/windows_gcc/Array/Array.o: src/Array/Array.cpp
+
+obj/windows_gcc/Array/Array_SmallestPositiveIntNotPresentInArray.o: src/Array/Array_SmallestPositiveIntNotPresentInArray.cpp \
+ src/Array/Array_SmallestPositiveIntNotPresentInArray.h \
+ ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/Array/Array_SortArrayUsingSingleSwap.o: src/Array/Array_SortArrayUsingSingleSwap.cpp \
+ src/Array/Array_SmallestPositiveIntNotPresentInArray.h \
+ ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ ../MM_CommonUtils/src/Assert/MyAssert.h
+
+obj/windows_gcc/Backtracking/Backtracking.o: src/Backtracking/Backtracking.cpp
+
+obj/windows_gcc/Binary/Binary_ReverseBits.o: src/Binary/Binary_ReverseBits.cpp \
+ src/Binary/Binary_ReverseBits.h \
+ ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/Binary/Binary_Toggle1bitForMaxAdjacency.o: src/Binary/Binary_Toggle1bitForMaxAdjacency.cpp \
+ src/Array/Array_SmallestPositiveIntNotPresentInArray.h \
+ ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/BinarySearchTree_BST/BST_CheckIfPreorderTraversalIsBST.o: src/BinarySearchTree_BST/BST_CheckIfPreorderTraversalIsBST.cpp \
+ src/BinarySearchTree_BST/BST_CheckIfPreorderTraversalIsBST.h \
+ ../MM_CommonUtils/src/Others\PrintUtils.h \
+ ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/BinaryTree/BinaryTree_BuildFromArrayRepresentation.o: src/BinaryTree/BinaryTree_BuildFromArrayRepresentation.cpp \
+ src/BinaryTree/BinaryTree_BuildFromArrayRepresentation.h \
+ src/BinaryTree\BinaryTree_TestData.h \
+ ../MM_CommonUtils/src/Others\PrintUtils.h \
+ ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/BinaryTree/BinaryTree_MaxTree.o: src/BinaryTree/BinaryTree_MaxTree.cpp \
+ src/BinaryTree/BinaryTree_MaxTree.h \
+ ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ ../MM_CommonUtils/src/Others/PrintUtils.h
+
+obj/windows_gcc/BinaryTree/BinaryTree_TestData.o: src/BinaryTree/BinaryTree_TestData.cpp \
+ src/Binary/Binary_ReverseBits.h \
+ ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/BinaryTree/BinaryTree_Traversals.o: src/BinaryTree/BinaryTree_Traversals.cpp \
+ src/Binary/Binary_ReverseBits.h \
+ ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/DivideAndConquer/DivideAndConquer.o: src/DivideAndConquer/DivideAndConquer.cpp
+
+obj/windows_gcc/DivideAndConquer/DivideAndConquer_BinarySearch.o: src/DivideAndConquer/DivideAndConquer_BinarySearch.cpp \
+ src/DivideAndConquer/DivideAndConquer_BinarySearch.h \
+ ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/DynamicProgramming/DP_CoinChangeMakingProblem.o: src/DynamicProgramming/DP_CoinChangeMakingProblem.cpp \
+ src/DynamicProgramming/DP_CoinChangeMakingProblem.h \
+ ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/DynamicProgramming/DP_Fibonacci.o: src/DynamicProgramming/DP_Fibonacci.cpp \
+ src/DynamicProgramming/DP_Fibonacci.h
+
+obj/windows_gcc/DynamicProgramming/DP_Fibonacci_UnitTests.o: src/DynamicProgramming/DP_Fibonacci_UnitTests.cpp \
+ src/DynamicProgramming/DP_Fibonacci.h \
+ ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/DynamicProgramming/DP_HouseRobbery.o: src/DynamicProgramming/DP_HouseRobbery.cpp \
+ ../MM_CommonUtils/src/my_math_lib/Permutations.h \
+ src/DynamicProgramming/DP_HouseRobbery.h
+
+obj/windows_gcc/DynamicProgramming/DP_HouseRobbery_UnitTests.o: src/DynamicProgramming/DP_HouseRobbery_UnitTests.cpp \
+ ../MM_CommonUtils/src/my_math_lib/Permutations.h \
+ src/DynamicProgramming/DP_HouseRobbery.h \
+ ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/DynamicProgramming/DP_KnapsackProblem_0_1.o: src/DynamicProgramming/DP_KnapsackProblem_0_1.cpp \
+ ../MM_CommonUtils/src/Others/PrintUtils.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
+ ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ ../MM_CommonUtils/src/Assert/MyAssert.h
+
+obj/windows_gcc/DynamicProgramming/DP_LongestCommonSubsequenceLength.o: src/DynamicProgramming/DP_LongestCommonSubsequenceLength.cpp \
+ src/DynamicProgramming/DP_LongestCommonSubsequenceLength.h \
+ src/DynamicProgramming/DP_Common.h \
+ ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/DynamicProgramming/DP_LongestCommonSubsequenceLengthOfkStrings.o: src/DynamicProgramming/DP_LongestCommonSubsequenceLengthOfkStrings.cpp \
+ src/DynamicProgramming/DP_LongestCommonSubsequenceLengthOfkStrings.h \
+ src/DynamicProgramming/DP_Common.h \
+ ../MM_CommonUtils/src/Others\PrintUtils.h \
+ ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/DynamicProgramming/DP_LongestCommonSubsequenceString.o: src/DynamicProgramming/DP_LongestCommonSubsequenceString.cpp \
+ src/DynamicProgramming/DP_LongestCommonSubsequenceString.h \
+ src/DynamicProgramming/DP_Common.h \
+ ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/DynamicProgramming/DP_LongestCommonSubsequenceString2.o: src/DynamicProgramming/DP_LongestCommonSubsequenceString2.cpp \
+ src/DynamicProgramming/DP_LongestCommonSubsequenceString2.h \
+ src/DynamicProgramming/DP_Common.h \
+ ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/DynamicProgramming/DP_LongestCommonSubsequenceStringsAll.o: src/DynamicProgramming/DP_LongestCommonSubsequenceStringsAll.cpp \
+ src/DynamicProgramming/DP_LongestCommonSubsequenceStringsAll.h \
+ src/DynamicProgramming/DP_Common.h \
+ ../MM_CommonUtils/src/Others\PrintUtils.h \
+ ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/DynamicProgramming/DP_LongestCommonSubstring.o: src/DynamicProgramming/DP_LongestCommonSubstring.cpp \
+ src/DynamicProgramming/DP_Common.h \
+ src/DynamicProgramming/DP_LongestCommonSubstring.h \
+ ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/DynamicProgramming/DP_MaxProductRodCutting.o: src/DynamicProgramming/DP_MaxProductRodCutting.cpp \
+ src/DynamicProgramming/DP_MaxProductRodCutting.h \
+ ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/DynamicProgramming/DP_MaxSumSequence.o: src/DynamicProgramming/DP_MaxSumSequence.cpp \
+ ../MM_CommonUtils/src/my_math_lib/Permutations.h \
+ src/DynamicProgramming/DP_MaxSumSequence.h
+
+obj/windows_gcc/DynamicProgramming/DP_RodCutting.o: src/DynamicProgramming/DP_RodCutting.cpp \
+ src/DynamicProgramming/DP_RodCutting.h \
+ ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/DynamicProgramming/DP_WaysToClimbNSteps.o: src/DynamicProgramming/DP_WaysToClimbNSteps.cpp \
+ ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/Graphs/Graphs.o: src/Graphs/Graphs.cpp
+
+obj/windows_gcc/Greedy/Greedy.o: src/Greedy/Greedy.cpp
+
+obj/windows_gcc/Heap/Heap_FindTopkElements.o: src/Heap/Heap_FindTopkElements.cpp
+
+obj/windows_gcc/Heap/Heap_FirstKMaximumOccurringWords.o: src/Heap/Heap_FirstKMaximumOccurringWords.cpp
+
+obj/windows_gcc/Heap/Heap_FirstKNonRepeatingChars.o: src/Heap/Heap_FirstKNonRepeatingChars.cpp
+
+obj/windows_gcc/LinkedList/LinkedList_AddNumbersInLinkListForm.o: src/LinkedList/LinkedList_AddNumbersInLinkListForm.cpp \
+ src/LinkedList/LinkedList_AddNumbersInLinkListForm.h \
+ ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/LinkedList/LinkedList_ReverseSingleLinkedList.o: src/LinkedList/LinkedList_ReverseSingleLinkedList.cpp \
+ src/LinkedList/LinkedList_ReverseSingleLinkedList.h \
+ ../MM_CommonUtils/src/Others/PrintUtils.h \
+ ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/Matrix/Matrix.o: src/Matrix/Matrix.cpp
+
+obj/windows_gcc/Others/Others_BigIntegerMultiplicationTest.o: src/Others/Others_BigIntegerMultiplicationTest.cpp \
+ src/Others\Others_BigIntegerMultiplicationTestData.h \
+ src/Others\Others_BigIntegerMultiplication_v1.h \
+ src/Others\Others_BigIntegerMultiplication_v2.h \
+ src/Others\Others_BigIntegerMultiplication_v3.h \
+ src/Others\Others_BigIntegerMultiplication_v4.h \
+ src/Others\Others_BigIntegerMultiplication_v5.h \
+ src/Others\Others_BigIntegerMultiplication_v6.h \
+ src/Others\Others_BigIntegerMultiplication_v7.h \
+ ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/Others/Others_BigIntegerMultiplication_v1.o: src/Others/Others_BigIntegerMultiplication_v1.cpp \
+ src/Others\Others_BigIntegerMultiplication_v1.h
+
+obj/windows_gcc/Others/Others_BigIntegerMultiplication_v2.o: src/Others/Others_BigIntegerMultiplication_v2.cpp \
+ src/Others\Others_BigIntegerMultiplication_v2.h
+
+obj/windows_gcc/Others/Others_BigIntegerMultiplication_v3.o: src/Others/Others_BigIntegerMultiplication_v3.cpp \
+ src/Others\Others_BigIntegerMultiplication_v3.h
+
+obj/windows_gcc/Others/Others_BigIntegerMultiplication_v4.o: src/Others/Others_BigIntegerMultiplication_v4.cpp \
+ src/Others\Others_BigIntegerMultiplication_v4.h
+
+obj/windows_gcc/Others/Others_BigIntegerMultiplication_v5.o: src/Others/Others_BigIntegerMultiplication_v5.cpp \
+ src/Others\Others_BigIntegerMultiplication_v5.h
+
+obj/windows_gcc/Others/Others_BigIntegerMultiplication_v6.o: src/Others/Others_BigIntegerMultiplication_v6.cpp \
+ src/Others\Others_BigIntegerMultiplication_v6.h
+
+obj/windows_gcc/Others/Others_BigIntegerMultiplication_v7.o: src/Others/Others_BigIntegerMultiplication_v7.cpp \
+ src/Others\Others_BigIntegerMultiplication_v7.h
+
+obj/windows_gcc/Others/Others_CheckIfNumberIsPalindrom.o: src/Others/Others_CheckIfNumberIsPalindrom.cpp \
+ src/Others/Others_CheckIfNumberIsPalindrom.h \
+ ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/Others/Others_Date.o: src/Others/Others_Date.cpp src/Others/Others_Date.h \
+ ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/Others/Others_EquityOrderManagementSystemTest.o: src/Others/Others_EquityOrderManagementSystemTest.cpp \
+ ../MM_CommonUtils/src/Others/PrintUtils.h \
+ ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ src/Others/Others_EquityOrderManagementSystemTestData.h \
+ src/Others/Others_EquityOrderManagementSystemTestDataGenerator.h \
+ src/Others\Others_EquityOrderManagementSystem_v1a.h \
+ ../MM_CommonUtils/src/Assert/MyAssert.h \
+ src/Others/Others_EquityOrderManagementSystemTestDataReader.h \
+ src/Others/Others_EquityOrderManagementSystem_v1b.h \
+ src/Others/Others_EquityOrderManagementSystem_v1c.h \
+ src/Others/Others_EquityOrderManagementSystem_v2a.h \
+ src/Others/Others_EquityOrderManagementSystem_v3a.h \
+ src/Others/Others_EquityOrderManagementSystem_v3b.h \
+ src/Others/Others_EquityOrderManagementSystem_v3c.h \
+ src/Others/Others_EquityOrderManagementSystem_v4a.h \
+ src/Others/Others_EquityOrderManagementSystem_v4b.h \
+ src/Others/Others_EquityOrderManagementSystem_v4c.h \
+ src/Others/Others_EquityOrderManagementSystem_v4d.h \
+ src/Others/Others_EquityOrderManagementSystem_v4e.h \
+ src/Others/Others_EquityOrderManagementSystem_v4f.h \
+ src/Others/Others_EquityOrderManagementSystem_v4g.h
+
+obj/windows_gcc/Others/Others_EquityOrderManagementSystemTestData.o: src/Others/Others_EquityOrderManagementSystemTestData.cpp \
+ src/Others/Others_EquityOrderManagementSystemTestData.h
+
+obj/windows_gcc/Others/Others_EquityOrderManagementSystem_v1a.o: src/Others/Others_EquityOrderManagementSystem_v1a.cpp \
+ ../MM_CommonUtils/src/Assert/MyAssert.h \
+ src/Others\Others_EquityOrderManagementSystem_v1a.h
+
+obj/windows_gcc/Others/Others_EquityOrderManagementSystem_v1b.o: src/Others/Others_EquityOrderManagementSystem_v1b.cpp \
+ ../MM_CommonUtils/src/Assert/MyAssert.h \
+ src/Others\Others_EquityOrderManagementSystem_v1b.h
+
+obj/windows_gcc/Others/Others_EquityOrderManagementSystem_v1c.o: src/Others/Others_EquityOrderManagementSystem_v1c.cpp \
+ ../MM_CommonUtils/src/Assert/MyAssert.h \
+ src/Others\Others_EquityOrderManagementSystem_v1c.h
+
+obj/windows_gcc/Others/Others_EquityOrderManagementSystem_v2a.o: src/Others/Others_EquityOrderManagementSystem_v2a.cpp \
+ ../MM_CommonUtils/src/Assert/MyAssert.h \
+ src/Others\Others_EquityOrderManagementSystem_v2a.h
+
+obj/windows_gcc/Others/Others_EquityOrderManagementSystem_v3a.o: src/Others/Others_EquityOrderManagementSystem_v3a.cpp \
+ ../MM_CommonUtils/src/Assert/MyAssert.h \
+ src/Others\Others_EquityOrderManagementSystem_v3a.h \
+ src/Others/Others_EquityOrderManagementSystemTestData.h
+
+obj/windows_gcc/Others/Others_EquityOrderManagementSystem_v3b.o: src/Others/Others_EquityOrderManagementSystem_v3b.cpp \
+ ../MM_CommonUtils/src/Assert/MyAssert.h \
+ src/Others\Others_EquityOrderManagementSystem_v3b.h \
+ src/Others/Others_EquityOrderManagementSystemTestData.h
+
+obj/windows_gcc/Others/Others_EquityOrderManagementSystem_v3c.o: src/Others/Others_EquityOrderManagementSystem_v3c.cpp \
+ ../MM_CommonUtils/src/Assert/MyAssert.h \
+ src/Others\Others_EquityOrderManagementSystem_v3c.h \
+ src/Others/Others_EquityOrderManagementSystemTestData.h
+
+obj/windows_gcc/Others/Others_EquityOrderManagementSystem_v4a.o: src/Others/Others_EquityOrderManagementSystem_v4a.cpp \
+ ../MM_CommonUtils/src/Assert/MyAssert.h \
+ src/Others\Others_EquityOrderManagementSystem_v4a.h \
+ src/Others/Others_EquityOrderManagementSystemTestData.h
+
+obj/windows_gcc/Others/Others_EquityOrderManagementSystem_v4b.o: src/Others/Others_EquityOrderManagementSystem_v4b.cpp \
+ ../MM_CommonUtils/src/Assert/MyAssert.h \
+ src/Others\Others_EquityOrderManagementSystem_v4b.h \
+ src/Others/Others_EquityOrderManagementSystemTestData.h
+
+obj/windows_gcc/Others/Others_EquityOrderManagementSystem_v4c.o: src/Others/Others_EquityOrderManagementSystem_v4c.cpp \
+ ../MM_CommonUtils/src/Assert/MyAssert.h \
+ src/Others\Others_EquityOrderManagementSystem_v4c.h \
+ src/Others/Others_EquityOrderManagementSystemTestData.h
+
+obj/windows_gcc/Others/Others_EquityOrderManagementSystem_v4d.o: src/Others/Others_EquityOrderManagementSystem_v4d.cpp \
+ ../MM_CommonUtils/src/Assert/MyAssert.h \
+ src/Others\Others_EquityOrderManagementSystem_v4d.h \
+ src/Others/Others_EquityOrderManagementSystemTestData.h
+
+obj/windows_gcc/Others/Others_EquityOrderManagementSystem_v4e.o: src/Others/Others_EquityOrderManagementSystem_v4e.cpp \
+ ../MM_CommonUtils/src/Assert/MyAssert.h \
+ src/Others\Others_EquityOrderManagementSystem_v4e.h \
+ src/Others/Others_EquityOrderManagementSystemTestData.h
+
+obj/windows_gcc/Others/Others_EquityOrderManagementSystem_v4f.o: src/Others/Others_EquityOrderManagementSystem_v4f.cpp \
+ ../MM_CommonUtils/src/Assert/MyAssert.h \
+ src/Others\Others_EquityOrderManagementSystem_v4f.h \
+ src/Others/Others_EquityOrderManagementSystemTestData.h
+
+obj/windows_gcc/Others/Others_EquityOrderManagementSystem_v4g.o: src/Others/Others_EquityOrderManagementSystem_v4g.cpp \
+ ../MM_CommonUtils/src/Assert/MyAssert.h \
+ src/Others\Others_EquityOrderManagementSystem_v4g.h \
+ src/Others/Others_EquityOrderManagementSystemTestData.h
+
+obj/windows_gcc/Others/Others_FixedPriceInstrumentsPricing.o: src/Others/Others_FixedPriceInstrumentsPricing.cpp \
+ src/Others/Others_FixedPriceInstrumentsPricing.h \
+ ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ ../MM_CommonUtils/src/Assert/MyAssert.h
+
+obj/windows_gcc/Others/Others_MaxProfitFromShareTrade.o: src/Others/Others_MaxProfitFromShareTrade.cpp \
+ src/Others/Others_MaxProfitFromShareTrade.h \
+ ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/Others/Others_SingleElevator.o: src/Others/Others_SingleElevator.cpp \
+ src/Others/Others_SingleElevator.h \
+ ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/Others/Others_StockPriceHistory_v1.o: src/Others/Others_StockPriceHistory_v1.cpp \
+ src/Others/Others_StockPriceHistory_v1.h \
+ ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/Puzzles/Puzzles_15_TowerOfHanoi.o: src/Puzzles/Puzzles_15_TowerOfHanoi.cpp
+
+obj/windows_gcc/Puzzles/Puzzles_AddTwoNumbers.o: src/Puzzles/Puzzles_AddTwoNumbers.cpp \
+ src/Puzzles/Puzzles_AddTwoNumbers.h
+
+obj/windows_gcc/Puzzles/Puzzles_ClockAngleProblem.o: src/Puzzles/Puzzles_ClockAngleProblem.cpp \
+ src/Puzzles/Puzzles_ClockAngleProblem.h
+
+obj/windows_gcc/Puzzles/Puzzles_FindHeavierAmongNBalls.o: src/Puzzles/Puzzles_FindHeavierAmongNBalls.cpp
+
+obj/windows_gcc/Queue/Queue.o: src/Queue/Queue.cpp
+
+obj/windows_gcc/Sorting/Sorting.o: src/Sorting/Sorting.cpp
+
+obj/windows_gcc/Stack/Stack.o: src/Stack/Stack.cpp
+
+obj/windows_gcc/String/String_FirstKNonRepeatingChars.o: src/String/String_FirstKNonRepeatingChars.cpp \
+ src/String/String_FirstKNonRepeatingChars.h \
+ ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/ToBeArranged.o: src/ToBeArranged.cpp
+
+obj/windows_gcc/Trie/Trie_implementationUsingArray.o: src/Trie/Trie_implementationUsingArray.cpp \
+ src/Trie/Trie_implementationUsingArray.h \
+ ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/Trie/Trie_implementationUsingHashMap.o: src/Trie/Trie_implementationUsingHashMap.cpp \
+ src/Trie/Trie_implementationUsingHashMap.h \
+ ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/_MM_Algorithms_main.o: src/_MM_Algorithms_main.cpp \
+ ../MM_CommonUtils/src/WindowsUtils/WindowsUtils.h \
+ ../MM_CommonUtils/src/Timer/Timer.h \
+ ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h

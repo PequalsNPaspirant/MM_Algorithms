@@ -1,0 +1,357 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1_testDataGenerator.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1_test.cpp" />
+    <ClCompile Include="..\..\..\..\src\Others\Others_EquityOrderManagementSystem_v4g.cpp" />
+    <ClCompile Include="..\..\..\..\src\Others\Others_EquityOrderManagementSystem_v4f.cpp" />
+    <ClCompile Include="..\..\..\..\src\Others\Others_EquityOrderManagementSystem_v4e.cpp" />
+    <ClCompile Include="..\..\..\..\src\Others\Others_EquityOrderManagementSystem_v1c.cpp" />
+    <ClCompile Include="..\..\..\..\src\Others\Others_EquityOrderManagementSystem_v2a.cpp" />
+    <ClCompile Include="..\..\..\..\src\Others\Others_EquityOrderManagementSystem_v4d.cpp" />
+    <ClCompile Include="..\..\..\..\src\Others\Others_EquityOrderManagementSystem_v4c.cpp" />
+    <ClCompile Include="..\..\..\..\src\Others\Others_EquityOrderManagementSystem_v3c.cpp" />
+    <ClCompile Include="..\..\..\..\src\Others\Others_EquityOrderManagementSystem_v3a.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1.cpp" />
+    <ClCompile Include="..\..\..\..\src\Others\Others_EquityOrderManagementSystem_v4a.cpp" />
+    <ClCompile Include="..\..\..\..\src\Others\Others_EquityOrderManagementSystem_v4b.cpp" />
+    <ClCompile Include="..\..\..\..\src\Others\Others_EquityOrderManagementSystemTestData.cpp" />
+    <ClCompile Include="..\..\..\..\src\Others\Others_EquityOrderManagementSystem_v1b.cpp" />
+    <ClCompile Include="..\..\..\..\src\Others\Others_EquityOrderManagementSystem_v3b.cpp" />
+    <ClCompile Include="..\..\..\..\src\Others\Others_EquityOrderManagementSystemTest.cpp" />
+    <ClCompile Include="..\..\..\..\src\Others\Others_EquityOrderManagementSystem_v1a.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_LongestCommonSubsequenceLengthOfkStrings.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_LongestCommonSubsequenceStringsAll.cpp" />
+    <ClCompile Include="..\..\..\..\src\Others\Others_BigIntegerMultiplicationTest.cpp" />
+    <ClCompile Include="..\..\..\..\src\Others\Others_BigIntegerMultiplication_v2.cpp" />
+    <ClCompile Include="..\..\..\..\src\Others\Others_BigIntegerMultiplication_v3.cpp" />
+    <ClCompile Include="..\..\..\..\src\Others\Others_BigIntegerMultiplication_v4.cpp" />
+    <ClCompile Include="..\..\..\..\src\Others\Others_BigIntegerMultiplication_v5.cpp" />
+    <ClCompile Include="..\..\..\..\src\Others\Others_BigIntegerMultiplication_v6.cpp" />
+    <ClCompile Include="..\..\..\..\src\Others\Others_BigIntegerMultiplication_v7.cpp" />
+    <ClCompile Include="..\..\..\..\src\Others\Others_BigIntegerMultiplication_v1.cpp" />
+    <ClCompile Include="..\..\..\..\src\Trie\Trie_implementationUsingArray.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_LongestCommonSubsequenceString2.cpp" />
+    <ClCompile Include="..\..\..\..\src\Array\Array.cpp" />
+    <ClCompile Include="..\..\..\..\src\BinaryTree\BinaryTree_BuildFromArrayRepresentation.cpp" />
+    <ClCompile Include="..\..\..\..\src\BinaryTree\BinaryTree_TestData.cpp" />
+    <ClCompile Include="..\..\..\..\src\Heap\Heap_FindTopkElements.cpp" />
+    <ClCompile Include="..\..\..\..\src\Heap\Heap_FirstKMaximumOccurringWords.cpp" />
+    <ClCompile Include="..\..\..\..\src\Heap\Heap_FirstKNonRepeatingChars.cpp" />
+    <ClCompile Include="..\..\..\..\src\LinkedList\LinkedList_AddNumbersInLinkListForm.cpp" />
+    <ClCompile Include="..\..\..\..\src\LinkedList\LinkedList_ReverseSingleLinkedList.cpp" />
+    <ClCompile Include="..\..\..\..\src\Others\Others_Date.cpp" />
+    <ClCompile Include="..\..\..\..\src\Puzzles\Puzzles_15_TowerOfHanoi.cpp" />
+    <ClCompile Include="..\..\..\..\src\Puzzles\Puzzles_FindHeavierAmongNBalls.cpp" />
+    <ClCompile Include="..\..\..\..\src\Sorting\Sorting.cpp" />
+    <ClCompile Include="..\..\..\..\src\ToBeArranged.cpp" />
+    <ClCompile Include="..\..\..\..\src\Others\Others_CheckIfNumberIsPalindrom.cpp" />
+    <ClCompile Include="..\..\..\..\src\Others\Others_FixedPriceInstrumentsPricing.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_Fibonacci.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_Fibonacci_UnitTests.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_HouseRobbery.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_HouseRobbery_UnitTests.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_LongestCommonSubsequenceString.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_MaxSumSequence.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_WaysToClimbNSteps.cpp" />
+    <ClCompile Include="..\..\..\..\src\Others\Others_SingleElevator.cpp" />
+    <ClCompile Include="..\..\..\..\src\BinaryTree\BinaryTree_MaxTree.cpp" />
+    <ClCompile Include="..\..\..\..\src\Others\Others_MaxProfitFromShareTrade.cpp" />
+    <ClCompile Include="..\..\..\..\src\Others\Others_StockPriceHistory_v1.cpp" />
+    <ClCompile Include="..\..\..\..\src\Backtracking\Backtracking.cpp" />
+    <ClCompile Include="..\..\..\..\src\BinarySearchTree_BST\BST_CheckIfPreorderTraversalIsBST.cpp" />
+    <ClCompile Include="..\..\..\..\src\BinaryTree\BinaryTree_Traversals.cpp" />
+    <ClCompile Include="..\..\..\..\src\Binary\Binary_ReverseBits.cpp" />
+    <ClCompile Include="..\..\..\..\src\DivideAndConquer\DivideAndConquer.cpp" />
+    <ClCompile Include="..\..\..\..\src\DivideAndConquer\DivideAndConquer_BinarySearch.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_LongestCommonSubsequenceLength.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_LongestCommonSubstring.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_RodCutting.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_MaxProductRodCutting.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_CoinChangeMakingProblem.cpp" />
+    <ClCompile Include="..\..\..\..\src\Graphs\Graphs.cpp" />
+    <ClCompile Include="..\..\..\..\src\Greedy\Greedy.cpp" />
+    <ClCompile Include="..\..\..\..\src\Matrix\Matrix.cpp" />
+    <ClCompile Include="..\..\..\..\src\Puzzles\Puzzles_ClockAngleProblem.cpp" />
+    <ClCompile Include="..\..\..\..\src\Puzzles\Puzzles_AddTwoNumbers.cpp" />
+    <ClCompile Include="..\..\..\..\src\Queue\Queue.cpp" />
+    <ClCompile Include="..\..\..\..\src\Stack\Stack.cpp" />
+    <ClCompile Include="..\..\..\..\src\String\String_FirstKNonRepeatingChars.cpp" />
+    <ClCompile Include="..\..\..\..\src\Trie\Trie_implementationUsingHashMap.cpp" />
+    <ClCompile Include="..\..\..\..\src\_MM_Algorithms_main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1_testDataGenerator.h" />
+    <ClInclude Include="..\..\..\..\src\Others\Others_EquityOrderManagementSystem_v4g.h" />
+    <ClInclude Include="..\..\..\..\src\Others\Others_EquityOrderManagementSystem_v4f.h" />
+    <ClInclude Include="..\..\..\..\src\Others\Others_EquityOrderManagementSystem_v4e.h" />
+    <ClInclude Include="..\..\..\..\src\Others\Others_EquityOrderManagementSystem_v1c.h" />
+    <ClInclude Include="..\..\..\..\src\Others\Others_EquityOrderManagementSystem_v2a.h" />
+    <ClInclude Include="..\..\..\..\src\Others\Others_EquityOrderManagementSystem_v4d.h" />
+    <ClInclude Include="..\..\..\..\src\Others\Others_EquityOrderManagementSystem_v4c.h" />
+    <ClInclude Include="..\..\..\..\src\Others\Others_EquityOrderManagementSystem_v3c.h" />
+    <ClInclude Include="..\..\..\..\src\Others\Others_EquityOrderManagementSystem_v3a.h" />
+    <ClInclude Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1.h" />
+    <ClInclude Include="..\..\..\..\src\Others\Others_EquityOrderManagementSystem_v4a.h" />
+    <ClInclude Include="..\..\..\..\src\Others\Others_EquityOrderManagementSystem_v4b.h" />
+    <ClInclude Include="..\..\..\..\src\Others\Others_EquityOrderManagementSystemTestData.h" />
+    <ClInclude Include="..\..\..\..\src\Others\Others_EquityOrderManagementSystemTestDataGenerator.h" />
+    <ClInclude Include="..\..\..\..\src\Others\Others_EquityOrderManagementSystem_v1b.h" />
+    <ClInclude Include="..\..\..\..\src\Others\Others_EquityOrderManagementSystem_v3b.h" />
+    <ClInclude Include="..\..\..\..\src\Others\Others_EquityOrderManagementSystemTestDataReader.h" />
+    <ClInclude Include="..\..\..\..\src\Others\Others_EquityOrderManagementSystem_v1a.h" />
+    <ClInclude Include="..\..\..\..\src\DynamicProgramming\DP_LongestCommonSubsequenceLengthOfkStrings.h" />
+    <ClInclude Include="..\..\..\..\src\DynamicProgramming\DP_LongestCommonSubsequenceStringsAll.h" />
+    <ClInclude Include="..\..\..\..\src\Others\Others_BigIntegerMultiplicationTestData.h" />
+    <ClInclude Include="..\..\..\..\src\Others\Others_BigIntegerMultiplication_v2.h" />
+    <ClInclude Include="..\..\..\..\src\Others\Others_BigIntegerMultiplication_v3.h" />
+    <ClInclude Include="..\..\..\..\src\Others\Others_BigIntegerMultiplication_v4.h" />
+    <ClInclude Include="..\..\..\..\src\Others\Others_BigIntegerMultiplication_v5.h" />
+    <ClInclude Include="..\..\..\..\src\Others\Others_BigIntegerMultiplication_v6.h" />
+    <ClInclude Include="..\..\..\..\src\Others\Others_BigIntegerMultiplication_v7.h" />
+    <ClInclude Include="..\..\..\..\src\Others\Others_BigIntegerMultiplication_v1.h" />
+    <ClInclude Include="..\..\..\..\src\Trie\Trie_implementationUsingArray.h" />
+    <ClInclude Include="..\..\..\..\src\DynamicProgramming\DP_LongestCommonSubsequenceString2.h" />
+    <ClInclude Include="..\..\..\..\src\Array\Array.h" />
+    <ClInclude Include="..\..\..\..\src\BinaryTree\BinaryTree_BuildFromArrayRepresentation.h" />
+    <ClInclude Include="..\..\..\..\src\BinaryTree\BinaryTree_TestData.h" />
+    <ClInclude Include="..\..\..\..\src\Heap\Heap_FindTopkElements.h" />
+    <ClInclude Include="..\..\..\..\src\Heap\Heap_FirstKMaximumOccurringWords.h" />
+    <ClInclude Include="..\..\..\..\src\Heap\Heap_FirstKNonRepeatingChars.h" />
+    <ClInclude Include="..\..\..\..\src\LinkedList\LinkedList_AddNumbersInLinkListForm.h" />
+    <ClInclude Include="..\..\..\..\src\LinkedList\LinkedList_ReverseSingleLinkedList.h" />
+    <ClInclude Include="..\..\..\..\src\Others\Others_Date.h" />
+    <ClInclude Include="..\..\..\..\src\Puzzles\Puzzles_FindHeavierAmongNBalls.h" />
+    <ClInclude Include="..\..\..\..\src\Sorting\Sorting.h" />
+    <ClInclude Include="..\..\..\..\src\Others\Others_CheckIfNumberIsPalindrom.h" />
+    <ClInclude Include="..\..\..\..\src\Others\Others_FixedPriceInstrumentsPricing.h" />
+    <ClInclude Include="..\..\..\..\src\DynamicProgramming\DP_LongestCommonSubsequenceString.h" />
+    <ClInclude Include="..\..\..\..\src\DynamicProgramming\DP_Common.h" />
+    <ClInclude Include="..\..\..\..\src\DynamicProgramming\DP_Fibonacci.h" />
+    <ClInclude Include="..\..\..\..\src\DynamicProgramming\DP_HouseRobbery.h" />
+    <ClInclude Include="..\..\..\..\src\DynamicProgramming\DP_MaxSumSequence.h" />
+    <ClInclude Include="..\..\..\..\src\Others\Others_SingleElevator.h" />
+    <ClInclude Include="..\..\..\..\src\BinaryTree\BinaryTree_MaxTree.h" />
+    <ClInclude Include="..\..\..\..\src\Others\Others_MaxProfitFromShareTrade.h" />
+    <ClInclude Include="..\..\..\..\src\Others\Others_StockPriceHistory_v1.h" />
+    <ClInclude Include="..\..\..\..\src\Backtracking\Backtracking.h" />
+    <ClInclude Include="..\..\..\..\src\BinarySearchTree_BST\BST_CheckIfPreorderTraversalIsBST.h" />
+    <ClInclude Include="..\..\..\..\src\BinaryTree\BinaryTree_Traversals.h" />
+    <ClInclude Include="..\..\..\..\src\Binary\Binary_ReverseBits.h" />
+    <ClInclude Include="..\..\..\..\src\DivideAndConquer\DivideAndConquer.h" />
+    <ClInclude Include="..\..\..\..\src\DivideAndConquer\DivideAndConquer_BinarySearch.h" />
+    <ClInclude Include="..\..\..\..\src\DynamicProgramming\DP_LongestCommonSubsequenceLength.h" />
+    <ClInclude Include="..\..\..\..\src\DynamicProgramming\DP_LongestCommonSubstring.h" />
+    <ClInclude Include="..\..\..\..\src\DynamicProgramming\DP_RodCutting.h" />
+    <ClInclude Include="..\..\..\..\src\DynamicProgramming\DP_MaxProductRodCutting.h" />
+    <ClInclude Include="..\..\..\..\src\DynamicProgramming\DP_CoinChangeMakingProblem.h" />
+    <ClInclude Include="..\..\..\..\src\Graphs\Graphs.h" />
+    <ClInclude Include="..\..\..\..\src\Greedy\Greedy.h" />
+    <ClInclude Include="..\..\..\..\src\Matrix\Matrix.h" />
+    <ClInclude Include="..\..\..\..\src\Puzzles\Puzzles_ClockAngleProblem.h" />
+    <ClInclude Include="..\..\..\..\src\Puzzles\Puzzles_AddTwoNumbers.h" />
+    <ClInclude Include="..\..\..\..\src\Queue\Queue.h" />
+    <ClInclude Include="..\..\..\..\src\Stack\Stack.h" />
+    <ClInclude Include="..\..\..\..\src\String\String_FirstKNonRepeatingChars.h" />
+    <ClInclude Include="..\..\..\..\src\Trie\Trie_implementationUsingHashMap.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\..\..\src\Others\Others_EquityOrderManagementSystem_v1.data" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{DE6F4752-AA5A-4B93-AF6D-9A91DD0A7FDE}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>MM_NewProjectTemplate</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(ProjectDir)..\..\..\..\bin\windows_visual_studio\$(Configuration)_$(Platform)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(ProjectDir)..\..\..\..\bin\windows_visual_studio\$(Configuration)_$(Platform)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(ProjectDir)..\..\..\..\bin\windows_visual_studio\$(Configuration)_$(Platform)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(ProjectDir)..\..\..\..\bin\windows_visual_studio\$(Configuration)_$(Platform)\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\..\..\..\src;$(ProjectDir)\..\..\..\..\..\MM_CommonUtils\src;$(ProjectDir)\..\..\..\..\..\MM_UnitTestFramework\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ObjectFileName>$(ProjectDir)\..\..\..\..\obj\windows_visual_studio\$(Configuration)_$(Platform)\</ObjectFileName>
+      <ProgramDataBaseFileName>$(ProjectDir)\..\..\..\..\obj\windows_visual_studio\$(Configuration)_$(Platform)\vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OutputFile>$(ProjectDir)..\..\..\..\bin\windows_visual_studio\$(Configuration)_$(Platform)\$(TargetName)$(TargetExt)</OutputFile>
+      <ProgramDatabaseFile>$(ProjectDir)..\..\..\..\bin\windows_visual_studio\$(Configuration)_$(Platform)\$(TargetName).pdb</ProgramDatabaseFile>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\..\..\MM_CommonUtils\bin\windows_visual_studio\$(Configuration)_$(Platform)\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>MM_CommonUtils.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <LargeAddressAware>true</LargeAddressAware>
+      <StackReserveSize>1000000000</StackReserveSize>
+      <StackCommitSize>1000000000</StackCommitSize>
+      <HeapReserveSize>2000000000</HeapReserveSize>
+      <HeapCommitSize>2000000000</HeapCommitSize>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\..\..\..\src;$(ProjectDir)\..\..\..\..\..\MM_CommonUtils\src;$(ProjectDir)\..\..\..\..\..\MM_UnitTestFramework\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ObjectFileName>$(ProjectDir)\..\..\..\..\obj\windows_visual_studio\$(Configuration)_$(Platform)\</ObjectFileName>
+      <ProgramDataBaseFileName>$(ProjectDir)\..\..\..\..\obj\windows_visual_studio\$(Configuration)_$(Platform)\vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OutputFile>$(ProjectDir)..\..\..\..\bin\windows_visual_studio\$(Configuration)_$(Platform)\$(TargetName)$(TargetExt)</OutputFile>
+      <ProgramDatabaseFile>$(ProjectDir)..\..\..\..\bin\windows_visual_studio\$(Configuration)_$(Platform)\$(TargetName).pdb</ProgramDatabaseFile>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\..\..\MM_CommonUtils\bin\windows_visual_studio\$(Configuration)_$(Platform)\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>MM_CommonUtils.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <LargeAddressAware>true</LargeAddressAware>
+      <StackReserveSize>1000000000</StackReserveSize>
+      <StackCommitSize>1000000000</StackCommitSize>
+      <HeapReserveSize>2000000000</HeapReserveSize>
+      <HeapCommitSize>2000000000</HeapCommitSize>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\..\..\..\src;$(ProjectDir)\..\..\..\..\..\MM_CommonUtils\src;$(ProjectDir)\..\..\..\..\..\MM_UnitTestFramework\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ObjectFileName>$(ProjectDir)\..\..\..\..\obj\windows_visual_studio\$(Configuration)_$(Platform)\</ObjectFileName>
+      <ProgramDataBaseFileName>$(ProjectDir)\..\..\..\..\obj\windows_visual_studio\$(Configuration)_$(Platform)\vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OutputFile>$(ProjectDir)..\..\..\..\bin\windows_visual_studio\$(Configuration)_$(Platform)\$(TargetName)$(TargetExt)</OutputFile>
+      <ProgramDatabaseFile>$(ProjectDir)..\..\..\..\bin\windows_visual_studio\$(Configuration)_$(Platform)\$(TargetName).pdb</ProgramDatabaseFile>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\..\..\MM_CommonUtils\bin\windows_visual_studio\$(Configuration)_$(Platform)\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>MM_CommonUtils.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <LargeAddressAware>true</LargeAddressAware>
+      <StackReserveSize>1000000000</StackReserveSize>
+      <StackCommitSize>1000000000</StackCommitSize>
+      <HeapReserveSize>2000000000</HeapReserveSize>
+      <HeapCommitSize>2000000000</HeapCommitSize>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\..\..\..\src;$(ProjectDir)\..\..\..\..\..\MM_CommonUtils\src;$(ProjectDir)\..\..\..\..\..\MM_UnitTestFramework\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ObjectFileName>$(ProjectDir)\..\..\..\..\obj\windows_visual_studio\$(Configuration)_$(Platform)\</ObjectFileName>
+      <ProgramDataBaseFileName>$(ProjectDir)\..\..\..\..\obj\windows_visual_studio\$(Configuration)_$(Platform)\vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OutputFile>$(ProjectDir)..\..\..\..\bin\windows_visual_studio\$(Configuration)_$(Platform)\$(TargetName)$(TargetExt)</OutputFile>
+      <ProgramDatabaseFile>$(ProjectDir)..\..\..\..\bin\windows_visual_studio\$(Configuration)_$(Platform)\$(TargetName).pdb</ProgramDatabaseFile>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\..\..\MM_CommonUtils\bin\windows_visual_studio\$(Configuration)_$(Platform)\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>MM_CommonUtils.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <LargeAddressAware>true</LargeAddressAware>
+      <StackReserveSize>1000000000</StackReserveSize>
+      <StackCommitSize>1000000000</StackCommitSize>
+      <HeapReserveSize>2000000000</HeapReserveSize>
+      <HeapCommitSize>2000000000</HeapCommitSize>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
