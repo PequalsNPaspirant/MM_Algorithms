@@ -2865,6 +2865,28 @@ namespace mm {
 		return maxValue;
 	}
 
+	// ============================= Solution using branch and bound approach v10b =============================
+	/*
+	Remove cumulative sum vectors. Keep endIndex and endValue in heap node to use it to calculate the new upperbound.
+	*/
+
+	// ============================= Solution using branch and bound approach v11b =============================
+	/*
+	Use Set in place of heap and remove elements having upper bound less than maxSoFar. This reduces space complexity.
+	This is already done by starting with greedy maxvalue. This already reduces heap size by large margin. But still there are cases,
+	where we need large heap size.
+	*/
+
+	// ============================= Solution using branch and bound approach v12b =============================
+	/*
+	Reduce numFunctionCalls i.e. optimize exploring solution tree. avoid exploring the nodes further.
+	*/
+
+	// ============================= Solution using branch and bound approach v13b =============================
+	/*
+	Replace heap by the vector of size numValues. Keep only one heap element in vector for each level. 
+	This would limit space complexity to number of values. Currently space complexity is O(2^n).
+	*/
 
 	// ============================= Solution using greedy approach =============================
 	/*
