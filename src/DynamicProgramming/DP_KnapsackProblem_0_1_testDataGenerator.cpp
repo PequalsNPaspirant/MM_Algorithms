@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <unordered_set>
 #include <algorithm>
 #include <chrono>
 #include <locale> // For printing number as thousand separated string
@@ -44,11 +45,11 @@ namespace mm {
 	{
 		int numTestCases = 10;
 		DP_KnapsackProblem_0_1_testDataGenerator::generateRandomTestCases(1, 20, 1, 1, 100, 99999, 10, 500, 75, 98, 
-			true, false, Kanpsack_0_1_testCaseType::performanceTestCases_1K);
+			true, false, Kanpsack_0_1_testCaseType::sanityTestCases);
 		DP_KnapsackProblem_0_1_testDataGenerator::generateRandomTestCases(25, 100, 5, 1, 100, 99999, 10, 500, 50, 75, 
-			true, false, Kanpsack_0_1_testCaseType::performanceTestCases_1K);
+			true, false, Kanpsack_0_1_testCaseType::sanityTestCases);
 		DP_KnapsackProblem_0_1_testDataGenerator::generateRandomTestCases(100, 100, 0, numTestCases, 100.0, 99999.0, 1, 1000, 75, 98, 
-			true, false, Kanpsack_0_1_testCaseType::performanceTestCases_1K);
+			true, false, Kanpsack_0_1_testCaseType::sanityTestCases);
 		
 		DP_KnapsackProblem_0_1_testDataGenerator::generateRandomTestCases(1000, 1000, 0, numTestCases, 100.0, 99999.0, 1, 10000, 50, 75, 
 			true, false, Kanpsack_0_1_testCaseType::performanceTestCases_1K);
@@ -90,24 +91,49 @@ namespace mm {
 			base << data.values[i] << ", " << data.weights[i] << "\n";
 	}
 
-	void DP_KnapsackProblem_0_1_testDataGenerator::writeTestCaseToFile(const Kanpsack_0_1_DataSet& testData, const string& testCaseName)
+	void DP_KnapsackProblem_0_1_testDataGenerator::writeTestCaseToFile(const Kanpsack_0_1_DataSet& testData, const string& testCaseNamePrefix)
 	{
-		string fileName("../../../test/data/knapsack_0_1/" + testCaseName + "_" + to_string(0) + ".data");
-		cout << "\nWriting test case to file: " << fileName;
+		std::unordered_set<string> allFiles;
+		const string path("../../../test/data/knapsack_0_1");		
+		for (const auto & fileOrDirectory : std::experimental::filesystem::directory_iterator(path))
+		{
+			if (std::experimental::filesystem::is_directory(fileOrDirectory))
+				continue;
+
+			string fullFileName(fileOrDirectory.path().generic_u8string());
+			string fileName(fullFileName.substr(fullFileName.find_last_of("/") + 1));
+			//if (fullFileName.find(testCaseNamePrefix) == string::npos)
+			if (fileName.find(testCaseNamePrefix) == 0) //the match should be found at start as its a prefix
+				allFiles.insert(fileName);
+		}
+
+		string fullFileName;
+		for (int start = 1; start <= 100; ++start)
+		{
+			string fileName(testCaseNamePrefix + "_" + to_string(start) + ".data");
+			if (allFiles.find(fileName) == allFiles.end())
+			{
+				fullFileName = path + "/" + fileName;
+				break;
+			}
+		}
+
+		MyAssert::myRunTimeAssert(!fullFileName.empty());
+
 		ofstream testDataFile;
 
 		try
 		{
-			testDataFile.open(fileName);
+			testDataFile.open(fullFileName);
 		}
 		catch (std::ofstream::failure &writeErr)
 		{
-			cout << "\nERROR: Can not open file: " << fileName << endl;
+			cout << "\nERROR: Can not open file: " << fullFileName << endl;
 			return;
 		}
 		catch (...)
 		{
-			cout << "\nUNKNOWN ERROR while opening file: " << fileName << endl;
+			cout << "\nUNKNOWN ERROR while opening file: " << fullFileName << endl;
 			return;
 		}
 
@@ -136,14 +162,14 @@ namespace mm {
 		vector<Kanpsack_0_1_DataSet> testData;
 		const string path("../../../test/data/knapsack_0_1");
 		for (const auto & fileOrDirectory : std::experimental::filesystem::directory_iterator(path))
-		//for (int i = start; i <= end; ++i)
 		{
 			if (std::experimental::filesystem::is_directory(fileOrDirectory))
 				continue;
 			
 			string fullFileName(fileOrDirectory.path().generic_u8string());
 			string fileName(fullFileName.substr(fullFileName.find_last_of("/") + 1));
-			if (fullFileName.find(testCaseNamePrefix) == string::npos)
+			//if (fullFileName.find(testCaseNamePrefix) == string::npos)
+			if (fileName.find(testCaseNamePrefix) != 0) //the match should be found at start as its a prefix
 				continue;
 
 			ifstream testDataFile;
@@ -197,8 +223,6 @@ namespace mm {
 				MyAssert::myRunTimeAssert(numItems == element.values.size() && numItems == element.weights.size());
 				testData.push_back(element);
 			}
-			//else
-			//	break;
 		}
 
 		return testData;
@@ -261,12 +285,15 @@ namespace mm {
 
 					newDataSet.expectedMaxValueByGreedy = DP_KnapsackProblem_0_1(newDataSet.values, newDataSet.weights, newDataSet.knapsackCapacity, actualSelectedItems, KnapsackProblemAlgo::greedy);
 
-					// Decide what king of test case data you want to generate: e.g. always defeating greedy algo, consistent with gredy algo, or random
-					//if (testDataVector[nextIndex].maxValue != testDataVector[nextIndex].maxValueByGreedy)
-					if (greedyEqualsExact == (newDataSet.expectedMaxValue != newDataSet.expectedMaxValueByGreedy))
+					//Decide what king of test case data you want to generate: 
+					//e.g. maxValue of greedy and exact are equal OR they are not equal
+					if (numObjects > 2 && newDataSet.expectedMaxValue != 0)
 					{
-						--i;
-						continue;
+						if (greedyEqualsExact == (newDataSet.expectedMaxValue != newDataSet.expectedMaxValueByGreedy))
+						{
+							--i;
+							continue;
+						}
 					}
 				}
 
