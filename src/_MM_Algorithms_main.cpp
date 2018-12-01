@@ -64,6 +64,7 @@ namespace mm {
 	MM_DEFINE_FLAG(false, Others_DateUnitTest);
 	MM_DEFINE_FLAG(false, Others_BigIntegerMultiplication);
 	MM_DEFINE_FLAG(false, Others_EquityOrderManagementSystem);
+	MM_DEFINE_FLAG(false, Others_CarRentalSystem);
 
 }
 

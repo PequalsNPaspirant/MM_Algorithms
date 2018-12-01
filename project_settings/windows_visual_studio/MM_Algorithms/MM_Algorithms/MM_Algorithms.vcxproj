@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\src\Others\Others_CarRentalSystem.cpp" />
     <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1_testDataGenerator.cpp" />
     <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1_test.cpp" />
     <ClCompile Include="..\..\..\..\src\Others\Others_EquityOrderManagementSystem_v4g.cpp" />
@@ -99,6 +100,7 @@
     <ClCompile Include="..\..\..\..\src\_MM_Algorithms_main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\src\Others\Others_CarRentalSystem.h" />
     <ClInclude Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1_testDataGenerator.h" />
     <ClInclude Include="..\..\..\..\src\Others\Others_EquityOrderManagementSystem_v4g.h" />
     <ClInclude Include="..\..\..\..\src\Others\Others_EquityOrderManagementSystem_v4f.h" />

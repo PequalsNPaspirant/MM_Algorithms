@@ -85,8 +85,8 @@ namespace mm {
 	{
 	public:
 		static void generateAndWriteTestCasesToFile();
-		static void writeTestCaseToFile(const Kanpsack_0_1_DataSet& testData, const string& testCaseName, int index);
-		static vector<Kanpsack_0_1_DataSet> readTestCasesFromFile(const string& testCaseName, int start, int end);
+		static void writeTestCaseToFile(const Kanpsack_0_1_DataSet& testData, const string& testCaseName);
+		static vector<Kanpsack_0_1_DataSet> readTestCasesFromFile(const string& testCaseNamePrefix);
 
 		static vector<Kanpsack_0_1_DataSet> getHardecodedSanityTestCases();
 
@@ -95,7 +95,7 @@ namespace mm {
 			double minValue, double maxValue,
 			unsigned long long minWeight, unsigned long long maxWeight,
 			int minKnapsackCapacityPercentage, int maxKnapsackCapacityPercentage,
-			bool findSolution, const string& testCaseName, int start);
+			bool findSolution, bool greedyEqualsExact, const string& testCaseNamePrefix);
 
 	private:
 		

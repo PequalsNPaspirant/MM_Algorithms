@@ -10,6 +10,7 @@
 #include <map>
 #include <fstream> //for file read/write
 #include <sstream> // for std::stringstream
+#include <filesystem>
 using namespace std;
 
 #include "DynamicProgramming/DP_KnapsackProblem_0_1_testDataGenerator.h"
@@ -43,34 +44,34 @@ namespace mm {
 	{
 		int numTestCases = 10;
 		DP_KnapsackProblem_0_1_testDataGenerator::generateRandomTestCases(1, 20, 1, 1, 100, 99999, 10, 500, 75, 98, 
-			true, Kanpsack_0_1_testCaseType::performanceTestCases_1K, 1);
+			true, false, Kanpsack_0_1_testCaseType::performanceTestCases_1K);
 		DP_KnapsackProblem_0_1_testDataGenerator::generateRandomTestCases(25, 100, 5, 1, 100, 99999, 10, 500, 50, 75, 
-			true, Kanpsack_0_1_testCaseType::performanceTestCases_1K, 20 + 1);
+			true, false, Kanpsack_0_1_testCaseType::performanceTestCases_1K);
 		DP_KnapsackProblem_0_1_testDataGenerator::generateRandomTestCases(100, 100, 0, numTestCases, 100.0, 99999.0, 1, 1000, 75, 98, 
-			true, Kanpsack_0_1_testCaseType::performanceTestCases_1K, 20 + (100 - 25)/5 + 1 + 1);
+			true, false, Kanpsack_0_1_testCaseType::performanceTestCases_1K);
 		
 		DP_KnapsackProblem_0_1_testDataGenerator::generateRandomTestCases(1000, 1000, 0, numTestCases, 100.0, 99999.0, 1, 10000, 50, 75, 
-			true, Kanpsack_0_1_testCaseType::performanceTestCases_1K, 1);
+			true, false, Kanpsack_0_1_testCaseType::performanceTestCases_1K);
 
 		DP_KnapsackProblem_0_1_testDataGenerator::generateRandomTestCases(10000, 10000, 0, numTestCases/2, 100.0, 99999.0, 1, 1000, 75, 98, 
-			true, Kanpsack_0_1_testCaseType::performanceTestCases_10K, 1);
+			true, false, Kanpsack_0_1_testCaseType::performanceTestCases_10K);
 		DP_KnapsackProblem_0_1_testDataGenerator::generateRandomTestCases(10000, 10000, 0, numTestCases/2, 100.0, 99999.0, 1, 5000, 50, 75, 
-			true, Kanpsack_0_1_testCaseType::performanceTestCases_10K, 1 + numTestCases/2);
+			true, false, Kanpsack_0_1_testCaseType::performanceTestCases_10K);
 
 		DP_KnapsackProblem_0_1_testDataGenerator::generateRandomTestCases(100000, 100000, 0, numTestCases/2, 100.0, 99999.0, 1, 250, 75, 98, 
-			true, Kanpsack_0_1_testCaseType::performanceTestCases_100K, 1);
+			true, false, Kanpsack_0_1_testCaseType::performanceTestCases_100K);
 		DP_KnapsackProblem_0_1_testDataGenerator::generateRandomTestCases(100000, 100000, 0, numTestCases/2, 100.0, 99999.0, 1, 2000, 50, 75, 
-			true, Kanpsack_0_1_testCaseType::performanceTestCases_100K, 1 + numTestCases/2);
+			true, false, Kanpsack_0_1_testCaseType::performanceTestCases_100K);
 
 		DP_KnapsackProblem_0_1_testDataGenerator::generateRandomTestCases(1000000, 1000000, 0, numTestCases/2, 100.0, 99999.0, 1, 250, 75, 98, 
-			true, Kanpsack_0_1_testCaseType::performanceTestCases_1M, 1);
+			true, false, Kanpsack_0_1_testCaseType::performanceTestCases_1M);
 		DP_KnapsackProblem_0_1_testDataGenerator::generateRandomTestCases(1000000, 1000000, 0, numTestCases/2, 100.0, 99999.0, 1, 2000, 50, 75, 
-			true, Kanpsack_0_1_testCaseType::performanceTestCases_1M, 1 + numTestCases/2);
+			true, false, Kanpsack_0_1_testCaseType::performanceTestCases_1M);
 		
 		DP_KnapsackProblem_0_1_testDataGenerator::generateRandomTestCases(10000000, 10000000, 0, numTestCases / 2, 100.0, 99999.0, 1, 250, 75, 98, 
-			false, Kanpsack_0_1_testCaseType::performanceTestCases_10M, 1);
+			true, false, Kanpsack_0_1_testCaseType::performanceTestCases_10M);
 		DP_KnapsackProblem_0_1_testDataGenerator::generateRandomTestCases(10000000, 10000000, 0, numTestCases / 2, 100.0, 99999.0, 1, 2000, 50, 75, 
-			false, Kanpsack_0_1_testCaseType::performanceTestCases_10M, 1 + numTestCases / 2);
+			true, false, Kanpsack_0_1_testCaseType::performanceTestCases_10M);
 	}
 
 	void printOrWriteData(std::ostream& base, const Kanpsack_0_1_DataSet& data)
@@ -89,9 +90,9 @@ namespace mm {
 			base << data.values[i] << ", " << data.weights[i] << "\n";
 	}
 
-	void DP_KnapsackProblem_0_1_testDataGenerator::writeTestCaseToFile(const Kanpsack_0_1_DataSet& testData, const string& testCaseName, int index)
+	void DP_KnapsackProblem_0_1_testDataGenerator::writeTestCaseToFile(const Kanpsack_0_1_DataSet& testData, const string& testCaseName)
 	{
-		string fileName("../../../test/data/knapsack_0_1/" + testCaseName + "_" + to_string(index) + ".data");
+		string fileName("../../../test/data/knapsack_0_1/" + testCaseName + "_" + to_string(0) + ".data");
 		cout << "\nWriting test case to file: " << fileName;
 		ofstream testDataFile;
 
@@ -130,14 +131,21 @@ namespace mm {
 		}
 	}
 
-	vector<Kanpsack_0_1_DataSet> DP_KnapsackProblem_0_1_testDataGenerator::readTestCasesFromFile(const string& testCaseName, int start, int end)
+	vector<Kanpsack_0_1_DataSet> DP_KnapsackProblem_0_1_testDataGenerator::readTestCasesFromFile(const string& testCaseNamePrefix)
 	{
 		vector<Kanpsack_0_1_DataSet> testData;
-
-		for (int i = start; i <= end; ++i)
+		const string path("../../../test/data/knapsack_0_1");
+		for (const auto & fileOrDirectory : std::experimental::filesystem::directory_iterator(path))
+		//for (int i = start; i <= end; ++i)
 		{
-			string fileName(testCaseName + "_" + to_string(i) + ".data");
-			string fullFileName("../../../test/data/knapsack_0_1/" + fileName);
+			if (std::experimental::filesystem::is_directory(fileOrDirectory))
+				continue;
+			
+			string fullFileName(fileOrDirectory.path().generic_u8string());
+			string fileName(fullFileName.substr(fullFileName.find_last_of("/") + 1));
+			if (fullFileName.find(testCaseNamePrefix) == string::npos)
+				continue;
+
 			ifstream testDataFile;
 
 			try
@@ -204,7 +212,7 @@ namespace mm {
 		double minValue, double maxValue,
 		unsigned long long minWeight, unsigned long long maxWeight,
 		int minKnapsackCapacityPercentage, int maxKnapsackCapacityPercentage,
-		bool findSolution, const string& testCaseName, int start)
+		bool findSolution, bool greedyEqualsExact, const string& testCaseNamePrefix)
 	{
 		//vector<Kanpsack_0_1_DataSet> testDataVector(0);
 
@@ -248,20 +256,21 @@ namespace mm {
 				if (findSolution)
 				{
 					vector<unsigned int> actualSelectedItems;
-					double actualMaxValue = DP_KnapsackProblem_0_1(newDataSet.values, newDataSet.weights, newDataSet.knapsackCapacity, actualSelectedItems, KnapsackProblemAlgo::branch_and_bound_cumulative_sum_v2);
-					newDataSet.expectedMaxValue = actualMaxValue;
+					newDataSet.expectedMaxValue = DP_KnapsackProblem_0_1(newDataSet.values, newDataSet.weights, newDataSet.knapsackCapacity, actualSelectedItems, KnapsackProblemAlgo::branch_and_bound_MM_Heap_use_greedy_maxValue_sort_inplace_v9b);
 					newDataSet.expectedSelectedItems = actualSelectedItems;
 
-					actualMaxValue = DP_KnapsackProblem_0_1(newDataSet.values, newDataSet.weights, newDataSet.knapsackCapacity, actualSelectedItems, KnapsackProblemAlgo::greedy);
-					newDataSet.expectedMaxValueByGreedy = actualMaxValue;
+					newDataSet.expectedMaxValueByGreedy = DP_KnapsackProblem_0_1(newDataSet.values, newDataSet.weights, newDataSet.knapsackCapacity, actualSelectedItems, KnapsackProblemAlgo::greedy);
 
 					// Decide what king of test case data you want to generate: e.g. always defeating greedy algo, consistent with gredy algo, or random
 					//if (testDataVector[nextIndex].maxValue != testDataVector[nextIndex].maxValueByGreedy)
-					//if (testDataVector[nextIndex].maxValue == testDataVector[nextIndex].maxValueByGreedy)
+					if (greedyEqualsExact == (newDataSet.expectedMaxValue != newDataSet.expectedMaxValueByGreedy))
+					{
+						--i;
+						continue;
+					}
 				}
 
-				writeTestCaseToFile(newDataSet, Kanpsack_0_1_testCaseType::performanceTestCases_10M, start);
-				++start;
+				writeTestCaseToFile(newDataSet, testCaseNamePrefix);
 			}
 		}
 

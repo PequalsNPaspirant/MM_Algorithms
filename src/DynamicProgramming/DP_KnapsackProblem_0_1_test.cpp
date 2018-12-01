@@ -612,14 +612,14 @@ namespace mm {
 
 	void runSanityTest(ofstream& resultFile)
 	{
-		vector<Kanpsack_0_1_DataSet> testData = DP_KnapsackProblem_0_1_testDataGenerator::readTestCasesFromFile(Kanpsack_0_1_testCaseType::sanityTestCases, 1, 200);
+		vector<Kanpsack_0_1_DataSet> testData = DP_KnapsackProblem_0_1_testDataGenerator::readTestCasesFromFile(Kanpsack_0_1_testCaseType::sanityTestCases);
 		KnapsackTest(testData, (1 << int(KnapsackProblemAlgo::max_approaches)) - 1);
 		writePerformanceTestResultsToCSVFile(testData, resultFile);
 	}
 	
 	void runPerformanceTest_1K(ofstream& resultFile)
 	{
-		vector<Kanpsack_0_1_DataSet> testData = DP_KnapsackProblem_0_1_testDataGenerator::readTestCasesFromFile(Kanpsack_0_1_testCaseType::performanceTestCases_1K, 1, 100);
+		vector<Kanpsack_0_1_DataSet> testData = DP_KnapsackProblem_0_1_testDataGenerator::readTestCasesFromFile(Kanpsack_0_1_testCaseType::performanceTestCases_1K);
 		KnapsackTest(testData, (1 << int(KnapsackProblemAlgo::max_approaches)) - 1);
 		writePerformanceTestResultsToCSVFile(testData, resultFile);
 	}
@@ -627,7 +627,7 @@ namespace mm {
 	void runPerformanceTest_10K(ofstream& resultFile)
 	{
 		// n = 1000, W = 5,000,000, O(5 billion)    Takes 7 seconds
-		vector<Kanpsack_0_1_DataSet> testData = DP_KnapsackProblem_0_1_testDataGenerator::readTestCasesFromFile(Kanpsack_0_1_testCaseType::performanceTestCases_10K, 1, 100);
+		vector<Kanpsack_0_1_DataSet> testData = DP_KnapsackProblem_0_1_testDataGenerator::readTestCasesFromFile(Kanpsack_0_1_testCaseType::performanceTestCases_10K);
 		KnapsackTest(testData, (1 << int(KnapsackProblemAlgo::max_approaches)) - 1);
 
 		writePerformanceTestResultsToCSVFile(testData, resultFile);
@@ -637,7 +637,7 @@ namespace mm {
 	{
 		// n = 10,000, W = 5,000,000, O(50 billion)  
 		// n = 10,000, W = 10,000,000, O(100 billion)   
-		vector<Kanpsack_0_1_DataSet> testData = DP_KnapsackProblem_0_1_testDataGenerator::readTestCasesFromFile(Kanpsack_0_1_testCaseType::performanceTestCases_100K, 1, 100);
+		vector<Kanpsack_0_1_DataSet> testData = DP_KnapsackProblem_0_1_testDataGenerator::readTestCasesFromFile(Kanpsack_0_1_testCaseType::performanceTestCases_100K);
 		KnapsackTest(testData, (1 << int(KnapsackProblemAlgo::max_approaches)) - 1);
 
 		writePerformanceTestResultsToCSVFile(testData, resultFile);
@@ -647,7 +647,7 @@ namespace mm {
 	{
 		for(int i = 0; i < 99; ++i)
 		{
-			vector<Kanpsack_0_1_DataSet> testData = DP_KnapsackProblem_0_1_testDataGenerator::readTestCasesFromFile(Kanpsack_0_1_testCaseType::performanceTestCases_1M, i, i);
+			vector<Kanpsack_0_1_DataSet> testData = DP_KnapsackProblem_0_1_testDataGenerator::readTestCasesFromFile(Kanpsack_0_1_testCaseType::performanceTestCases_1M);
 			if (testData.empty())
 				continue;
 			
@@ -662,7 +662,7 @@ namespace mm {
 	{
 		for(int i = 0; i < 99; ++i)
 		{
-			vector<Kanpsack_0_1_DataSet> testData = DP_KnapsackProblem_0_1_testDataGenerator::readTestCasesFromFile(Kanpsack_0_1_testCaseType::performanceTestCases_10M, i, i);
+			vector<Kanpsack_0_1_DataSet> testData = DP_KnapsackProblem_0_1_testDataGenerator::readTestCasesFromFile(Kanpsack_0_1_testCaseType::performanceTestCases_10M);
 			if (testData.empty())
 				continue;
 
@@ -677,7 +677,7 @@ namespace mm {
 	{
 		for(int i = 0; i < 99; ++i)
 		{
-			vector<Kanpsack_0_1_DataSet> testData = DP_KnapsackProblem_0_1_testDataGenerator::readTestCasesFromFile(Kanpsack_0_1_testCaseType::performanceTestCases_100M, i, i);
+			vector<Kanpsack_0_1_DataSet> testData = DP_KnapsackProblem_0_1_testDataGenerator::readTestCasesFromFile(Kanpsack_0_1_testCaseType::performanceTestCases_100M);
 			if (testData.empty())
 				continue;
 
