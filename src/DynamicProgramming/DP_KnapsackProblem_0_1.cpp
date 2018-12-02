@@ -1188,9 +1188,6 @@ namespace mm {
 			prev = maxHeap_v2.top();
 			maxHeap_v2.pop();
 
-			if (prev.level == values.size())
-				continue;
-
 			current.level = prev.level + 1;
 			unsigned int itemIndex = sortedIndices[current.level - 1];
 
@@ -1204,7 +1201,7 @@ namespace mm {
 					maxValue = current.maxValue;
 
 				// maxValue is kind of lower bound so far, so avoid the decision tree nodes having upper bound less than maxValue
-				if (current.upperbound > maxValue)
+				if (current.level < values.size() && current.upperbound > maxValue)
 					maxHeap_v2.push(current);
 			}
 
@@ -1213,7 +1210,7 @@ namespace mm {
 			current.maxValue = prev.maxValue;
 			current.calculateAndSetUpperBound(values, weights, knapsackCapacity, sortedIndices, cumulativeWeights, cumulativeValues);
 			// maxValue is kind of lower bound so far, so avoid the decision tree nodes having upper bound less than maxValue
-			if (current.upperbound > maxValue)
+			if (current.level < values.size() && current.upperbound > maxValue)
 				maxHeap_v2.push(current);			
 		}
 
@@ -1347,7 +1344,10 @@ namespace mm {
 				break;
 
 			if (top.level == values.size())
+			{
+				maxHeap_v3.pop();
 				continue;
+			}
 
 			unsigned int itemIndex = sortedIndices[top.level];
 
@@ -1519,9 +1519,6 @@ namespace mm {
 			if (top.upperbound <= maxValue)
 				break;
 
-			if (top.level == values.size())
-				continue;
-
 			unsigned int itemIndex = sortedIndices[top.level];
 
 			top.level += 1;
@@ -1544,6 +1541,9 @@ namespace mm {
 				//	maxHeap_v3a.push(current);
 				if (top.upperbound <= maxValue)
 					break;
+
+				if (top.level == values.size())
+					maxHeap_v3a.pop();
 			}
 			else
 				maxHeap_v3a.pop();
@@ -1551,7 +1551,7 @@ namespace mm {
 			//exclude this item
 			prev.calculateAndSetUpperBound(values, weights, knapsackCapacity, sortedIndices, cumulativeWeights, cumulativeValues);
 			// maxValue is kind of lower bound so far, so avoid the decision tree nodes having upper bound less than maxValue
-			if (prev.upperbound > maxValue)
+			if (top.level < values.size() && prev.upperbound > maxValue)
 				maxHeap_v3a.push(prev);			
 		}
 
@@ -1706,9 +1706,6 @@ namespace mm {
 			if (top.upperbound <= maxValue)
 				break;
 
-			if (top.level == values.size())
-				continue;
-
 			unsigned int itemIndex = sortedIndices[top.level];
 
 			top.level += 1;
@@ -1731,6 +1728,9 @@ namespace mm {
 				//	maxHeap_v3b.push(current);
 				if (top.upperbound <= maxValue)
 					break;
+
+				if (top.level == values.size())
+					maxHeap_v3b.pop();
 			}
 			else
 				maxHeap_v3b.pop();
@@ -1738,7 +1738,7 @@ namespace mm {
 			//exclude this item
 			prev.calculateAndSetUpperBound(values, weights, knapsackCapacity, sortedIndices, cumulativeWeights, cumulativeValues);
 			// maxValue is kind of lower bound so far, so avoid the decision tree nodes having upper bound less than maxValue
-			if (prev.upperbound > maxValue)
+			if (top.level < values.size() && prev.upperbound > maxValue)
 				maxHeap_v3b.push(prev);			
 		}
 
@@ -1872,9 +1872,6 @@ namespace mm {
 			if (top.upperbound <= maxValue)
 				break;
 
-			if (top.level == values.size())
-				continue;
-
 			unsigned int itemIndex = sortedIndices[top.level];
 
 			top.level += 1;
@@ -1897,6 +1894,9 @@ namespace mm {
 				//	maxHeap_v3.push(current);
 				if (top.upperbound <= maxValue)
 					break;
+
+				if (top.level == values.size())
+					maxHeap_v4.pop();
 			}
 			else
 				maxHeap_v4.pop();
@@ -1904,7 +1904,7 @@ namespace mm {
 			//exclude this item
 			prev.calculateAndSetUpperBound(values, weights, knapsackCapacity, sortedIndices, cumulativeWeights, cumulativeValues);
 			// maxValue is kind of lower bound so far, so avoid the decision tree nodes having upper bound less than maxValue
-			if (prev.upperbound > maxValue)
+			if (top.level < values.size() && prev.upperbound > maxValue)
 				maxHeap_v4.push(prev);			
 		}
 
@@ -2053,12 +2053,6 @@ namespace mm {
 			if (top->upperbound <= maxValue)
 				break;
 
-			if (top->level == values.size())
-			{
-				maxHeap_v5.pop();
-				continue;
-			}
-
 			unsigned int itemIndex = sortedIndices[top->level];
 			
 			top->level += 1;
@@ -2083,6 +2077,9 @@ namespace mm {
 				//	maxHeap_v3.push(current);
 				if (top->upperbound <= maxValue)
 					break;
+
+				if (top->level == values.size())
+					maxHeap_v5.pop();
 			}
 			else
 			{
@@ -2094,7 +2091,7 @@ namespace mm {
 			//exclude this item
 			prev->calculateAndSetUpperBound(values, weights, knapsackCapacity, sortedIndices, cumulativeWeights, cumulativeValues);
 			// maxValue is kind of lower bound so far, so avoid the decision tree nodes having upper bound less than maxValue
-			if (prev->upperbound > maxValue)
+			if (top->level < values.size() && prev->upperbound > maxValue)
 				maxHeap_v5.push(std::move(prev));
 		}
 
@@ -2188,12 +2185,6 @@ namespace mm {
 			if (top->upperbound <= maxValue)
 				break;
 
-			if (top->level == values.size())
-			{
-				maxHeap_v6.pop();
-				continue;
-			}
-
 			unsigned int itemIndex = sortedIndices[top->level];
 			
 			top->level += 1;
@@ -2230,6 +2221,9 @@ namespace mm {
 				//	maxHeap_v3.push(current);
 				if (top->upperbound <= maxValue)
 					break;
+
+				if (top->level == values.size())
+					maxHeap_v6.pop();
 			}
 			else
 				maxHeap_v6.pop();
@@ -2237,7 +2231,7 @@ namespace mm {
 			//exclude this item
 			prev->calculateAndSetUpperBound(values, weights, knapsackCapacity, sortedIndices, cumulativeWeights, cumulativeValues);
 			// maxValue is kind of lower bound so far, so avoid the decision tree nodes having upper bound less than maxValue
-			if (prev->upperbound > maxValue)
+			if (prev->level < values.size() && prev->upperbound > maxValue)
 				maxHeap_v6.push(prev);
 			else
 				poolIndices.push(prev);
@@ -2333,12 +2327,6 @@ namespace mm {
 			if (top->upperbound <= maxValue)
 				break;
 
-			if (top->level == values.size())
-			{
-				maxHeap_v7.pop();
-				continue;
-			}
-
 			unsigned int itemIndex = sortedIndices[top->level];
 			
 			top->level += 1;
@@ -2375,6 +2363,9 @@ namespace mm {
 				//	maxHeap_v3.push(current);
 				if (top->upperbound <= maxValue)
 					break;
+
+				if (top->level == values.size())
+					maxHeap_v7.pop();
 			}
 			else
 				maxHeap_v7.pop();
@@ -2382,7 +2373,7 @@ namespace mm {
 			//exclude this item
 			prev->calculateAndSetUpperBound(values, weights, knapsackCapacity, sortedIndices, cumulativeWeights, cumulativeValues);
 			// maxValue is kind of lower bound so far, so avoid the decision tree nodes having upper bound less than maxValue
-			if (prev->upperbound > maxValue)
+			if (prev->level < values.size() && prev->upperbound > maxValue)
 				maxHeap_v7.push(prev);
 			else
 				poolIndices.push(prev);
@@ -2468,12 +2459,6 @@ namespace mm {
 			if (top->upperbound <= maxValue)
 				break;
 
-			if (top->level == values.size())
-			{
-				maxHeap_v8.pop();
-				continue;
-			}
-
 			unsigned int itemIndex = sortedIndices[top->level];
 			
 			top->level += 1;
@@ -2510,6 +2495,9 @@ namespace mm {
 				//	maxHeap_v3.push(current);
 				if (top->upperbound <= maxValue)
 					break;
+
+				if (top->level == values.size())
+					maxHeap_v8.pop();
 			}
 			else
 				maxHeap_v8.pop();
@@ -2517,7 +2505,7 @@ namespace mm {
 			//exclude this item
 			prev->calculateAndSetUpperBound(values, weights, knapsackCapacity, sortedIndices, cumulativeWeights, cumulativeValues);
 			// maxValue is kind of lower bound so far, so avoid the decision tree nodes having upper bound less than maxValue
-			if (prev->upperbound > maxValue)
+			if (prev->level < values.size() && prev->upperbound > maxValue)
 				maxHeap_v8.push(prev);
 		}
 
@@ -2622,12 +2610,6 @@ namespace mm {
 			if (top->upperbound <= maxValue)
 				break;
 
-			if (top->level == values.size())
-			{
-				maxHeap_v8b.pop();
-				continue;
-			}
-
 			unsigned int itemIndex = sortedIndices[top->level];
 			
 			top->level += 1;
@@ -2664,6 +2646,9 @@ namespace mm {
 				//	maxHeap_v3.push(current);
 				if (top->upperbound <= maxValue)
 					break;
+
+				if (top->level == values.size())
+					maxHeap_v8b.pop();
 			}
 			else
 				maxHeap_v8b.pop();
@@ -2671,7 +2656,7 @@ namespace mm {
 			//exclude this item
 			prev->calculateAndSetUpperBound(values, weights, knapsackCapacity, sortedIndices, cumulativeWeights, cumulativeValues);
 			// maxValue is kind of lower bound so far, so avoid the decision tree nodes having upper bound less than maxValue
-			if (prev->upperbound > maxValue)
+			if (prev->level < values.size() && prev->upperbound > maxValue)
 				maxHeap_v8b.push(prev);
 		}
 
@@ -2807,12 +2792,6 @@ namespace mm {
 			if (top->upperbound <= maxValue)
 				break;
 
-			if (top->level == values.size())
-			{
-				maxHeap_v9b.pop();
-				continue;
-			}
-
 			unsigned int itemIndex = top->level;
 			
 			top->level += 1;
@@ -2849,6 +2828,9 @@ namespace mm {
 				//	maxHeap_v3.push(current);
 				if (top->upperbound <= maxValue)
 					break;
+
+				if (top->level == values.size())
+					maxHeap_v9b.pop();
 			}
 			else
 				maxHeap_v9b.pop();
@@ -2856,7 +2838,7 @@ namespace mm {
 			//exclude this item
 			prev->calculateAndSetUpperBound(values, weights, knapsackCapacity, cumulativeWeights, cumulativeValues);
 			// maxValue is kind of lower bound so far, so avoid the decision tree nodes having upper bound less than maxValue
-			if (prev->upperbound > maxValue)
+			if (prev->level < values.size() && prev->upperbound > maxValue)
 				maxHeap_v9b.push(prev);
 		}
 
