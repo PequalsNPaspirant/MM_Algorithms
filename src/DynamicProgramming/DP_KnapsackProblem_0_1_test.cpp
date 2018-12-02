@@ -694,12 +694,12 @@ namespace mm {
 
 		ofstream& resultFile = createResultFile();
 
-		//runHardecodedSanityTest(resultFile);
-		//runSanityTest(resultFile);
+		runHardecodedSanityTest(resultFile);
+		runSanityTest(resultFile);
 
-		//runPerformanceTest_1K(resultFile);
-		//runPerformanceTest_10K(resultFile);
-		//runPerformanceTest_100K(resultFile);
+		runPerformanceTest_1K(resultFile);
+		runPerformanceTest_10K(resultFile);
+		runPerformanceTest_100K(resultFile);
 
 		runPerformanceTest_1M(resultFile);
 		runPerformanceTest_10M(resultFile);
