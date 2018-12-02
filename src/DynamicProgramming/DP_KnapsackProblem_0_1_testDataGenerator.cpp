@@ -41,6 +41,8 @@ namespace mm {
 	const string Kanpsack_0_1_tags::num_items{"num_items: "};
 	const string Kanpsack_0_1_tags::value_weight_pairs{"value_weight_pairs: "};
 
+	const string DP_KnapsackProblem_0_1_testDataGenerator::testCaseDirectory("../../../test/data/knapsack_0_1");
+
 	void DP_KnapsackProblem_0_1_testDataGenerator::generateAndWriteTestCasesToFile()
 	{
 		int numTestCases = 10;
@@ -94,8 +96,7 @@ namespace mm {
 	void DP_KnapsackProblem_0_1_testDataGenerator::writeTestCaseToFile(const Kanpsack_0_1_DataSet& testData, const string& testCaseNamePrefix)
 	{
 		std::unordered_set<string> allFiles;
-		const string path("../../../test/data/knapsack_0_1");		
-		for (const auto & fileOrDirectory : std::experimental::filesystem::directory_iterator(path))
+		for (const auto & fileOrDirectory : std::experimental::filesystem::directory_iterator(testCaseDirectory))
 		{
 			if (std::experimental::filesystem::is_directory(fileOrDirectory))
 				continue;
@@ -113,7 +114,7 @@ namespace mm {
 			string fileName(testCaseNamePrefix + "_" + to_string(start) + ".data");
 			if (allFiles.find(fileName) == allFiles.end())
 			{
-				fullFileName = path + "/" + fileName;
+				fullFileName = testCaseDirectory + "/" + fileName;
 				break;
 			}
 		}
@@ -157,11 +158,10 @@ namespace mm {
 		}
 	}
 
-	vector<Kanpsack_0_1_DataSet> DP_KnapsackProblem_0_1_testDataGenerator::readTestCasesFromFile(const string& testCaseNamePrefix)
+	vector<Kanpsack_0_1_DataSet> DP_KnapsackProblem_0_1_testDataGenerator::readAllTestCasesFromFile(const string& testCaseNamePrefix)
 	{
 		vector<Kanpsack_0_1_DataSet> testData;
-		const string path("../../../test/data/knapsack_0_1");
-		for (const auto & fileOrDirectory : std::experimental::filesystem::directory_iterator(path))
+		for (const auto & fileOrDirectory : std::experimental::filesystem::directory_iterator(testCaseDirectory))
 		{
 			if (std::experimental::filesystem::is_directory(fileOrDirectory))
 				continue;
@@ -172,60 +172,69 @@ namespace mm {
 			if (fileName.find(testCaseNamePrefix) != 0) //the match should be found at start as its a prefix
 				continue;
 
-			ifstream testDataFile;
-
-			try
-			{
-				testDataFile.open(fullFileName);
-			}
-			catch (std::ifstream::failure &readErr)
-			{
-				cout << "\nERROR: Can not open file: " << fullFileName << endl;
-				return testData;
-			}
-			catch (...)
-			{
-				cout << "\nUNKNOWN ERROR while opening file: " << fullFileName << endl;
-				return testData;
-			}
-
-			if (testDataFile.is_open())
-			{
-				Kanpsack_0_1_DataSet element;
-				element.testFileName = fileName;
-				string line;
-				int numItems = 0;
-				while (std::getline(testDataFile, line, '\n'))
-				{
-					if (line.empty())
-						continue;
-					else if (line.substr(0, Kanpsack_0_1_tags::result_exact.length()) == Kanpsack_0_1_tags::result_exact)
-						element.expectedMaxValue = stod(line.substr(Kanpsack_0_1_tags::result_exact.length()));
-					else if (line.substr(0, Kanpsack_0_1_tags::result_greedy.length()) == Kanpsack_0_1_tags::result_greedy)
-						element.expectedMaxValueByGreedy = stod(line.substr(Kanpsack_0_1_tags::result_greedy.length()));
-					else if (line.substr(0, Kanpsack_0_1_tags::knapsack_capacity.length()) == Kanpsack_0_1_tags::knapsack_capacity)
-						element.knapsackCapacity = stoull(line.substr(Kanpsack_0_1_tags::knapsack_capacity.length()));
-					else if (line.substr(0, Kanpsack_0_1_tags::num_items.length()) == Kanpsack_0_1_tags::num_items)
-						numItems = stoi(line.substr(Kanpsack_0_1_tags::num_items.length()));
-					else if (line == Kanpsack_0_1_tags::value_weight_pairs)
-					{
-						while (std::getline(testDataFile, line, '\n'))
-						{
-							if (line.empty())
-								continue;
-							size_t mid = line.find_first_of(',', 0);
-							element.values.push_back(stod(line.substr(0, mid)));
-							element.weights.push_back(stoull(line.substr(mid + 1)));
-						}
-					}
-				}
-
-				MyAssert::myRunTimeAssert(numItems == element.values.size() && numItems == element.weights.size());
+			Kanpsack_0_1_DataSet element = readOneTestCaseFromFile(fullFileName);
+			if(element.knapsackCapacity > 0)
 				testData.push_back(element);
-			}
 		}
 
 		return testData;
+	}
+
+	Kanpsack_0_1_DataSet DP_KnapsackProblem_0_1_testDataGenerator::readOneTestCaseFromFile(const string& testCaseFullFileName)
+	{
+		Kanpsack_0_1_DataSet element;
+		ifstream testDataFile;
+
+		try
+		{
+			testDataFile.open(testCaseFullFileName);
+		}
+		catch (std::ifstream::failure &readErr)
+		{
+			cout << "\nERROR: Can not open file: " << testCaseFullFileName << endl;
+			return element;
+		}
+		catch (...)
+		{
+			cout << "\nUNKNOWN ERROR while opening file: " << testCaseFullFileName << endl;
+			return element;
+		}
+
+		if (testDataFile.is_open())
+		{
+			string fileName(testCaseFullFileName.substr(testCaseFullFileName.find_last_of("/") + 1));
+			element.testFileName = fileName;
+			string line;
+			int numItems = 0;
+			while (std::getline(testDataFile, line, '\n'))
+			{
+				if (line.empty())
+					continue;
+				else if (line.substr(0, Kanpsack_0_1_tags::result_exact.length()) == Kanpsack_0_1_tags::result_exact)
+					element.expectedMaxValue = stod(line.substr(Kanpsack_0_1_tags::result_exact.length()));
+				else if (line.substr(0, Kanpsack_0_1_tags::result_greedy.length()) == Kanpsack_0_1_tags::result_greedy)
+					element.expectedMaxValueByGreedy = stod(line.substr(Kanpsack_0_1_tags::result_greedy.length()));
+				else if (line.substr(0, Kanpsack_0_1_tags::knapsack_capacity.length()) == Kanpsack_0_1_tags::knapsack_capacity)
+					element.knapsackCapacity = stoull(line.substr(Kanpsack_0_1_tags::knapsack_capacity.length()));
+				else if (line.substr(0, Kanpsack_0_1_tags::num_items.length()) == Kanpsack_0_1_tags::num_items)
+					numItems = stoi(line.substr(Kanpsack_0_1_tags::num_items.length()));
+				else if (line == Kanpsack_0_1_tags::value_weight_pairs)
+				{
+					while (std::getline(testDataFile, line, '\n'))
+					{
+						if (line.empty())
+							continue;
+						size_t mid = line.find_first_of(',', 0);
+						element.values.push_back(stod(line.substr(0, mid)));
+						element.weights.push_back(stoull(line.substr(mid + 1)));
+					}
+				}
+			}
+
+			MyAssert::myRunTimeAssert(numItems == element.values.size() && numItems == element.weights.size());
+		}
+
+		return element;
 	}
 
 	//Function declaration
