@@ -1,0 +1,388 @@
+
+====================== version1: Using dynamic programming (tabulated - by eagerly finding solutions for all sum problems to get to final one) - O(n * W)
+
+public bool KnapsackSimplified_DP_Tabulated_Eager(int[] weights, int W)
+{
+	this.Validate(weights, W);
+	bool[][] DP_Memoization_Cache = new bool[weights.Length + 1][];
+	for (int i = 0; i <= weights.Length; i++)
+	{
+		DP_Memoization_Cache[i] = new bool[W + 1];
+	}
+	for (int i = 1; i <= weights.Length; i++)
+	{
+		for (int w = 0; w <= W; w++)
+		{
+			/// f(i, w) determines if weight 'w' can be accumulated using given 'i' number of weights
+			/// f(i, w) = False if i <= 0
+			///           OR True if weights[i-1] == w
+			///           OR f(i-1, w) if weights[i-1] > w
+			///           OR f(i-1, w) || f(i-1, w-weights[i-1])
+			if(weights[i-1] == w)
+			{
+				DP_Memoization_Cache[i][w] = true;
+			}
+			else
+			{
+				DP_Memoization_Cache[i][w] = DP_Memoization_Cache[i - 1][w];
+				if(!DP_Memoization_Cache[i][w])
+				{
+					if (w > weights[i - 1])
+					{
+						DP_Memoization_Cache[i][w] = DP_Memoization_Cache[i - 1][w - weights[i - 1]];
+					}
+				}
+			}
+		}
+	}
+	return DP_Memoization_Cache[weights.Length][W];
+}
+		
+		
+====================== version 2: Using DP but memorization version (lazy - just finding solutions for whatever is needed)
+
+/// <summary>
+/// f(i, w) determines if weight 'w' can be accumulated using given 'i' number of weights
+/// f(i, w) = False if i < 0
+///           OR True if weights[i] == w
+///           OR f(i-1, w) if weights[i] > w
+///           OR f(i-1, w) || f(i-1, w-weights[i])
+/// </summary>
+/// <param name="rowIndexOfCache">
+/// Note, its index of row in the cache
+/// index of given weifhts is indexOfCahce -1 (as it starts from 0)
+/// </param>
+bool KnapsackSimplified_DP_Memoization_Lazy(int[] weights, int w, int i_rowIndexOfCache, bool?[][] DP_Memoization_Cache)
+{
+	if(i_rowIndexOfCache < 0)
+	{
+		return false;
+	}
+	if(DP_Memoization_Cache[i_rowIndexOfCache][w].HasValue)
+	{
+		return DP_Memoization_Cache[i_rowIndexOfCache][w].Value;
+	}
+	int i_weights_index = i_rowIndexOfCache - 1;
+	if (weights[i_weights_index] == w)
+	{
+		//we can just use current weight, so no need to call other recursive methods
+		//just return true
+		DP_Memoization_Cache[i_rowIndexOfCache][w] = true;
+		return true;
+	}
+	//see if W, can be achieved without using weights[i]
+	bool flag = this.KnapsackSimplified_OverlappedSubPromblems_OptimalSubstructure(weights,
+		w, i_rowIndexOfCache - 1);
+	DP_Memoization_Cache[i_rowIndexOfCache][w] = flag;
+	if (flag)
+	{
+		return true;
+	}
+	if (w > weights[i_weights_index])
+	{
+		//see if W-weight[i] can be achieved with rest of the weights
+		flag = this.KnapsackSimplified_OverlappedSubPromblems_OptimalSubstructure(weights,
+			w - weights[i_weights_index], i_rowIndexOfCache - 1);
+		DP_Memoization_Cache[i_rowIndexOfCache][w] = flag;
+	}
+	return flag;
+}
+		
+		
+		
+public bool KnapsackSimplified_DP_Memoization_Lazy(int[] weights, int W)
+{
+	this.Validate(weights, W);
+	//note 'row' index represents the number of weights been used
+	//note 'colum' index represents the weight that can be achived using given 
+	//number of weights 'row'
+	bool?[][] DP_Memoization_Cache = new bool?[weights.Length+1][];
+	for(int i = 0; i<=weights.Length; i++)
+	{
+		DP_Memoization_Cache[i] = new bool?[W + 1];
+		for(int w=0; w<=W; w++)
+		{
+			if(i != 0)
+			{
+				DP_Memoization_Cache[i][w] = null;
+			}
+			else
+			{
+				//can't get to weight 'w' using none of the given weights
+				DP_Memoization_Cache[0][w] = false;
+			}
+		}
+		DP_Memoization_Cache[i][0] = false;
+	}
+	bool f = this.KnapsackSimplified_DP_Memoization_Lazy(
+		weights, w: W, i_rowIndexOfCache: weights.Length, DP_Memoization_Cache: DP_Memoization_Cache);
+	Assert.IsTrue(f == DP_Memoization_Cache[weights.Length][W]);
+	return f;
+}
+		
+		
+		
+====================== version 3 Identifying overlapped sub problems and optimal sub structure
+		
+
+/// <summary>
+/// f(i, w) = False if i < 0
+///           OR True if weights[i] == w
+///           OR f(i-1, w) if weights[i] > w
+///           OR f(i-1, w) || f(i-1, w-weights[i])
+/// </summary>
+public bool KnapsackSimplified_OverlappedSubPromblems_OptimalSubstructure(int[] weights, int W, int i)
+{
+	if(i<0)
+	{
+		//no more weights to traverse
+		return false;
+	}
+	if(weights[i] == W)
+	{
+		//we can just use current weight, so no need to call other recursive methods
+		//just return true
+		return true;
+	}
+	//see if W, can be achieved without using weights[i]
+	bool flag = this.KnapsackSimplified_OverlappedSubPromblems_OptimalSubstructure(weights,
+		W, i - 1);
+	if(flag)
+	{
+		return true;
+	}
+	if(W > weights[i])
+	{
+		//see if W-weight[i] can be achieved with rest of the weights
+		return this.KnapsackSimplified_OverlappedSubPromblems_OptimalSubstructure(weights, W - weights[i], i - 1);
+	}
+	return false;
+}
+
+
+public bool KnapsackSimplified_OverlappedSubPromblems_OptimalSubstructure(int[] weights, int W)
+{
+	this.Validate(weights, W);
+	bool f = this.KnapsackSimplified_OverlappedSubPromblems_OptimalSubstructure(weights, W,
+		i: weights.Length - 1);
+	return f;
+}
+
+
+		
+====================== version 4 Brute force
+		
+		
+private bool KnapsackSimplifiedProblemRecursive(int[] weights, int sum, int currentSum, int index, List<int> itemsInTheKnapsack)
+{
+	if (currentSum == sum)
+	{
+		return true;
+	}
+	if (currentSum > sum)
+	{
+		return false;
+	}
+	if (index >= weights.Length)
+	{
+		return false;
+	}
+	itemsInTheKnapsack.Add(weights[index]);
+	bool flag = KnapsackSimplifiedProblemRecursive(weights, sum, currentSum: currentSum + weights[index],
+		index: index + 1, itemsInTheKnapsack: itemsInTheKnapsack);
+	if (!flag)
+	{
+		itemsInTheKnapsack.Remove(weights[index]);
+		flag = KnapsackSimplifiedProblemRecursive(weights, sum, currentSum, index + 1, itemsInTheKnapsack);
+	}
+	return flag;
+}
+public bool KnapsackRecursive(int[] weights, int sum, out List<int> knapsack)
+{
+	if(sum <= 0)
+	{
+		throw new ArgumentException("sum should be +ve non zero integer");
+	}
+	knapsack = new List<int>();
+	bool fits = KnapsackSimplifiedProblemRecursive(weights, sum, currentSum: 0, index: 0, 
+		itemsInTheKnapsack: knapsack);
+	return fits;
+}
+
+		
+====================== version 5: Iterative version using stack (note - same complexity - using stack - removing tail recursion)
+		
+class KnapsackStackNode
+{
+	public int sumOfWeightsInTheKnapsack;
+	public int nextItemIndex;
+	public bool alreadyExploredAdjuscentItems;
+	public bool includesItemAtCurrentIndex;
+}
+
+public bool KnapsackIterativeUsingStack(int[] weights, int sum, out List<int> knapsack)
+{
+	sum.Throw("sum", s => s <= 0);
+	weights.ThrowIfNull("weights");
+	weights.Throw("weights", w => (w.Length == 0)
+						  || w.Any(wi => wi < 0));
+	var knapsackIndices = new List<int>();
+	knapsack = new List<int>();
+	Stack<KnapsackStackNode> stack = new Stack<KnapsackStackNode>();
+	stack.Push(new KnapsackStackNode() { sumOfWeightsInTheKnapsack = 0, nextItemIndex = 1 });
+	stack.Push(new KnapsackStackNode() { sumOfWeightsInTheKnapsack = weights[0], nextItemIndex = 1, includesItemAtCurrentIndex = true });
+	knapsackIndices.Add(0);
+
+	while(stack.Count > 0)
+	{
+		var top = stack.Peek();
+		if(top.sumOfWeightsInTheKnapsack == sum)
+		{
+			int count = 0;
+			foreach(var index in knapsackIndices)
+			{
+				var w = weights[index];
+				knapsack.Add(w);
+				count += w;
+			}
+			Debug.Assert(count == sum);
+			return true;
+		}
+		//basically either of the below three cases, we dont need to traverse/explore adjuscent
+		// nodes further
+		if((top.nextItemIndex == weights.Length) //we reached end, no need to traverse
+			|| (top.sumOfWeightsInTheKnapsack > sum) // last added node should not be there
+			|| (top.alreadyExploredAdjuscentItems)) //already visted
+		{
+			if (top.includesItemAtCurrentIndex)
+			{
+				Debug.Assert(knapsackIndices.Contains(top.nextItemIndex - 1));
+				knapsackIndices.Remove(top.nextItemIndex - 1);
+			}
+			stack.Pop();
+			continue;
+		}
+
+		var node1 = new KnapsackStackNode();
+		node1.sumOfWeightsInTheKnapsack = top.sumOfWeightsInTheKnapsack;
+		node1.nextItemIndex = top.nextItemIndex + 1;
+		stack.Push(node1);
+
+		var node2 = new KnapsackStackNode();
+		knapsackIndices.Add(top.nextItemIndex);
+		node2.sumOfWeightsInTheKnapsack = top.sumOfWeightsInTheKnapsack + weights[top.nextItemIndex];
+		node2.nextItemIndex = top.nextItemIndex + 1;
+		node2.includesItemAtCurrentIndex = true;
+		stack.Push(node2);
+
+		top.alreadyExploredAdjuscentItems = true;
+	}
+	return false;
+}
+
+
+		
+====================== Unit tests
+		
+
+[TestMethod]
+public void KnapsackSimpliedProblemTests()
+{
+	int[] weights = new int[] { 7, 5, 4, 4, 1 };
+	List<int> bag = null;
+	bool flag = this.KnapsackSimplifiedProblemIterativeUsingStack(weights, 10, knapsack: out bag);
+	Assert.IsTrue(flag);
+	Assert.IsTrue(bag.Contains(5));
+	Assert.IsTrue(bag.Contains(4));
+	Assert.IsTrue(bag.Contains(1));
+	Assert.IsTrue(bag.Count == 3);
+	flag = this.KnapsackSimplifiedProblemIterativeUsingStack(weights, 3, knapsack: out bag);
+	Assert.IsFalse(flag);
+	flag = this.KnapsackSimplifiedProblemIterativeUsingStack(weights, 7, knapsack: out bag);
+	Assert.IsTrue(flag);
+	Assert.IsTrue(bag.Contains(7));
+	Assert.IsTrue(bag.Count == 1);
+	flag = this.KnapsackSimplifiedProblemIterativeUsingStack(weights, 1, knapsack: out bag);
+	Assert.IsTrue(flag);
+	Assert.IsTrue(bag.Contains(1));
+	Assert.IsTrue(bag.Count == 1);
+
+	flag = this.KnapsackSimplified_DP_Tabulated_Eager(weights, 10);
+	Assert.IsTrue(flag);
+	flag = this.KnapsackSimplified_DP_Tabulated_Eager(weights, 3);
+	Assert.IsFalse(flag);
+	flag = this.KnapsackSimplified_DP_Tabulated_Eager(weights, 7);
+	Assert.IsTrue(flag);
+	flag = this.KnapsackSimplified_DP_Tabulated_Eager(weights, 1);
+	Assert.IsTrue(flag);
+
+	flag = this.KnapsackSimplified_DP_Memoization_Lazy(weights, 10);
+	Assert.IsTrue(flag);
+	flag = this.KnapsackSimplified_DP_Memoization_Lazy(weights, 3);
+	Assert.IsFalse(flag);
+	flag = this.KnapsackSimplified_DP_Memoization_Lazy(weights, 7);
+	Assert.IsTrue(flag);
+	flag = this.KnapsackSimplified_DP_Memoization_Lazy(weights, 1);
+	Assert.IsTrue(flag);
+
+	flag = this.KnapsackSimplified_OverlappedSubPromblems_OptimalSubstructure(weights, 10);
+	Assert.IsTrue(flag);
+	flag = this.KnapsackSimplified_OverlappedSubPromblems_OptimalSubstructure(weights, 3);
+	Assert.IsFalse(flag);
+	flag = this.KnapsackSimplified_OverlappedSubPromblems_OptimalSubstructure(weights, 7);
+	Assert.IsTrue(flag);
+	flag = this.KnapsackSimplified_OverlappedSubPromblems_OptimalSubstructure(weights, 1);
+	Assert.IsTrue(flag);
+
+
+	flag = this.KnapsackRecursive(weights, 10, knapsack: out bag);
+	Assert.IsTrue(flag);
+	Assert.IsTrue(bag.Contains(5));
+	Assert.IsTrue(bag.Contains(4));
+	Assert.IsTrue(bag.Contains(1));
+	Assert.IsTrue(bag.Count == 3);
+	flag = this.KnapsackRecursive(weights, 3, knapsack: out bag);
+	Assert.IsFalse(flag);
+	flag = this.KnapsackRecursive(weights, 7, knapsack: out bag);
+	Assert.IsTrue(flag);
+	Assert.IsTrue(bag.Contains(7));
+	Assert.IsTrue(bag.Count == 1);
+	flag = this.KnapsackRecursive(weights, 1, knapsack: out bag);
+	Assert.IsTrue(flag);
+	Assert.IsTrue(bag.Contains(1));
+	Assert.IsTrue(bag.Count == 1);
+
+	weights = new int[] { 11, 8, 7, 6, 5 };
+	flag = this.KnapsackSimplifiedProblemIterativeUsingStack(weights, 20, knapsack: out bag);
+	Assert.IsTrue(bag.Contains(8));
+	Assert.IsTrue(bag.Contains(7));
+	Assert.IsTrue(bag.Contains(5));
+	Assert.IsTrue(bag.Count == 3);
+	flag = this.KnapsackSimplifiedProblemIterativeUsingStack(weights, 27, knapsack: out bag);
+	Assert.IsFalse(flag);
+	flag = this.KnapsackSimplifiedProblemIterativeUsingStack(weights, 11, knapsack: out bag);
+	Assert.IsTrue(flag);
+	Assert.IsTrue(bag.Contains(11));
+	Assert.IsTrue(bag.Count == 1);
+	flag = this.KnapsackSimplifiedProblemIterativeUsingStack(weights, 5, knapsack: out bag);
+	Assert.IsTrue(flag);
+	Assert.IsTrue(bag.Contains(5));
+	Assert.IsTrue(bag.Count == 1);
+
+	flag = this.KnapsackRecursive(weights, 20, knapsack: out bag);
+	Assert.IsTrue(bag.Contains(8));
+	Assert.IsTrue(bag.Contains(7));
+	Assert.IsTrue(bag.Contains(5));
+	Assert.IsTrue(bag.Count == 3);
+	flag = this.KnapsackRecursive(weights, 27, knapsack: out bag);
+	Assert.IsFalse(flag);
+	flag = this.KnapsackRecursive(weights, 11, knapsack: out bag);
+	Assert.IsTrue(flag);
+	Assert.IsTrue(bag.Contains(11));
+	Assert.IsTrue(bag.Count == 1);
+	flag = this.KnapsackRecursive(weights, 5, knapsack: out bag);
+	Assert.IsTrue(flag);
+	Assert.IsTrue(bag.Contains(5));
+	Assert.IsTrue(bag.Count == 1);
+}
+
