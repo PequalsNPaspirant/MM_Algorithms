@@ -249,7 +249,10 @@
     <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1_testDataGenerator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\%40_Programming\Everything\MM_Algorithms\src\Others\Others_CarRentalSystem.cpp">
+    <ClCompile Include="..\..\..\..\src\Others\Others_CarRentalSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\Others\Others_PersonSort.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -473,7 +476,10 @@
     <ClInclude Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1_testDataGenerator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\..\%40_Programming\Everything\MM_Algorithms\src\Others\Others_CarRentalSystem.h">
+    <ClInclude Include="..\..\..\..\src\Others\Others_CarRentalSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\Others\Others_PersonSort.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

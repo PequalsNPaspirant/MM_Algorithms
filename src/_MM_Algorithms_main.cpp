@@ -25,7 +25,7 @@ namespace mm {
 	MM_DEFINE_FLAG(false, DP_LongestCommonSubsequenceStringsAll);
 	MM_DEFINE_FLAG(false, DP_LongestCommonSubsequenceLengthOfkStrings);
 	MM_DEFINE_FLAG(false, DP_LongestCommonSubstring);
-	MM_DEFINE_FLAG(true, DP_KnapsackProblem_0_1);
+	MM_DEFINE_FLAG(false, DP_KnapsackProblem_0_1);
 	MM_DEFINE_FLAG(false, DP_RodCutting);
 	MM_DEFINE_FLAG(false, DP_MaxProductRodCutting);
 	MM_DEFINE_FLAG(false, DP_MinCoinsChange);
@@ -65,7 +65,7 @@ namespace mm {
 	MM_DEFINE_FLAG(false, Others_BigIntegerMultiplication);
 	MM_DEFINE_FLAG(false, Others_EquityOrderManagementSystem);
 	MM_DEFINE_FLAG(false, Others_CarRentalSystem);
-
+	MM_DEFINE_FLAG(true, Others_PersonSort);
 }
 
 using namespace mm;
