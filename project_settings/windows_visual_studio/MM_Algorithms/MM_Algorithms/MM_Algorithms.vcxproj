@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement.cpp" />
+    <ClCompile Include="..\..\..\..\src\Others_h\Others_h_DistinctNumbersGenerated.cpp" />
     <ClCompile Include="..\..\..\..\src\Others\Others_PersonSort.cpp" />
     <ClCompile Include="..\..\..\..\src\Others\Others_CarRentalSystem.cpp" />
     <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1_testDataGenerator.cpp" />
@@ -101,6 +103,8 @@
     <ClCompile Include="..\..\..\..\src\_MM_Algorithms_main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\src\Others\Others_FxSettlement.h" />
+    <ClInclude Include="..\..\..\..\src\Others_h\Others_h_DistinctNumbersGenerated.h" />
     <ClInclude Include="..\..\..\..\src\Others\Others_PersonSort.h" />
     <ClInclude Include="..\..\..\..\src\Others\Others_CarRentalSystem.h" />
     <ClInclude Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1_testDataGenerator.h" />
