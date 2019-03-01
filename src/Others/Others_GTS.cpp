@@ -37,7 +37,7 @@ namespace mm {
 		//dynamic data of lenth (tradeLen - 18 bytes) will be ignored.
 	};
 
-	uint16_t readMarketUpdate(unsigned char* start)
+	uint16_t readMarketUpdate(unsigned char* start, ofstream& outputFile)
 	{
 		commonData* cdata = reinterpret_cast<commonData*>(start);
 		cdata->len = (((uint16_t)start[0]) << 8) | ((uint16_t)start[1]);
@@ -72,7 +72,15 @@ namespace mm {
 			unsigned int volume = t.tradeSize * volumeLotSize;
 			double actualPrice = t.tradePrice / 10000.0;
 
-			cout << "\nOutput: " << volume << " " << symbol << " @ " << std::fixed << std::setprecision(2) << actualPrice;
+			//cout << "\nOutput: " << volume << " " << symbol << " @ " << std::fixed << std::setprecision(2) << actualPrice;
+			char buffer[256];
+			int len = sprintf(buffer, "%d %s @ %.2f\n", volume, symbol.c_str(), actualPrice);
+			string output(buffer, buffer + len);
+			//cout << "\nOutput: " << output;
+			if (outputFile.is_open())
+			{
+				outputFile << output;
+			}
 		}
 		else if (cdata->type == 'Q')
 		{
@@ -86,9 +94,8 @@ namespace mm {
 		return cdata->len;
 	}
 
-	uint16_t readPacket(unsigned char* start)
+	uint16_t readPacket(unsigned char* start, ofstream& outputFile)
 	{
-		//packetHeader* header = reinterpret_cast<packetHeader*>(start);
 		packetHeader header;
 		header.packetLen = (((uint16_t)start[0]) << 8) | ((uint16_t)start[1]);
 //cout << "\n" << "***DEBUGING*** Address: " << (void*)(&header.packetLen) << " packetLen: " << header.packetLen;
@@ -99,12 +106,10 @@ namespace mm {
 		for (int i = 0; i < header.numMarketUpdates; ++i)
 		{
 			//Read market data
-			uint16_t length = readMarketUpdate(start);
+			uint16_t length = readMarketUpdate(start, outputFile);
 			start += length;
-			//cin.get();
 		}
 
-		//return header.packetLen == 0 ? sizeof(packetHeader) : header.packetLen;
 		return header.packetLen;
 	}
 
@@ -114,6 +119,7 @@ namespace mm {
 
 		string filePath("C:/@_Programming/GTS/input.dat");
 		ifstream inputFile;
+		ofstream outputFile("C:/@_Programming/GTS/output.txt");
 
 		try
 		{
@@ -138,23 +144,20 @@ namespace mm {
 
 		streampos size = inputFile.tellg();
 		inputFile.seekg(0, ios::beg);
-		//string streamData(size);
 		char* data = new char[size];
 		inputFile.read(data, size);
-
-		//char packetLength[2];
-		//packetHeader header;
-		//while (inputFile.read(reinterpret_cast<char*>(&header), sizeof(header)))
 		int position = 0;
+
+		//while (inputFile.read(reinterpret_cast<char*>(&header), sizeof(header)))
 		while (position < size)
 		{
-			//cout << "\n-----------------------------------";
-			uint16_t length = readPacket((unsigned char*)&data[position]);
+			uint16_t length = readPacket((unsigned char*)&data[position], outputFile);
 			position += length;
-			//cin.get();
 		}
 
 		delete[] data;
+		inputFile.close();
+		outputFile.close();
 
 		cout << "\nFinished test...\n";
 	}
