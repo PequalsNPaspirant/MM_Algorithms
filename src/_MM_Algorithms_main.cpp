@@ -67,6 +67,7 @@ namespace mm {
 	MM_DEFINE_FLAG(false, Others_CarRentalSystem);
 	MM_DEFINE_FLAG(false, Others_PersonSort);
 	MM_DEFINE_FLAG(false, Others_FxSettlement);
+	MM_DEFINE_FLAG(true, Others_GTS);
 
 	MM_DEFINE_FLAG(false, Others_h_findDistrinctNumbersGenerated);
 }

@@ -261,6 +261,9 @@
     <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\%40_Programming\Everything\MM_Algorithms\src\Others\Others_GTS.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\src\Backtracking\Backtracking.h">
@@ -492,6 +495,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\src\Others\Others_FxSettlement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\%40_Programming\Everything\MM_Algorithms\src\Others\Others_GTS.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
