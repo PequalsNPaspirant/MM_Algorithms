@@ -90,7 +90,7 @@ cout << "\n" << "***DEBUGING*** Address: " << (void*)(&t.tradePrice) << " tradeP
 
 			cout << "\nOutput: " << volume << " " << symbol << " @ " << std::fixed << std::setprecision(2) << actualPrice;
 		}
-		else if (cdata->type == 'T')
+		else if (cdata->type == 'Q')
 			cout << "\nThe current market data is quote. ignoring...";
 		else
 			cout << "\nERROR: unknown type: " << cdata->type;
@@ -113,7 +113,7 @@ cout << "\n" << "***DEBUGING*** Address: " << (void*)(&t.tradePrice) << " tradeP
 			//Read market data
 			uint16_t length = readMarketUpdate(start);
 			start += length;
-			cin.get();
+			//cin.get();
 		}
 
 		return header.packetLen == 0 ? sizeof(packetHeader) : header.packetLen;
@@ -159,8 +159,10 @@ cout << "\n" << "***DEBUGING*** Address: " << (void*)(&t.tradePrice) << " tradeP
 		int position = 0;
 		while (position < size)
 		{
+			cout << "\n-----------------------------------";
 			uint16_t length = readPacket((unsigned char*)&data[position]);
 			position += length;
+			cin.get();
 		}
 
 		delete[] data;
