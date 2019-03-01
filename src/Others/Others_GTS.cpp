@@ -49,26 +49,27 @@ namespace mm {
 
 	uint16_t readMarketUpdate(unsigned char* start)
 	{
+		//commonData cdata;
 		commonData* cdata = reinterpret_cast<commonData*>(start);
-		cdata->len = (((uint32_t)start[0]) << 8) | ((uint32_t)start[1]);
-		cout << "\n" << "Address: " << (void*)(&cdata->len) << " cdata->len: " << cdata->len;
-		//cdata->type = start[2];
-		cout << "\n" << "Address: " << (void*)(&cdata->type) << " cdata->type: " << cdata->type;
-		cout << "\n" << "Address: " << (void*)(&cdata->symbol) << " cdata->symbol: " << cdata->symbol;
+		cdata->len = (((uint16_t)start[0]) << 8) | ((uint16_t)start[1]);
+cout << "\n" << "***DEBUGING*** Address: " << (void*)(&cdata->len) << " cdata.len: " << cdata->len;
+cout << "\n" << "***DEBUGING*** Address: " << (void*)(&cdata->type) << " cdata.type: " << cdata->type;
+cout << "\n" << "***DEBUGING*** Address: " << (void*)(&cdata->symbol) << " cdata.symbol: " << cdata->symbol;
 
 		start += sizeof(commonData);
 
 		if (cdata->type == 'T')
 		{
-			trade* t = reinterpret_cast<trade*>(start);
-			//t->cdata.len = (((uint16_t)start[0]) << 8) | ((uint16_t)start[1]);
-			//cout << "\n" << "Address: " << (void*)(&t->cdata.len) << " len: " << t->cdata.len;
-			//cout << "\n" << "Address: " << (void*)(&t->cdata.type) << " type: " << t->cdata.type;
-			//cout << "\n" << "Address: " << (void*)(&t->cdata.symbol) << " symbol: " << t->cdata.symbol;
-			t->tradeSize = (((uint32_t)start[0]) << 8) | ((uint32_t)start[1]);
-			cout << "\n***** " << (0 + start[0]) << " " << (0 + start[1]);
-			cout << "\n" << "Address: " << (void*)(&t->tradeSize) << " tradeSize: " << t->tradeSize;
-			t->tradePrice = (((uint64_t)start[2]) << 56) |
+			//trade* t = reinterpret_cast<trade*>(start);
+			trade t;
+			//t.cdata.len = (((uint16_t)start[0]) << 8) | ((uint16_t)start[1]);
+			//cout << "\n" << "Address: " << (void*)(&t.cdata.len) << " len: " << t.cdata.len;
+			//cout << "\n" << "Address: " << (void*)(&t.cdata.type) << " type: " << t.cdata.type;
+			//cout << "\n" << "Address: " << (void*)(&t.cdata.symbol) << " symbol: " << t.cdata.symbol;
+			t.tradeSize = (((uint16_t)start[0]) << 8) | ((uint16_t)start[1]);
+			//cout << "\n***DEBUGING*** " << (0 + start[0]) << " " << (0 + start[1]);
+cout << "\n" << "***DEBUGING*** Address: " << (void*)(&t.tradeSize) << " tradeSize: " << t.tradeSize;
+			t.tradePrice = (((uint64_t)start[2]) << 56) |
 				(((uint64_t)start[3]) << 48) |
 				(((uint64_t)start[4]) << 40) |
 				(((uint64_t)start[5]) << 32) |
@@ -77,22 +78,37 @@ namespace mm {
 				(((uint64_t)start[8]) << 8) |
 				(((uint64_t)start[9]));
 
-			cout << "\n" << "Address: " << (void*)(&t->tradePrice) << " tradePrice: " << t->tradePrice;
+cout << "\n" << "***DEBUGING*** Address: " << (void*)(&t.tradePrice) << " tradePrice: " << t.tradePrice;
+
+			string symbol(cdata->symbol, cdata->symbol + 5);
+			auto it = symbol.find_first_of(' ');
+			if (it != string::npos)
+				symbol.erase(it);
+			const unsigned int volumeLotSize = 100;
+			unsigned int volume = t.tradeSize * volumeLotSize;
+			double actualPrice = t.tradePrice / 10000.0;
+
+			cout << "\nOutput: " << volume << " " << symbol << " @ " << std::fixed << std::setprecision(2) << actualPrice;
 		}
-		else
+		else if (cdata->type == 'T')
 			cout << "\nThe current market data is quote. ignoring...";
+		else
+			cout << "\nERROR: unknown type: " << cdata->type;
 
 		return cdata->len;
 	}
 
 	uint16_t readPacket(unsigned char* start)
 	{
-		packetHeader* header = reinterpret_cast<packetHeader*>(start);
-		cout << "\n" << "Address: " << (void*)(&header->packetLen) << " packetLen: " << header->packetLen;
-		cout << "\n" << "Address: " << (void*)(&header->numMarketUpdates) << " numMarketUpdates: " << header->numMarketUpdates;
+		//packetHeader* header = reinterpret_cast<packetHeader*>(start);
+		packetHeader header;
+		header.packetLen = (((uint16_t)start[0]) << 8) | ((uint16_t)start[1]);
+		cout << "\n" << "***DEBUGING*** Address: " << (void*)(&header.packetLen) << " packetLen: " << header.packetLen;
+		header.numMarketUpdates = (((uint16_t)start[2]) << 8) | ((uint16_t)start[3]);
+		cout << "\n" << "***DEBUGING*** Address: " << (void*)(&header.numMarketUpdates) << " numMarketUpdates: " << header.numMarketUpdates;
 		start += sizeof(packetHeader);
 
-		for (int i = 0; i < header->numMarketUpdates; ++i)
+		for (int i = 0; i < header.numMarketUpdates; ++i)
 		{
 			//Read market data
 			uint16_t length = readMarketUpdate(start);
@@ -100,7 +116,7 @@ namespace mm {
 			cin.get();
 		}
 
-		return header->packetLen;
+		return header.packetLen == 0 ? sizeof(packetHeader) : header.packetLen;
 	}
 
 	void test_GTS()
@@ -146,6 +162,8 @@ namespace mm {
 			uint16_t length = readPacket((unsigned char*)&data[position]);
 			position += length;
 		}
+
+		delete[] data;
 	}
 
 	MM_DECLARE_FLAG(Others_GTS);
