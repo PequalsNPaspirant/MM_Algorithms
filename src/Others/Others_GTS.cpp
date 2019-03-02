@@ -117,9 +117,9 @@ namespace mm {
 	{
 		cout << "\nStarted test...\n";
 
-		string filePath("C:/@_Programming/GTS/input.dat");
+		string filePath("../../../test/data/GTS/input.dat");
 		ifstream inputFile;
-		ofstream outputFile("C:/@_Programming/GTS/output.txt");
+		ofstream outputFile("../../../test/data/GTS/output.txt");
 
 		try
 		{
