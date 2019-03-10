@@ -24,14 +24,20 @@ namespace mm {
 	FreqStack_v1:
 	Runtime: 308 ms, faster than 38.33% of C++ online submissions for Maximum Frequency Stack.
 	Memory Usage: 70.4 MB, less than 81.69% of C++ online submissions for Maximum Frequency Stack.
-	FreqStack_v2:
+	FreqStack_v2: Changes: Different implementation of FreqStack_v2::push()
 	Runtime: 268 ms, faster than 79.72% of C++ online submissions for Maximum Frequency Stack.
 	Memory Usage: 68.1 MB, less than 85.91% of C++ online submissions for Maximum Frequency Stack.
+	FreqStack_v3: Changes: store frequency and index in one variable
+	Runtime: 264 ms, faster than 82.22% of C++ online submissions for Maximum Frequency Stack.
+	Memory Usage: 68.1 MB, less than 85.91% of C++ online submissions for Maximum Frequency Stack.
+	FreqStack_v4: 
+
 	*/
 
 	class FreqStack_v1 {
 	public:
-		FreqStack_v1() {
+		FreqStack_v1()
+		{
 			index_ = 0;
 		}
 
@@ -85,17 +91,18 @@ namespace mm {
 	};
 
 
-	//Changed the implementation of FreqStack_v2::push()
+	//Changes: Different implementation of FreqStack_v2::push()
 	class FreqStack_v2 {
 	public:
-		FreqStack_v2() {
+		FreqStack_v2()
+		{
 			index_ = 0;
 		}
 
 		void push(int x) {
-			unsigned int& val = hash_[x];
-			++val;
-			max_heap_.push(data{ x, val, ++index_ });
+			unsigned int& freq = hash_[x];
+			++freq;
+			max_heap_.push(data{ x, freq, ++index_ });
 		}
 
 		int pop() {
@@ -137,6 +144,93 @@ namespace mm {
 		};
 
 		priority_queue<data, vector<data>, comp> max_heap_;
+	};
+
+	//Changes: store frequency and index in one variable
+	class FreqStack_v3 {
+	public:
+		FreqStack_v3()
+		{
+			index_ = 0;
+		}
+
+		void push(int x) {
+
+			unsigned int& freq = hash_[x];
+			++freq;
+			max_heap_.push(data{ x, freq, ++index_ });
+		}
+
+		int pop() {
+			data d = max_heap_.top();
+			max_heap_.pop();
+			--hash_[d.num];
+
+			return d.num;
+		}
+
+	private:
+		struct data
+		{
+			data(int n, unsigned int freq, unsigned int ind)
+				: num(n), frequency_index(((unsigned long)freq << 32) | ind)
+			{
+			}
+
+			int num;
+			unsigned long frequency_index; // combined frequency and index
+		};
+
+		unsigned int index_;
+		unordered_map<int, unsigned int> hash_; //Map of num -> frequency
+
+		struct comp
+		{
+			bool operator()(const data& lhs,
+				const data& rhs) const
+			{
+				return lhs.frequency_index < rhs.frequency_index; //max frequency_index would be at top
+			}
+		};
+
+		priority_queue<data, vector<data>, comp> max_heap_;
+	};
+
+	//Changes: 
+	class FreqStack_v4 {
+	public:
+		FreqStack_v4()
+			: freq_stacks_(1)
+		{
+		}
+
+		void push(int x) {
+
+			unsigned int& freq = hash_[x];
+			++freq;
+			if (freq == freq_stacks_.size())
+			{
+				//if (freq_stacks_.capacity() <= freq)
+				//	freq_stacks_.reserve(freq_stacks_.capacity() + 100);
+				freq_stacks_.push_back({});
+			}
+			freq_stacks_[freq].push_back(x);
+		}
+
+		int pop() {
+			int num = *freq_stacks_.rbegin()->rbegin();
+			freq_stacks_.rbegin()->pop_back();
+			if (freq_stacks_.rbegin()->size() == 0)
+				freq_stacks_.pop_back();
+
+			--hash_[num];
+
+			return num;
+		}
+
+	private:
+		unordered_map<int, unsigned int> hash_; //Map of num -> frequency
+		vector< vector<int> > freq_stacks_; //freq_stacks_[freq] is a stack of num having frequency = freq
 	};
 
 #define MM_TIME2(msg, statement, time) \
@@ -225,7 +319,7 @@ namespace mm {
 		}
 
 		int n;
-		FreqStack_v1 s;
+		FreqStack_v4 s;
 		s.push(5);
 		s.push(7);
 		s.push(5);
