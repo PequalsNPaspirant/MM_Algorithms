@@ -31,7 +31,8 @@ namespace mm {
 	Runtime: 264 ms, faster than 82.22% of C++ online submissions for Maximum Frequency Stack.
 	Memory Usage: 68.1 MB, less than 85.91% of C++ online submissions for Maximum Frequency Stack.
 	FreqStack_v4: 
-
+	Runtime: 244 ms, faster than 100.00% of C++ online submissions for Maximum Frequency Stack.
+	Memory Usage: 68.2 MB, less than 83.10% of C++ online submissions for Maximum Frequency Stack.
 	*/
 
 	class FreqStack_v1 {
@@ -206,8 +207,9 @@ namespace mm {
 
 		void push(int x) {
 
-			unsigned int& freq = hash_[x];
-			++freq;
+			//unsigned int& freq = hash_[x];
+			//++freq;
+			unsigned int freq = ++hash_[x];
 			if (freq == freq_stacks_.size())
 			{
 				//if (freq_stacks_.capacity() <= freq)
