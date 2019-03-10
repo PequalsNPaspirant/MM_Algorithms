@@ -8,24 +8,16 @@ namespace mm {
 
 	namespace {
 
-		struct Node
-		{
-			int data;
-			Node *left, *right;
-		};
+		// Check the implementations present in src\BinaryTree\BinaryTree_BuildFromArrayRepresentation.cpp
 
-		bool BinaryTree_CheckIfIdentical(Node* root1, Node* root2)
-		{
-			if (root1 == nullptr && root2 == nullptr)
-				return true;
+		//struct Node
+		//{
+		//	int data;
+		//	Node *left, *right;
+		//};
 
-			if (root1 == nullptr || root2 == nullptr)
-				return false;
-
-			return root1->data == root2->data &&
-				BinaryTree_CheckIfIdentical(root1->left, root2->left) &&
-				BinaryTree_CheckIfIdentical(root1->right, root2->right);
-		}
+		//bool BinaryTree_CheckIfIdentical_recursive(Node* root1, Node* root2)
+		//bool BinaryTree_CheckIfIdentical_recursive(Node* root1, Node* root2)
 
 	}
 

@@ -146,7 +146,7 @@ namespace mm {
 			return true;
 		}
 
-		bool BinaryTree_CheckIfIdentical(Node* root1, Node* root2)
+		bool BinaryTree_CheckIfIdentical_recursive(Node* root1, Node* root2)
 		{
 			if (root1 == nullptr && root2 == nullptr)
 				return true;
@@ -155,8 +155,38 @@ namespace mm {
 				return false;
 
 			return root1->data == root2->data &&
-				BinaryTree_CheckIfIdentical(root1->left, root2->left) &&
-				BinaryTree_CheckIfIdentical(root1->right, root2->right);
+				BinaryTree_CheckIfIdentical_recursive(root1->left, root2->left) &&
+				BinaryTree_CheckIfIdentical_recursive(root1->right, root2->right);
+		}
+
+		bool BinaryTree_CheckIfIdentical_iterative(Node* root1, Node* root2)
+		{
+			queue<Node*> cache1;
+			cache1.push(root1);
+			queue<Node*> cache2;
+			cache2.push(root2);
+			while (!cache1.empty() && !cache2.empty())
+			{
+				Node* current1 = cache1.front();
+				cache1.pop();
+				Node* current2 = cache2.front();
+				cache2.pop();
+
+				if (current1 != nullptr && current2 != nullptr)
+				{
+					if (current1->data != current2->data)
+						return false;
+
+					cache1.push(current1->left);
+					cache1.push(current1->right);
+					cache2.push(current2->left);
+					cache2.push(current2->right);
+				}
+				else if (current1 != nullptr || current2 != nullptr)
+					return false;
+			}
+
+			return cache1.empty() && cache2.empty();
 		}
 
 		//============== Testing ================
@@ -326,7 +356,8 @@ namespace mm {
 			BinaryTree_getArrayRepresentation_recursive(root2, 0, actualResult);
 			MM_EXPECT_TRUE(compareArrayRepresentations(BTArray[i], actualResult), BTArray[i], actualResult);
 
-			MM_EXPECT_TRUE(BinaryTree_CheckIfIdentical(root1, root2) == true);
+			MM_EXPECT_TRUE(BinaryTree_CheckIfIdentical_recursive(root1, root2) == true);
+			MM_EXPECT_TRUE(BinaryTree_CheckIfIdentical_iterative(root1, root2) == true);
 
 			//get back array representation from binary tree using BinaryTree_getArrayRepresentation_iterative
 			actualResult.clear();
