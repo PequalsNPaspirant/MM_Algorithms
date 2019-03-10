@@ -2,6 +2,7 @@
 #include <cmath>
 #include <cstdio>
 #include <vector>
+#include <queue>
 #include <set>
 #include <unordered_map>
 #include <iostream>
@@ -19,73 +20,123 @@ using namespace std;
 
 namespace mm {
 
-	class FreqStack {
+	/*
+	FreqStack_v1:
+	Runtime: 308 ms, faster than 38.33% of C++ online submissions for Maximum Frequency Stack.
+	Memory Usage: 70.4 MB, less than 81.69% of C++ online submissions for Maximum Frequency Stack.
+	FreqStack_v2:
+	Runtime: 268 ms, faster than 79.72% of C++ online submissions for Maximum Frequency Stack.
+	Memory Usage: 68.1 MB, less than 85.91% of C++ online submissions for Maximum Frequency Stack.
+	*/
+
+	class FreqStack_v1 {
 	public:
-		FreqStack() {
+		FreqStack_v1() {
 			index_ = 0;
 		}
 
 		void push(int x) {
-			auto itPair = hash.insert({ x, data(x) });
+			//Insert it into hash table
+			auto itPair = hash_.insert({ x, 0 });
 			auto it = itPair.first;
-				
-			//data& val = hash[x];
-			if (it->second.count > 0)
-			{
-				sorted.erase(sorted.find(it));
-			}
-			it->second.count += 1;
-			it->second.index = (++index_);
-			sorted.insert(it);
+			it->second += 1;
+			max_heap_.push(data{x, it->second, ++index_});		
 		}
 
 		int pop() {
-			auto itSet = sorted.begin();
-			if (itSet != sorted.end())
-			{
-				auto itUMap = *itSet;
-				itUMap->second.count -= 1;
-				if (itUMap->second.count == 0)
-					sorted.erase(itSet);
+			data d = max_heap_.top();
+			max_heap_.pop();
+			--hash_[d.num];
 
-				return itUMap->second.num;
-			}
-
-			return 0;
+			return d.num;
 		}
 
 	private:
 		struct data
 		{
-			data(int n)
+			data(int n, unsigned int freq, int ind)
 			{
 				num = n;
-				count = 0;
-				index = 0;
+				frequency = freq;
+				index = ind;
 			}
 
 			int num;
-			int count;
-			int index;
+			unsigned int frequency; //it is always non-negative.
+			unsigned long index; // it is always incremental, it never decreases
 		};
 
+		int index_;
+		unordered_map<int, unsigned int> hash_; //Map of num -> frequency
 
-		unordered_map<int, data> hash;
-		//vector<data> heap;
 		struct comp
 		{
-			bool operator()(const unordered_map<int, data>::iterator& lhs,
-				const unordered_map<int, data>::iterator& rhs) const
+			bool operator()(const data& lhs,
+				const data& rhs) const
 			{
-				if (lhs->second.count == rhs->second.count)
-					return lhs->second.index > rhs->second.index;
+				if (lhs.frequency == rhs.frequency)
+					return lhs.index < rhs.index; //max index would be at top
 				else
-					return lhs->second.count > rhs->second.count;
+					return lhs.frequency < rhs.frequency; //max frequency would be at top
 			}
 		};
 
-		set<unordered_map<int, data>::iterator, comp> sorted;
+		priority_queue<data, vector<data>, comp> max_heap_;
+	};
+
+
+	//Changed the implementation of FreqStack_v2::push()
+	class FreqStack_v2 {
+	public:
+		FreqStack_v2() {
+			index_ = 0;
+		}
+
+		void push(int x) {
+			unsigned int& val = hash_[x];
+			++val;
+			max_heap_.push(data{ x, val, ++index_ });
+		}
+
+		int pop() {
+			data d = max_heap_.top();
+			max_heap_.pop();
+			--hash_[d.num];
+
+			return d.num;
+		}
+
+	private:
+		struct data
+		{
+			data(int n, unsigned int freq, int ind)
+			{
+				num = n;
+				frequency = freq;
+				index = ind;
+			}
+
+			int num;
+			unsigned int frequency; //it is always non-negative.
+			unsigned long index; // it is always incremental, it never decreases
+		};
+
 		int index_;
+		unordered_map<int, unsigned int> hash_; //Map of num -> frequency
+
+		struct comp
+		{
+			bool operator()(const data& lhs,
+				const data& rhs) const
+			{
+				if (lhs.frequency == rhs.frequency)
+					return lhs.index < rhs.index; //max index would be at top
+				else
+					return lhs.frequency < rhs.frequency; //max frequency would be at top
+			}
+		};
+
+		priority_queue<data, vector<data>, comp> max_heap_;
 	};
 
 #define MM_TIME2(msg, statement, time) \
@@ -174,7 +225,7 @@ namespace mm {
 		}
 
 		int n;
-		FreqStack s;
+		FreqStack_v1 s;
 		s.push(5);
 		s.push(7);
 		s.push(5);

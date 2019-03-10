@@ -12,7 +12,7 @@ namespace mm {
 	MM_DEFINE_FLAG(false, BST_checkIfPreorderTraversalIsBST);
 	//Binary Tree
 	MM_DEFINE_FLAG(false, BinaryTree_buildMaxBinaryTreeUnitTest);
-	MM_DEFINE_FLAG(true, BinaryTree_BuildFromArrayRepresentation);
+	MM_DEFINE_FLAG(false, BinaryTree_BuildFromArrayRepresentation);
 	MM_DEFINE_FLAG(false, BinaryTree_Traversals);
 	MM_DEFINE_FLAG(false, BinaryTree_CheckIfIdentical_UnitTests);
 	//Dynamic Programming
@@ -72,7 +72,7 @@ namespace mm {
 
 	MM_DEFINE_FLAG(false, Others_h_findDistrinctNumbersGenerated);
 
-	MM_DEFINE_FLAG(false, Others_L_MaxFrequencyStack);
+	MM_DEFINE_FLAG(true, Others_L_MaxFrequencyStack);
 }
 
 using namespace mm;
