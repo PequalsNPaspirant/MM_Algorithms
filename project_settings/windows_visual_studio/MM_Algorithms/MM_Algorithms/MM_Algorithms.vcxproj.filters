@@ -270,6 +270,9 @@
     <ClCompile Include="..\..\..\..\src\Others_L\Others_L_MaxFrequencyStack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\src\Others\Others_FxRatesCache.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\src\Backtracking\Backtracking.h">
@@ -510,6 +513,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\src\Others_L\Others_L_MaxFrequencyStack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\Others\Others_FxRatesCache.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

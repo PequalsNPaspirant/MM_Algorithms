@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\src\Others\Others_FxRatesCache.cpp" />
     <ClCompile Include="..\..\..\..\src\Others_L\Others_L_MaxFrequencyStack.cpp" />
     <ClCompile Include="..\..\..\..\src\BinaryTree\BinaryTree_CheckIfIdentical.cpp" />
     <ClCompile Include="..\..\..\..\src\Binary\Binary_Toggle1bitForMaxAdjacency.cpp" />
@@ -106,6 +107,7 @@
     <ClCompile Include="..\..\..\..\src\_MM_Algorithms_main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\src\Others\Others_FxRatesCache.h" />
     <ClInclude Include="..\..\..\..\src\Others_L\Others_L_MaxFrequencyStack.h" />
     <ClInclude Include="..\..\..\..\src\BinaryTree\BinaryTree_CheckIfIdentical.h" />
     <ClInclude Include="..\..\..\..\src\Binary\Binary_Toggle1bitForMaxAdjacency.h" />
