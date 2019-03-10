@@ -12,8 +12,9 @@ namespace mm {
 	MM_DEFINE_FLAG(false, BST_checkIfPreorderTraversalIsBST);
 	//Binary Tree
 	MM_DEFINE_FLAG(false, BinaryTree_buildMaxBinaryTreeUnitTest);
-	MM_DEFINE_FLAG(false, BinaryTree_BuildFromArrayRepresentation);
+	MM_DEFINE_FLAG(true, BinaryTree_BuildFromArrayRepresentation);
 	MM_DEFINE_FLAG(false, BinaryTree_Traversals);
+	MM_DEFINE_FLAG(false, BinaryTree_CheckIfIdentical_UnitTests);
 	//Dynamic Programming
 	MM_DEFINE_FLAG(false, DP_HouseRobbery);
 	MM_DEFINE_FLAG(false, DP_Fibonacci);
@@ -67,9 +68,11 @@ namespace mm {
 	MM_DEFINE_FLAG(false, Others_CarRentalSystem);
 	MM_DEFINE_FLAG(false, Others_PersonSort);
 	MM_DEFINE_FLAG(false, Others_FxSettlement);
-	MM_DEFINE_FLAG(true, Others_GTS);
+	MM_DEFINE_FLAG(false, Others_GTS);
 
 	MM_DEFINE_FLAG(false, Others_h_findDistrinctNumbersGenerated);
+
+	MM_DEFINE_FLAG(false, Others_L_MaxFrequencyStack);
 }
 
 using namespace mm;

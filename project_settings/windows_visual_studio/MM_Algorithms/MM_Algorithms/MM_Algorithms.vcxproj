@@ -19,7 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\..\..\%40_Programming\Everything\MM_Algorithms\src\Others\Others_GTS.cpp" />
+    <ClCompile Include="..\..\..\..\src\Others_L\Others_L_MaxFrequencyStack.cpp" />
+    <ClCompile Include="..\..\..\..\src\BinaryTree\BinaryTree_CheckIfIdentical.cpp" />
+    <ClCompile Include="..\..\..\..\src\Binary\Binary_Toggle1bitForMaxAdjacency.cpp" />
+    <ClCompile Include="..\..\..\..\src\Others\Others_GTS.cpp" />
     <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement.cpp" />
     <ClCompile Include="..\..\..\..\src\Others_h\Others_h_DistinctNumbersGenerated.cpp" />
     <ClCompile Include="..\..\..\..\src\Others\Others_PersonSort.cpp" />
@@ -57,7 +60,6 @@
     <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_LongestCommonSubsequenceString2.cpp" />
     <ClCompile Include="..\..\..\..\src\Array\Array.cpp" />
     <ClCompile Include="..\..\..\..\src\BinaryTree\BinaryTree_BuildFromArrayRepresentation.cpp" />
-    <ClCompile Include="..\..\..\..\src\BinaryTree\BinaryTree_TestData.cpp" />
     <ClCompile Include="..\..\..\..\src\Heap\Heap_FindTopkElements.cpp" />
     <ClCompile Include="..\..\..\..\src\Heap\Heap_FirstKMaximumOccurringWords.cpp" />
     <ClCompile Include="..\..\..\..\src\Heap\Heap_FirstKNonRepeatingChars.cpp" />
@@ -104,7 +106,10 @@
     <ClCompile Include="..\..\..\..\src\_MM_Algorithms_main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\..\..\%40_Programming\Everything\MM_Algorithms\src\Others\Others_GTS.h" />
+    <ClInclude Include="..\..\..\..\src\Others_L\Others_L_MaxFrequencyStack.h" />
+    <ClInclude Include="..\..\..\..\src\BinaryTree\BinaryTree_CheckIfIdentical.h" />
+    <ClInclude Include="..\..\..\..\src\Binary\Binary_Toggle1bitForMaxAdjacency.h" />
+    <ClInclude Include="..\..\..\..\src\Others\Others_GTS.h" />
     <ClInclude Include="..\..\..\..\src\Others\Others_FxSettlement.h" />
     <ClInclude Include="..\..\..\..\src\Others_h\Others_h_DistinctNumbersGenerated.h" />
     <ClInclude Include="..\..\..\..\src\Others\Others_PersonSort.h" />
@@ -142,7 +147,6 @@
     <ClInclude Include="..\..\..\..\src\DynamicProgramming\DP_LongestCommonSubsequenceString2.h" />
     <ClInclude Include="..\..\..\..\src\Array\Array.h" />
     <ClInclude Include="..\..\..\..\src\BinaryTree\BinaryTree_BuildFromArrayRepresentation.h" />
-    <ClInclude Include="..\..\..\..\src\BinaryTree\BinaryTree_TestData.h" />
     <ClInclude Include="..\..\..\..\src\Heap\Heap_FindTopkElements.h" />
     <ClInclude Include="..\..\..\..\src\Heap\Heap_FirstKMaximumOccurringWords.h" />
     <ClInclude Include="..\..\..\..\src\Heap\Heap_FirstKNonRepeatingChars.h" />

@@ -135,9 +135,6 @@
     <ClCompile Include="..\..\..\..\src\BinaryTree\BinaryTree_Traversals.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\src\BinaryTree\BinaryTree_TestData.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\src\BinaryTree\BinaryTree_BuildFromArrayRepresentation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -261,7 +258,16 @@
     <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\%40_Programming\Everything\MM_Algorithms\src\Others\Others_GTS.cpp">
+    <ClCompile Include="..\..\..\..\src\Others\Others_GTS.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\Binary\Binary_Toggle1bitForMaxAdjacency.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\BinaryTree\BinaryTree_CheckIfIdentical.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\Others_L\Others_L_MaxFrequencyStack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -372,9 +378,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\src\BinaryTree\BinaryTree_Traversals.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\src\BinaryTree\BinaryTree_TestData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\src\BinaryTree\BinaryTree_BuildFromArrayRepresentation.h">
@@ -497,7 +500,16 @@
     <ClInclude Include="..\..\..\..\src\Others\Others_FxSettlement.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\..\%40_Programming\Everything\MM_Algorithms\src\Others\Others_GTS.h">
+    <ClInclude Include="..\..\..\..\src\Others\Others_GTS.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\Binary\Binary_Toggle1bitForMaxAdjacency.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\BinaryTree\BinaryTree_CheckIfIdentical.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\Others_L\Others_L_MaxFrequencyStack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
