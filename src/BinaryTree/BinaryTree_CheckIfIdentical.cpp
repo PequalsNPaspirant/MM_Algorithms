@@ -10,14 +10,8 @@ namespace mm {
 
 		// Check the implementations present in src\BinaryTree\BinaryTree_BuildFromArrayRepresentation.cpp
 
-		//struct Node
-		//{
-		//	int data;
-		//	Node *left, *right;
-		//};
-
 		//bool BinaryTree_CheckIfIdentical_recursive(Node* root1, Node* root2)
-		//bool BinaryTree_CheckIfIdentical_recursive(Node* root1, Node* root2)
+		//bool BinaryTree_CheckIfIdentical_iterative(Node* root1, Node* root2)
 
 	}
 

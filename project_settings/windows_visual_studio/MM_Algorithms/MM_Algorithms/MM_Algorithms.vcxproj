@@ -19,6 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\src\BinaryTree\BinaryTree_CheckIfBST.cpp" />
+    <ClCompile Include="..\..\..\..\src\Graphs\Graph_FxRatesCache.cpp" />
+    <ClCompile Include="..\..\..\..\src\Puzzles\Puzzles_EggDropping.cpp" />
+    <ClCompile Include="..\..\..\..\src\Puzzles\Puzzles_JosephusProblem.cpp" />
     <ClCompile Include="..\..\..\..\src\Others\Others_FxRatesCache.cpp" />
     <ClCompile Include="..\..\..\..\src\Others_L\Others_L_MaxFrequencyStack.cpp" />
     <ClCompile Include="..\..\..\..\src\BinaryTree\BinaryTree_CheckIfIdentical.cpp" />
@@ -95,7 +99,6 @@
     <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_RodCutting.cpp" />
     <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_MaxProductRodCutting.cpp" />
     <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_CoinChangeMakingProblem.cpp" />
-    <ClCompile Include="..\..\..\..\src\Graphs\Graphs.cpp" />
     <ClCompile Include="..\..\..\..\src\Greedy\Greedy.cpp" />
     <ClCompile Include="..\..\..\..\src\Matrix\Matrix.cpp" />
     <ClCompile Include="..\..\..\..\src\Puzzles\Puzzles_ClockAngleProblem.cpp" />
@@ -107,6 +110,10 @@
     <ClCompile Include="..\..\..\..\src\_MM_Algorithms_main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\src\BinaryTree\BinaryTree_CheckIfBST.h" />
+    <ClInclude Include="..\..\..\..\src\Graphs\Graph_FxRatesCache.h" />
+    <ClInclude Include="..\..\..\..\src\Puzzles\Puzzles_EggDropping.h" />
+    <ClInclude Include="..\..\..\..\src\Puzzles\Puzzles_JosephusProblem.h" />
     <ClInclude Include="..\..\..\..\src\Others\Others_FxRatesCache.h" />
     <ClInclude Include="..\..\..\..\src\Others_L\Others_L_MaxFrequencyStack.h" />
     <ClInclude Include="..\..\..\..\src\BinaryTree\BinaryTree_CheckIfIdentical.h" />
@@ -179,7 +186,6 @@
     <ClInclude Include="..\..\..\..\src\DynamicProgramming\DP_RodCutting.h" />
     <ClInclude Include="..\..\..\..\src\DynamicProgramming\DP_MaxProductRodCutting.h" />
     <ClInclude Include="..\..\..\..\src\DynamicProgramming\DP_CoinChangeMakingProblem.h" />
-    <ClInclude Include="..\..\..\..\src\Graphs\Graphs.h" />
     <ClInclude Include="..\..\..\..\src\Greedy\Greedy.h" />
     <ClInclude Include="..\..\..\..\src\Matrix\Matrix.h" />
     <ClInclude Include="..\..\..\..\src\Puzzles\Puzzles_ClockAngleProblem.h" />

@@ -15,6 +15,7 @@ namespace mm {
 	MM_DEFINE_FLAG(false, BinaryTree_BuildFromArrayRepresentation);
 	MM_DEFINE_FLAG(false, BinaryTree_Traversals);
 	MM_DEFINE_FLAG(false, BinaryTree_CheckIfIdentical_UnitTests);
+	MM_DEFINE_FLAG(false, BinaryTree_CheckIfBST_UnitTests); //-----TODO
 	//Dynamic Programming
 	MM_DEFINE_FLAG(false, DP_HouseRobbery);
 	MM_DEFINE_FLAG(false, DP_Fibonacci);
@@ -39,6 +40,8 @@ namespace mm {
 	//Stack
 	//Heaps
 	//Puzzles
+	MM_DEFINE_FLAG(true, Puzzles_JosephusProblem);
+	MM_DEFINE_FLAG(false, Puzzles_EggDropping);  //--------TODO
 	//Binary
 	MM_DEFINE_FLAG(false, Binary_reverseBitsInInteger);
 	//Queue
@@ -69,7 +72,7 @@ namespace mm {
 	MM_DEFINE_FLAG(false, Others_PersonSort);
 	MM_DEFINE_FLAG(false, Others_FxSettlement);
 	MM_DEFINE_FLAG(false, Others_GTS);
-	MM_DEFINE_FLAG(true, Others_FxRatesCache);
+	MM_DEFINE_FLAG(false, Others_FxRatesCache); //----TODO
 
 	MM_DEFINE_FLAG(false, Others_h_findDistrinctNumbersGenerated);
 

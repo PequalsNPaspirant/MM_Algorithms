@@ -91,6 +91,13 @@ namespace mm {
 		static constexpr const double precision = 0.0001; //10 ^ -4
 	};
 
+	/*
+	Above class FxRatesCache_v1 does not find the Fx rate which depend upon more than 2 Fx rates.
+	e.g. It can find Fx rate USD-INR if USD-EUR and EUR-INR are known.
+	But it can not find Fx rate USD-INR if USD-EUR, EUR-GBP, GBP-INR are known.
+	Please check the solution using graph in file: Graphs/Graph_FxRatesCache.cpp
+	*/
+
 	MM_DECLARE_FLAG(Others_FxRatesCache);
 
 	MM_UNIT_TEST(Others_FxRatesCache_test_1, Others_FxRatesCache)
