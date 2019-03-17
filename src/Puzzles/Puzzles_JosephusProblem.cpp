@@ -40,65 +40,49 @@ namespace mm {
 	}
 
 	/*
-	Recurrence relation:
-	Note: s is always less than n. k can be anything from 0 to infinity
+	Slightly different Recurrence relation: 
+	f(n, k, s) = (s + f(n, k)) % n    ---Rotate the circle of indices (by s indices) to bring the index 0 at the person with sword, 
+	                                  ---then complete the process and rotate the circle of indices in opposite direction (by s indices)
+	
+	f(n, k) = ((k + 1) + f(n-1, k)) % n   ---When first person is killed, the problem remaing is f(n-1, k, 0), so the survivor in this case 
+	                                      ---is the actual survivor, but it starts at (k + 1)st position, so we need to adjust the index 
+									      ---by adding (1 + k) to solution of f(n-1, k, 0)
+	f(1, k) = 0                           ---If there is only one person, he is the survivor
 
-	f(n, k, s) = (s + f(n, k, 0))              ---Rotate the circle of indices (by s indices) to bring the index 0 at the person with sword,
-	                                           ---then complete the process and rotate the circle of indices in opposite direction (by s indices)
-	//Make sure s is always less than n
-	f(n, k, 0) = f(n-1, k, (k + 1) % n)        ---When first person is killed, the problem remaing is f(n-1, k, 0), so the survivor in this case
-	                                           ---is the actual survivor, but it starts at (k + 1)st position, so we need to adjust the index
-	                                           ---by adding (1 + k) to solution of f(n-1, k, 0)
-	f(1, k, s) = 0                             ---If there is only one person, he is the survivor
 
-	Time complexity: O(n)
-	*/
-	unsigned int JosephusProblem_DP_topdown_recursive_v1_helper(unsigned int n, unsigned int k, unsigned int s, const unsigned int orig_n)
-	{
-		if (n == 1)
-			return s;
+	example:
+	Lets say following persons are in circle
+	The person who is killed, will be replaced by X
+	n = 8, k = 3, s = 0
 
-		return JosephusProblem_DP_topdown_recursive_v1_helper(n - 1, k, (s + k + 1) % n, orig_n);
-	}
-
-	unsigned int JosephusProblem_DP_topdown_recursive_v1(unsigned int n, unsigned int k, unsigned int s)
-	{
-		//invalid case
-		if (n == 0 || s >= n)
-		//if(n == 0)
-			return 0; //ideally we should return -1 i.e. the invalid index
-
-		return JosephusProblem_DP_topdown_recursive_v1_helper(n, k, s, n);
-	}
-
-	/*
-	Slightly different and un-necessarily complex Recurrence relation: 
-	f(n, k, s) = (s + f(n, k, 0)) % n          ---Rotate the circle of indices (by s indices) to bring the index 0 at the person with sword, 
-	                                           ---then complete the process and rotate the circle of indices in opposite direction (by s indices)
-	f(n, k, 0) = ((k + 1) + f(n-1, k, 0)) % n  ---When first person is killed, the problem remaing is f(n-1, k, 0), so the survivor in this case 
-	                                           ---is the actual survivor, but it starts at (k + 1)st position, so we need to adjust the index 
-											   ---by adding (1 + k) to solution of f(n-1, k, 0)
-	f(1, k, s) = 0                             ---If there is only one person, he is the survivor
+	a b c d e f g h -- _ is killed, a gets sword, n = 8 from a to h
+	a b c X e f g h -- d is killed, e gets sword, n = 7 from e to c -- Note, it's a circle, so go around back to the start of line
+	a b c X e f g X -- h is killed, a gets sword, n = 6 from a to g
+	a b X X e f g X -- c is killed, e gets sword, n = 5 from e to b
+	X b X X e f g X -- a is killed, b gets sword, n = 4 from b to g
+	X b X X e f X X -- g is killed, b gets sword, n = 3 from b to f
+	X X X X e f X X -- b is killed, e gets sword, n = 2 from e to f
+	X X X X e X X X -- f is killed, e gets sword, n = 1 from e to e
 
 	Time complexity: O(n)
 	*/
 
 	//This function assumes, we always start at index 0 i.e. s = 0
-	unsigned int JosephusProblem_DP_topdown_recursive_v2(unsigned int n, unsigned int k)
+	unsigned int JosephusProblem_DP_topdown_recursive_v1(unsigned int n, unsigned int k)
 	{
 		if (n == 1)
 			return 0;
 
-		return ((k + 1) + JosephusProblem_DP_topdown_recursive_v2(n - 1, k)) % n;
+		return ((k + 1) + JosephusProblem_DP_topdown_recursive_v1(n - 1, k)) % n;
 	}
 
-	unsigned int JosephusProblem_DP_topdown_recursive_v2(unsigned int n, unsigned int k, unsigned int s)
+	unsigned int JosephusProblem_DP_topdown_recursive_v1(unsigned int n, unsigned int k, unsigned int s)
 	{
 		//invalid case
 		if (n == 0 || s >= n) //recursively n goes on decreasing, but index s can be anything from 0 to original n
 			return 0; //ideally we should return -1 i.e. the invalid index
 
-		return (s + JosephusProblem_DP_topdown_recursive_v2(n, k)) % n ;
+		return (s + JosephusProblem_DP_topdown_recursive_v1(n, k)) % n ;
 	}
 
 	/*
@@ -380,8 +364,7 @@ namespace mm {
 		{
 			unsigned int actualResult;
 			MM_EXPECT_TRUE((actualResult = JosephusProblem_naive_v1               (testData[i].n, testData[i].k, testData[i].s)) == testData[i].expectedResult, testData[i].n, testData[i].k, testData[i].s, testData[i].expectedResult, actualResult);
-			//MM_EXPECT_TRUE((actualResult = JosephusProblem_DP_topdown_recursive_v1(testData[i].n, testData[i].k, testData[i].s)) == testData[i].expectedResult, testData[i].n, testData[i].k, testData[i].s, testData[i].expectedResult, actualResult);
-			MM_EXPECT_TRUE((actualResult = JosephusProblem_DP_topdown_recursive_v2(testData[i].n, testData[i].k, testData[i].s)) == testData[i].expectedResult, testData[i].n, testData[i].k, testData[i].s, testData[i].expectedResult, actualResult);
+			MM_EXPECT_TRUE((actualResult = JosephusProblem_DP_topdown_recursive_v1(testData[i].n, testData[i].k, testData[i].s)) == testData[i].expectedResult, testData[i].n, testData[i].k, testData[i].s, testData[i].expectedResult, actualResult);
 			MM_EXPECT_TRUE((actualResult = JosephusProblem_DP_bottomup_v1         (testData[i].n, testData[i].k, testData[i].s)) == testData[i].expectedResult, testData[i].n, testData[i].k, testData[i].s, testData[i].expectedResult, actualResult);
 		}		
 	}
