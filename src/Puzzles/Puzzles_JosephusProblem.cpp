@@ -129,8 +129,8 @@ namespace mm {
 
 	Solution of above recurrence is
 
-	f(n) = 2(n - 2 ^ floor(Log2n)
-	     = 2n - 2 ^ (1 + floor(Log2n))
+	f(n) = 2(n - 2 ^ floor(Log2(n))
+	     = 2n - 2 ^ (1 + floor(Log2(n)))
 
 	Time complexity: O(1)
 	*/
@@ -147,12 +147,67 @@ namespace mm {
 		while (p <= n)
 			p *= 2;
 
-		// Return 2n - 2^(1+floor(Logn)) 
+		// Return 2n - 2^(1+floor(Log2(n))) 
 		unsigned int retVal = (2 * n) - p;
 
 		return (s + retVal) % n;
 	}
-	
+
+	/*
+	Time complexity : O(1)
+	*/
+	// function to find the position of the Most 
+	// Significant Bit 
+	int msbPos(int n)
+	{
+		int pos = 0;
+		while (n != 0) {
+			pos++;
+
+			// keeps shifting bits to the right 
+			// until we are left with 0 
+			n = n >> 1;
+		}
+		return pos;
+	}
+
+	unsigned int JosephusProblem_when_k_is_1_v2(unsigned int n, unsigned int s)
+	{
+		//invalid case
+		if (n == 0 || s >= n)
+			return 0; //ideally we should return -1 i.e. the invalid index
+
+		unsigned int retVal = 0;
+
+		/* Getting the position of the Most Significant
+		Bit(MSB). The leftmost '1'. If the number is
+		'41' then its binary is '101001'.
+		So msbPos(41) = 6 */
+		int position = msbPos(n);
+
+		/* 'j' stores the number with which to XOR the
+		number 'n'. Since we need '100000'
+		We will do 1<<6-1 to get '100000' */
+		int j = 1 << (position - 1);
+
+		/* Toggling the Most Significant Bit. Changing
+		the leftmost '1' to '0'.
+		101001 ^ 100000 = 001001 (9) */
+		retVal = n ^ j;
+
+		/* Left-shifting once to add an extra '0' to
+		the right end of the binary number
+		001001 = 010010 (18) */
+		retVal = retVal << 1;
+
+		/* Toggling the '0' at the end to '1' which
+		is essentially the same as putting the
+		MSB at the rightmost place. 010010 | 1
+		= 010011 (19) */
+		retVal = retVal | 1;
+
+		return (s + retVal - 1) % n;
+	}
 
 	MM_DECLARE_FLAG(Puzzles_JosephusProblem);
 
@@ -416,7 +471,10 @@ namespace mm {
 			MM_EXPECT_TRUE((actualResult = JosephusProblem_DP_topdown_recursive_v1(testData[i].n, testData[i].k, testData[i].s)) == testData[i].expectedResult, testData[i].n, testData[i].k, testData[i].s, testData[i].expectedResult, actualResult);
 			MM_EXPECT_TRUE((actualResult = JosephusProblem_DP_bottomup_v1         (testData[i].n, testData[i].k, testData[i].s)) == testData[i].expectedResult, testData[i].n, testData[i].k, testData[i].s, testData[i].expectedResult, actualResult);
 			if(testData[i].k == 1)
+			{
 				MM_EXPECT_TRUE((actualResult = JosephusProblem_when_k_is_1_v1     (testData[i].n,                testData[i].s)) == testData[i].expectedResult, testData[i].n, testData[i].k, testData[i].s, testData[i].expectedResult, actualResult);
+				MM_EXPECT_TRUE((actualResult = JosephusProblem_when_k_is_1_v2     (testData[i].n,                testData[i].s)) == testData[i].expectedResult, testData[i].n, testData[i].k, testData[i].s, testData[i].expectedResult, actualResult);
+			}
 		}		
 	}
 }
