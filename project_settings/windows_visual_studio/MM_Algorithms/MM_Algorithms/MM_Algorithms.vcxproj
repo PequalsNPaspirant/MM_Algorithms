@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\src\LinearRecurrenceRelations\LinearRecurrenceRelations_concept.cpp" />
+    <ClCompile Include="..\..\..\..\src\LinearRecurrenceRelations\LRR_Fibonacci.cpp" />
     <ClCompile Include="..\..\..\..\src\BinaryTree\BinaryTree_CheckIfBST.cpp" />
     <ClCompile Include="..\..\..\..\src\Graphs\Graph_FxRatesCache.cpp" />
     <ClCompile Include="..\..\..\..\src\Puzzles\Puzzles_EggDropping.cpp" />
@@ -110,6 +112,7 @@
     <ClCompile Include="..\..\..\..\src\_MM_Algorithms_main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\src\LinearRecurrenceRelations\LRR_Fibonacci.h" />
     <ClInclude Include="..\..\..\..\src\BinaryTree\BinaryTree_CheckIfBST.h" />
     <ClInclude Include="..\..\..\..\src\Graphs\Graph_FxRatesCache.h" />
     <ClInclude Include="..\..\..\..\src\Puzzles\Puzzles_EggDropping.h" />

@@ -40,7 +40,7 @@ namespace mm {
 	//Stack
 	//Heaps
 	//Puzzles
-	MM_DEFINE_FLAG(true, Puzzles_JosephusProblem);
+	MM_DEFINE_FLAG(false, Puzzles_JosephusProblem); // -----TODO
 	MM_DEFINE_FLAG(false, Puzzles_EggDropping);  //--------TODO
 	//Binary
 	MM_DEFINE_FLAG(false, Binary_reverseBitsInInteger);
@@ -77,6 +77,8 @@ namespace mm {
 	MM_DEFINE_FLAG(false, Others_h_findDistrinctNumbersGenerated);
 
 	MM_DEFINE_FLAG(false, Others_L_MaxFrequencyStack);
+
+	MM_DEFINE_FLAG(true, LLR_Fibonacci);
 }
 
 using namespace mm;

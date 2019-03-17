@@ -282,6 +282,12 @@
     <ClCompile Include="..\..\..\..\src\Graphs\Graph_FxRatesCache.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\src\LinearRecurrenceRelations\LRR_Fibonacci.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\LinearRecurrenceRelations\LinearRecurrenceRelations_concept.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\src\Backtracking\Backtracking.h">
@@ -534,6 +540,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\src\Graphs\Graph_FxRatesCache.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\LinearRecurrenceRelations\LRR_Fibonacci.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

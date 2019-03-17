@@ -6,6 +6,11 @@ using namespace std;
 
 namespace mm {
 
+	//TODO: 
+	//Convert the method for special case where k = 1, into generic method for all k
+	//Add segment tree solution where we can get the number of persns surviving in range (left, right) at any time
+	//Ref: https://www.youtube.com/watch?v=nyVX2lqX8lA
+
 	/*
 	Problem description: There are n people standing in a circle indexed from 0 to n-1, 
 	the person with index s has a sword, he kills the next kth person i.e. with index (s + k) and passes the sword on to next person.
