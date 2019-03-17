@@ -82,7 +82,7 @@ namespace mm {
 		if (n == 0 || s >= n) //recursively n goes on decreasing, but index s can be anything from 0 to original n
 			return 0; //ideally we should return -1 i.e. the invalid index
 
-		return (s + JosephusProblem_DP_topdown_recursive_v1(n, k)) % n ;
+		return (s + JosephusProblem_DP_topdown_recursive_v1(n, k)) % n;
 	}
 
 	/*
@@ -103,6 +103,55 @@ namespace mm {
 		return (s + retVal) % n;
 	}
 
+	/*
+	Special case: k = 2
+
+	Below are some interesting facts.
+
+	In first round all even positioned persons are killed.
+	For second round two cases arise
+	If n is even : For example n = 8. In first round, first 2 is killed, then 4, then 6, then 8. In second round, we have 1, 3, 5 and 7 in positions 1st, 2nd, 3rd and 4th respectively.
+	If n is odd : For example n = 7. In first round, first 2 is killed, then 4, then 6. In second round, we have 3, 5, 7 in positions 1st, 2nd and 3rd respectively.
+	If n is even and a person is in position x in current round, then the person was in position 2x – 1 in previous round.
+
+	If n is odd and a person is in position x in current round, then the person was in position 2x + 1 in previous round.
+
+	From above facts, we can recursively define the formula for finding position of survivor.
+
+	Let f(n) be position of survivor for input n,
+	the value of f(n) can be recursively written
+	as below.
+
+	if n is even
+		f(n) = 2f(n/2) - 1
+	else
+		f(n) = 2f((n-1)/2)
+
+	Solution of above recurrence is
+
+	f(n) = 2(n - 2 ^ floor(Log2n)
+	     = 2n - 2 ^ (1 + floor(Log2n))
+
+	Time complexity: O(1)
+	*/
+	unsigned int JosephusProblem_when_k_is_1_v1(unsigned int n, unsigned int s)
+	{
+		//invalid case
+		if (n == 0 || s >= n)
+			return 0; //ideally we should return -1 i.e. the invalid index
+
+		// Find value of 2 ^ (1 + floor(Log n)) 
+		// which is a power of 2 whose value 
+		// is just above n. 
+		int p = 1;
+		while (p <= n)
+			p *= 2;
+
+		// Return 2n - 2^(1+floor(Logn)) 
+		unsigned int retVal = (2 * n) - p;
+
+		return (s + retVal) % n;
+	}
 	
 
 	MM_DECLARE_FLAG(Puzzles_JosephusProblem);
@@ -366,6 +415,8 @@ namespace mm {
 			MM_EXPECT_TRUE((actualResult = JosephusProblem_naive_v1               (testData[i].n, testData[i].k, testData[i].s)) == testData[i].expectedResult, testData[i].n, testData[i].k, testData[i].s, testData[i].expectedResult, actualResult);
 			MM_EXPECT_TRUE((actualResult = JosephusProblem_DP_topdown_recursive_v1(testData[i].n, testData[i].k, testData[i].s)) == testData[i].expectedResult, testData[i].n, testData[i].k, testData[i].s, testData[i].expectedResult, actualResult);
 			MM_EXPECT_TRUE((actualResult = JosephusProblem_DP_bottomup_v1         (testData[i].n, testData[i].k, testData[i].s)) == testData[i].expectedResult, testData[i].n, testData[i].k, testData[i].s, testData[i].expectedResult, actualResult);
+			if(testData[i].k == 1)
+				MM_EXPECT_TRUE((actualResult = JosephusProblem_when_k_is_1_v1     (testData[i].n,                testData[i].s)) == testData[i].expectedResult, testData[i].n, testData[i].k, testData[i].s, testData[i].expectedResult, actualResult);
 		}		
 	}
 }
