@@ -58,7 +58,7 @@ namespace mm {
 		if (n == 1)
 			return s;
 
-		return JosephusProblem_DP_topdown_recursive_v1_helper(n - 1, k, (s + k + 1) % orig_n, orig_n);
+		return JosephusProblem_DP_topdown_recursive_v1_helper(n - 1, k, (s + k + 1) % n, orig_n);
 	}
 
 	unsigned int JosephusProblem_DP_topdown_recursive_v1(unsigned int n, unsigned int k, unsigned int s)
@@ -82,20 +82,23 @@ namespace mm {
 
 	Time complexity: O(n)
 	*/
+
+	//This function assumes, we always start at index 0 i.e. s = 0
+	unsigned int JosephusProblem_DP_topdown_recursive_v2(unsigned int n, unsigned int k)
+	{
+		if (n == 1)
+			return 0;
+
+		return ((k + 1) + JosephusProblem_DP_topdown_recursive_v2(n - 1, k)) % n;
+	}
+
 	unsigned int JosephusProblem_DP_topdown_recursive_v2(unsigned int n, unsigned int k, unsigned int s)
 	{
 		//invalid case
-		//if (n == 0 || s >= n) //recursively n goes on decreasing, but index s can be anything from 0 to original n
-		if (n == 0)
+		if (n == 0 || s >= n) //recursively n goes on decreasing, but index s can be anything from 0 to original n
 			return 0; //ideally we should return -1 i.e. the invalid index
 
-		if (n == 1 && s == 0)
-			return 0;
-
-		if (s > 0)
-			return (s + JosephusProblem_DP_topdown_recursive_v2(n, k, 0)) % n;
-
-		return ((k + 1) + JosephusProblem_DP_topdown_recursive_v2(n - 1, k, 0)) % n ;
+		return (s + JosephusProblem_DP_topdown_recursive_v2(n, k)) % n ;
 	}
 
 	/*
