@@ -8,6 +8,8 @@ using namespace std;
 
 /*
 More at:
+http://cubbi.com/fibonacci/c++.html#f1a
+https://www.geeksforgeeks.org/program-for-nth-fibonacci-number/
 http://fusharblog.com/solving-linear-recurrence-for-programming-contest/
 http://www.maths.surrey.ac.uk/hosted-sites/R.Knott/Fibonacci/fibFormula.html
 http://www.askamathematician.com/2011/04/q-is-there-a-formula-to-find-the-nth-term-in-the-fibonacci-sequence/
