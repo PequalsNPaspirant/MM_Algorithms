@@ -313,6 +313,15 @@ namespace mm {
 	
 	*/
 
+	unsigned long long fibonacci_Binet_v2(const unsigned long long index)
+	{
+		const static long double phi = (1.0l + sqrt(5.0l)) / 2.0l;
+		const static long double psi = 1.0l - phi;
+		//return round(pow(phi, index) / sqrt(5.0l));
+		long double retVal = (pow(phi, index) - pow(psi, index)) / sqrt(5.0l);
+		return round(retVal);
+	}
+
 	//Testing
 	MM_DECLARE_FLAG(LLR_Fibonacci)
 
@@ -434,6 +443,8 @@ namespace mm {
 			//MM_EXPECT_TRUE((actualValue = fibonacci_fast_recursion_bottomup_v1(data[index].first)) == expectedValue, data[index].first, actualValue, expectedValue);
 			if (index < 71) //the results are incorrect due to limited double precision
 			MM_EXPECT_TRUE((actualValue = fibonacci_Binet_v1(data[index].first)) == expectedValue, data[index].first, actualValue, expectedValue);
+			if (index < 71) //the results are incorrect due to limited double precision
+			MM_EXPECT_TRUE((actualValue = fibonacci_Binet_v2(data[index].first)) == expectedValue, data[index].first, actualValue, expectedValue);
 		}
 	}
 
