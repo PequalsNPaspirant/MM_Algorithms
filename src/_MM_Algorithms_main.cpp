@@ -42,6 +42,7 @@ namespace mm {
 	//Puzzles
 	MM_DEFINE_FLAG(false, Puzzles_JosephusProblem); // -----TODO
 	MM_DEFINE_FLAG(false, Puzzles_EggDropping);  //--------TODO
+	MM_DEFINE_FLAG(true, Puzzles_TowerOfHanoi_test);
 	//Binary
 	MM_DEFINE_FLAG(false, Binary_reverseBitsInInteger);
 	//Queue
@@ -78,7 +79,7 @@ namespace mm {
 
 	MM_DEFINE_FLAG(false, Others_L_MaxFrequencyStack);
 
-	MM_DEFINE_FLAG(true, LLR_Fibonacci);
+	MM_DEFINE_FLAG(false, LLR_Fibonacci);
 }
 
 using namespace mm;

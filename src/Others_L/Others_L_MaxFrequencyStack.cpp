@@ -235,23 +235,6 @@ namespace mm {
 		vector< vector<int> > freq_stacks_; //freq_stacks_[freq] is a stack of num having frequency = freq
 	};
 
-#define MM_TIME2(msg, statement, time) \
-	std::chrono::steady_clock::time_point startTime = std::chrono::steady_clock::now(); \
-	statement; \
-	std::chrono::steady_clock::time_point endTime = std::chrono::steady_clock::now(); \
-	time = std::chrono::duration_cast<std::chrono::nanoseconds>(endTime - startTime).count(); \
-	int columnWidth = 25; \
-	cout << "\n" << setw(columnWidth) << std::right << msg; \
-	cout << setw(columnWidth) << std::right << getCommaSeparatedTimeDuration(time);
-
-#define MM_TIME(msg, statement) \
-	{ \
-	unsigned long long time; \
-	MM_TIME2(msg, statement, time) \
-	}
-
-	
-
 	//===============================================================================
 
 	MM_DECLARE_FLAG(Others_L_MaxFrequencyStack);
@@ -303,21 +286,6 @@ namespace mm {
 		for (int i = 0; i < testData.size(); ++i)
 		{
 			unsigned int actualNum;
-			//cout << endl;
-			//MM_TIME("findDistrinctNumbersGenerated_v1: ", actualNum = findDistrinctNumbersGenerated_v1(testData[i].n_, testData[i].s_, testData[i].p_, testData[i].q_));
-			//MM_EXPECT_TRUE(actualNum == testData[i].result_, actualNum, testData[i].result_);
-			//cout << endl;
-			//MM_TIME("findDistrinctNumbersGenerated_v2: ", actualNum = findDistrinctNumbersGenerated_v2(testData[i].n_, testData[i].s_, testData[i].p_, testData[i].q_));
-			//MM_EXPECT_TRUE(actualNum == testData[i].result_, actualNum, testData[i].result_);
-			//cout << endl;
-			//MM_TIME("findDistrinctNumbersGenerated_v3: ", actualNum = findDistrinctNumbersGenerated_v3(testData[i].n_, testData[i].s_, testData[i].p_, testData[i].q_));
-			//MM_EXPECT_TRUE(actualNum == testData[i].result_, actualNum, testData[i].result_);
-			//cout << endl;
-			//MM_TIME("findDistrinctNumbersGenerated_v4: ", actualNum = findDistrinctNumbersGenerated_v4(testData[i].n_, testData[i].s_, testData[i].p_, testData[i].q_));
-			//MM_EXPECT_TRUE(actualNum == testData[i].result_, actualNum, testData[i].result_);
-			//cout << endl;
-			//MM_TIME("findDistrinctNumbersGenerated_v5: ", actualNum = findDistrinctNumbersGenerated_v5(testData[i].n_, testData[i].s_, testData[i].p_, testData[i].q_));
-			//MM_EXPECT_TRUE(actualNum == testData[i].result_, actualNum, testData[i].result_);
 		}
 
 		int n;

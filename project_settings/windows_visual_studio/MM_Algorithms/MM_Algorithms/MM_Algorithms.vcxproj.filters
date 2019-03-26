@@ -138,9 +138,6 @@
     <ClCompile Include="..\..\..\..\src\Others\Others_Date.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\src\Puzzles\Puzzles_15_TowerOfHanoi.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\src\Puzzles\Puzzles_FindHeavierAmongNBalls.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -286,6 +283,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\src\LinearRecurrenceRelations\LinearRecurrenceRelations_concept.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\Puzzles\Puzzles_TowerOfHanoi.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -543,6 +543,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\src\LinearRecurrenceRelations\LRR_Fibonacci.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\Puzzles\Puzzles_TowerOfHanoi.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

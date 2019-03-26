@@ -73,7 +73,7 @@
     <ClCompile Include="..\..\..\..\src\LinkedList\LinkedList_AddNumbersInLinkListForm.cpp" />
     <ClCompile Include="..\..\..\..\src\LinkedList\LinkedList_ReverseSingleLinkedList.cpp" />
     <ClCompile Include="..\..\..\..\src\Others\Others_Date.cpp" />
-    <ClCompile Include="..\..\..\..\src\Puzzles\Puzzles_15_TowerOfHanoi.cpp" />
+    <ClCompile Include="..\..\..\..\src\Puzzles\Puzzles_TowerOfHanoi.cpp" />
     <ClCompile Include="..\..\..\..\src\Puzzles\Puzzles_FindHeavierAmongNBalls.cpp" />
     <ClCompile Include="..\..\..\..\src\Sorting\Sorting.cpp" />
     <ClCompile Include="..\..\..\..\src\ToBeArranged.cpp" />
@@ -112,6 +112,7 @@
     <ClCompile Include="..\..\..\..\src\_MM_Algorithms_main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\src\Puzzles\Puzzles_TowerOfHanoi.h" />
     <ClInclude Include="..\..\..\..\src\LinearRecurrenceRelations\LRR_Fibonacci.h" />
     <ClInclude Include="..\..\..\..\src\BinaryTree\BinaryTree_CheckIfBST.h" />
     <ClInclude Include="..\..\..\..\src\Graphs\Graph_FxRatesCache.h" />

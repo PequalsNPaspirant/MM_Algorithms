@@ -169,7 +169,7 @@ namespace mm {
 				size_t actualValue3 = getWaysToClimbNSteps_fibonacci_2(n, k);
 				size_t actualValue4 = getWaysToClimbNSteps_DP_1(n, k);
 				size_t actualValue5 = getWaysToClimbNSteps_DP_2(n, k);
-				MM_EXPECT_TRUE_PRINT(false, true, false, actualValue1 == actualValue2
+				MM_EXPECT_TRUE_PRINTALLRESULTS(actualValue1 == actualValue2
 					&& actualValue2 == actualValue3 
 					&& actualValue3 == actualValue4 
 					&& actualValue4 == actualValue5
@@ -192,7 +192,7 @@ namespace mm {
 				//size_t actualValue3 = getWaysToClimbNSteps_fibonacci_2(n, k);
 				size_t actualValue4 = getWaysToClimbNSteps_DP_1(n, k);
 				size_t actualValue5 = getWaysToClimbNSteps_DP_2(n, k);
-				MM_EXPECT_TRUE_PRINT(false, true, false,
+				MM_EXPECT_TRUE_PRINTALLRESULTS(
 					true
 					//&& actualValue1 == actualValue2
 					//&& actualValue2 == actualValue3
