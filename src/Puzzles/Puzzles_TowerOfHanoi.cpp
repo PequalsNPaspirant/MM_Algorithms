@@ -96,7 +96,16 @@ namespace mm
 	*/
 	unsigned long long Puzzles_TowerOfHanoi_getNumMoves(int numDisks, int from, int to, int aux, vector<unsigned long long>& cache)
 	{
-		return pow(2, numDisks) - 1;
+		//double can not keep big integer part of values precisely
+		//return pow(2, numDisks) - 1;
+
+		//This function can calculate num moves for disks upto 64
+		assert(numDisks <= sizeof(unsigned long long) * 8);
+
+		if (numDisks < sizeof(unsigned long long) * 8)
+			return (1ull << numDisks) - 1;
+		else
+			return numeric_limits<unsigned long long>::max();
 	}
 
 	/*
@@ -196,7 +205,7 @@ namespace mm
 					data[i].numDisks, actualMoves, data[i].expectedMoves);
 			}
 
-			if(data[i].numDisks <= 20)
+			if(data[i].numDisks <= 18)
 			{
 				stack<int> from;
 				stack<int> to;
@@ -216,8 +225,8 @@ namespace mm
 			//MM_TIMED_EXPECT_TRUE((actualMoves = Puzzles_TowerOfHanoi_getNumMoves_DP_bottomup_v1(data[i].numDisks, 1, 2, 3, cache)) == data[i].expectedMoves,
 			//	data[i].numDisks, actualMoves, data[i].expectedMoves);
 
-			//MM_TIMED_EXPECT_TRUE((actualMoves = Puzzles_TowerOfHanoi_getNumMoves(data[i].numDisks, 1, 2, 3, cache)) == data[i].expectedMoves,
-			//	data[i].numDisks, actualMoves, data[i].expectedMoves);
+			MM_TIMED_EXPECT_TRUE((actualMoves = Puzzles_TowerOfHanoi_getNumMoves(data[i].numDisks, 1, 2, 3, cache)) == data[i].expectedMoves,
+				data[i].numDisks, actualMoves, data[i].expectedMoves);
 
 			//MM_TIMED_EXPECT_TRUE((actualMoves = Puzzles_TowerOfHanoi_binary_v1(data[i].numDisks, 1, 2, 3, cache)) == data[i].expectedMoves,
 			//	data[i].numDisks, actualMoves, data[i].expectedMoves);
