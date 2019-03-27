@@ -1,5 +1,6 @@
 #include <stack>
 #include <vector>
+#include <cassert>
 using namespace std;
 
 #include "Puzzles/Puzzles_TowerOfHanoi.h"
@@ -9,6 +10,7 @@ using namespace std;
 /*
 There are n disks. disk 1 is smallest and disk n is the largest disk.
 There are three poles with index 1, 2 and 3.
+The number of moves required is: 2^n – 1
 */
 
 namespace mm
@@ -17,7 +19,26 @@ namespace mm
 	This recursive function will be called 2^n times where n = numDisks
 	Time Complexity: O(2^n)
 	*/
-	unsigned long long Puzzles_TowerOfHanoi_recursive_v1(int numDisks, int from, int to, int aux)
+	unsigned long long Puzzles_TowerOfHanoi_getNumMoves_recursive_v1(int numDisks, int from, int to, int aux)
+	{
+		if (numDisks == 0)
+			return 0;
+
+		unsigned long long numMoves = 0;
+		numMoves += Puzzles_TowerOfHanoi_getNumMoves_recursive_v1(numDisks - 1, from, aux, to);
+		//Move top disk: from -> to
+		//We can display it on screen
+		//cout << "Move disk " << numDisks << " from " << from << " to " << to;
+		numMoves += 1;
+		numMoves += Puzzles_TowerOfHanoi_getNumMoves_recursive_v1(numDisks - 1, aux, to, from);
+		return numMoves;
+	}
+
+	/*
+	This recursive function will be called 2^n times where n = numDisks
+	Time Complexity: O(2^n)
+	*/
+	unsigned long long Puzzles_TowerOfHanoi_recursive_v1(int numDisks, stack<int>& from, stack<int>& to, stack<int>& aux)
 	{
 		if (numDisks == 0)
 			return 0;
@@ -27,8 +48,11 @@ namespace mm
 		//Move top disk: from -> to
 		//We can display it on screen
 		//cout << "Move disk " << numDisks << " from " << from << " to " << to;
-		//OR we can store it in vector
-		//vector<Moves> retVec; retVec.push_back(Moves{numDisks, from, to});
+		//OR we can store it in stack
+		int disk = from.top();
+		from.pop();
+		assert(to.empty() || to.top() > disk);
+		to.push(disk);
 		numMoves += 1;
 		numMoves += Puzzles_TowerOfHanoi_recursive_v1(numDisks - 1, aux, to, from);
 		return numMoves;
@@ -39,7 +63,7 @@ namespace mm
 	Time Complexity: O(n)
 	Space Complexity: O(n)
 	*/
-	unsigned long long Puzzles_TowerOfHanoi_DP_v1(int numDisks, int from, int to, int aux, vector<unsigned long long>& cache)
+	unsigned long long Puzzles_TowerOfHanoi_getNumMoves_DP_topdown_v1(int numDisks, int from, int to, int aux, vector<unsigned long long>& cache)
 	{
 		if (numDisks == 0)
 			return 0;
@@ -47,11 +71,63 @@ namespace mm
 		if(cache[numDisks] == 0)
 		{
 			unsigned long long numMoves = 0;
-			numMoves += Puzzles_TowerOfHanoi_DP_v1(numDisks - 1, from, aux, to, cache);
+			numMoves += Puzzles_TowerOfHanoi_getNumMoves_DP_topdown_v1(numDisks - 1, from, aux, to, cache);
 			//Move top disk: from -> to
 			numMoves += 1;
-			numMoves += Puzzles_TowerOfHanoi_DP_v1(numDisks - 1, aux, to, from, cache);
+			numMoves += Puzzles_TowerOfHanoi_getNumMoves_DP_topdown_v1(numDisks - 1, aux, to, from, cache);
 			cache[numDisks] = numMoves;
+		}
+
+		return cache[numDisks];
+	}
+
+	/*
+	Time Complexity: O(n)
+	Space Complexity: O(n)
+	*/
+	unsigned long long Puzzles_TowerOfHanoi_getNumMoves_DP_bottomup_v1(int numDisks, int from, int to, int aux, vector<unsigned long long>& cache)
+	{
+		return 0;
+	}
+
+	/*
+	Time Complexity: O(1)
+	Space Complexity: O(n)
+	*/
+	unsigned long long Puzzles_TowerOfHanoi_getNumMoves(int numDisks, int from, int to, int aux, vector<unsigned long long>& cache)
+	{
+		return pow(2, numDisks) - 1;
+	}
+
+	/*
+	Time Complexity: O(2^n)
+	Space Complexity: O(n)
+	*/
+	unsigned long long Puzzles_TowerOfHanoi_binary_v1(int numDisks, int from, int to, int aux, vector<unsigned long long>& cache)
+	{
+		if (numDisks == 0)
+			return 0;
+
+		if (cache[numDisks] == 0)
+		{
+
+		}
+
+		return cache[numDisks];
+	}
+
+	/*
+	Time Complexity: O(2^n)
+	Space Complexity: O(n)
+	*/
+	unsigned long long Puzzles_TowerOfHanoi_binary_v2(int numDisks, int from, int to, int aux, vector<unsigned long long>& cache)
+	{
+		if (numDisks == 0)
+			return 0;
+
+		if (cache[numDisks] == 0)
+		{
+
 		}
 
 		return cache[numDisks];
@@ -114,15 +190,41 @@ namespace mm
 		for (int i = 0; i < data.size(); ++i)
 		{
 			unsigned long long actualMoves = 0;
-			if(i <= 25)
+			if (data[i].numDisks <= 25)
 			{
-				MM_TIMED_EXPECT_TRUE((actualMoves = Puzzles_TowerOfHanoi_recursive_v1(data[i].numDisks, 1, 2, 3)) == data[i].expectedMoves,
+				MM_TIMED_EXPECT_TRUE((actualMoves = Puzzles_TowerOfHanoi_getNumMoves_recursive_v1(data[i].numDisks, 1, 2, 3)) == data[i].expectedMoves,
+					data[i].numDisks, actualMoves, data[i].expectedMoves);
+			}
+
+			if(data[i].numDisks <= 20)
+			{
+				stack<int> from;
+				stack<int> to;
+				stack<int> aux;
+				for (int j = data[i].numDisks; j > 0; --j)
+					from.push(j);
+
+				MM_TIMED_EXPECT_TRUE((actualMoves = Puzzles_TowerOfHanoi_recursive_v1(data[i].numDisks, from, to, aux)) == data[i].expectedMoves
+					&& from.empty() && aux.empty() && to.size() == data[i].numDisks,
 					data[i].numDisks, actualMoves, data[i].expectedMoves);
 			}
 
 			vector<unsigned long long> cache(data[i].numDisks + 1, 0);
-			MM_TIMED_EXPECT_TRUE((actualMoves = Puzzles_TowerOfHanoi_DP_v1(data[i].numDisks, 1, 2, 3, cache)) == data[i].expectedMoves,
+			MM_TIMED_EXPECT_TRUE((actualMoves = Puzzles_TowerOfHanoi_getNumMoves_DP_topdown_v1(data[i].numDisks, 1, 2, 3, cache)) == data[i].expectedMoves,
 				data[i].numDisks, actualMoves, data[i].expectedMoves);
+
+			//MM_TIMED_EXPECT_TRUE((actualMoves = Puzzles_TowerOfHanoi_getNumMoves_DP_bottomup_v1(data[i].numDisks, 1, 2, 3, cache)) == data[i].expectedMoves,
+			//	data[i].numDisks, actualMoves, data[i].expectedMoves);
+
+			//MM_TIMED_EXPECT_TRUE((actualMoves = Puzzles_TowerOfHanoi_getNumMoves(data[i].numDisks, 1, 2, 3, cache)) == data[i].expectedMoves,
+			//	data[i].numDisks, actualMoves, data[i].expectedMoves);
+
+			//MM_TIMED_EXPECT_TRUE((actualMoves = Puzzles_TowerOfHanoi_binary_v1(data[i].numDisks, 1, 2, 3, cache)) == data[i].expectedMoves,
+			//	data[i].numDisks, actualMoves, data[i].expectedMoves);
+
+			//MM_TIMED_EXPECT_TRUE((actualMoves = Puzzles_TowerOfHanoi_binary_v2(data[i].numDisks, 1, 2, 3, cache)) == data[i].expectedMoves,
+			//	data[i].numDisks, actualMoves, data[i].expectedMoves);
+
 		}
 	}
 }
