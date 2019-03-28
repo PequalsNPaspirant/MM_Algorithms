@@ -94,7 +94,7 @@ namespace mm
 	Time Complexity: O(1)
 	Space Complexity: O(n)
 	*/
-	unsigned long long Puzzles_TowerOfHanoi_getNumMoves(int numDisks, int from, int to, int aux, vector<unsigned long long>& cache)
+	unsigned long long Puzzles_TowerOfHanoi_getNumMoves(int numDisks)
 	{
 		//double can not keep big integer part of values precisely
 		//return pow(2, numDisks) - 1;
@@ -129,17 +129,65 @@ namespace mm
 	Time Complexity: O(2^n)
 	Space Complexity: O(n)
 	*/
-	unsigned long long Puzzles_TowerOfHanoi_binary_v2(int numDisks, int from, int to, int aux, vector<unsigned long long>& cache)
+	unsigned long long Puzzles_TowerOfHanoi_binary_v2(int numDisks, stack<int>& from, stack<int>& to, stack<int>& aux)
 	{
 		if (numDisks == 0)
 			return 0;
 
-		if (cache[numDisks] == 0)
+		stack<int>* source = &from;
+		stack<int>* destination = &to;
+		stack<int>* auxiliary = &aux;
+		//If number of disks is even, then interchange  
+		//destination pole and auxiliary pole 
+		if ((numDisks & 1) == 0)
 		{
-
+			stack<int>* temp = destination;
+			destination = auxiliary;
+			auxiliary = temp;
 		}
 
-		return cache[numDisks];
+		unsigned long long totalMoves = 0;
+		if (numDisks < sizeof(unsigned long long) * 8)
+			totalMoves = (1ull << numDisks) - 1;
+		else
+			totalMoves = numeric_limits<unsigned long long>::max();
+
+		auto moveDisk = [](stack<int>* fromStack, stack<int>* toStack) {
+			if (fromStack->empty() && toStack->empty())
+				assert(false);
+			else if (fromStack->empty())
+			{
+				fromStack->push(toStack->top());
+				toStack->pop();
+			}
+			else if (toStack->empty())
+			{
+				toStack->push(fromStack->top());
+				fromStack->pop();
+			}
+			else if (fromStack->top() < toStack->top())
+			{
+				toStack->push(fromStack->top());
+				fromStack->pop();
+			}
+			else if (fromStack->top() > toStack->top())
+			{
+				fromStack->push(toStack->top());
+				toStack->pop();
+			}
+		};
+
+		for (int i = 1; i <= totalMoves; ++i)
+		{
+			if (i % 3 == 1)
+				moveDisk(source, destination);
+			else if (i % 3 == 2)
+				moveDisk(source, auxiliary);
+			else if (i % 3 == 0)
+				moveDisk(auxiliary, destination);
+		}
+
+		return totalMoves;
 	}
 
 	// Test
@@ -196,6 +244,16 @@ namespace mm
 		{ 64, numeric_limits<unsigned long long>::max() },
 		};
 
+		auto validate = [](stack<int>& st) -> bool {
+			for (int j = 1; j <= st.size(); ++j)
+				if (st.top() == j)
+					st.pop();
+				else
+					return false;
+
+			return true;
+		};
+
 		for (int i = 0; i < data.size(); ++i)
 		{
 			unsigned long long actualMoves = 0;
@@ -212,9 +270,8 @@ namespace mm
 				stack<int> aux;
 				for (int j = data[i].numDisks; j > 0; --j)
 					from.push(j);
-
 				MM_TIMED_EXPECT_TRUE((actualMoves = Puzzles_TowerOfHanoi_recursive_v1(data[i].numDisks, from, to, aux)) == data[i].expectedMoves
-					&& from.empty() && aux.empty() && to.size() == data[i].numDisks,
+					&& from.empty() && aux.empty() && to.size() == data[i].numDisks && validate(to),
 					data[i].numDisks, actualMoves, data[i].expectedMoves);
 			}
 
@@ -225,14 +282,23 @@ namespace mm
 			//MM_TIMED_EXPECT_TRUE((actualMoves = Puzzles_TowerOfHanoi_getNumMoves_DP_bottomup_v1(data[i].numDisks, 1, 2, 3, cache)) == data[i].expectedMoves,
 			//	data[i].numDisks, actualMoves, data[i].expectedMoves);
 
-			MM_TIMED_EXPECT_TRUE((actualMoves = Puzzles_TowerOfHanoi_getNumMoves(data[i].numDisks, 1, 2, 3, cache)) == data[i].expectedMoves,
+			MM_TIMED_EXPECT_TRUE((actualMoves = Puzzles_TowerOfHanoi_getNumMoves(data[i].numDisks)) == data[i].expectedMoves,
 				data[i].numDisks, actualMoves, data[i].expectedMoves);
 
 			//MM_TIMED_EXPECT_TRUE((actualMoves = Puzzles_TowerOfHanoi_binary_v1(data[i].numDisks, 1, 2, 3, cache)) == data[i].expectedMoves,
 			//	data[i].numDisks, actualMoves, data[i].expectedMoves);
 
-			//MM_TIMED_EXPECT_TRUE((actualMoves = Puzzles_TowerOfHanoi_binary_v2(data[i].numDisks, 1, 2, 3, cache)) == data[i].expectedMoves,
-			//	data[i].numDisks, actualMoves, data[i].expectedMoves);
+			if (data[i].numDisks <= 18)
+			{
+				stack<int> from;
+				stack<int> to;
+				stack<int> aux;
+				for (int j = data[i].numDisks; j > 0; --j)
+					from.push(j);
+				MM_TIMED_EXPECT_TRUE((actualMoves = Puzzles_TowerOfHanoi_binary_v2(data[i].numDisks, from, to, aux)) == data[i].expectedMoves
+					&& from.empty() && aux.empty() && to.size() == data[i].numDisks && validate(to),
+					data[i].numDisks, actualMoves, data[i].expectedMoves);
+			}
 
 		}
 	}
