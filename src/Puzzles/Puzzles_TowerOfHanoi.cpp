@@ -89,13 +89,13 @@ namespace mm
 
 	Time Complexity: O(2^n)
 	Space Complexity: O(1)
+
+	NOTE: This approach is same as Puzzles_TowerOfHanoi_binary_v2
 	*/
 	unsigned long long Puzzles_TowerOfHanoi_iterative_v1(stack<int>& from, stack<int>& to, stack<int>& aux)
 	{
-		int numDisks = from.size();
-		if (numDisks == 0)
-			return 0;
-
+		//This approach is same as Puzzles_TowerOfHanoi_binary_v2()
+		//return Puzzles_TowerOfHanoi_binary_v2(from, to, aux);
 		return 0;
 	}
 
@@ -128,7 +128,27 @@ namespace mm
 		if (numDisks == 0)
 			return 0;
 
-		return 0;
+		unsigned long long totalMoves = 0;
+		if (numDisks < sizeof(unsigned long long) * 8)
+			totalMoves = (1ull << numDisks) - 1;
+		else
+			totalMoves = numeric_limits<unsigned long long>::max();
+
+		stack<int>* source = &from;
+		stack<int>* destination = &to;
+		stack<int>* auxiliary = &aux;
+		//If number of disks is even, then interchange  
+		//destination pole and auxiliary pole 
+		if ((numDisks & 1) == 0)
+		{
+			stack<int>* temp = destination;
+			destination = auxiliary;
+			auxiliary = temp;
+		}
+
+
+
+		return totalMoves;
 	}
 
 	/*
@@ -391,6 +411,8 @@ namespace mm
 	/*
 	Time Complexity: O(2^n)
 	Space Complexity: O(n)
+
+	NOTE: Please check the comments for Puzzles_TowerOfHanoi_iterative_v1 above.
 	*/
 	unsigned long long Puzzles_TowerOfHanoi_binary_v2(stack<int>& from, stack<int>& to, stack<int>& aux)
 	{
@@ -637,16 +659,7 @@ namespace mm
 					data[i].numDisks, actualMoves, data[i].expectedMoves);
 			}
 
-			//{
-			//	stack<int> from;
-			//	stack<int> to;
-			//	stack<int> aux;
-			//	for (int j = data[i].numDisks; j > 0; --j)
-			//		from.push(j);
-			//	MM_TIMED_EXPECT_TRUE((actualMoves = Puzzles_TowerOfHanoi_iterative_v1(from, to, aux)) == data[i].expectedMoves
-			//		&& from.empty() && aux.empty() && to.size() == data[i].numDisks && validate(to),
-			//		data[i].numDisks, actualMoves, data[i].expectedMoves);
-			//}
+			//NOTE: Puzzles_TowerOfHanoi_iterative_v1 is same as Puzzles_TowerOfHanoi_binary_v2
 
 			//{
 			//	stack<int> from;
