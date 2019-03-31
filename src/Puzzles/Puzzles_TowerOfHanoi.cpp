@@ -467,15 +467,89 @@ namespace mm
 	Source: https://en.wikipedia.org/wiki/Tower_of_Hanoi
 	The source and destination pegs for the mth move can also be found elegantly from the binary representation of m using bitwise operations.
 	To use the syntax of the C programming language, move m is from peg (m & m - 1) % 3 to peg ((m | m - 1) + 1) % 3, where the disks begin
-	on peg 0 and finish on peg 1 or 2 according as whether the number of disks is even or odd. Another formulation is from
-	peg (m - (m & -m)) % 3 to peg (m + (m & -m)) % 3.
+	on peg 0 and finish on peg 1 or 2 according as whether the number of disks is even or odd. 
 
 	Time Complexity: O(2^n)
 	Space Complexity: O(n)
 	*/
 	unsigned long long Puzzles_TowerOfHanoi_binary_v3(stack<int>& from, stack<int>& to, stack<int>& aux)
 	{
-		return 0;
+		int numDisks = from.size();
+		if (numDisks == 0)
+			return 0;
+
+		stack<int>* source = &from;
+		stack<int>* destination = &to;
+		stack<int>* auxiliary = &aux;
+		//If number of disks is even, then interchange  
+		//destination pole and auxiliary pole 
+		if ((numDisks & 1) == 0)
+		{
+			stack<int>* temp = destination;
+			destination = auxiliary;
+			auxiliary = temp;
+		}
+
+		unsigned long long totalMoves = 0;
+		if (numDisks < sizeof(unsigned long long) * 8)
+			totalMoves = (1ull << numDisks) - 1;
+		else
+			totalMoves = numeric_limits<unsigned long long>::max();
+
+		stack<int>* stacks[3] = { source, auxiliary, destination }; //Please note the sequence, the destination stack is at last
+		for (int m = 1; m <= totalMoves; ++m)
+		{
+			//We can display the move on screen. Assuming, we have ID with each stack OR we can also display address of stack.
+			//cout << "Move disk " << stacks[(m & m - 1) % 3]->top() << " from " << stacks[(m & m - 1) % 3]->getID() << " to " << stacks[((m | m - 1) + 1) % 3]->getID();
+			stacks[((m | m - 1) + 1) % 3]->push(stacks[(m & m - 1) % 3]->top());
+			stacks[(m & m - 1) % 3]->pop();
+		}
+
+		return totalMoves;
+	}
+
+	/*
+	Source: https://en.wikipedia.org/wiki/Tower_of_Hanoi
+	Another formulation is from peg (m - (m & -m)) % 3 to peg (m + (m & -m)) % 3.
+
+	Time Complexity: O(2^n)
+	Space Complexity: O(n)
+	*/
+
+	unsigned long long Puzzles_TowerOfHanoi_binary_v4(stack<int>& from, stack<int>& to, stack<int>& aux)
+	{
+		int numDisks = from.size();
+		if (numDisks == 0)
+			return 0;
+
+		stack<int>* source = &from;
+		stack<int>* destination = &to;
+		stack<int>* auxiliary = &aux;
+		//If number of disks is even, then interchange  
+		//destination pole and auxiliary pole 
+		if ((numDisks & 1) == 0)
+		{
+			stack<int>* temp = destination;
+			destination = auxiliary;
+			auxiliary = temp;
+		}
+
+		unsigned long long totalMoves = 0;
+		if (numDisks < sizeof(unsigned long long) * 8)
+			totalMoves = (1ull << numDisks) - 1;
+		else
+			totalMoves = numeric_limits<unsigned long long>::max();
+
+		stack<int>* stacks[3] = { source, auxiliary, destination }; //Please note the sequence, the destination stack is at last
+		for (int m = 1; m <= totalMoves; ++m)
+		{
+			//We can display the move on screen. Assuming, we have ID with each stack OR we can also display address of stack.
+			//cout << "Move disk " << stacks[(m - (m & -m)) % 3]->top() << " from " << stacks[(m - (m & -m)) % 3]->getID() << " to " << stacks[(m + (m & -m)) % 3]->getID();
+			stacks[(m + (m & -m)) % 3]->push(stacks[(m - (m & -m)) % 3]->top());
+			stacks[(m - (m & -m)) % 3]->pop();
+		}
+
+		return totalMoves;
 	}
 
 	// Test
@@ -624,17 +698,29 @@ namespace mm
 					data[i].numDisks, actualMoves, data[i].expectedMoves);
 			}
 
-			//if (data[i].numDisks <= 18)
-			//{
-			//	stack<int> from;
-			//	stack<int> to;
-			//	stack<int> aux;
-			//	for (int j = data[i].numDisks; j > 0; --j)
-			//		from.push(j);
-			//	MM_TIMED_EXPECT_TRUE((actualMoves = Puzzles_TowerOfHanoi_binary_v3(from, to, aux)) == data[i].expectedMoves
-			//		&& from.empty() && aux.empty() && to.size() == data[i].numDisks && validate(to),
-			//		data[i].numDisks, actualMoves, data[i].expectedMoves);
-			//}
+			if (data[i].numDisks <= 18)
+			{
+				stack<int> from;
+				stack<int> to;
+				stack<int> aux;
+				for (int j = data[i].numDisks; j > 0; --j)
+					from.push(j);
+				MM_TIMED_EXPECT_TRUE((actualMoves = Puzzles_TowerOfHanoi_binary_v3(from, to, aux)) == data[i].expectedMoves
+					&& from.empty() && aux.empty() && to.size() == data[i].numDisks && validate(to),
+					data[i].numDisks, actualMoves, data[i].expectedMoves);
+			}
+
+			if (data[i].numDisks <= 18)
+			{
+				stack<int> from;
+				stack<int> to;
+				stack<int> aux;
+				for (int j = data[i].numDisks; j > 0; --j)
+					from.push(j);
+				MM_TIMED_EXPECT_TRUE((actualMoves = Puzzles_TowerOfHanoi_binary_v4(from, to, aux)) == data[i].expectedMoves
+					&& from.empty() && aux.empty() && to.size() == data[i].numDisks && validate(to),
+					data[i].numDisks, actualMoves, data[i].expectedMoves);
+			}
 
 		}
 	}
