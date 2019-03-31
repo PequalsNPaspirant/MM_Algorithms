@@ -146,6 +146,8 @@ namespace mm
 			unsigned long long numMoves = 0;
 			numMoves += Puzzles_TowerOfHanoi_getNumMoves_DP_topdown_v1(numDisks - 1, from, aux, to, cache);
 			//Move top disk: from -> to
+			//We can display it on screen. But due to memoization, it does not display all (2^n - 1) steps.
+			//cout << "Move disk " << numDisks << " from " << from << " to " << to;
 			numMoves += 1;
 			numMoves += Puzzles_TowerOfHanoi_getNumMoves_DP_topdown_v1(numDisks - 1, aux, to, from, cache);
 			cache[numDisks] = numMoves;
@@ -160,7 +162,20 @@ namespace mm
 	*/
 	unsigned long long Puzzles_TowerOfHanoi_getNumMoves_DP_bottomup_v1(int numDisks, int from, int to, int aux, vector<unsigned long long>& cache)
 	{
-		return 0;
+		//For 0 disks, the number of moves are 0
+		cache[0] = 0;
+
+		//For 1 disk, the number of moves are 1
+		//cache[1] = 1;
+
+		for (int i = 1; i <= numDisks; ++i)
+		{
+			//the pattern is derived from the recursive approach.
+			//For every disk, we need twice as many moves as required for (disks - 1) and one extra move to place last disk.
+			cache[i] = cache[i-1] * 2 + 1; 
+		}
+
+		return cache[numDisks];
 	}
 
 	/*
@@ -360,6 +375,8 @@ namespace mm
 						target = stacks[(i + 2) % 3];
 
 					assert(target->empty() || target->top() > stacks[i]->top());
+					//We can display the move on screen. Assuming, we have ID with each stack OR we can also display address of stack.
+					//cout << "Move disk " << disk << " from " << stacks[i]->getID() << " to " << target->getID();
 					target->push(disk);
 					stacks[i]->pop();
 					
@@ -404,21 +421,29 @@ namespace mm
 				assert(false);
 			else if (fromStack->empty())
 			{
+				//We can display the move on screen. Assuming, we have ID with each stack OR we can also display address of stack.
+				//cout << "Move disk " << toStack->top() << " from " << toStack->getID() << " to " << fromStack->getID();
 				fromStack->push(toStack->top());
 				toStack->pop();
 			}
 			else if (toStack->empty())
 			{
+				//We can display the move on screen. Assuming, we have ID with each stack OR we can also display address of stack.
+				//cout << "Move disk " << fromStack->top() << " from " << fromStack->getID() << " to " << toStack->getID();
 				toStack->push(fromStack->top());
 				fromStack->pop();
 			}
 			else if (fromStack->top() < toStack->top())
 			{
+				//We can display the move on screen. Assuming, we have ID with each stack OR we can also display address of stack.
+				//cout << "Move disk " << fromStack->top() << " from " << fromStack->getID() << " to " << toStack->getID();
 				toStack->push(fromStack->top());
 				fromStack->pop();
 			}
 			else if (fromStack->top() > toStack->top())
 			{
+				//We can display the move on screen. Assuming, we have ID with each stack OR we can also display address of stack.
+				//cout << "Move disk " << toStack->top() << " from " << toStack->getID() << " to " << fromStack->getID();
 				fromStack->push(toStack->top());
 				toStack->pop();
 			}
@@ -560,12 +585,17 @@ namespace mm
 			//		data[i].numDisks, actualMoves, data[i].expectedMoves);
 			//}
 
-			vector<unsigned long long> cache(data[i].numDisks + 1, 0);
-			MM_TIMED_EXPECT_TRUE((actualMoves = Puzzles_TowerOfHanoi_getNumMoves_DP_topdown_v1(data[i].numDisks, 1, 2, 3, cache)) == data[i].expectedMoves,
-				data[i].numDisks, actualMoves, data[i].expectedMoves);
+			{
+				vector<unsigned long long> cache(data[i].numDisks + 1, 0);
+				MM_TIMED_EXPECT_TRUE((actualMoves = Puzzles_TowerOfHanoi_getNumMoves_DP_topdown_v1(data[i].numDisks, 1, 2, 3, cache)) == data[i].expectedMoves,
+					data[i].numDisks, actualMoves, data[i].expectedMoves);
+			}
 
-			//MM_TIMED_EXPECT_TRUE((actualMoves = Puzzles_TowerOfHanoi_getNumMoves_DP_bottomup_v1(data[i].numDisks, 1, 2, 3, cache)) == data[i].expectedMoves,
-			//	data[i].numDisks, actualMoves, data[i].expectedMoves);
+			{
+				vector<unsigned long long> cache(data[i].numDisks + 1, 0);
+				MM_TIMED_EXPECT_TRUE((actualMoves = Puzzles_TowerOfHanoi_getNumMoves_DP_bottomup_v1(data[i].numDisks, 1, 2, 3, cache)) == data[i].expectedMoves,
+					data[i].numDisks, actualMoves, data[i].expectedMoves);
+			}
 
 			MM_TIMED_EXPECT_TRUE((actualMoves = Puzzles_TowerOfHanoi_getNumMoves(data[i].numDisks)) == data[i].expectedMoves,
 				data[i].numDisks, actualMoves, data[i].expectedMoves);
@@ -593,6 +623,18 @@ namespace mm
 					&& from.empty() && aux.empty() && to.size() == data[i].numDisks && validate(to),
 					data[i].numDisks, actualMoves, data[i].expectedMoves);
 			}
+
+			//if (data[i].numDisks <= 18)
+			//{
+			//	stack<int> from;
+			//	stack<int> to;
+			//	stack<int> aux;
+			//	for (int j = data[i].numDisks; j > 0; --j)
+			//		from.push(j);
+			//	MM_TIMED_EXPECT_TRUE((actualMoves = Puzzles_TowerOfHanoi_binary_v3(from, to, aux)) == data[i].expectedMoves
+			//		&& from.empty() && aux.empty() && to.size() == data[i].numDisks && validate(to),
+			//		data[i].numDisks, actualMoves, data[i].expectedMoves);
+			//}
 
 		}
 	}
