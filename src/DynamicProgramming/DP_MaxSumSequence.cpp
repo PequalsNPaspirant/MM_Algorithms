@@ -9,7 +9,7 @@
 #include <iomanip> //for setw(n)
 using namespace std;
 
-#include "my_math_lib/Permutations.h"
+#include "Maths/Maths_Permutations.h"
 #include "DynamicProgramming/DP_MaxSumSequence.h"
 
 namespace mm {

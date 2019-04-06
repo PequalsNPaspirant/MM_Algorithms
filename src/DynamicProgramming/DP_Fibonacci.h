@@ -5,7 +5,7 @@
 
 using namespace std;
 
-//#include "my_math_lib/Permutations.h"
+//#include "Maths/Maths_Permutations.h"
 
 namespace mm {
 

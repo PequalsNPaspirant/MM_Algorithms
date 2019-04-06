@@ -23,6 +23,19 @@ namespace mm {
 		return result;
 	}
 
+	/*
+	bool isOnlyOneBitON(); // or isPowerOf2()
+	bool isnthBitON();
+	bool isnthBitOFF();
+	void setnthBitON();
+	void setnthBitOFF();
+	unsigned int getCountOfONBits();
+	getRightmostONBit();
+	getLeftmostONBit();
+	keepOnlyRightmostBitON() { lhs[0] = (currentDigit & -currentDigit); }
+	getCountOfONBits()
+	*/
+
 	MM_DECLARE_FLAG(Binary_reverseBitsInInteger);
 
 	MM_UNIT_TEST(Binary_reverseBitsInInteger_test_1, Binary_reverseBitsInInteger)
@@ -42,6 +55,14 @@ namespace mm {
 		{
 			unsigned int actualResult;
 			MM_EXPECT_TRUE((actualResult = reverseBits(testData[i].value)) == testData[i].reverse, testData[i].value, testData[i].reverse, actualResult);
-		}		
+		}
+
+		unsigned int value[20] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 };
+		for (int i = 0; i < 20; ++i)
+		{
+			unsigned int temp = reverseBits(value[i]);
+			unsigned int temp2 = reverseBits(temp);
+			MM_EXPECT_TRUE(value[i] == temp2, value[i], temp2)
+		}
 	}
 }

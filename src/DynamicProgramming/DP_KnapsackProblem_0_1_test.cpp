@@ -17,11 +17,11 @@ using namespace std;
 //#include "DynamicProgramming/DP_Common.h"
 #include "DynamicProgramming/DP_KnapsackProblem_0_1.h"
 #include "DynamicProgramming/DP_KnapsackProblem_0_1_testDataGenerator.h"
-//#include "Assert/MyAssert.h"
-#include "Others/PrintUtils.h"
+//#include "Utils/Utils_MM_Assert.h"
+#include "Utils/Utils_PrintUtils.h"
 #include "MM_UnitTestFramework/MM_UnitTestFramework.h"
-#include "Assert/MyAssert.h"
-#include "Timer/Timer.h"
+#include "Utils/Utils_MM_Assert.h"
+#include "Timer/Timer_Timer.h"
 
 namespace mm {
 

@@ -3,7 +3,7 @@
 using namespace std;
 
 #include "BinaryTree/BinaryTree_BuildFromArrayRepresentation.h"
-#include "Others\PrintUtils.h"
+#include "Utils\Utils_PrintUtils.h"
 #include "MM_UnitTestFramework/MM_UnitTestFramework.h"
 
 namespace mm {

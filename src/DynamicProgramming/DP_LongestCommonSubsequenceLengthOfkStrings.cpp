@@ -6,7 +6,7 @@ using namespace std;
 
 #include "DynamicProgramming/DP_LongestCommonSubsequenceLengthOfkStrings.h"
 #include "DynamicProgramming/DP_Common.h"
-#include "Others\PrintUtils.h"
+#include "Utils\Utils_PrintUtils.h"
 #include "MM_UnitTestFramework/MM_UnitTestFramework.h"
 
 namespace mm {

@@ -10,12 +10,12 @@
 #include <map>
 using namespace std;
 
-//#include "Assert/MyAssert.h"
-#include "Others/PrintUtils.h"
+//#include "Utils/Utils_MM_Assert.h"
+#include "Utils/Utils_PrintUtils.h"
 //#include "DynamicProgramming/DP_Common.h"
 #include "DynamicProgramming/DP_KnapsackProblem_0_1.h"
 #include "MM_UnitTestFramework/MM_UnitTestFramework.h"
-#include "Assert/MyAssert.h"
+#include "Utils/Utils_MM_Assert.h"
 
 namespace mm {
 

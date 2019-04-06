@@ -4,7 +4,7 @@ using namespace std;
 
 #include "BinaryTree/BinaryTree_MaxTree.h"
 #include "MM_UnitTestFramework/MM_UnitTestFramework.h"
-#include "Others/PrintUtils.h"
+#include "Utils/Utils_PrintUtils.h"
 
 namespace mm {
 

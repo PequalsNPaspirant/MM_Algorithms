@@ -2,8 +2,8 @@
 
 #include <iostream>
 
-#include "WindowsUtils/WindowsUtils.h"
-#include "Timer/Timer.h"
+#include "Utils/Utils_WindowsUtils.h"
+#include "Timer/Timer_Timer.h"
 #include "MM_UnitTestFramework/MM_UnitTestFramework.h"
 
 namespace mm {
@@ -80,17 +80,30 @@ namespace mm {
 	MM_DEFINE_FLAG(false, Others_L_MaxFrequencyStack);
 
 	MM_DEFINE_FLAG(false, LLR_Fibonacci);
+
+	MM_DEFINE_FLAG(false, bitwiseOperations_reverseBits);
+	MM_DEFINE_FLAG(false, arithmeticOperations_matrix);
+	MM_DEFINE_FLAG(false, Miscellaneous_Others_atoi);
+	MM_DEFINE_FLAG(false, ReadWriteSubscriptOperators);
+	MM_DEFINE_FLAG(false, MM_shared_ptr_UnitTest);
+	MM_DEFINE_FLAG(false, arithmeticOperations_power);
+	MM_DEFINE_FLAG(false, STL_SharedPtrToBaseDerived);
+	MM_DEFINE_FLAG(false, SharedPtrCyclicReferenceMemoryLeak);
+	MM_DEFINE_FLAG(false, SharedPtrCyclicReferenceNoMemoryLeak);
+	MM_DEFINE_FLAG(false, STL_VectorUniquePtrToInt);
+	MM_DEFINE_FLAG(false, STL_unordered_map_UnitTest);
+	MM_DEFINE_FLAG(false, STL_vectorUnitTest);
 }
 
 using namespace mm;
 
 int main(int argc, char* argv[])
 {
-	MaximizeWindow();				
+	mm::MaximizeWindow();
 
 	MM_RUN_UNIT_TESTS
 
-	cout << "\n\n\n" << Timer::getCurrentLocalTimeInNanoSeconds() << " CONGRATULATIONS!!! End of program reached successfully.\n\n\n";
+	cout << "\n\n\n" << mm::Timer::getCurrentLocalTimeInNanoSeconds() << " CONGRATULATIONS!!! End of program reached successfully.\n\n\n";
 
 	std::cin.get();
 	return 0;

@@ -19,6 +19,60 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\src\C++11_onwards\C++11_MoveSemantics.cpp" />
+    <ClCompile Include="..\..\..\..\src\C++11_onwards\C++11_RvalueReferenceAndMove.cpp" />
+    <ClCompile Include="..\..\..\..\src\C++\C++_atoi.cpp" />
+    <ClCompile Include="..\..\..\..\src\C++\C++_CastDerivedPtrToPtr.cpp" />
+    <ClCompile Include="..\..\..\..\src\C++\C++_DataTypes.cpp" />
+    <ClCompile Include="..\..\..\..\src\C++\C++_Date.cpp" />
+    <ClCompile Include="..\..\..\..\src\C++\C++_Excel.cpp" />
+    <ClCompile Include="..\..\..\..\src\C++\C++_FunctionOverloading.cpp" />
+    <ClCompile Include="..\..\..\..\src\C++\C++_Miscellaneous.cpp" />
+    <ClCompile Include="..\..\..\..\src\C++\C++_OperatorOverloadingAllinOne.cpp" />
+    <ClCompile Include="..\..\..\..\src\C++\C++_ReadWriteSubscriptOperators.cpp" />
+    <ClCompile Include="..\..\..\..\src\C++\C++_ReadWriteSubscriptOperatorsMatrix.cpp" />
+    <ClCompile Include="..\..\..\..\src\Cryptography\Cryptography_PasswordEncryption.cpp" />
+    <ClCompile Include="..\..\..\..\src\Database\Database_Database.cpp" />
+    <ClCompile Include="..\..\..\..\src\DataStructures\DS_BST.cpp" />
+    <ClCompile Include="..\..\..\..\src\DataStructures\DS_BST_AVL.cpp" />
+    <ClCompile Include="..\..\..\..\src\DataStructures\DS_BST_RedBlackTree.cpp" />
+    <ClCompile Include="..\..\..\..\src\DataStructures\DS_BST_splay.cpp" />
+    <ClCompile Include="..\..\..\..\src\DataStructures\DS_BST_treap.cpp" />
+    <ClCompile Include="..\..\..\..\src\DataStructures\DS_heap.cpp" />
+    <ClCompile Include="..\..\..\..\src\DataStructures\DS_LinkList.cpp" />
+    <ClCompile Include="..\..\..\..\src\DataStructures\DS_MM_shared_ptr.cpp" />
+    <ClCompile Include="..\..\..\..\src\DataStructures\DS_MM_vector_bool.cpp" />
+    <ClCompile Include="..\..\..\..\src\DataStructures\DS_my_deque.cpp" />
+    <ClCompile Include="..\..\..\..\src\DataStructures\DS_my_vector.cpp" />
+    <ClCompile Include="..\..\..\..\src\DataStructures\DS_StackQueue.cpp" />
+    <ClCompile Include="..\..\..\..\src\Maths\Maths_ArithmeticOperations.cpp" />
+    <ClCompile Include="..\..\..\..\src\Maths\Maths_Maths.cpp" />
+    <ClCompile Include="..\..\..\..\src\Maths\Maths_Matrix.cpp" />
+    <ClCompile Include="..\..\..\..\src\Maths\Maths_NumberSystems.cpp" />
+    <ClCompile Include="..\..\..\..\src\Maths\Maths_Permutations.cpp" />
+    <ClCompile Include="..\..\..\..\src\Maths\Maths_PrimeNumber.cpp" />
+    <ClCompile Include="..\..\..\..\src\Maths\Maths_RandomNumber.cpp" />
+    <ClCompile Include="..\..\..\..\src\Others\Others_FloatingPoint.cpp" />
+    <ClCompile Include="..\..\..\..\src\ScottMeyers\ScottMeyers_EffectiveModernCPP.cpp" />
+    <ClCompile Include="..\..\..\..\src\STL\STL_Allocators.cpp" />
+    <ClCompile Include="..\..\..\..\src\STL\STL_Concurrency.cpp" />
+    <ClCompile Include="..\..\..\..\src\STL\STL_Containers.cpp" />
+    <ClCompile Include="..\..\..\..\src\STL\STL_Lambda.cpp" />
+    <ClCompile Include="..\..\..\..\src\STL\STL_Ratio.cpp" />
+    <ClCompile Include="..\..\..\..\src\STL\STL_shared_ptr.cpp" />
+    <ClCompile Include="..\..\..\..\src\STL\STL_shared_ptr_cyclic_ref.cpp" />
+    <ClCompile Include="..\..\..\..\src\STL\STL_TypeTraits.cpp" />
+    <ClCompile Include="..\..\..\..\src\STL\STL_unique_ptr.cpp" />
+    <ClCompile Include="..\..\..\..\src\STL\STL_unordered_map.cpp" />
+    <ClCompile Include="..\..\..\..\src\STL\STL_vector.cpp" />
+    <ClCompile Include="..\..\..\..\src\Timer\Timer_MSDNTimeExample.cpp" />
+    <ClCompile Include="..\..\..\..\src\Timer\Timer_Timer.cpp" />
+    <ClCompile Include="..\..\..\..\src\Timer\Timer_Timer2.cpp" />
+    <ClCompile Include="..\..\..\..\src\Utils\Utils_MM_Assert.cpp" />
+    <ClCompile Include="..\..\..\..\src\Utils\Utils_MM_Logger.cpp" />
+    <ClCompile Include="..\..\..\..\src\Utils\Utils_PrintUtils.cpp" />
+    <ClCompile Include="..\..\..\..\src\Utils\Utils_StringUtils.cpp" />
+    <ClCompile Include="..\..\..\..\src\Utils\Utils_WindowsUtils.cpp" />
     <ClCompile Include="..\..\..\..\src\LinearRecurrenceRelations\LinearRecurrenceRelations_concept.cpp" />
     <ClCompile Include="..\..\..\..\src\LinearRecurrenceRelations\LRR_Fibonacci.cpp" />
     <ClCompile Include="..\..\..\..\src\BinaryTree\BinaryTree_CheckIfBST.cpp" />
@@ -112,6 +166,60 @@
     <ClCompile Include="..\..\..\..\src\_MM_Algorithms_main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\src\MM_UnitTestFramework\MM_UnitTestFramework.h" />
+    <ClInclude Include="..\..\..\..\src\C++11_onwards\C++11_MoveSemantics.h" />
+    <ClInclude Include="..\..\..\..\src\C++11_onwards\C++11_RvalueReferenceAndMove.h" />
+    <ClInclude Include="..\..\..\..\src\C++\C++_CastDerivedPtrToPtr.h" />
+    <ClInclude Include="..\..\..\..\src\C++\C++_DataTypes.h" />
+    <ClInclude Include="..\..\..\..\src\C++\C++_Date.h" />
+    <ClInclude Include="..\..\..\..\src\C++\C++_Excel.h" />
+    <ClInclude Include="..\..\..\..\src\C++\C++_FunctionOverloading.h" />
+    <ClInclude Include="..\..\..\..\src\C++\C++_Miscellaneous.h" />
+    <ClInclude Include="..\..\..\..\src\C++\C++_OperatorOverloadingAllinOne.h" />
+    <ClInclude Include="..\..\..\..\src\C++\C++_ReadWriteSubscriptOperators.h" />
+    <ClInclude Include="..\..\..\..\src\C++\C++_ReadWriteSubscriptOperatorsMatrix.h" />
+    <ClInclude Include="..\..\..\..\src\Cryptography\Cryptography_PasswordEncryption.h" />
+    <ClInclude Include="..\..\..\..\src\Database\Database_Database.h" />
+    <ClInclude Include="..\..\..\..\src\DataStructures\DS_BST.h" />
+    <ClInclude Include="..\..\..\..\src\DataStructures\DS_BST_AVL.h" />
+    <ClInclude Include="..\..\..\..\src\DataStructures\DS_BST_RedBlackTree.h" />
+    <ClInclude Include="..\..\..\..\src\DataStructures\DS_BST_splay.h" />
+    <ClInclude Include="..\..\..\..\src\DataStructures\DS_BST_treap.h" />
+    <ClInclude Include="..\..\..\..\src\DataStructures\DS_heap.h" />
+    <ClInclude Include="..\..\..\..\src\DataStructures\DS_LinkList.h" />
+    <ClInclude Include="..\..\..\..\src\DataStructures\DS_MM_shared_ptr.h" />
+    <ClInclude Include="..\..\..\..\src\DataStructures\DS_MM_vector_bool.h" />
+    <ClInclude Include="..\..\..\..\src\DataStructures\DS_my_deque.h" />
+    <ClInclude Include="..\..\..\..\src\DataStructures\DS_my_vector.h" />
+    <ClInclude Include="..\..\..\..\src\DataStructures\DS_StackQueue.h" />
+    <ClInclude Include="..\..\..\..\src\Maths\Maths_ArithmeticOperations.h" />
+    <ClInclude Include="..\..\..\..\src\Maths\Maths_Maths.h" />
+    <ClInclude Include="..\..\..\..\src\Maths\Maths_Matrix.h" />
+    <ClInclude Include="..\..\..\..\src\Maths\Maths_NumberSystems.h" />
+    <ClInclude Include="..\..\..\..\src\Maths\Maths_Permutations.h" />
+    <ClInclude Include="..\..\..\..\src\Maths\Maths_PrimeNumber.h" />
+    <ClInclude Include="..\..\..\..\src\Maths\Maths_RandomNumber.h" />
+    <ClInclude Include="..\..\..\..\src\Others\Others_FloatingPoint.h" />
+    <ClInclude Include="..\..\..\..\src\ScottMeyers\ScottMeyers_EffectiveModernCPP.h" />
+    <ClInclude Include="..\..\..\..\src\STL\STL_Allocators.h" />
+    <ClInclude Include="..\..\..\..\src\STL\STL_Concurrency.h" />
+    <ClInclude Include="..\..\..\..\src\STL\STL_Containers.h" />
+    <ClInclude Include="..\..\..\..\src\STL\STL_Lambda.h" />
+    <ClInclude Include="..\..\..\..\src\STL\STL_Ratio.h" />
+    <ClInclude Include="..\..\..\..\src\STL\STL_shared_ptr.h" />
+    <ClInclude Include="..\..\..\..\src\STL\STL_shared_ptr_cyclic_ref.h" />
+    <ClInclude Include="..\..\..\..\src\STL\STL_TypeTraits.h" />
+    <ClInclude Include="..\..\..\..\src\STL\STL_unique_ptr.h" />
+    <ClInclude Include="..\..\..\..\src\STL\STL_unordered_map.h" />
+    <ClInclude Include="..\..\..\..\src\STL\STL_vector.h" />
+    <ClInclude Include="..\..\..\..\src\Timer\Timer_MSDNTimeExample.h" />
+    <ClInclude Include="..\..\..\..\src\Timer\Timer_Timer.h" />
+    <ClInclude Include="..\..\..\..\src\Timer\Timer_Timer2.h" />
+    <ClInclude Include="..\..\..\..\src\Utils\Utils_MM_Assert.h" />
+    <ClInclude Include="..\..\..\..\src\Utils\Utils_MM_Logger.h" />
+    <ClInclude Include="..\..\..\..\src\Utils\Utils_PrintUtils.h" />
+    <ClInclude Include="..\..\..\..\src\Utils\Utils_StringUtils.h" />
+    <ClInclude Include="..\..\..\..\src\Utils\Utils_WindowsUtils.h" />
     <ClInclude Include="..\..\..\..\src\Puzzles\Puzzles_TowerOfHanoi.h" />
     <ClInclude Include="..\..\..\..\src\LinearRecurrenceRelations\LRR_Fibonacci.h" />
     <ClInclude Include="..\..\..\..\src\BinaryTree\BinaryTree_CheckIfBST.h" />
@@ -276,7 +384,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)\..\..\..\..\src;$(ProjectDir)\..\..\..\..\..\MM_CommonUtils\src;$(ProjectDir)\..\..\..\..\..\MM_UnitTestFramework\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\..\..\..\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ObjectFileName>$(ProjectDir)\..\..\..\..\obj\windows_visual_studio\$(Configuration)_$(Platform)\</ObjectFileName>
       <ProgramDataBaseFileName>$(ProjectDir)\..\..\..\..\obj\windows_visual_studio\$(Configuration)_$(Platform)\vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
     </ClCompile>
@@ -285,8 +393,9 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <OutputFile>$(ProjectDir)..\..\..\..\bin\windows_visual_studio\$(Configuration)_$(Platform)\$(TargetName)$(TargetExt)</OutputFile>
       <ProgramDatabaseFile>$(ProjectDir)..\..\..\..\bin\windows_visual_studio\$(Configuration)_$(Platform)\$(TargetName).pdb</ProgramDatabaseFile>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\..\..\MM_CommonUtils\bin\windows_visual_studio\$(Configuration)_$(Platform)\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>MM_CommonUtils.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <LargeAddressAware>true</LargeAddressAware>
       <StackReserveSize>1000000000</StackReserveSize>
       <StackCommitSize>1000000000</StackCommitSize>
@@ -301,7 +410,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)\..\..\..\..\src;$(ProjectDir)\..\..\..\..\..\MM_CommonUtils\src;$(ProjectDir)\..\..\..\..\..\MM_UnitTestFramework\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\..\..\..\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ObjectFileName>$(ProjectDir)\..\..\..\..\obj\windows_visual_studio\$(Configuration)_$(Platform)\</ObjectFileName>
       <ProgramDataBaseFileName>$(ProjectDir)\..\..\..\..\obj\windows_visual_studio\$(Configuration)_$(Platform)\vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
     </ClCompile>
@@ -310,8 +419,9 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <OutputFile>$(ProjectDir)..\..\..\..\bin\windows_visual_studio\$(Configuration)_$(Platform)\$(TargetName)$(TargetExt)</OutputFile>
       <ProgramDatabaseFile>$(ProjectDir)..\..\..\..\bin\windows_visual_studio\$(Configuration)_$(Platform)\$(TargetName).pdb</ProgramDatabaseFile>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\..\..\MM_CommonUtils\bin\windows_visual_studio\$(Configuration)_$(Platform)\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>MM_CommonUtils.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <LargeAddressAware>true</LargeAddressAware>
       <StackReserveSize>1000000000</StackReserveSize>
       <StackCommitSize>1000000000</StackCommitSize>
@@ -328,7 +438,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)\..\..\..\..\src;$(ProjectDir)\..\..\..\..\..\MM_CommonUtils\src;$(ProjectDir)\..\..\..\..\..\MM_UnitTestFramework\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\..\..\..\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ObjectFileName>$(ProjectDir)\..\..\..\..\obj\windows_visual_studio\$(Configuration)_$(Platform)\</ObjectFileName>
       <ProgramDataBaseFileName>$(ProjectDir)\..\..\..\..\obj\windows_visual_studio\$(Configuration)_$(Platform)\vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
     </ClCompile>
@@ -339,8 +449,9 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <OutputFile>$(ProjectDir)..\..\..\..\bin\windows_visual_studio\$(Configuration)_$(Platform)\$(TargetName)$(TargetExt)</OutputFile>
       <ProgramDatabaseFile>$(ProjectDir)..\..\..\..\bin\windows_visual_studio\$(Configuration)_$(Platform)\$(TargetName).pdb</ProgramDatabaseFile>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\..\..\MM_CommonUtils\bin\windows_visual_studio\$(Configuration)_$(Platform)\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>MM_CommonUtils.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <LargeAddressAware>true</LargeAddressAware>
       <StackReserveSize>1000000000</StackReserveSize>
       <StackCommitSize>1000000000</StackCommitSize>
@@ -357,7 +468,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)\..\..\..\..\src;$(ProjectDir)\..\..\..\..\..\MM_CommonUtils\src;$(ProjectDir)\..\..\..\..\..\MM_UnitTestFramework\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\..\..\..\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ObjectFileName>$(ProjectDir)\..\..\..\..\obj\windows_visual_studio\$(Configuration)_$(Platform)\</ObjectFileName>
       <ProgramDataBaseFileName>$(ProjectDir)\..\..\..\..\obj\windows_visual_studio\$(Configuration)_$(Platform)\vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
     </ClCompile>
@@ -368,8 +479,9 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <OutputFile>$(ProjectDir)..\..\..\..\bin\windows_visual_studio\$(Configuration)_$(Platform)\$(TargetName)$(TargetExt)</OutputFile>
       <ProgramDatabaseFile>$(ProjectDir)..\..\..\..\bin\windows_visual_studio\$(Configuration)_$(Platform)\$(TargetName).pdb</ProgramDatabaseFile>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\..\..\MM_CommonUtils\bin\windows_visual_studio\$(Configuration)_$(Platform)\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>MM_CommonUtils.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <LargeAddressAware>true</LargeAddressAware>
       <StackReserveSize>1000000000</StackReserveSize>
       <StackCommitSize>1000000000</StackCommitSize>
