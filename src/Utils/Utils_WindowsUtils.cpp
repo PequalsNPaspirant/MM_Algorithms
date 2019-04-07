@@ -1,4 +1,5 @@
 #include <tchar.h>
+#include <windows.h>
 
 #include "Utils/Utils_WindowsUtils.h"
 
