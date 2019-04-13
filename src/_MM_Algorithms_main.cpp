@@ -8,6 +8,12 @@
 
 namespace mm {
 
+	//CPU Friendly
+	MM_DEFINE_FLAG(false, CPU_accessMatrixRowwise);
+	MM_DEFINE_FLAG(false, CPU_findCasheSize);
+	MM_DEFINE_FLAG(false, CPU_falseSharing);
+	MM_DEFINE_FLAG(false, CPU_cacheCoherency);
+	MM_DEFINE_FLAG(false, CPU_branchPrediction);
 	//Binary Search Tree(BST)
 	MM_DEFINE_FLAG(false, BST_checkIfPreorderTraversalIsBST);
 	//Binary Tree
@@ -74,25 +80,30 @@ namespace mm {
 	MM_DEFINE_FLAG(false, Others_FxSettlement);
 	MM_DEFINE_FLAG(false, Others_GTS);
 	MM_DEFINE_FLAG(false, Others_FxRatesCache); //----TODO
-
+	//Others_h
 	MM_DEFINE_FLAG(false, Others_h_findDistrinctNumbersGenerated);
-
+	//Others_L
 	MM_DEFINE_FLAG(false, Others_L_MaxFrequencyStack);
-
+	//Linear Recurrence Relations
 	MM_DEFINE_FLAG(false, LLR_Fibonacci);
-
+	//Bitwise operations
 	MM_DEFINE_FLAG(false, bitwiseOperations_reverseBits);
+	//Arithmatic Operations
 	MM_DEFINE_FLAG(false, arithmeticOperations_matrix);
-	MM_DEFINE_FLAG(false, Miscellaneous_Others_atoi);
-	MM_DEFINE_FLAG(false, ReadWriteSubscriptOperators);
-	MM_DEFINE_FLAG(false, MM_shared_ptr_UnitTest);
 	MM_DEFINE_FLAG(false, arithmeticOperations_power);
-	MM_DEFINE_FLAG(false, STL_SharedPtrToBaseDerived);
+	//STL
+	MM_DEFINE_FLAG(false, MM_shared_ptr_UnitTest);
 	MM_DEFINE_FLAG(false, SharedPtrCyclicReferenceMemoryLeak);
 	MM_DEFINE_FLAG(false, SharedPtrCyclicReferenceNoMemoryLeak);
+	MM_DEFINE_FLAG(false, STL_SharedPtrToBaseDerived);
 	MM_DEFINE_FLAG(false, STL_VectorUniquePtrToInt);
 	MM_DEFINE_FLAG(false, STL_unordered_map_UnitTest);
 	MM_DEFINE_FLAG(false, STL_vectorUnitTest);
+	//Geometry
+	//Pattern Matching
+	//Miscellaneous
+	MM_DEFINE_FLAG(false, Miscellaneous_Others_atoi);
+	MM_DEFINE_FLAG(false, ReadWriteSubscriptOperators);
 }
 
 using namespace mm;
