@@ -19,6 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\src\_CPU_Friendly\CPU_accessMatrixRowWise.cpp" />
+    <ClCompile Include="..\..\..\..\src\_CPU_Friendly\CPU_branchPrediction.cpp" />
+    <ClCompile Include="..\..\..\..\src\_CPU_Friendly\CPU_cacheCoherency.cpp" />
+    <ClCompile Include="..\..\..\..\src\_CPU_Friendly\CPU_falseSharing.cpp" />
+    <ClCompile Include="..\..\..\..\src\_CPU_Friendly\CPU_findCacheSize.cpp" />
     <ClCompile Include="..\..\..\..\src\C++11_onwards\C++11_MoveSemantics.cpp" />
     <ClCompile Include="..\..\..\..\src\C++11_onwards\C++11_RvalueReferenceAndMove.cpp" />
     <ClCompile Include="..\..\..\..\src\C++\C++_atoi.cpp" />

@@ -450,6 +450,21 @@
     <ClCompile Include="..\..\..\..\src\C++\C++_ReadWriteSubscriptOperatorsMatrix.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\src\_CPU_Friendly\CPU_branchPrediction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\_CPU_Friendly\CPU_cacheCoherency.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\_CPU_Friendly\CPU_falseSharing.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\_CPU_Friendly\CPU_findCacheSize.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\_CPU_Friendly\CPU_accessMatrixRowWise.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\src\Backtracking\Backtracking.h">
