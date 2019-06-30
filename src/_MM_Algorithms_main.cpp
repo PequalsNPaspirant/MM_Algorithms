@@ -9,11 +9,11 @@
 namespace mm {
 
 	//CPU Friendly
-	MM_DEFINE_FLAG(false, CPU_accessMatrixRowwise);
-	MM_DEFINE_FLAG(false, CPU_findCasheSize);
-	MM_DEFINE_FLAG(false, CPU_falseSharing);
-	MM_DEFINE_FLAG(false, CPU_cacheCoherency);
-	MM_DEFINE_FLAG(false, CPU_branchPrediction);
+	MM_DEFINE_FLAG(false, CPU_accessMatrixRowwise); //-----TODO
+	MM_DEFINE_FLAG(false, CPU_findCasheSize); //-----TODO
+	MM_DEFINE_FLAG(false, CPU_falseSharing); //-----TODO
+	MM_DEFINE_FLAG(false, CPU_cacheCoherency); //-----TODO
+	MM_DEFINE_FLAG(false, CPU_branchPrediction); //-----TODO
 	//Binary Search Tree(BST)
 	MM_DEFINE_FLAG(false, BST_checkIfPreorderTraversalIsBST);
 	//Binary Tree
@@ -48,7 +48,7 @@ namespace mm {
 	//Puzzles
 	MM_DEFINE_FLAG(false, Puzzles_JosephusProblem); // -----TODO
 	MM_DEFINE_FLAG(false, Puzzles_EggDropping);  //--------TODO
-	MM_DEFINE_FLAG(true, Puzzles_TowerOfHanoi_test);
+	MM_DEFINE_FLAG(false, Puzzles_TowerOfHanoi_test);
 	//Binary
 	MM_DEFINE_FLAG(false, Binary_reverseBitsInInteger);
 	//Queue
@@ -77,7 +77,7 @@ namespace mm {
 	MM_DEFINE_FLAG(false, Others_EquityOrderManagementSystem);
 	MM_DEFINE_FLAG(false, Others_CarRentalSystem);
 	MM_DEFINE_FLAG(false, Others_PersonSort);
-	MM_DEFINE_FLAG(false, Others_FxSettlement);
+	MM_DEFINE_FLAG(true, Others_FxSettlement);
 	MM_DEFINE_FLAG(false, Others_GTS);
 	MM_DEFINE_FLAG(false, Others_FxRatesCache); //----TODO
 	//Others_h
@@ -102,8 +102,8 @@ namespace mm {
 	//Geometry
 	//Pattern Matching
 	//Miscellaneous
-	MM_DEFINE_FLAG(false, Miscellaneous_Others_atoi);
-	MM_DEFINE_FLAG(false, ReadWriteSubscriptOperators);
+	MM_DEFINE_FLAG(false, Miscellaneous_Others_atoi); //-----TODO
+	MM_DEFINE_FLAG(false, ReadWriteSubscriptOperators); //-----TODO
 }
 
 using namespace mm;
