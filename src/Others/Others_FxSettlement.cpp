@@ -313,33 +313,87 @@ namespace mm {
 			{ 500.0, 0.0 },
 			};
 			vector<double> exchangeRates{
-				1.0, //USD = 1,
-				0.88 //EUR,
-				 //CAD,
-				 //AUD,
-				 //GBP,
-				 //NZD,
-				 //JPY,
-				 //SGD,
-				 //CHF,
-				 //HUF,
-				 //MXN,
-				 //HKD,
-				 //SEK,
-				 //KRW,
-				 //NOK,
-				 //INR,
-				 //CUR1,
-				 //CUR2,
-				 //CUR3,
-				 //CUR4,
-				 //CUR5,
-				 //CUR6,
-				 //CUR7,
-				 //CUR8,
-				 //CUR9,
-				 //CUR10,
+				1.0, //USD = 1
+				1.14 //EUR
+				 //CAD
+				 //AUD
+				 //GBP
+				 //NZD
+				 //JPY
+				 //SGD
+				 //CHF
+				 //HUF
+				 //MXN
+				 //HKD
+				 //SEK
+				 //KRW
+				 //NOK
+				 //INR
+				 //CUR1
+				 //CUR2
+				 //CUR3
+				 //CUR4
+				 //CUR5
+				 //CUR6
+				 //CUR7
+				 //CUR8
+				 //CUR9
+				 //CUR10
 				 //maxCurrency
+			};
+			double settledAmount = 500.0;
+			vector<int> settledTradeIds{
+				1
+			};
+			testCases.push_back({ std::move(trades), std::move(spl), std::move(aspl), std::move(initialBalance), std::move(exchangeRates), settledAmount, std::move(settledTradeIds) });
+		}
+
+		{//1 trade, 2 members, 2 currencies
+			vector<Trade> trades{
+				{ 1, 1, 2, Currency(0), Currency(1), 500.0, 440.0, false }
+			};
+			vector< vector<double> > spl{
+			{ 0.0, 0.0 },
+			{ 0.0, 0.0 }
+			};
+			vector<double> aspl{
+				0.0,
+				0.0
+			};
+			vector< vector<double> > initialBalance{
+			{ 0.0, 440.0 },
+			{ 500.0, 0.0 },
+			};
+			vector<double> exchangeRates{
+				1.0, //USD = 1
+				1.14 //EUR
+			};
+			double settledAmount = 500.0;
+			vector<int> settledTradeIds{
+				1
+			};
+			testCases.push_back({ std::move(trades), std::move(spl), std::move(aspl), std::move(initialBalance), std::move(exchangeRates), settledAmount, std::move(settledTradeIds) });
+		}
+
+		{//1 trade, 2 members, 2 currencies
+			vector<Trade> trades{
+				{ 1, 1, 2, Currency(0), Currency(1), 500.0, 440.0, false }
+			};
+			vector< vector<double> > spl{
+			{ 0.0, 440.0 },
+			{ 500.0, 0.0 }
+			};
+			vector<double> aspl{
+				500.0,
+				500.0
+			};
+			vector< vector<double> > initialBalance{
+			{ 0.0, 10.0 },
+			{ 10.0, 0.0 },
+			};
+			vector<double> exchangeRates{
+				1.0, //USD = 1
+				1.14 //EUR
 			};
 			double settledAmount = 500.0;
 			vector<int> settledTradeIds{
