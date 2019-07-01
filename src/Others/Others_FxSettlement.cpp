@@ -115,7 +115,7 @@ namespace mm {
 			if (novTemp < -zero)
 				return false;
 
-			if (asplTemp < -aspl[memberIndex])
+			if (asplTemp < (-aspl[memberIndex] - zero))
 				return false;
 		}
 
@@ -342,9 +342,7 @@ namespace mm {
 				 //maxCurrency
 			};
 			double settledAmount = 500.0;
-			vector<int> settledTradeIds{
-				1
-			};
+			vector<int> settledTradeIds{ 1 };
 			testCases.push_back({ std::move(trades), std::move(spl), std::move(aspl), std::move(initialBalance), std::move(exchangeRates), settledAmount, std::move(settledTradeIds) });
 		}
 
@@ -369,9 +367,7 @@ namespace mm {
 				1.14 //EUR
 			};
 			double settledAmount = 500.0;
-			vector<int> settledTradeIds{
-				1
-			};
+			vector<int> settledTradeIds{ 1 };
 			testCases.push_back({ std::move(trades), std::move(spl), std::move(aspl), std::move(initialBalance), std::move(exchangeRates), settledAmount, std::move(settledTradeIds) });
 		}
 
@@ -396,9 +392,7 @@ namespace mm {
 				1.14 //EUR
 			};
 			double settledAmount = 500.0;
-			vector<int> settledTradeIds{
-				1
-			};
+			vector<int> settledTradeIds{ 1 };
 			testCases.push_back({ std::move(trades), std::move(spl), std::move(aspl), std::move(initialBalance), std::move(exchangeRates), settledAmount, std::move(settledTradeIds) });
 		}
 
@@ -424,10 +418,38 @@ namespace mm {
 				500.0/440.0 //EUR
 			};
 			double settledAmount = 1000.0;
-			vector<int> settledTradeIds{
-				1,
-				2
+			vector<int> settledTradeIds{ 1, 2 };
+			testCases.push_back({ std::move(trades), std::move(spl), std::move(aspl), std::move(initialBalance), std::move(exchangeRates), settledAmount, std::move(settledTradeIds) });
+		}
+
+		{//3 trades, 3 members, 3 currencies
+			vector<Trade> trades{
+			{ 1, 1, 2, Currency(0), Currency(1), 100.0, 88.0, false },
+			{ 2, 2, 3, Currency(1), Currency(2), 88.0, 131.0, false },
+			{ 3, 3, 1, Currency(2), Currency(0), 131.0, 100.0, false }
 			};
+			vector< vector<double> > spl{
+			{ 0.0, 0.0, 131.0 },
+			{ 100.0, 0.0, 0.0 },
+			{ 0.0, 88.0, 0.0 }
+			};
+			vector<double> aspl{
+				131.0,
+				100.0,
+				100.0
+			};
+			vector< vector<double> > initialBalance{
+			{ 0.0, 88.0, 0.0 },
+			{ 0.0, 0.0, 131.0 },
+			{ 100.0, 0.0, 0.0 }
+			};
+			vector<double> exchangeRates{
+				1.0, //USD = 1
+				100.0 / 88.0, //EUR
+				100.0 / 131.0  //CAD
+			};
+			double settledAmount = 300.0;
+			vector<int> settledTradeIds{ 1, 2, 3 };
 			testCases.push_back({ std::move(trades), std::move(spl), std::move(aspl), std::move(initialBalance), std::move(exchangeRates), settledAmount, std::move(settledTradeIds) });
 		}
 
