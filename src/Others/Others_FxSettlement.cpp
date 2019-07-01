@@ -402,6 +402,35 @@ namespace mm {
 			testCases.push_back({ std::move(trades), std::move(spl), std::move(aspl), std::move(initialBalance), std::move(exchangeRates), settledAmount, std::move(settledTradeIds) });
 		}
 
+		{//2 trades, 2 members, 2 currencies
+			vector<Trade> trades{
+			{ 1, 1, 2, Currency(0), Currency(1), 500.0, 440.0, false },
+			{ 2, 1, 2, Currency(1), Currency(0), 440.0, 500.0, false }
+			};
+			vector< vector<double> > spl{
+			{ 0.0, 0.0 },
+			{ 0.0, 0.0 }
+			};
+			vector<double> aspl{
+				0.0,
+				0.0
+			};
+			vector< vector<double> > initialBalance{
+			{ 0.0, 0.0 },
+			{ 0.0, 0.0 },
+			};
+			vector<double> exchangeRates{
+				1.0, //USD = 1
+				500.0/440.0 //EUR
+			};
+			double settledAmount = 1000.0;
+			vector<int> settledTradeIds{
+				1,
+				2
+			};
+			testCases.push_back({ std::move(trades), std::move(spl), std::move(aspl), std::move(initialBalance), std::move(exchangeRates), settledAmount, std::move(settledTradeIds) });
+		}
+
 		return testCases;
 	}
 }
