@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\src\Others\Others_RankInSortedArray.cpp" />
     <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement_testData.cpp" />
     <ClCompile Include="..\..\..\..\src\_CPU_Friendly\CPU_accessMatrixRowWise.cpp" />
     <ClCompile Include="..\..\..\..\src\_CPU_Friendly\CPU_branchPrediction.cpp" />
@@ -172,6 +173,7 @@
     <ClCompile Include="..\..\..\..\src\_MM_Algorithms_main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\src\Others\Others_RankInSortedArray.h" />
     <ClInclude Include="..\..\..\..\src\MM_UnitTestFramework\MM_UnitTestFramework.h" />
     <ClInclude Include="..\..\..\..\src\C++11_onwards\C++11_MoveSemantics.h" />
     <ClInclude Include="..\..\..\..\src\C++11_onwards\C++11_RvalueReferenceAndMove.h" />
