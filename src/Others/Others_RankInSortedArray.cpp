@@ -1,11 +1,50 @@
 #include <iostream>
 #include <cassert>
+#include <time.h>       /* time */
 using namespace std;
 
 #include "Others/Others_RankInSortedArray.h"
 #include "MM_UnitTestFramework/MM_UnitTestFramework.h"
 
 namespace mm {
+
+	// +++++++++++++++++ RankInSortedArray_v0 +++++++++++++++++
+
+	void RankInSortedArray_v0::update(const string& stock, double price)
+	{
+		unordered_map<string, double>::mapped_type& value = stockToPrice_[stock];
+		if (fabs(value) < 0.000001)
+		{
+			value = price;
+			priceToStock_[price] = stock;
+		}
+		else
+		{
+			priceToStock_.erase(value);
+			value = price;
+			priceToStock_[price] = stock;
+		}
+	}
+
+	int RankInSortedArray_v0::getRank(const string& stock)
+	{
+		int rank = 1;
+		for (auto it = priceToStock_.begin(); it != priceToStock_.end() && it->second != stock; ++it, ++rank);
+
+		return rank;
+	}
+
+	string RankInSortedArray_v0::getStockWithRank(int rank)
+	{
+		auto it = priceToStock_.begin();
+		int i = 1;
+		for (; it != priceToStock_.end() && i < rank; ++it, ++i);
+
+		return it->second;
+	}
+
+
+	// +++++++++++++++++ RankInSortedArray_v1 +++++++++++++++++
 
 	void RankInSortedArray_v1::update(const string& stock, double price)
 	{
@@ -160,20 +199,6 @@ namespace mm {
 
 	MM_DECLARE_FLAG(Others_RankInSortedArray);
 
-	enum class API
-	{
-		update,
-		getRank,
-		getStockWithRank
-	};
-
-	struct Data
-	{
-		API api;
-		string stock;
-		double priceOrRank;
-	};
-
 	template<typename T>
 	void test(const vector<Data>& data)
 	{
@@ -181,6 +206,7 @@ namespace mm {
 		for (int k = 0; k < data.size(); ++k)
 		{
 			int actualRank = -1;
+			int expectedRank = -1;
 			switch (data[k].api)
 			{
 			case API::update:
@@ -188,70 +214,28 @@ namespace mm {
 				break;
 			case API::getRank:
 				actualRank = obj.getRank(data[k].stock);
-				MM_EXPECT_TRUE(actualRank == static_cast<int>(data[k].priceOrRank), actualRank, static_cast<int>(data[k].priceOrRank));
-				break;
-			case API::getStockWithRank:
-				string actualStock = obj.getStockWithRank(static_cast<int>(data[k].priceOrRank));
+				expectedRank = static_cast<int>(data[k].priceOrRank);
+				MM_EXPECT_TRUE(actualRank == expectedRank, actualRank, expectedRank);
+				string actualStock = obj.getStockWithRank(expectedRank);
 				MM_EXPECT_TRUE(actualStock == data[k].stock, actualStock, data[k].stock);
 				break;
 			}
 		}
 	}
 
+	void generateRandomTestCases();
+	std::vector<vector<Data>> getTestData();
+	
 	MM_UNIT_TEST(Others_RankInSortedArray_test_1, Others_RankInSortedArray)
 	{
-		std::vector<vector<Data>> testData
-		{
-			{
-				vector<Data>{
-					{ API::update, "AAPL", 116.25 },
-					{ API::update, "IBM", 225.36 },
-					{ API::update, "GOOGL", 180.56 },
-					{ API::update, "FB", 80.29 },
-					{ API::getRank, "AAPL", 2 },
-					{ API::getRank, "IBM", 4 },
-					{ API::getRank, "GOOGL", 3 },
-					{ API::getRank, "FB", 1 },
-					{ API::getStockWithRank, "AAPL", 2 },
-					{ API::getStockWithRank, "IBM", 4 },
-					{ API::getStockWithRank, "GOOGL", 3 },
-					{ API::getStockWithRank, "FB", 1 }
-				}
-			}
+		//return generateRandomTestCases();
 
-			//{
-			//	vector<Data>{
-			//		{ API::update, "AAPL", 116.25 },
-			//		{ API::update, "AAPL", 116.25 },
-			//		{ API::update, "AAPL", 116.25 },
-			//		{ API::update, "AAPL", 116.25 },
-			//		{ API::update, "AAPL", 116.25 },
-			//		{ API::update, "AAPL", 116.25 },
-			//		{ API::update, "AAPL", 116.25 },
-			//		{ API::update, "AAPL", 116.25 },
-			//		{ API::update, "AAPL", 116.25 },
-			//		{ API::update, "AAPL", 116.25 },
-			//		{ API::update, "AAPL", 116.25 },
-			//		{ API::update, "AAPL", 116.25 },
-			//		{ API::update, "AAPL", 116.25 },
-			//		{ API::update, "AAPL", 116.25 },
-			//		{ API::update, "AAPL", 116.25 },
-			//		{ API::update, "AAPL", 116.25 },
-			//		{ API::update, "AAPL", 116.25 },
-			//		{ API::update, "AAPL", 116.25 },
-			//		{ API::update, "AAPL", 116.25 },
-			//		{ API::update, "AAPL", 116.25 },
-			//		{ API::update, "AAPL", 116.25 },
-			//		{ API::update, "AAPL", 116.25 },
-			//		{ API::update, "AAPL", 116.25 },
-			//		{ API::update, "AAPL", 116.25 }
-			//	}
-			//}
-		};
+		std::vector<vector<Data>> testData = getTestData();
 
 		for (int i = 0; i < testData.size(); ++i)
 		{
-			test<RankInSortedArray_v1>(testData[i]);
+			test<RankInSortedArray_v0>(testData[i]);
+			//test<RankInSortedArray_v1>(testData[i]);
 		}
 	}
 }

@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\src\Others\Others_RankInSortedArray_test.cpp" />
     <ClCompile Include="..\..\..\..\src\Others\Others_RankInSortedArray.cpp" />
     <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement_testData.cpp" />
     <ClCompile Include="..\..\..\..\src\_CPU_Friendly\CPU_accessMatrixRowWise.cpp" />
