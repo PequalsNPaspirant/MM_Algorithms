@@ -20,6 +20,19 @@ namespace mm {
 		double priceOrRank;
 	};
 
+	struct compare
+	{
+		compare(double epsilon = 1e-7)
+			: epsilon_(epsilon)
+		{}
+		bool operator()(double left, double right) const
+		{
+			return (abs(left - right) > epsilon_) && (left < right);
+		}
+	private:
+		double epsilon_;
+	};
+
 	class RankInSortedArray_v0
 	{
 	public:
@@ -29,18 +42,6 @@ namespace mm {
 
 	private:
 		unordered_map<string, double> stockToPrice_;
-		struct compare
-		{
-			compare(double epsilon = 1e-7)
-				: epsilon_(epsilon)
-			{}
-			bool operator()(double left, double right) const
-			{
-				return (abs(left - right) > epsilon_) && (left < right);
-			}
-		private:
-			double epsilon_;
-		};
 		map<double, string, compare> priceToStock_;
 	};
 
@@ -69,6 +70,7 @@ namespace mm {
 		Node* insert(Node*& root, const string& stock, double price);
 		void deleteNode(Node* current);
 		void deleteTree(Node* current);
+		bool validateBST(Node* current, double min, double max);
 
 		unordered_map<string, std::pair<double, Node*>> data_;
 		Node* root_{ nullptr };

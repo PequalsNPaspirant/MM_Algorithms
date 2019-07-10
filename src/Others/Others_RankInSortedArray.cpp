@@ -61,6 +61,8 @@ namespace mm {
 			deleteNode(value.second);
 			value.second = insert(root_, stock, price);
 		}
+
+		assert(validateBST(root_, std::numeric_limits<double>::min(), std::numeric_limits<double>::max()));
 	}
 
 	int RankInSortedArray_v1::getRank(const string& stock)
@@ -72,7 +74,7 @@ namespace mm {
 		while (current)
 		{
 			if(current->parent_ && current->parent_->right_ == current)
-				rankFromLeft += ((current->left_ ? current->left_->numNodesInSubtree_ : 0) + 1);
+				rankFromLeft += ((current->parent_->left_ ? current->parent_->left_->numNodesInSubtree_ : 0) + 1);
 			current = current->parent_;
 		}
 
@@ -193,6 +195,14 @@ namespace mm {
 		delete current;
 	}
 
+	bool RankInSortedArray_v1::validateBST(Node* current, double min, double max)
+	{
+		return !current || 
+			(min < current->price_ && current->price_ < max
+			&& validateBST(current->left_, min, current->price_)
+			&& validateBST(current->right_, current->price_, max));
+	}
+
 	//void RankInSortedArray_v1::Node::update(double price)
 	//{
 	//}
@@ -235,7 +245,7 @@ namespace mm {
 		for (int i = 0; i < testData.size(); ++i)
 		{
 			test<RankInSortedArray_v0>(testData[i]);
-			//test<RankInSortedArray_v1>(testData[i]);
+			test<RankInSortedArray_v1>(testData[i]);
 		}
 	}
 }
