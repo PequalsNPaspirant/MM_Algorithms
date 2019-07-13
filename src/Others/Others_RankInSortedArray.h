@@ -68,7 +68,7 @@ namespace mm {
 		};
 
 		Node* insert(Node*& root, const string& stock, double price);
-		void deleteNode(Node* current);
+		Node* removeNodeFromTree(Node* current);
 		void deleteTree(Node* current);
 		bool validateBST(Node* current, double min, double max);
 

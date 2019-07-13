@@ -58,7 +58,10 @@ namespace mm {
 		else
 		{
 			//value.second->update(price);
-			deleteNode(value.second);
+			Node* replacement = removeNodeFromTree(value.second);
+			if (value.second == root_)
+				root_ = replacement;
+			delete value.second;
 			value.second = insert(root_, stock, price);
 		}
 
@@ -142,47 +145,81 @@ namespace mm {
 		return retVal;
 	}
 
-	void RankInSortedArray_v1::deleteNode(Node* current)
+	RankInSortedArray_v1::Node* RankInSortedArray_v1::removeNodeFromTree(Node* current)
 	{
-		if (!current) return;
+		if (!current) return nullptr;
 		Node* parent = nullptr;
+		Node* retVal = nullptr;
+
 		if (!current->left_)
 		{
-			if (current->parent_->left_ == current)
-				current->parent_->left_ = current->right_;
-			else
-				current->parent_->right_ = current->right_;
+			if (current->parent_)
+			{
+				if (current->parent_->left_ == current)
+					current->parent_->left_ = current->right_;
+				else
+					current->parent_->right_ = current->right_;
+			}
+
+			if (current->right_)
+				current->right_->parent_ = current->parent_;
 			parent = current->parent_;
-			delete current;
+			//delete current;
+			retVal = current->right_;
 		}
-		else if(!current->right_)
+		else if (!current->right_)
 		{
-			if (current->parent_->left_ == current)
-				current->parent_->left_ = current->left_;
-			else
-				current->parent_->right_ = current->left_;
+			if (current->parent_)
+			{
+				if (current->parent_->left_ == current)
+					current->parent_->left_ = current->left_;
+				else
+					current->parent_->right_ = current->left_;
+			}
+
+			if (current->left_)
+				current->left_->parent_ = current->parent_;
 			parent = current->parent_;
-			delete current;
+			//delete current;
+			retVal = current->left_;
 		}
-		else
+		else if(current->left_ && current->right_)
 		{
 			//Get inorder successor (smallest in the right subtree)
 			Node* inorderSuccessor = current->right_;
 			assert(inorderSuccessor);
-			while (!inorderSuccessor->left_)
+			while (inorderSuccessor->left_)
 				inorderSuccessor = inorderSuccessor->left_;
-			*current = *inorderSuccessor; //copy the contents of the inorderSuccessor to current node instead of rearranging pointers
-			parent = inorderSuccessor->parent_;
-			delete inorderSuccessor;
+
+			removeNodeFromTree(inorderSuccessor);
+			inorderSuccessor->parent_ = current->parent_;
+			inorderSuccessor->left_ = current->left_;
+			inorderSuccessor->right_ = current->right_;
+			inorderSuccessor->numNodesInSubtree_ = current->numNodesInSubtree_;
+			if (current->parent_)
+			{
+				if (current->parent_->left_ == current)
+					current->parent_->left_ = inorderSuccessor;
+				else
+					current->parent_->right_ = inorderSuccessor;
+			}
+			if (current->left_)
+				current->left_->parent_ = inorderSuccessor;
+			if (current->right_)
+				current->right_->parent_ = inorderSuccessor;
+			parent = nullptr;
+			retVal = inorderSuccessor;
 		}
 
-		while (!parent)
+		while (parent)
 		{
 			parent->numNodesInSubtree_ = 1
-				+ (parent->left_ ? current->left_->numNodesInSubtree_ : 0)
-				+ (parent->right_ ? current->right_->numNodesInSubtree_ : 0);
+				+ (parent->left_ ? parent->left_->numNodesInSubtree_ : 0)
+				+ (parent->right_ ? parent->right_->numNodesInSubtree_ : 0);
 			parent = parent->parent_;
 		}
+
+		return retVal;
 	}
 
 	void RankInSortedArray_v1::deleteTree(Node* current)
@@ -197,10 +234,15 @@ namespace mm {
 
 	bool RankInSortedArray_v1::validateBST(Node* current, double min, double max)
 	{
-		return !current || 
-			(min < current->price_ && current->price_ < max
+		bool result = (
+			!current 
+			|| (fabs(min - current->price_) < 1e-7 || min < current->price_)
+			&& (fabs(max - current->price_) < 1e-7 || current->price_ < max)
 			&& validateBST(current->left_, min, current->price_)
-			&& validateBST(current->right_, current->price_, max));
+			&& validateBST(current->right_, current->price_, max)
+		);
+
+		return result;
 	}
 
 	//void RankInSortedArray_v1::Node::update(double price)
