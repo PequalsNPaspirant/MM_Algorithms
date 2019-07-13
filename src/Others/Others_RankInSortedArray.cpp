@@ -58,11 +58,19 @@ namespace mm {
 		else
 		{
 			//value.second->update(price);
-			Node* replacement = removeNodeFromTree(value.second);
-			if (value.second == root_)
-				root_ = replacement;
-			delete value.second;
-			value.second = insert(root_, stock, price);
+			//if (value.second->left_
+			//	&& (fabs(value.second->left_->price_ - price) < 1e-7 || value.second->left_->price_ < price)
+			//	&& value.second->right_
+			//	&& (fabs(value.second->right_->price_ - price) < 1e-7 || price < value.second->right_->price_))
+			//	value.second->price_ = price;
+			//else
+			{
+				Node* replacement = removeNodeFromTree(value.second);
+				if (value.second == root_)
+					root_ = replacement;
+				delete value.second;
+				value.second = insert(root_, stock, price);
+			}
 		}
 
 		assert(validateBST(root_, std::numeric_limits<double>::min(), std::numeric_limits<double>::max()));
