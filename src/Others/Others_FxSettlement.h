@@ -28,10 +28,12 @@ namespace mm {
 	extern string resultsFileName;
 	extern string settledAmountTag;
 	extern string settledTradeIdsTag;
-	extern bool GlobalFlagCreateTestCases;
-	//FloatingPointComparator zero(0.000001);
 	constexpr int maxPrecision = 10;
+	//FloatingPointComparator zero(0.000001);
 	constexpr const double zero = compile_time_pow(10, -maxPrecision + 1);
+	constexpr bool GlobalFlagCreateTestCases = false;
+	constexpr const int numTestCases = 1; // 10;
+	constexpr const int maxCurrencies = 5; // 10;
 
 	string to_string_max_precision(double value);
 

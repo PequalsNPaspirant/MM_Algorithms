@@ -86,10 +86,8 @@ namespace mm {
 		std::mt19937 mt(rd());
 		std::uniform_real_distribution<double> dist_double(100.0, 100000.0);
 		
-		constexpr const int numTestCases = 1; // 10;
-		constexpr const int maxCurr = 5; // 10;
 		int filePrefix = 0;
-		for (int c = 3; c <= maxCurr; ++c)
+		for (int c = 3; c <= maxCurrencies; ++c)
 		{
 			int numMembers = c;
 			int numCurrencies = c;

@@ -21,7 +21,6 @@ namespace mm {
 	string resultsFileName{ "results.csv" };
 	string settledAmountTag{ "Settled Amount: " };
 	string settledTradeIdsTag{ "Settled Trade Ids:" };
-	extern bool GlobalFlagCreateTestCases = false;
 
 	string to_string_max_precision(double value)
 	{
