@@ -162,19 +162,26 @@ namespace mm {
 				//getTestCases().push_back({ std::move(trades), std::move(spl), std::move(aspl), std::move(initialBalance), std::move(allFxRates), settledAmount, std::move(settledTradeIds) });
 
 				//Write to csv files
+
+				//std::filesystem::exists("helloworld.txt"); //available in C++17 onwards
+				auto checkIfFileExists = [](const std::string& name) -> bool {
+					ifstream f(name);
+					return f.good();
+				};
+				while (checkIfFileExists(testDataPath + to_string(++filePrefix) + "_" + tradesFileName));
+
+				string tradesFileFullName{ testDataPath + to_string(filePrefix) + "_" + tradesFileName };
+				string initialBalancesFileFullName{ testDataPath + to_string(filePrefix) + "_" + initialBalancesFileName };
+				string splFileFullName{ testDataPath + to_string(filePrefix) + "_" + splFileName };
+				string asplFileFullName{ testDataPath + to_string(filePrefix) + "_" + asplFileName };
+				string fxRatesFileFullName{ testDataPath + to_string(filePrefix) + "_" + fxRatesFileName };
+
 				ofstream tradesFile;
 				ofstream initialBalancesFile;
 				ofstream splFile;
 				ofstream asplFile;
 				ofstream fxRatesFile;
 				ofstream resultsFile;
-
-				++filePrefix;
-				string tradesFileFullName{ testDataPath + to_string(filePrefix) + "_" + tradesFileName };
-				string initialBalancesFileFullName{ testDataPath + to_string(filePrefix) + "_" + initialBalancesFileName };
-				string splFileFullName{ testDataPath + to_string(filePrefix) + "_" + splFileName };
-				string asplFileFullName{ testDataPath + to_string(filePrefix) + "_" + asplFileName };
-				string fxRatesFileFullName{ testDataPath + to_string(filePrefix) + "_" + fxRatesFileName };
 
 				try
 				{
@@ -209,8 +216,8 @@ namespace mm {
 							to_string(trades[i].cPartyId_) + "," +
 							to_string(static_cast<int>(trades[i].buyCurr_)) + "," +
 							to_string(static_cast<int>(trades[i].sellCurr_)) + "," +
-							to_string(trades[i].buyVol_) + "," +
-							to_string(trades[i].sellVol_)
+							to_string_max_precision(trades[i].buyVol_) + "," +
+							to_string_max_precision(trades[i].sellVol_)
 						};
 						tradesFile.write(row.c_str(), row.length());
 					}
@@ -228,7 +235,7 @@ namespace mm {
 								"\n" +
 								to_string(m) + "," +
 								to_string(c) + "," +
-								to_string(initialBalance[m][c])
+								to_string_max_precision(initialBalance[m][c])
 							};
 							initialBalancesFile.write(row.c_str(), row.length());
 						}
@@ -247,7 +254,7 @@ namespace mm {
 								"\n" +
 								to_string(m) + "," +
 								to_string(c) + "," +
-								to_string(spl[m][c])
+								to_string_max_precision(spl[m][c])
 							};
 							splFile.write(row.c_str(), row.length());
 						}
@@ -263,7 +270,7 @@ namespace mm {
 						string row{
 							"\n" +
 							to_string(m) + "," +
-							to_string(aspl[m])
+							to_string_max_precision(aspl[m])
 						};
 						asplFile.write(row.c_str(), row.length());
 					}
@@ -278,7 +285,7 @@ namespace mm {
 						string row{
 							"\n" +
 							to_string(c) + "," +
-							to_string(allFxRates[c])
+							to_string_max_precision(allFxRates[c])
 						};
 						fxRatesFile.write(row.c_str(), row.length());
 					}

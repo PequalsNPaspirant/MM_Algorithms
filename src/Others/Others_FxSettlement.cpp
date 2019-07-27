@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <cassert> //for assert()
 #include <fstream>
+#include <limits> // for std::numeric_limits<double>::digits10
 using namespace std;
 
 #include "Others/Others_FxSettlement.h"
@@ -25,7 +26,8 @@ namespace mm {
 	string to_string_max_precision(double value)
 	{
 		std::stringstream buffer;
-		buffer.precision(maxPrecision);
+		//buffer.precision(maxPrecision);
+		buffer.precision(std::numeric_limits<double>::digits10);
 		buffer << std::fixed << value;
 		return buffer.str();
 	}
