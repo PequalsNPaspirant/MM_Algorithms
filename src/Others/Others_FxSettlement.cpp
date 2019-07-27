@@ -3,6 +3,7 @@
 #include <vector>
 #include <algorithm>
 #include <cassert> //for assert()
+#include <fstream>
 using namespace std;
 
 #include "Others/Others_FxSettlement.h"
@@ -10,6 +11,25 @@ using namespace std;
 #include "MM_UnitTestFramework/MM_UnitTestFramework.h"
 
 namespace mm {
+
+	string testDataPath{ "../../../test/data/FxSettlement/test_cases/" };
+	string tradesFileName{ "trades.csv" };
+	string initialBalancesFileName{ "initial_balances.csv" };
+	string splFileName{ "spl.csv" };
+	string asplFileName{ "aspl.csv" };
+	string fxRatesFileName{ "fx_rates.csv" };
+	string resultsFileName{ "results.csv" };
+	string settledAmountTag{ "Settled Amount: " };
+	string settledTradeIdsTag{ "Settled Trade Ids:" };
+	extern bool GlobalFlagCreateTestCases = false;
+
+	string to_string_max_precision(double value)
+	{
+		std::stringstream buffer;
+		buffer.precision(maxPrecision);
+		buffer << std::fixed << value;
+		return buffer.str();
+	}
 
 	bool rmt(vector<Trade>& trades, const vector< vector<double> >& spl, const vector<double>& aspl, const vector< vector<double> >& initialBalance, const vector<double>& exchangeRates)
 	{
@@ -20,8 +40,8 @@ namespace mm {
 		{
 			if (!trades[i].isSettled_) continue;
 
-			int partyIndex = trades[i].partyId_ - 1;
-			int cPartyIndex = trades[i].cPartyId_ - 1;
+			int partyIndex = trades[i].partyId_;
+			int cPartyIndex = trades[i].cPartyId_;
 
 			updatedBalance[partyIndex][static_cast<int>(trades[i].buyCurr_)] += trades[i].buyVol_;
 			updatedBalance[partyIndex][static_cast<int>(trades[i].sellCurr_)] -= trades[i].sellVol_;
@@ -76,8 +96,8 @@ namespace mm {
 		//Try to settle this trade
 		double include = 0.0;
 
-		int partyIndex = trades[currentTradeIndex].partyId_ - 1;
-		int cPartyIndex = trades[currentTradeIndex].cPartyId_ - 1;
+		int partyIndex = trades[currentTradeIndex].partyId_;
+		int cPartyIndex = trades[currentTradeIndex].cPartyId_;
 		int buyCurrIndex = static_cast<int>(trades[currentTradeIndex].buyCurr_);
 		int sellCurrIndex = static_cast<int>(trades[currentTradeIndex].sellCurr_);
 		//Back up all previous NOV, SPL and ASPL to revert later for backtracking
@@ -202,9 +222,29 @@ namespace mm {
 				if (testCases[testCaseIndex].trades_[i].isSettled_)
 					actualSettledTradeIds.push_back(testCases[testCaseIndex].trades_[i].id_);
 
-			MM_EXPECT_TRUE(verified == true, verified);
-			MM_EXPECT_TRUE(fabs(actualSettledAmount - testCases[testCaseIndex].settledAmount_) < zero, actualSettledAmount, testCases[testCaseIndex].settledAmount_);
-			MM_EXPECT_TRUE(actualSettledTradeIds == testCases[testCaseIndex].settledTradeIds_, actualSettledTradeIds, testCases[testCaseIndex].settledTradeIds_);
+			if (GlobalFlagCreateTestCases && !testCases[testCaseIndex].fileNamePrefix_.empty())
+			{
+				//Write results to csv file
+				ofstream resultsFile{ testDataPath + testCases[testCaseIndex].fileNamePrefix_ + "_" + resultsFileName };
+				if (resultsFile.is_open())
+				{
+					string settledAmount{ settledAmountTag + to_string_max_precision(actualSettledAmount) };
+					resultsFile.write(settledAmount.c_str(), settledAmount.length());
+					string settledTrades{ "\n" + settledTradeIdsTag };
+					resultsFile.write(settledTrades.c_str(), settledTrades.length());
+					for (int i = 0; i < actualSettledTradeIds.size(); ++i)
+					{
+						string tradeId{ "\n" + to_string(actualSettledTradeIds[i]) };
+						resultsFile.write(tradeId.c_str(), tradeId.length());
+					}
+				}
+			}
+			else
+			{
+				MM_EXPECT_TRUE(verified == true, verified);
+				MM_EXPECT_TRUE(fabs(actualSettledAmount - testCases[testCaseIndex].settledAmount_) < zero, actualSettledAmount, testCases[testCaseIndex].settledAmount_);
+				MM_EXPECT_TRUE(actualSettledTradeIds == testCases[testCaseIndex].settledTradeIds_, actualSettledTradeIds, testCases[testCaseIndex].settledTradeIds_);
+			}
 		}
 	}
 
@@ -212,6 +252,8 @@ namespace mm {
 
 	MM_UNIT_TEST(Others_FxSettlement_sanity, Others_FxSettlement)
 	{
+		if(GlobalFlagCreateTestCases)
+			createTestCases();
 		testFxSettlement(getTestCases());
 	}
 }

@@ -77,10 +77,10 @@ namespace mm {
 	MM_DEFINE_FLAG(false, Others_EquityOrderManagementSystem);
 	MM_DEFINE_FLAG(false, Others_CarRentalSystem);
 	MM_DEFINE_FLAG(false, Others_PersonSort);
-	MM_DEFINE_FLAG(false, Others_FxSettlement);
+	MM_DEFINE_FLAG(true, Others_FxSettlement);
 	MM_DEFINE_FLAG(false, Others_GTS);
 	MM_DEFINE_FLAG(false, Others_FxRatesCache); //----TODO
-	MM_DEFINE_FLAG(true, Others_RankInSortedArray);
+	MM_DEFINE_FLAG(false, Others_RankInSortedArray);
 	//Others_h
 	MM_DEFINE_FLAG(false, Others_h_findDistrinctNumbersGenerated);
 	//Others_L
