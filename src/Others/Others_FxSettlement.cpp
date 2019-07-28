@@ -266,7 +266,8 @@ namespace mm {
 					if (testCases[testCaseIndex].trades_[i].isSettled_)
 						actualSettledTradeIds.push_back(testCases[testCaseIndex].trades_[i].id_);
 
-				if (GlobalFlagCreateTestCases && !testCases[testCaseIndex].fileNamePrefix_.empty())
+				if ((GlobalFlagCreateTestCases || overrideTestResults)
+					&& !testCases[testCaseIndex].fileNamePrefix_.empty()) //File prefix is empty only for hardcoded tests
 				{
 					//Write results to csv file
 					ofstream resultsFile{ testDataPath + testCases[testCaseIndex].fileNamePrefix_ + "_" + resultsFileName };

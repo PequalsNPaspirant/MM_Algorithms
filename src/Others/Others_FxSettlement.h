@@ -32,6 +32,7 @@ namespace mm {
 	//FloatingPointComparator zero(0.000001);
 	constexpr const double zero = compile_time_pow(10, -maxPrecision + 1);
 	constexpr bool GlobalFlagCreateTestCases = false;
+	constexpr bool overrideTestResults = false;
 	constexpr const int numTestCases = 1; // 10;
 	constexpr const int maxCurrencies = 5; // 10;
 
