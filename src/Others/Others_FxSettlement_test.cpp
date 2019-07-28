@@ -34,15 +34,18 @@ namespace mm {
 		return buffer.str();
 	}
 
-	bool verifySettlement(vector<Trade>& trades, const vector< vector<double> >& spl, const vector<double>& aspl, const vector< vector<double> >& initialBalance, const vector<double>& exchangeRates)
+	bool verifySettlement(vector<Trade>& trades, const vector< vector<double> >& spl, const vector<double>& aspl, const vector< vector<double> >& initialBalance, const vector<double>& exchangeRates, double actualSettledAmount)
 	{
 		//rmt
 		double novVal = 0.0;
 		vector< vector<double> > updatedBalance(initialBalance.begin(), initialBalance.end());
 
+		double amountSettled = 0.0;
 		for (int i = 0; i < trades.size(); ++i)
 		{
 			if (!trades[i].isSettled_) continue;
+
+			amountSettled += trades[i].buyVol_ * exchangeRates[static_cast<int>(trades[i].buyCurr_)];
 
 			int partyIndex = trades[i].partyId_;
 			int cPartyIndex = trades[i].cPartyId_;
@@ -79,7 +82,7 @@ namespace mm {
 				return false;
 		}
 
-		return true;
+		return fabs(actualSettledAmount - amountSettled) < zero;
 	}
 
 	void testFxSettlement(vector<TestCase>& testCases)
@@ -129,7 +132,8 @@ namespace mm {
 					testCases[testCaseIndex].spl_,
 					testCases[testCaseIndex].aspl_,
 					testCases[testCaseIndex].initialBalance_,
-					testCases[testCaseIndex].exchangeRates_
+					testCases[testCaseIndex].exchangeRates_,
+					actualSettledAmount
 				);
 				vector<int> actualSettledTradeIds;
 				for (int i = 0; i < testCases[testCaseIndex].trades_.size(); ++i)
