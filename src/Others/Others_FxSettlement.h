@@ -147,4 +147,7 @@ namespace mm {
 
 	void createTestCases();
 	vector<TestCase>& getTestCases();
+
+	//Settlement Algos:
+	double doSettlement_naive_v1(vector<Trade>& trades, const vector< vector<double> >& spl, const vector<double>& aspl, const vector< vector<double> >& initialBalance, const vector<double>& exchangeRates);
 }

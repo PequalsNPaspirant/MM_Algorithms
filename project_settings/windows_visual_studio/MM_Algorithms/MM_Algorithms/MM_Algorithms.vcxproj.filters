@@ -249,9 +249,6 @@
     <ClCompile Include="..\..\..\..\src\Others_h\Others_h_DistinctNumbersGenerated.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\src\Others\Others_GTS.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -472,6 +469,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\src\Others\Others_RankInSortedArray_test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement_test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement_naive_v1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

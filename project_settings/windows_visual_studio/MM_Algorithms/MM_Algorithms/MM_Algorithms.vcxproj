@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement_naive_v1.cpp" />
     <ClCompile Include="..\..\..\..\src\Others\Others_RankInSortedArray_test.cpp" />
     <ClCompile Include="..\..\..\..\src\Others\Others_RankInSortedArray.cpp" />
     <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement_testData.cpp" />
@@ -92,7 +93,7 @@
     <ClCompile Include="..\..\..\..\src\BinaryTree\BinaryTree_CheckIfIdentical.cpp" />
     <ClCompile Include="..\..\..\..\src\Binary\Binary_Toggle1bitForMaxAdjacency.cpp" />
     <ClCompile Include="..\..\..\..\src\Others\Others_GTS.cpp" />
-    <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement.cpp" />
+    <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement_test.cpp" />
     <ClCompile Include="..\..\..\..\src\Others_h\Others_h_DistinctNumbersGenerated.cpp" />
     <ClCompile Include="..\..\..\..\src\Others\Others_PersonSort.cpp" />
     <ClCompile Include="..\..\..\..\src\Others\Others_CarRentalSystem.cpp" />
