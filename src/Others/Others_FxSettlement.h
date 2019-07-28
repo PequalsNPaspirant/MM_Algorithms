@@ -137,12 +137,14 @@ namespace mm {
 	struct TestStats
 	{
 		int testCaseIndex;
+		bool testCaseResult;
 		string algoType;
-		int numTrades;
 		int numMembers;
 		int numCurrencies;
+		int numTrades;
+		int tradesSettled;
+		double amountSettled;
 		string durationStr;
-		bool testCaseResult;
 	};
 
 	void createTestCases();

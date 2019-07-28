@@ -89,15 +89,17 @@ namespace mm {
 		static unordered_map<AlgoType, string> AlgoTypeStrings{
 			{ AlgoType::naive_v1 , "naive_v1"}
 		};
-		int columnWidth[7] = { 12, 12, 12, 12, 15, 18, 12 };
+		int columnWidth[9] = { 12, 12, 12, 10, 15, 12, 15, 15, 18 };
 		cout << "\n"
 			<< setw(columnWidth[0]) << std::left << "TestIndex"
+			<< setw(columnWidth[5]) << std::left << "TestResult"
 			<< setw(columnWidth[1]) << std::left << "AlgoType"
-			<< setw(columnWidth[2]) << std::left << "numTrades"
-			<< setw(columnWidth[3]) << std::left << "numMembers"
-			<< setw(columnWidth[4]) << std::left << "numCurrencies"
-			<< setw(columnWidth[6]) << std::left << "TestResult"
-			<< setw(columnWidth[5]) << std::right << "Duration";
+			<< setw(columnWidth[3]) << std::right << "numMembers"
+			<< setw(columnWidth[4]) << std::right << "numCurrencies"
+			<< setw(columnWidth[2]) << std::right << "numTrades"
+			<< setw(columnWidth[6]) << std::right << "TradesSettled"
+			<< setw(columnWidth[7]) << std::right << "AmountSettled"
+			<< setw(columnWidth[8]) << std::right << "Duration";
 
 		for (int testCaseIndex = 0; testCaseIndex < testCases.size(); ++testCaseIndex)
 		{
@@ -165,22 +167,26 @@ namespace mm {
 
 				TestStats testStats{
 					testCaseIndex,
+					verified,
 					AlgoTypeStrings[AlgoType(i)],
-					testCases[testCaseIndex].trades_.size(),
 					testCases[testCaseIndex].aspl_.size(),
 					testCases[testCaseIndex].spl_.size() / testCases[testCaseIndex].aspl_.size(),
-					buffer.str() + " ns",
-					verified
+					testCases[testCaseIndex].trades_.size(),
+					actualSettledTradeIds.size(),
+					actualSettledAmount,
+					buffer.str() + " ns"
 				};
 				//printOrWrite(testStats);
 				cout << "\n"
 					<< setw(columnWidth[0]) << std::left << testStats.testCaseIndex
+					<< setw(columnWidth[5]) << std::left << (testStats.testCaseResult ? "SUCCESS" : "FAILED")
 					<< setw(columnWidth[1]) << std::left << testStats.algoType
-					<< setw(columnWidth[2]) << std::left << testStats.numTrades
-					<< setw(columnWidth[3]) << std::left << testStats.numMembers
-					<< setw(columnWidth[4]) << std::left << testStats.numCurrencies
-					<< setw(columnWidth[6]) << std::left << (testStats.testCaseResult ? "SUCCESS" : "FAILED")
-					<< setw(columnWidth[5]) << std::right << testStats.durationStr;
+					<< setw(columnWidth[3]) << std::right << testStats.numMembers
+					<< setw(columnWidth[4]) << std::right << testStats.numCurrencies
+					<< setw(columnWidth[2]) << std::right << testStats.numTrades
+					<< setw(columnWidth[6]) << std::right << testStats.tradesSettled
+					<< setw(columnWidth[7]) << std::right << testStats.amountSettled
+					<< setw(columnWidth[8]) << std::right << testStats.durationStr;
 				
 				stats.push_back(std::move(testStats));
 			}
