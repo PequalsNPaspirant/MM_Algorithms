@@ -1,17 +1,7 @@
-#include <iostream>
-#include <string>
 #include <vector>
-#include <algorithm>
-#include <cassert> //for assert()
-#include <fstream>
-#include <limits> // for std::numeric_limits<double>::digits10
-#include <chrono>
-#include <unordered_map>
 using namespace std;
 
 #include "Others/Others_FxSettlement.h"
-#include "Utils/Utils_PrintUtils.h"
-#include "MM_UnitTestFramework/MM_UnitTestFramework.h"
 
 namespace mm {
 
