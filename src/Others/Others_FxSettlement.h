@@ -104,7 +104,6 @@ namespace mm {
 		Currency sellCurr_;
 		double buyVol_;
 		double sellVol_;
-		bool isSettled_ = false;
 
 		friend ostream& operator<<(ostream& o, const Trade& trade)
 		{
@@ -115,8 +114,8 @@ namespace mm {
 				<< "Currency(" << static_cast<int>(trade.buyCurr_) << "), "
 				<< "Currency(" << static_cast<int>(trade.sellCurr_) << "), "
 				<< trade.buyVol_ << ", "
-				<< trade.sellVol_ << ", "
-				<< std::boolalpha << trade.isSettled_ << " }";
+				<< trade.sellVol_
+				<< " }";
 
 			return o;
 		}
@@ -151,5 +150,5 @@ namespace mm {
 	vector<TestCase>& getTestCases();
 
 	//Settlement Algos:
-	double doSettlement_naive_v1(vector<Trade>& trades, const vector< vector<double> >& spl, const vector<double>& aspl, const vector< vector<double> >& initialBalance, const vector<double>& exchangeRates);
+	double doSettlement_naive_v1(vector<bool>& settleFlagsOut, const vector<Trade>& trades, const vector< vector<double> >& spl, const vector<double>& aspl, const vector< vector<double> >& initialBalance, const vector<double>& exchangeRates);
 }

@@ -34,16 +34,16 @@ namespace mm {
 		return buffer.str();
 	}
 
-	bool verifySettlement(vector<Trade>& trades, const vector< vector<double> >& spl, const vector<double>& aspl, const vector< vector<double> >& initialBalance, const vector<double>& exchangeRates, double actualSettledAmount)
+	bool verifySettlement(const vector<bool>& settleFlags, const vector<Trade>& trades, const vector< vector<double> >& spl, const vector<double>& aspl, const vector< vector<double> >& initialBalance, const vector<double>& exchangeRates, double actualSettledAmount)
 	{
 		//rmt
 		double novVal = 0.0;
-		vector< vector<double> > updatedBalance(initialBalance.begin(), initialBalance.end());
+		vector< vector<double> > updatedBalance{ initialBalance };
 
 		double amountSettled = 0.0;
 		for (int i = 0; i < trades.size(); ++i)
 		{
-			if (!trades[i].isSettled_) continue;
+			if (!settleFlags[i]) continue;
 
 			amountSettled += trades[i].buyVol_ * exchangeRates[static_cast<int>(trades[i].buyCurr_)];
 
@@ -66,7 +66,7 @@ namespace mm {
 			double novTemp = 0.0;
 			for (int currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
 			{
-				if (updatedBalance[memberIndex][currencyIndex] < -spl[memberIndex][currencyIndex])
+				if (updatedBalance[memberIndex][currencyIndex] + zero < -spl[memberIndex][currencyIndex])
 					return false;
 
 				double currentBalanceInDollars = updatedBalance[memberIndex][currencyIndex] * exchangeRates[currencyIndex];
@@ -78,7 +78,7 @@ namespace mm {
 			if (novTemp < -zero)
 				return false;
 
-			if (asplTemp < (-aspl[memberIndex] - zero))
+			if (asplTemp + zero < -aspl[memberIndex])
 				return false;
 		}
 
@@ -109,11 +109,13 @@ namespace mm {
 			double actualSettledAmount = 0.0;
 			for (int i = 0; i < static_cast<int>(AlgoType::totalAlgos); ++i)
 			{
+				vector<bool> settleFlags(testCases[testCaseIndex].trades_.size(), false);
 				std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();
 				switch (AlgoType(i))
 				{
 				case AlgoType::naive_v1:
 					actualSettledAmount = doSettlement_naive_v1(
+						settleFlags,
 						testCases[testCaseIndex].trades_,
 						testCases[testCaseIndex].spl_,
 						testCases[testCaseIndex].aspl_,
@@ -128,6 +130,7 @@ namespace mm {
 				unsigned long long duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count();
 
 				bool verified = verifySettlement(
+					settleFlags,
 					testCases[testCaseIndex].trades_,
 					testCases[testCaseIndex].spl_,
 					testCases[testCaseIndex].aspl_,
@@ -136,34 +139,9 @@ namespace mm {
 					actualSettledAmount
 				);
 				vector<int> actualSettledTradeIds;
-				for (int i = 0; i < testCases[testCaseIndex].trades_.size(); ++i)
-					if (testCases[testCaseIndex].trades_[i].isSettled_)
+				for (int i = 0; i < settleFlags.size(); ++i)
+					if (settleFlags[i] == true)
 						actualSettledTradeIds.push_back(testCases[testCaseIndex].trades_[i].id_);
-
-				if ((GlobalFlagCreateTestCases || overrideTestResults)
-					&& !testCases[testCaseIndex].fileNamePrefix_.empty()) //File prefix is empty only for hardcoded tests
-				{
-					//Write results to csv file
-					ofstream resultsFile{ testDataPath + testCases[testCaseIndex].fileNamePrefix_ + "_" + resultsFileName };
-					if (resultsFile.is_open())
-					{
-						string settledAmount{ settledAmountTag + to_string_max_precision(actualSettledAmount) };
-						resultsFile.write(settledAmount.c_str(), settledAmount.length());
-						string settledTrades{ "\n" + settledTradeIdsTag };
-						resultsFile.write(settledTrades.c_str(), settledTrades.length());
-						for (int i = 0; i < actualSettledTradeIds.size(); ++i)
-						{
-							string tradeId{ "\n" + to_string(actualSettledTradeIds[i]) };
-							resultsFile.write(tradeId.c_str(), tradeId.length());
-						}
-					}
-				}
-				else
-				{
-					//MM_EXPECT_TRUE(verified == true, verified);
-					//MM_EXPECT_TRUE(fabs(actualSettledAmount - testCases[testCaseIndex].settledAmount_) < zero, actualSettledAmount, testCases[testCaseIndex].settledAmount_);
-					//MM_EXPECT_TRUE(actualSettledTradeIds == testCases[testCaseIndex].settledTradeIds_, actualSettledTradeIds, testCases[testCaseIndex].settledTradeIds_);
-				}
 
 				std::stringstream buffer;
 				buffer.imbue(std::locale(""));
@@ -193,6 +171,31 @@ namespace mm {
 					<< setw(columnWidth[8]) << std::right << testStats.durationStr;
 				
 				stats.push_back(std::move(testStats));
+
+				if ((GlobalFlagCreateTestCases || overrideTestResults)
+					&& !testCases[testCaseIndex].fileNamePrefix_.empty()) //File prefix is empty only for hardcoded tests
+				{
+					//Write results to csv file
+					ofstream resultsFile{ testDataPath + testCases[testCaseIndex].fileNamePrefix_ + "_" + resultsFileName };
+					if (resultsFile.is_open())
+					{
+						string settledAmount{ settledAmountTag + to_string_max_precision(actualSettledAmount) };
+						resultsFile.write(settledAmount.c_str(), settledAmount.length());
+						string settledTrades{ "\n" + settledTradeIdsTag };
+						resultsFile.write(settledTrades.c_str(), settledTrades.length());
+						for (int i = 0; i < actualSettledTradeIds.size(); ++i)
+						{
+							string tradeId{ "\n" + to_string(actualSettledTradeIds[i]) };
+							resultsFile.write(tradeId.c_str(), tradeId.length());
+						}
+					}
+				}
+				else
+				{
+					//MM_EXPECT_TRUE(verified == true, verified);
+					//MM_EXPECT_TRUE(fabs(actualSettledAmount - testCases[testCaseIndex].settledAmount_) < zero, actualSettledAmount, testCases[testCaseIndex].settledAmount_);
+					//MM_EXPECT_TRUE(actualSettledTradeIds == testCases[testCaseIndex].settledTradeIds_, actualSettledTradeIds, testCases[testCaseIndex].settledTradeIds_);
+				}
 			}
 		}
 	}
@@ -201,6 +204,8 @@ namespace mm {
 
 	MM_UNIT_TEST(Others_FxSettlement_sanity, Others_FxSettlement)
 	{
+		MM_PRINT_TEST_CASE_NUMBER(false);
+
 		if(GlobalFlagCreateTestCases)
 			createTestCases();
 		testFxSettlement(getTestCases());

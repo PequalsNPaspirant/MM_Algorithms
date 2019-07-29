@@ -5,131 +5,217 @@ using namespace std;
 
 namespace mm {
 
-	double doSettlement_naive_v1(int currentTradeIndex, vector<double>& currentNOV, vector< vector<double> >& currentSP, vector<double>& currentASP,
-		vector<Trade>& trades, const vector< vector<double> >& spl, const vector<double>& aspl, const vector< vector<double> >& initialBalance, const vector<double>& exchangeRates)
+	struct Result
+	{
+		double settledAmount;
+
+	};
+
+	double doSettlement_naive_v1(
+		int currentTradeIndex, 
+		vector<bool>& settleFlagsOut, 
+		vector< vector<double> >& currentBalanceOut,
+		const vector<Trade>& trades, 
+		const vector< vector<double> >& spl, 
+		const vector<double>& aspl, 
+		const vector<double>& exchangeRates)
 	{
 		if (currentTradeIndex == trades.size())
 			return 0.0;
 
 		//Do not settle this trade
-		double exclude = doSettlement_naive_v1(currentTradeIndex + 1, currentNOV, currentSP, currentASP,
-			trades, spl, aspl, initialBalance, exchangeRates);
+		vector<bool> settleFlagsExclude{ settleFlagsOut };
+		//vector<double> currentNOVExclude{ currentNOV };
+		//vector< vector<double> > currentSPExclude{ currentSP };
+		//vector<double> currentASPExclude{ currentASP };
+		vector< vector<double> > currentBalanceExclude{ currentBalanceOut };
+		double exclude = doSettlement_naive_v1(currentTradeIndex + 1, settleFlagsExclude, currentBalanceExclude, trades, spl, aspl, exchangeRates);
 
 		//Try to settle this trade
-		double include = 0.0;
-
+		vector<bool> settleFlagsInclude{ settleFlagsOut };
 		int partyIndex = trades[currentTradeIndex].partyId_;
 		int cPartyIndex = trades[currentTradeIndex].cPartyId_;
 		int buyCurrIndex = static_cast<int>(trades[currentTradeIndex].buyCurr_);
 		int sellCurrIndex = static_cast<int>(trades[currentTradeIndex].sellCurr_);
-		//Back up all previous NOV, SPL and ASPL to revert later for backtracking
-		double prevPartyBuySP = currentSP[partyIndex][buyCurrIndex];
-		double prevPartySellSP = currentSP[partyIndex][sellCurrIndex];
-		double prevCPartyBuySP = currentSP[cPartyIndex][buyCurrIndex];
-		double prevCPartySellSP = currentSP[cPartyIndex][sellCurrIndex];
-		double prevPartyASP = currentASP[partyIndex];
-		double prevCPartyASP = currentASP[cPartyIndex];
-		double prevPartyNOV = currentNOV[partyIndex];
-		double prevCPartyNOV = currentNOV[cPartyIndex];
-
-		double prevPartyBuySPLInDollars = currentSP[partyIndex][buyCurrIndex] * exchangeRates[buyCurrIndex];
-		double prevPartySellSPLInDollars = currentSP[partyIndex][sellCurrIndex] * exchangeRates[sellCurrIndex];
-		double prevCPartyBuySPLInDollars = currentSP[cPartyIndex][buyCurrIndex] * exchangeRates[buyCurrIndex];
-		double prevCPartySellSPLInDollars = currentSP[cPartyIndex][sellCurrIndex] * exchangeRates[sellCurrIndex];
-		currentSP[partyIndex][buyCurrIndex] += trades[currentTradeIndex].buyVol_;
-		currentSP[partyIndex][sellCurrIndex] -= trades[currentTradeIndex].sellVol_;
-		currentSP[cPartyIndex][buyCurrIndex] -= trades[currentTradeIndex].buyVol_;
-		currentSP[cPartyIndex][sellCurrIndex] += trades[currentTradeIndex].sellVol_;
-		double currPartyBuySPLInDollars = currentSP[partyIndex][buyCurrIndex] * exchangeRates[buyCurrIndex];
-		double currPartySellSPLInDollars = currentSP[partyIndex][sellCurrIndex] * exchangeRates[sellCurrIndex];
-		double currCPartyBuySPLInDollars = currentSP[cPartyIndex][buyCurrIndex] * exchangeRates[buyCurrIndex];
-		double currCPartySellSPLInDollars = currentSP[cPartyIndex][sellCurrIndex] * exchangeRates[sellCurrIndex];
-
+		int numCurrencies = currentBalanceOut[0].size();
 		
-		if (prevPartyBuySPLInDollars < -zero)
-			currentASP[partyIndex] -= prevPartyBuySPLInDollars;
-		if(currPartyBuySPLInDollars < -zero)
-			currentASP[partyIndex] += currPartyBuySPLInDollars;
-		if (prevPartySellSPLInDollars < -zero)
-			currentASP[partyIndex] -= prevPartySellSPLInDollars;
-		if (currPartySellSPLInDollars < -zero)
-			currentASP[partyIndex] += currPartySellSPLInDollars;
-
-		if (prevCPartyBuySPLInDollars < -zero)
-			currentASP[cPartyIndex] -= prevCPartyBuySPLInDollars;
-		if (currCPartyBuySPLInDollars < -zero)
-			currentASP[cPartyIndex] += currCPartyBuySPLInDollars;
-		if (prevCPartySellSPLInDollars < -zero)
-			currentASP[cPartyIndex] -= prevCPartySellSPLInDollars;
-		if (currCPartySellSPLInDollars < -zero)
-			currentASP[cPartyIndex] += currCPartySellSPLInDollars;
-
+		vector< vector<double> > currentBalanceInclude{ currentBalanceOut };
 		double buyVolInDollars = trades[currentTradeIndex].buyVol_ * exchangeRates[buyCurrIndex];
 		double sellVolInDollars = trades[currentTradeIndex].sellVol_ * exchangeRates[sellCurrIndex];
-		currentNOV[partyIndex] += buyVolInDollars;
-		currentNOV[partyIndex] -= sellVolInDollars;
-		currentNOV[cPartyIndex] -= buyVolInDollars;
-		currentNOV[cPartyIndex] += sellVolInDollars;
-
-		if (!(currentSP[partyIndex][buyCurrIndex] < -spl[partyIndex][buyCurrIndex]
-			&& currentSP[partyIndex][sellCurrIndex] < -spl[partyIndex][sellCurrIndex]
-			&& currentSP[cPartyIndex][buyCurrIndex] < -spl[cPartyIndex][buyCurrIndex]
-			&& currentSP[cPartyIndex][sellCurrIndex] < -spl[cPartyIndex][sellCurrIndex]
-			&& currentNOV[partyIndex] < -zero
-			&& currentNOV[cPartyIndex] < -zero
-			&& currentASP[partyIndex] < -aspl[partyIndex]
-			&& currentASP[cPartyIndex] < -aspl[cPartyIndex]
-			))
+		if (fabs(buyVolInDollars - sellVolInDollars) > zero)
 		{
-			trades[currentTradeIndex].isSettled_ = true;
-			double currentSettledAmount = trades[currentTradeIndex].buyVol_ * exchangeRates[buyCurrIndex];
-			include = currentSettledAmount + doSettlement_naive_v1(currentTradeIndex + 1, currentNOV, currentSP, currentASP,
-				trades, spl, aspl, initialBalance, exchangeRates);
+			//Need to correct fx rates
+			int i = 0;
 		}
+		double currentSettledAmount = buyVolInDollars;
+		//Update Balances for current trade
+		currentBalanceInclude[partyIndex][buyCurrIndex] += trades[currentTradeIndex].buyVol_;
+		currentBalanceInclude[partyIndex][sellCurrIndex] -= trades[currentTradeIndex].sellVol_;
+		currentBalanceInclude[cPartyIndex][buyCurrIndex] -= trades[currentTradeIndex].buyVol_;
+		currentBalanceInclude[cPartyIndex][sellCurrIndex] += trades[currentTradeIndex].sellVol_;
+		settleFlagsInclude[currentTradeIndex] = true;
 
-		//Revert back changes to currentNOV, currentSPL, currentASPL to backtrack
-		currentSP[partyIndex][buyCurrIndex] = prevPartyBuySP;
-		currentSP[partyIndex][sellCurrIndex] = prevPartySellSP;
-		currentSP[cPartyIndex][buyCurrIndex] = prevCPartyBuySP;
-		currentSP[cPartyIndex][sellCurrIndex] = prevCPartySellSP;
-		currentASP[partyIndex] = prevPartyASP;
-		currentASP[cPartyIndex] = prevCPartyASP;
-		currentNOV[partyIndex] = prevPartyNOV;
-		currentNOV[cPartyIndex] = prevCPartyNOV;
+		double include = currentSettledAmount + doSettlement_naive_v1(currentTradeIndex + 1, settleFlagsInclude, currentBalanceInclude,
+			trades, spl, aspl, exchangeRates);
 
-		//return std::max(exclude, include);
-		if (exclude > include)
+		//Do rmt tests
+		bool rmtTestResult = true;
+		int memberIndices[2] = { partyIndex , cPartyIndex };
+
+		for (int i = 0; rmtTestResult && i < 2; ++i)
 		{
-			trades[currentTradeIndex].isSettled_ = false;
-			return exclude;
-		}
-		
-		return include;
-	}
-
-	double doSettlement_naive_v1(vector<Trade>& trades, const vector< vector<double> >& spl, const vector<double>& aspl, const vector< vector<double> >& initialBalance, const vector<double>& exchangeRates)
-	{
-		vector<double> currentNOV(aspl.size(), 0.0);
-		vector< vector<double> > currentSP = initialBalance;
-		vector<double> currentASP(aspl.size(), 0.0);
-
-		int numMembers = initialBalance.size();
-		int numCurrencies = initialBalance[0].size();
-		for (int memberIndex = 0; memberIndex < numMembers; ++memberIndex)
-		{
+			int memberIndex = memberIndices[i];
 			double asplTemp = 0.0;
 			double novTemp = 0.0;
 			for (int currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
 			{
-				double currentBalanceInDollars = initialBalance[memberIndex][currencyIndex] * exchangeRates[currencyIndex];
+				if (currentBalanceInclude[memberIndex][currencyIndex] + zero < -spl[memberIndex][currencyIndex])
+				{
+					rmtTestResult = false;
+					break;
+				}
+
+				double currentBalanceInDollars = currentBalanceInclude[memberIndex][currencyIndex] * exchangeRates[currencyIndex];
 				novTemp += currentBalanceInDollars;
 				if (currentBalanceInDollars < -zero)
 					asplTemp += currentBalanceInDollars;
 			}
 
-			currentNOV[memberIndex] = novTemp;
-			currentASP[memberIndex] = asplTemp;
+			if (novTemp < -zero)
+				rmtTestResult = false;
+
+			if (asplTemp + zero < -aspl[memberIndex])
+				rmtTestResult = false;
 		}
-		return doSettlement_naive_v1(0, currentNOV, currentSP, currentASP, trades, spl, aspl, initialBalance, exchangeRates);
+
+		//return std::max(exclude, include);
+		if (include > exclude && rmtTestResult)
+		{
+			settleFlagsOut = settleFlagsInclude;
+			//currentNOV = currentNOVInclude;
+			//currentSP = currentSPInclude;
+			//currentASP = currentASPInclude;
+			currentBalanceOut = currentBalanceInclude;
+			return include;
+		}
+		else
+		{
+			settleFlagsOut = settleFlagsExclude;
+			//currentNOV = currentNOVExclude;
+			//currentSP = currentSPExclude;
+			//currentASP = currentASPExclude;
+			currentBalanceOut = currentBalanceExclude;
+			return exclude;
+		}
+		
+		//vector<double> currentNOVInclude{ currentNOV };
+		//vector< vector<double> > currentSPInclude{ currentSP };
+		//vector<double> currentASPInclude{ currentASP };
+
+		//Back up all previous NOV, SPL and ASPL to revert later for backtracking
+		//double prevPartyBuySP = currentSPInclude[partyIndex][buyCurrIndex];
+		//double prevPartySellSP = currentSPInclude[partyIndex][sellCurrIndex];
+		//double prevCPartyBuySP = currentSPInclude[cPartyIndex][buyCurrIndex];
+		//double prevCPartySellSP = currentSPInclude[cPartyIndex][sellCurrIndex];
+		//double prevPartyASP = currentASPInclude[partyIndex];
+		//double prevCPartyASP = currentASPInclude[cPartyIndex];
+		//double prevPartyNOV = currentNOVInclude[partyIndex];
+		//double prevCPartyNOV = currentNOVInclude[cPartyIndex];
+
+		//double prevPartyBuySPLInDollars = currentSPInclude[partyIndex][buyCurrIndex] * exchangeRates[buyCurrIndex];
+		//double prevPartySellSPLInDollars = currentSPInclude[partyIndex][sellCurrIndex] * exchangeRates[sellCurrIndex];
+		//double prevCPartyBuySPLInDollars = currentSPInclude[cPartyIndex][buyCurrIndex] * exchangeRates[buyCurrIndex];
+		//double prevCPartySellSPLInDollars = currentSPInclude[cPartyIndex][sellCurrIndex] * exchangeRates[sellCurrIndex];
+		//currentSPInclude[partyIndex][buyCurrIndex] += trades[currentTradeIndex].buyVol_;
+		//currentSPInclude[partyIndex][sellCurrIndex] -= trades[currentTradeIndex].sellVol_;
+		//currentSPInclude[cPartyIndex][buyCurrIndex] -= trades[currentTradeIndex].buyVol_;
+		//currentSPInclude[cPartyIndex][sellCurrIndex] += trades[currentTradeIndex].sellVol_;
+		//double currPartyBuySPLInDollars = currentSPInclude[partyIndex][buyCurrIndex] * exchangeRates[buyCurrIndex];
+		//double currPartySellSPLInDollars = currentSPInclude[partyIndex][sellCurrIndex] * exchangeRates[sellCurrIndex];
+		//double currCPartyBuySPLInDollars = currentSPInclude[cPartyIndex][buyCurrIndex] * exchangeRates[buyCurrIndex];
+		//double currCPartySellSPLInDollars = currentSPInclude[cPartyIndex][sellCurrIndex] * exchangeRates[sellCurrIndex];
+		
+		//if (prevPartyBuySPLInDollars < -zero)
+		//	currentASPInclude[partyIndex] -= prevPartyBuySPLInDollars;
+		//if(currPartyBuySPLInDollars < -zero)
+		//	currentASPInclude[partyIndex] += currPartyBuySPLInDollars;
+		//if (prevPartySellSPLInDollars < -zero)
+		//	currentASPInclude[partyIndex] -= prevPartySellSPLInDollars;
+		//if (currPartySellSPLInDollars < -zero)
+		//	currentASPInclude[partyIndex] += currPartySellSPLInDollars;
+
+		//if (prevCPartyBuySPLInDollars < -zero)
+		//	currentASPInclude[cPartyIndex] -= prevCPartyBuySPLInDollars;
+		//if (currCPartyBuySPLInDollars < -zero)
+		//	currentASPInclude[cPartyIndex] += currCPartyBuySPLInDollars;
+		//if (prevCPartySellSPLInDollars < -zero)
+		//	currentASPInclude[cPartyIndex] -= prevCPartySellSPLInDollars;
+		//if (currCPartySellSPLInDollars < -zero)
+		//	currentASPInclude[cPartyIndex] += currCPartySellSPLInDollars;
+
+		//double buyVolInDollars = trades[currentTradeIndex].buyVol_ * exchangeRates[buyCurrIndex];
+		//double sellVolInDollars = trades[currentTradeIndex].sellVol_ * exchangeRates[sellCurrIndex];
+		//currentNOVInclude[partyIndex] += buyVolInDollars;
+		//currentNOVInclude[partyIndex] -= sellVolInDollars;
+		//currentNOVInclude[cPartyIndex] -= buyVolInDollars;
+		//currentNOVInclude[cPartyIndex] += sellVolInDollars;
+
+		//bool rmtFailed = (currentSPInclude[partyIndex][buyCurrIndex] < -spl[partyIndex][buyCurrIndex]
+		//	|| currentSPInclude[partyIndex][sellCurrIndex] < -spl[partyIndex][sellCurrIndex]
+		//	|| currentSPInclude[cPartyIndex][buyCurrIndex] < -spl[cPartyIndex][buyCurrIndex]
+		//	|| currentSPInclude[cPartyIndex][sellCurrIndex] < -spl[cPartyIndex][sellCurrIndex]
+		//	|| currentNOVInclude[partyIndex] < -zero
+		//	|| currentNOVInclude[cPartyIndex] < -zero
+		//	|| currentASPInclude[partyIndex] < -aspl[partyIndex]
+		//	|| currentASPInclude[cPartyIndex] < -aspl[cPartyIndex]
+		//	);
+		//if(!rmtFailed)
+		//{
+		//	
+		//}
+
+		//Revert back changes to currentNOV, currentSPL, currentASPL to backtrack
+		//currentSP[partyIndex][buyCurrIndex] = prevPartyBuySP;
+		//currentSP[partyIndex][sellCurrIndex] = prevPartySellSP;
+		//currentSP[cPartyIndex][buyCurrIndex] = prevCPartyBuySP;
+		//currentSP[cPartyIndex][sellCurrIndex] = prevCPartySellSP;
+		//currentASP[partyIndex] = prevPartyASP;
+		//currentASP[cPartyIndex] = prevCPartyASP;
+		//currentNOV[partyIndex] = prevPartyNOV;
+		//currentNOV[cPartyIndex] = prevCPartyNOV;
+
+	}
+
+	double doSettlement_naive_v1(
+		vector<bool>& settleFlagsOut, 
+		const vector<Trade>& trades, 
+		const vector< vector<double> >& spl, 
+		const vector<double>& aspl, 
+		const vector< vector<double> >& initialBalance, 
+		const vector<double>& exchangeRates)
+	{
+		//vector<double> currentNOV(aspl.size(), 0.0);
+		//vector< vector<double> > currentSP{ initialBalance };
+		//vector<double> currentASP(aspl.size(), 0.0);
+
+		//int numMembers = initialBalance.size();
+		//int numCurrencies = initialBalance[0].size();
+		//for (int memberIndex = 0; memberIndex < numMembers; ++memberIndex)
+		//{
+		//	double asplTemp = 0.0;
+		//	double novTemp = 0.0;
+		//	for (int currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
+		//	{
+		//		double currentBalanceInDollars = initialBalance[memberIndex][currencyIndex] * exchangeRates[currencyIndex];
+		//		novTemp += currentBalanceInDollars;
+		//		if (currentBalanceInDollars < -zero)
+		//			asplTemp += currentBalanceInDollars;
+		//	}
+
+		//	currentNOV[memberIndex] = novTemp;
+		//	currentASP[memberIndex] = asplTemp;
+		//}
+		vector< vector<double> > currentBalance{ initialBalance };
+		return doSettlement_naive_v1(0, settleFlagsOut, currentBalance, trades, spl, aspl, exchangeRates);
 	}
 }

@@ -112,7 +112,7 @@ namespace mm {
 
 					double buyAmount = dist_double(mt);
 					double sellAmount = dist_double(mt);
-					trades.push_back({ tradeIndex, party, cParty, Currency(buyCurr), Currency(sellCurr), buyAmount, sellAmount, false });
+					trades.push_back({ tradeIndex, party, cParty, Currency(buyCurr), Currency(sellCurr), buyAmount, sellAmount });
 				}
 
 				//Create SPLs
@@ -302,9 +302,9 @@ namespace mm {
 			return testCases;
 
 		//Add hardcoded test cases
-		{//1 trade, 2 members, 2 currencies
+		{//Test index 0: 1 trade, 2 members, 2 currencies
 			vector<Trade> trades{
-			{ 0, 0, 1, Currency(0), Currency(1), 500.0, 440.0, false }
+			{ 0, 0, 1, Currency(0), Currency(1), 500.0, 440.0 }
 			};
 			vector< vector<double> > spl{
 			{ 500.0, 400.0 },
@@ -327,9 +327,9 @@ namespace mm {
 			testCases.push_back({ "", std::move(trades), std::move(spl), std::move(aspl), std::move(initialBalance), std::move(fxRates), settledAmount, std::move(settledTradeIds) });
 		}
 
-		{//1 trade, 2 members, 2 currencies
+		{//Test index 1: 1 trade, 2 members, 2 currencies
 			vector<Trade> trades{
-				{ 0, 0, 1, Currency(0), Currency(1), 500.0, 440.0, false }
+				{ 0, 0, 1, Currency(0), Currency(1), 500.0, 440.0 }
 			};
 			vector< vector<double> > spl{
 			{ 0.0, 0.0 },
@@ -352,9 +352,9 @@ namespace mm {
 			testCases.push_back({ "", std::move(trades), std::move(spl), std::move(aspl), std::move(initialBalance), std::move(fxRates), settledAmount, std::move(settledTradeIds) });
 		}
 
-		{//1 trade, 2 members, 2 currencies
+		{//Test index 2: 1 trade, 2 members, 2 currencies
 			vector<Trade> trades{
-				{ 0, 0, 1, Currency(0), Currency(1), 500.0, 440.0, false }
+				{ 0, 0, 1, Currency(0), Currency(1), 500.0, 440.0 }
 			};
 			vector< vector<double> > spl{
 			{ 0.0, 440.0 },
@@ -377,10 +377,10 @@ namespace mm {
 			testCases.push_back({ "", std::move(trades), std::move(spl), std::move(aspl), std::move(initialBalance), std::move(fxRates), settledAmount, std::move(settledTradeIds) });
 		}
 
-		{//2 trades, 2 members, 2 currencies
+		{//Test index 3: 2 trades, 2 members, 2 currencies
 			vector<Trade> trades{
-			{ 0, 0, 1, Currency(0), Currency(1), 500.0, 440.0, false },
-			{ 1, 0, 1, Currency(1), Currency(0), 440.0, 500.0, false }
+			{ 0, 0, 1, Currency(0), Currency(1), 500.0, 440.0 },
+			{ 1, 0, 1, Currency(1), Currency(0), 440.0, 500.0 }
 			};
 			vector< vector<double> > spl{
 			{ 0.0, 0.0 },
@@ -403,11 +403,11 @@ namespace mm {
 			testCases.push_back({ "", std::move(trades), std::move(spl), std::move(aspl), std::move(initialBalance), std::move(fxRates), settledAmount, std::move(settledTradeIds) });
 		}
 
-		{//3 trades, 3 members, 3 currencies
+		{//Test index 4: 3 trades, 3 members, 3 currencies
 			vector<Trade> trades{
-			{ 0, 0, 1, Currency(0), Currency(1), 100.0, 88.0, false },
-			{ 1, 1, 2, Currency(1), Currency(2), 88.0, 131.0, false },
-			{ 2, 2, 0, Currency(2), Currency(0), 131.0, 100.0, false }
+			{ 0, 0, 1, Currency(0), Currency(1), 100.0, 88.0 },
+			{ 1, 1, 2, Currency(1), Currency(2), 88.0, 131.0 },
+			{ 2, 2, 0, Currency(2), Currency(0), 131.0, 100.0 }
 			};
 			vector< vector<double> > spl{
 			{ 0.0, 0.0, 131.0 },
