@@ -88,10 +88,6 @@ namespace mm {
 	void testFxSettlement(vector<TestCase>& testCases)
 	{
 		vector<TestStats> stats;
-
-		static unordered_map<AlgoType, string> AlgoTypeStrings{
-			{ AlgoType::naive_v1 , "naive_v1"}
-		};
 		int columnWidth[9] = { 12, 12, 12, 10, 15, 12, 15, 15, 18 };
 		cout << "\n"
 			<< setw(columnWidth[0]) << std::left << "TestIndex"
@@ -106,6 +102,7 @@ namespace mm {
 
 		for (int testCaseIndex = 0; testCaseIndex < testCases.size(); ++testCaseIndex)
 		{
+			cout << "\n";
 			double actualSettledAmount = 0.0;
 			for (int i = 0; i < static_cast<int>(AlgoType::totalAlgos); ++i)
 			{
@@ -115,6 +112,16 @@ namespace mm {
 				{
 				case AlgoType::naive_v1:
 					actualSettledAmount = doSettlement_naive_v1(
+						settleFlags,
+						testCases[testCaseIndex].trades_,
+						testCases[testCaseIndex].spl_,
+						testCases[testCaseIndex].aspl_,
+						testCases[testCaseIndex].initialBalance_,
+						testCases[testCaseIndex].exchangeRates_
+					);
+					break;
+				case AlgoType::naive_v2:
+					actualSettledAmount = doSettlement_naive_v2(
 						settleFlags,
 						testCases[testCaseIndex].trades_,
 						testCases[testCaseIndex].spl_,
@@ -150,7 +157,7 @@ namespace mm {
 				TestStats testStats{
 					testCaseIndex,
 					verified,
-					AlgoTypeStrings[AlgoType(i)],
+					getString(AlgoType(i)),
 					testCases[testCaseIndex].aspl_.size(),
 					testCases[testCaseIndex].spl_.size() / testCases[testCaseIndex].aspl_.size(),
 					testCases[testCaseIndex].trades_.size(),
@@ -192,9 +199,9 @@ namespace mm {
 				}
 				else
 				{
-					//MM_EXPECT_TRUE(verified == true, verified);
-					//MM_EXPECT_TRUE(fabs(actualSettledAmount - testCases[testCaseIndex].settledAmount_) < zero, actualSettledAmount, testCases[testCaseIndex].settledAmount_);
-					//MM_EXPECT_TRUE(actualSettledTradeIds == testCases[testCaseIndex].settledTradeIds_, actualSettledTradeIds, testCases[testCaseIndex].settledTradeIds_);
+					MM_EXPECT_TRUE(verified == true, verified);
+					MM_EXPECT_TRUE(fabs(actualSettledAmount - testCases[testCaseIndex].settledAmount_) < zero, actualSettledAmount, testCases[testCaseIndex].settledAmount_);
+					MM_EXPECT_TRUE(actualSettledTradeIds == testCases[testCaseIndex].settledTradeIds_, actualSettledTradeIds, testCases[testCaseIndex].settledTradeIds_);
 				}
 			}
 		}

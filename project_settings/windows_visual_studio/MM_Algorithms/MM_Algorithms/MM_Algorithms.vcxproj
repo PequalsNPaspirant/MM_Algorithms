@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement_naive_v2.cpp" />
     <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement_naive_v1.cpp" />
     <ClCompile Include="..\..\..\..\src\Others\Others_RankInSortedArray_test.cpp" />
     <ClCompile Include="..\..\..\..\src\Others\Others_RankInSortedArray.cpp" />

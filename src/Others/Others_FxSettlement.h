@@ -1,6 +1,7 @@
 #pragma once
 
 #include <sstream> // for std::stringstream
+#include <unordered_map>
 
 namespace mm {
 
@@ -55,13 +56,6 @@ namespace mm {
 
 	private:
 		double val_;
-	};
-
-	enum class AlgoType
-	{
-		naive_v1 = 0,
-
-		totalAlgos
 	};
 
 	enum class Currency
@@ -150,5 +144,25 @@ namespace mm {
 	vector<TestCase>& getTestCases();
 
 	//Settlement Algos:
+	enum class AlgoType
+	{
+		naive_v1 = 0,
+		naive_v2,
+
+		totalAlgos
+	};
+
+	template<typename T = void>
+	string getString(AlgoType type)
+	{ 
+		static unordered_map<AlgoType, string> AlgoTypeStrings{
+		{ AlgoType::naive_v1 , "naive_v1" },
+		{ AlgoType::naive_v2 , "naive_v2" }
+		}; 
+		return AlgoTypeStrings[type];
+	}
+	//template<> string getString<AlgoType>() { return "naive_v2"; }
+
 	double doSettlement_naive_v1(vector<bool>& settleFlagsOut, const vector<Trade>& trades, const vector< vector<double> >& spl, const vector<double>& aspl, const vector< vector<double> >& initialBalance, const vector<double>& exchangeRates);
+	double doSettlement_naive_v2(vector<bool>& settleFlagsOut, const vector<Trade>& trades, const vector< vector<double> >& spl, const vector<double>& aspl, const vector< vector<double> >& initialBalance, const vector<double>& exchangeRates);
 }
