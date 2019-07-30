@@ -176,6 +176,7 @@ namespace mm {
 		return pos;
 	}
 
+	//Ref- https://www.youtube.com/watch?v=uCsD3ZGzMgE
 	unsigned int JosephusProblem_when_k_is_1_v2(unsigned int n, unsigned int s)
 	{
 		//invalid case
