@@ -82,19 +82,56 @@ namespace mm {
 
 	void createTestCases()
 	{
+		//numMembers, numCurrencies, numTrades, numTestCases
+		//numTrades = numMembers * (numMembers - 1) / 2
+		vector<TestCaseInput> input{
+		//{ 5, 5, 10, 2 },
+		//{ 5, 5, 11, 2 },
+		//{ 5, 5, 12, 2 },
+		//{ 5, 5, 13, 2 },
+		//{ 5, 5, 14, 2 },
+		//{ 6, 6, 15, 2 },
+		//{ 6, 6, 16, 2 },
+		//{ 6, 6, 17, 2 },
+		//{ 6, 6, 18, 2 },
+		//{ 6, 6, 19, 2 },
+		//{ 6, 6, 20, 2 },
+		//{ 7, 7, 21, 2 },
+		//{ 7, 7, 22, 2 },
+		//{ 7, 7, 23, 2 },
+		//{ 7, 7, 24, 2 },
+		//{ 7, 7, 25, 2 },
+		//{ 7, 7, 26, 2 },
+		//{ 7, 7, 27, 2 },
+		//{ 8, 8, 28, 2 },
+		//{ 8, 8, 29, 2 },
+		//{ 8, 8, 30, 2 },
+		//{ 8, 8, 31, 2 },
+		//{ 8, 8, 32, 2 },
+		//{ 8, 8, 33, 2 },
+		//{ 8, 8, 34, 2 },
+		//{ 8, 8, 35, 2 },
+		//{ 9, 9, 36, 2 },
+		//{ 9, 9, 37, 2 },
+		//{ 9, 9, 38, 2 },
+		//{ 9, 9, 39, 2 },
+		//{ 9, 9, 40, 2 },
+		};
+
 		std::random_device rd;
 		std::mt19937 mt(rd());
 		std::uniform_real_distribution<double> dist_double(100.0, 100000.0);
 		
 		int filePrefix = 0;
-		for (int c = 3; c <= maxCurrencies; ++c)
+		for (int i = 0; i < input.size(); ++i)
 		{
-			int numMembers = c;
-			int numCurrencies = c;
+			int numMembers = input[i].numMembers;
+			int numCurrencies = input[i].numCurrencies;
 			std::uniform_int_distribution<int> dist_member(0, numMembers - 1);
 			std::uniform_int_distribution<int> dist_curr(0, numCurrencies - 1);
-			int numTrades = numCurrencies * (numCurrencies - 1) / 2;
-			for (int ti = 0; ti < numTestCases; ++ti)
+			//int numTrades = numMembers * (numMembers - 1) / 2; // every member trades with every other member
+			int numTrades = input[i].numTrades;
+			for (int ti = 0; ti < input[i].numTestCases; ++ti)
 			{
 				//Create Trades
 				vector<Trade> trades;
@@ -158,9 +195,21 @@ namespace mm {
 				//cout << "\nvector<int> settledTradeIds{ 1 };";
 				//cout << "\ntestCases.push_back({ std::move(trades), std::move(spl), std::move(aspl), std::move(initialBalance), std::move(allFxRates), settledAmount, std::move(settledTradeIds) });";
 
-				//Add to test data
-				//getTestCases().push_back({ std::move(trades), std::move(spl), std::move(aspl), std::move(initialBalance), std::move(allFxRates), settledAmount, std::move(settledTradeIds) });
-
+				if (!GlobalFlagWriteTestCasesToFile)
+				{
+					//Add to test data
+					getTestCases().push_back({
+						"",
+						std::move(trades), 
+						std::move(spl), 
+						std::move(aspl), 
+						std::move(initialBalance), 
+						std::move(allFxRates), 
+						settledAmount, 
+						std::move(settledTradeIds) 
+						});
+					continue;
+				}
 				//Write to csv files
 
 				//std::filesystem::exists("helloworld.txt"); //available in C++17 onwards
@@ -324,7 +373,7 @@ namespace mm {
 			};
 			double settledAmount = 500.0;
 			vector<int> settledTradeIds{ 0 };
-			testCases.push_back({ "", std::move(trades), std::move(spl), std::move(aspl), std::move(initialBalance), std::move(fxRates), settledAmount, std::move(settledTradeIds) });
+			testCases.push_back({ "", std::move(trades), std::move(spl), std::move(aspl), std::move(initialBalance), std::move(fxRates), settledAmount, std::move(settledTradeIds), true });
 		}
 
 		{//Test index 1: 1 trade, 2 members, 2 currencies
@@ -349,7 +398,7 @@ namespace mm {
 			};
 			double settledAmount = 500.0;
 			vector<int> settledTradeIds{ 0 };
-			testCases.push_back({ "", std::move(trades), std::move(spl), std::move(aspl), std::move(initialBalance), std::move(fxRates), settledAmount, std::move(settledTradeIds) });
+			testCases.push_back({ "", std::move(trades), std::move(spl), std::move(aspl), std::move(initialBalance), std::move(fxRates), settledAmount, std::move(settledTradeIds), true });
 		}
 
 		{//Test index 2: 1 trade, 2 members, 2 currencies
@@ -374,7 +423,7 @@ namespace mm {
 			};
 			double settledAmount = 500.0;
 			vector<int> settledTradeIds{ 0 };
-			testCases.push_back({ "", std::move(trades), std::move(spl), std::move(aspl), std::move(initialBalance), std::move(fxRates), settledAmount, std::move(settledTradeIds) });
+			testCases.push_back({ "", std::move(trades), std::move(spl), std::move(aspl), std::move(initialBalance), std::move(fxRates), settledAmount, std::move(settledTradeIds), true });
 		}
 
 		{//Test index 3: 2 trades, 2 members, 2 currencies
@@ -400,7 +449,7 @@ namespace mm {
 			};
 			double settledAmount = 1000.0;
 			vector<int> settledTradeIds{ 0, 1 };
-			testCases.push_back({ "", std::move(trades), std::move(spl), std::move(aspl), std::move(initialBalance), std::move(fxRates), settledAmount, std::move(settledTradeIds) });
+			testCases.push_back({ "", std::move(trades), std::move(spl), std::move(aspl), std::move(initialBalance), std::move(fxRates), settledAmount, std::move(settledTradeIds), true });
 		}
 
 		{//Test index 4: 3 trades, 3 members, 3 currencies
@@ -431,7 +480,7 @@ namespace mm {
 			};
 			double settledAmount = 300.0;
 			vector<int> settledTradeIds{ 0, 1, 2 };
-			testCases.push_back({ "", std::move(trades), std::move(spl), std::move(aspl), std::move(initialBalance), std::move(fxRates), settledAmount, std::move(settledTradeIds) });
+			testCases.push_back({ "", std::move(trades), std::move(spl), std::move(aspl), std::move(initialBalance), std::move(fxRates), settledAmount, std::move(settledTradeIds), true });
 		}
 
 		//Read test cases from csv files
@@ -477,8 +526,7 @@ namespace mm {
 				|| !fxRatesFile.good())
 				break;
 
-			if (!GlobalFlagCreateTestCases && !resultsFile.good())
-				break;
+			bool resultsAvailable = resultsFile.good();
 
 			vector< vector<double> > initialBalance{};
 			vector<Trade> trades{};
@@ -713,7 +761,7 @@ namespace mm {
 
 			double settledAmount = 0.0;
 			vector<int> settledTradeIds{};
-			if (!GlobalFlagCreateTestCases && resultsFile.is_open())
+			if (resultsAvailable && resultsFile.is_open())
 			{
 				string line;
 				while (std::getline(resultsFile, line, '\n'))
@@ -728,8 +776,10 @@ namespace mm {
 					}
 				}
 			}
+			else
+				resultsAvailable = false;
 			
-			testCases.push_back({ to_string(filePrefix), std::move(trades), std::move(spl), std::move(aspl), std::move(initialBalance), std::move(fxRates), settledAmount, std::move(settledTradeIds) });
+			testCases.push_back({ to_string(filePrefix), std::move(trades), std::move(spl), std::move(aspl), std::move(initialBalance), std::move(fxRates), settledAmount, std::move(settledTradeIds), resultsAvailable });
 		}
 
 		return testCases;

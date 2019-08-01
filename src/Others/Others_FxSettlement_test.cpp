@@ -159,7 +159,7 @@ namespace mm {
 					verified,
 					getString(AlgoType(i)),
 					testCases[testCaseIndex].aspl_.size(),
-					testCases[testCaseIndex].spl_.size() / testCases[testCaseIndex].aspl_.size(),
+					testCases[testCaseIndex].spl_[0].size(),
 					testCases[testCaseIndex].trades_.size(),
 					actualSettledTradeIds.size(),
 					actualSettledAmount,
@@ -179,8 +179,14 @@ namespace mm {
 				
 				stats.push_back(std::move(testStats));
 
-				if ((GlobalFlagCreateTestCases || overrideTestResults)
-					&& !testCases[testCaseIndex].fileNamePrefix_.empty()) //File prefix is empty only for hardcoded tests
+				MM_EXPECT_TRUE(verified == true, verified);
+
+				if (testCases[testCaseIndex].resultsAvailable)
+				{
+					MM_EXPECT_TRUE(fabs(actualSettledAmount - testCases[testCaseIndex].settledAmount_) < zero, actualSettledAmount, testCases[testCaseIndex].settledAmount_);
+					MM_EXPECT_TRUE(actualSettledTradeIds == testCases[testCaseIndex].settledTradeIds_, actualSettledTradeIds, testCases[testCaseIndex].settledTradeIds_);
+				}
+				else if (!testCases[testCaseIndex].fileNamePrefix_.empty()) //File prefix is empty only for hardcoded tests
 				{
 					//Write results to csv file
 					ofstream resultsFile{ testDataPath + testCases[testCaseIndex].fileNamePrefix_ + "_" + resultsFileName };
@@ -197,12 +203,6 @@ namespace mm {
 						}
 					}
 				}
-				else
-				{
-					MM_EXPECT_TRUE(verified == true, verified);
-					MM_EXPECT_TRUE(fabs(actualSettledAmount - testCases[testCaseIndex].settledAmount_) < zero, actualSettledAmount, testCases[testCaseIndex].settledAmount_);
-					MM_EXPECT_TRUE(actualSettledTradeIds == testCases[testCaseIndex].settledTradeIds_, actualSettledTradeIds, testCases[testCaseIndex].settledTradeIds_);
-				}
 			}
 		}
 	}
@@ -213,8 +213,7 @@ namespace mm {
 	{
 		MM_PRINT_TEST_CASE_NUMBER(false);
 
-		if(GlobalFlagCreateTestCases)
-			createTestCases();
+		//createTestCases();
 		testFxSettlement(getTestCases());
 	}
 }

@@ -58,55 +58,56 @@ namespace mm {
 		double include = currentSettledAmount + doSettlement_naive_v2(currentTradeIndex + 1, settleFlagsInclude, currentBalanceInclude,
 			trades, spl, aspl, exchangeRates);
 
-		//Do rmt tests
-		bool rmtTestResult = true;
-		int memberIndices[2] = { partyIndex , cPartyIndex };
-
-		for (int i = 0; rmtTestResult && i < 2; ++i)
+		//return std::max(exclude, include);
+		if (include > exclude)
 		{
-			int memberIndex = memberIndices[i];
-			double asplTemp = 0.0;
-			double novTemp = 0.0;
-			for (int currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
+			//Do rmt tests
+			bool rmtTestResult = true;
+			int memberIndices[2] = { partyIndex , cPartyIndex };
+
+			for (int i = 0; rmtTestResult && i < 2; ++i)
 			{
-				if (currentBalanceInclude[memberIndex][currencyIndex] + zero < -spl[memberIndex][currencyIndex])
+				int memberIndex = memberIndices[i];
+				double asplTemp = 0.0;
+				double novTemp = 0.0;
+				for (int currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
 				{
-					rmtTestResult = false;
-					break;
+					if (currentBalanceInclude[memberIndex][currencyIndex] + zero < -spl[memberIndex][currencyIndex])
+					{
+						rmtTestResult = false;
+						break;
+					}
+
+					double currentBalanceInDollars = currentBalanceInclude[memberIndex][currencyIndex] * exchangeRates[currencyIndex];
+					novTemp += currentBalanceInDollars;
+					if (currentBalanceInDollars < -zero)
+						asplTemp += currentBalanceInDollars;
 				}
 
-				double currentBalanceInDollars = currentBalanceInclude[memberIndex][currencyIndex] * exchangeRates[currencyIndex];
-				novTemp += currentBalanceInDollars;
-				if (currentBalanceInDollars < -zero)
-					asplTemp += currentBalanceInDollars;
+				if (novTemp < -zero)
+					rmtTestResult = false;
+
+				if (asplTemp + zero < -aspl[memberIndex])
+					rmtTestResult = false;
 			}
 
-			if (novTemp < -zero)
-				rmtTestResult = false;
-
-			if (asplTemp + zero < -aspl[memberIndex])
-				rmtTestResult = false;
+			if (rmtTestResult)
+			{
+				settleFlagsOut = settleFlagsInclude;
+				//currentNOV = currentNOVInclude;
+				//currentSP = currentSPInclude;
+				//currentASP = currentASPInclude;
+				currentBalanceOut = currentBalanceInclude;
+				return include;
+			}
 		}
 
-		//return std::max(exclude, include);
-		if (include > exclude && rmtTestResult)
-		{
-			settleFlagsOut = settleFlagsInclude;
-			//currentNOV = currentNOVInclude;
-			//currentSP = currentSPInclude;
-			//currentASP = currentASPInclude;
-			currentBalanceOut = currentBalanceInclude;
-			return include;
-		}
-		else
-		{
-			settleFlagsOut = settleFlagsExclude;
-			//currentNOV = currentNOVExclude;
-			//currentSP = currentSPExclude;
-			//currentASP = currentASPExclude;
-			currentBalanceOut = currentBalanceExclude;
-			return exclude;
-		}
+		settleFlagsOut = settleFlagsExclude;
+		//currentNOV = currentNOVExclude;
+		//currentSP = currentSPExclude;
+		//currentASP = currentASPExclude;
+		currentBalanceOut = currentBalanceExclude;
+		return exclude;
 		
 		//vector<double> currentNOVInclude{ currentNOV };
 		//vector< vector<double> > currentSPInclude{ currentSP };
