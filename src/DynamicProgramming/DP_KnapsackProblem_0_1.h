@@ -626,6 +626,8 @@ namespace mm {
 		}
 	};
 
+	size_t getHash(size_t num1, size_t num2) noexcept;
+
 	double DP_KnapsackProblem_0_1_naive_v1(const vector<double>& values, unsigned long long numItems, const vector<unsigned long long>& weights, unsigned long long knapsackCapacity, vector<unsigned int>& selectedItems);
 	double DP_KnapsackProblem_0_1_naive_v2(const vector<double>& values, unsigned long long numItems, const vector<unsigned long long>& weights, unsigned long long knapsackCapacity, vector<unsigned int>& selectedItems);
 	double DP_KnapsackProblem_0_1_naive_tail_recursive(double retValue, const vector<double>& values, unsigned long long numItems, const vector<unsigned long long>& weights, unsigned long long knapsackCapacity, vector<unsigned int>& selectedItems);
@@ -649,7 +651,7 @@ namespace mm {
 		vector<double>& cache_bottom_up);
 	double DP_KnapsackProblem_0_1_bottom_up_object_count_independent_space_efficient_v1(const vector<double>& values, const vector<unsigned long long>& weights, unsigned long long knapsackCapacity, vector<unsigned int>& selectedItems,
 		vector<double>& cache_bottom_up_prev, vector<double>& cache_bottom_up_current);
-	double DP_KnapsackProblem_0_1_bottom_up_object_count_independent_space_efficient_v1_1(const vector<double>& values, const vector<unsigned long long>& weights, unsigned long long knapsackCapacity, vector<unsigned int>& selectedItems,
+	double DP_KnapsackProblem_0_1_bottom_up_object_count_independent_space_efficient_v1a(const vector<double>& values, const vector<unsigned long long>& weights, unsigned long long knapsackCapacity, vector<unsigned int>& selectedItems,
 		vector<double>& cache_bottom_up_prev, vector<double>& cache_bottom_up_current);
 	double DP_KnapsackProblem_0_1_bottom_up_object_count_independent_space_efficient_v2(const vector<double>& values, const vector<unsigned long long>& weights, unsigned long long knapsackCapacity, vector<unsigned int>& selectedItems,
 		vector<double>& cache_bottom_up);

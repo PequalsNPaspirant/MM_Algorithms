@@ -19,6 +19,39 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1_bottom_up_space_efficient_v1a.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1_bottom_up_space_efficient_v2.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1_bottom_up_space_efficient_v3.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1_bottom_up_space_efficient_v4.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1_bottom_up_space_efficient_set.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1_bottom_up_no_capacity.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1_bottom_up_no_capacity_space_efficient.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1_branch_and_bound_v1.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1_branch_and_bound_v2.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1_branch_and_bound_v3.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1_naive_non_recursive_v3.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1_branch_and_bound_v3a.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1_branch_and_bound_v3b.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1_branch_and_bound_v4.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1_branch_and_bound_v5.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1_branch_and_bound_v6.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1_branch_and_bound_v7.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1_branch_and_bound_v8.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1_branch_and_bound_v8b.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1_branch_and_bound_v9b.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1_branch_and_bound_todo.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1_top_down_using_vector.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1_greedy.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1_naive_non_recursive_v2.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1_naive_non_recursive_v1.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1_top_down_using_hashmap.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1_top_down_tail_recursive.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1_top_down_non_recursive.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1_bottom_up_v1.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1_bottom_up_v2.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1_bottom_up_space_efficient_v1.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1_naive_tail_recursive.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1_naive_v1.cpp" />
     <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement_naive_v2.cpp" />
     <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement_naive_v1.cpp" />
     <ClCompile Include="..\..\..\..\src\Others\Others_RankInSortedArray_test.cpp" />
@@ -109,7 +142,7 @@
     <ClCompile Include="..\..\..\..\src\Others\Others_EquityOrderManagementSystem_v4c.cpp" />
     <ClCompile Include="..\..\..\..\src\Others\Others_EquityOrderManagementSystem_v3c.cpp" />
     <ClCompile Include="..\..\..\..\src\Others\Others_EquityOrderManagementSystem_v3a.cpp" />
-    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1_naive_v2.cpp" />
     <ClCompile Include="..\..\..\..\src\Others\Others_EquityOrderManagementSystem_v4a.cpp" />
     <ClCompile Include="..\..\..\..\src\Others\Others_EquityOrderManagementSystem_v4b.cpp" />
     <ClCompile Include="..\..\..\..\src\Others\Others_EquityOrderManagementSystemTestData.cpp" />
