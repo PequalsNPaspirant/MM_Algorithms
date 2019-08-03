@@ -34,7 +34,7 @@ namespace mm {
 	//FloatingPointComparator zero(0.000001);
 	constexpr const double zero = compile_time_pow(10, -maxPrecision + 1);
 	constexpr bool GlobalFlagWriteTestCasesToFile = false;
-	constexpr bool globalFlagOverwriteResults = true;
+	constexpr bool globalFlagOverwriteResults = false;
 
 	struct TestCaseInput
 	{
@@ -158,6 +158,7 @@ namespace mm {
 		naive_v2,
 		branch_and_bound_v1,
 		branch_and_bound_v2,
+		branch_and_bound_v3,
 
 		totalAlgos
 	};
@@ -172,18 +173,19 @@ namespace mm {
 	AlgoInfo getAlgoInfo(AlgoType type)
 	{ 
 		static unordered_map<AlgoType, AlgoInfo> AlgoTypeInfo{
-		{ AlgoType::naive_v1 ,						{ "naive_v1", 20}										},
-		{ AlgoType::naive_v2 ,						{ "naive_v2", 20}										},
-		{ AlgoType::branch_and_bound_v1,			{ "branch_and_bound_v1", 23	}	},
-		{ AlgoType::branch_and_bound_v2,			{ "branch_and_bound_v2", numeric_limits<int>::max() }	}
+		{ AlgoType::naive_v1 ,						{ "naive_v1", 20} },
+		{ AlgoType::naive_v2 ,						{ "naive_v2", 20} },
+		{ AlgoType::branch_and_bound_v1,			{ "branch_and_bound_v1", 23	} },
+		{ AlgoType::branch_and_bound_v2,			{ "branch_and_bound_v2", 29 } },
+		{ AlgoType::branch_and_bound_v3,			{ "branch_and_bound_v3", numeric_limits<int>::max() }	}
 		}; 
 		return AlgoTypeInfo[type];
 	}
-	//template<> string getString<AlgoType>() { return "naive_v2"; }
 
 	double doSettlement_naive_v1(vector<bool>& settleFlagsOut, const vector<Trade>& trades, const vector< vector<double> >& spl, const vector<double>& aspl, const vector< vector<double> >& initialBalance, const vector<double>& exchangeRates);
 	double doSettlement_naive_v2(vector<bool>& settleFlagsOut, const vector<Trade>& trades, const vector< vector<double> >& spl, const vector<double>& aspl, const vector< vector<double> >& initialBalance, const vector<double>& exchangeRates);
 	double doSettlement_branch_and_bound_v1(vector<bool>& settleFlagsOut, vector<Trade>& trades, const vector< vector<double> >& spl, const vector<double>& aspl, const vector< vector<double> >& initialBalance, const vector<double>& exchangeRates);
 	double doSettlement_branch_and_bound_v2(vector<bool>& settleFlagsOut, vector<Trade>& trades, const vector< vector<double> >& spl, const vector<double>& aspl, const vector< vector<double> >& initialBalance, const vector<double>& exchangeRates);
+	double doSettlement_branch_and_bound_v3(vector<bool>& settleFlagsOut, vector<Trade>& trades, const vector< vector<double> >& spl, const vector<double>& aspl, const vector< vector<double> >& initialBalance, const vector<double>& exchangeRates);
 
 }

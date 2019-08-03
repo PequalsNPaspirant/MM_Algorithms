@@ -153,6 +153,16 @@ namespace mm {
 						testCases[testCaseIndex].exchangeRates_
 					);
 					break;
+				case AlgoType::branch_and_bound_v3:
+					actualSettledAmount = doSettlement_branch_and_bound_v3(
+						settleFlags,
+						testCases[testCaseIndex].trades_,
+						testCases[testCaseIndex].spl_,
+						testCases[testCaseIndex].aspl_,
+						testCases[testCaseIndex].initialBalance_,
+						testCases[testCaseIndex].exchangeRates_
+					);
+					break;
 				default:
 					assert(false, "Algo type '" + to_string(i) + "' is not suported");
 				}
