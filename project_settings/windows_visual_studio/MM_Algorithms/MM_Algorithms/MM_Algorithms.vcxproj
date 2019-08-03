@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\..\..\%40_Programming\Everything\MM_Algorithms\src\Others\Others_FxSettlement_branch_and_bound_v3.cpp" />
+    <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v3.cpp" />
     <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v2.cpp" />
     <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v1.cpp" />
     <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1_bottom_up_space_efficient_v1a.cpp" />

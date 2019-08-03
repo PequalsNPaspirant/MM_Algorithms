@@ -585,7 +585,7 @@
     <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\%40_Programming\Everything\MM_Algorithms\src\Others\Others_FxSettlement_branch_and_bound_v3.cpp">
+    <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
