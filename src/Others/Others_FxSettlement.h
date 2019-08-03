@@ -34,7 +34,7 @@ namespace mm {
 	//FloatingPointComparator zero(0.000001);
 	constexpr const double zero = compile_time_pow(10, -maxPrecision + 1);
 	constexpr bool GlobalFlagWriteTestCasesToFile = false;
-	constexpr bool globalFlagOverwriteResults = false;
+	constexpr bool globalFlagOverwriteResults = true;
 
 	struct TestCaseInput
 	{
@@ -174,7 +174,7 @@ namespace mm {
 		static unordered_map<AlgoType, AlgoInfo> AlgoTypeInfo{
 		{ AlgoType::naive_v1 ,						{ "naive_v1", 20}										},
 		{ AlgoType::naive_v2 ,						{ "naive_v2", 20}										},
-		{ AlgoType::branch_and_bound_v1,			{ "branch_and_bound_v1", 25	}	},
+		{ AlgoType::branch_and_bound_v1,			{ "branch_and_bound_v1", 23	}	},
 		{ AlgoType::branch_and_bound_v2,			{ "branch_and_bound_v2", numeric_limits<int>::max() }	}
 		}; 
 		return AlgoTypeInfo[type];
