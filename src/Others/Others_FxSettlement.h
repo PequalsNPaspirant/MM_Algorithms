@@ -172,9 +172,9 @@ namespace mm {
 	AlgoInfo getAlgoInfo(AlgoType type)
 	{ 
 		static unordered_map<AlgoType, AlgoInfo> AlgoTypeInfo{
-		{ AlgoType::naive_v1 ,						{ "naive_v1", 22}										},
-		{ AlgoType::naive_v2 ,						{ "naive_v2", 22}										},
-		{ AlgoType::branch_and_bound_v1,			{ "branch_and_bound_v1", numeric_limits<int>::max()	}	},
+		{ AlgoType::naive_v1 ,						{ "naive_v1", 20}										},
+		{ AlgoType::naive_v2 ,						{ "naive_v2", 20}										},
+		{ AlgoType::branch_and_bound_v1,			{ "branch_and_bound_v1", 25	}	},
 		{ AlgoType::branch_and_bound_v2,			{ "branch_and_bound_v2", numeric_limits<int>::max() }	}
 		}; 
 		return AlgoTypeInfo[type];
