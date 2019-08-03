@@ -135,7 +135,7 @@ namespace mm {
 
 	struct TestStats
 	{
-		int testCaseIndex;
+		string fileNamePrefix;
 		bool testCaseResult;
 		string algoType;
 		int numMembers;
@@ -154,6 +154,7 @@ namespace mm {
 	{
 		naive_v1 = 0,
 		naive_v2,
+		branch_and_bound_v1,
 
 		totalAlgos
 	};
@@ -162,8 +163,9 @@ namespace mm {
 	string getString(AlgoType type)
 	{ 
 		static unordered_map<AlgoType, string> AlgoTypeStrings{
-		{ AlgoType::naive_v1 , "naive_v1" },
-		{ AlgoType::naive_v2 , "naive_v2" }
+		{ AlgoType::naive_v1 ,						"naive_v1"				},
+		{ AlgoType::naive_v2 ,						"naive_v2"				},
+		{ AlgoType::branch_and_bound_v1,			"branch_and_bound_v1"	}
 		}; 
 		return AlgoTypeStrings[type];
 	}
@@ -171,4 +173,5 @@ namespace mm {
 
 	double doSettlement_naive_v1(vector<bool>& settleFlagsOut, const vector<Trade>& trades, const vector< vector<double> >& spl, const vector<double>& aspl, const vector< vector<double> >& initialBalance, const vector<double>& exchangeRates);
 	double doSettlement_naive_v2(vector<bool>& settleFlagsOut, const vector<Trade>& trades, const vector< vector<double> >& spl, const vector<double>& aspl, const vector< vector<double> >& initialBalance, const vector<double>& exchangeRates);
+	double doSettlement_branch_and_bound_v1(vector<bool>& settleFlagsOut, vector<Trade>& trades, const vector< vector<double> >& spl, const vector<double>& aspl, const vector< vector<double> >& initialBalance, const vector<double>& exchangeRates);
 }

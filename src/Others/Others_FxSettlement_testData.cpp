@@ -349,7 +349,7 @@ namespace mm {
 
 		if (!testCases.empty())
 			return testCases;
-
+		/*
 		//Add hardcoded test cases
 		{//Test index 0: 1 trade, 2 members, 2 currencies
 			vector<Trade> trades{
@@ -425,7 +425,7 @@ namespace mm {
 			vector<int> settledTradeIds{ 0 };
 			testCases.push_back({ "", std::move(trades), std::move(spl), std::move(aspl), std::move(initialBalance), std::move(fxRates), settledAmount, std::move(settledTradeIds), true });
 		}
-
+		
 		{//Test index 3: 2 trades, 2 members, 2 currencies
 			vector<Trade> trades{
 			{ 0, 0, 1, Currency(0), Currency(1), 500.0, 440.0 },
@@ -451,7 +451,7 @@ namespace mm {
 			vector<int> settledTradeIds{ 0, 1 };
 			testCases.push_back({ "", std::move(trades), std::move(spl), std::move(aspl), std::move(initialBalance), std::move(fxRates), settledAmount, std::move(settledTradeIds), true });
 		}
-
+		
 		{//Test index 4: 3 trades, 3 members, 3 currencies
 			vector<Trade> trades{
 			{ 0, 0, 1, Currency(0), Currency(1), 100.0, 88.0 },
@@ -482,7 +482,7 @@ namespace mm {
 			vector<int> settledTradeIds{ 0, 1, 2 };
 			testCases.push_back({ "", std::move(trades), std::move(spl), std::move(aspl), std::move(initialBalance), std::move(fxRates), settledAmount, std::move(settledTradeIds), true });
 		}
-
+		*/
 		//Read test cases from csv files
 		for (int filePrefix = 1; ; ++filePrefix)
 		{
@@ -650,7 +650,17 @@ namespace mm {
 					assert(end == string::npos);
 					double sellVol = stod(line.substr(start));
 
-					trades.push_back({ tradeId, partyId, cPartyId, Currency(buyCurr), Currency(sellCurr), buyVol, sellVol });
+					int partyIndex = memberIdUMap[partyId];
+					int cPartyIndex = memberIdUMap[cPartyId];
+					int buyCurrIndex = currencyIdUMap[buyCurr];
+					int sellCurrIndex = currencyIdUMap[sellCurr];
+
+					assert(partyIndex < numMembers);
+					assert(cPartyIndex < numMembers);
+					assert(buyCurrIndex < numCurrencies);
+					assert(sellCurrIndex < numCurrencies);
+
+					trades.push_back({ tradeId, partyIndex, cPartyIndex, Currency(buyCurrIndex), Currency(sellCurrIndex), buyVol, sellVol });
 				}
 
 				tradesFile.close();
@@ -663,6 +673,7 @@ namespace mm {
 			{
 				bool isColumnHeader = true;
 				string line;
+				int splRead = 0;
 				while (std::getline(splFile, line, '\n'))
 				{
 					if (line.empty())
@@ -672,6 +683,7 @@ namespace mm {
 						isColumnHeader = false;
 						continue;
 					}
+					++splRead;
 					int start = 0;
 					int end = line.find_first_of(',', start);
 					int memberId = stoi(line.substr(start, end - start));
@@ -687,9 +699,11 @@ namespace mm {
 
 					int memberIndex = memberIdUMap[memberId];
 					int currencyIndex = currencyIdUMap[currencyId];
+					assert(memberIndex < numMembers);
+					assert(currencyIndex < numCurrencies);
 					spl[memberIndex][currencyIndex] = splVal;
 				}
-
+				assert(splRead == numMembers * numCurrencies);
 				splFile.close();
 			}
 			else
@@ -700,6 +714,7 @@ namespace mm {
 			{
 				bool isColumnHeader = true;
 				string line;
+				int asplRead = 0;
 				while (std::getline(asplFile, line, '\n'))
 				{
 					if (line.empty())
@@ -709,6 +724,7 @@ namespace mm {
 						isColumnHeader = false;
 						continue;
 					}
+					++asplRead;
 					int start = 0;
 					int end = line.find_first_of(',', start);
 					int memberId = stoi(line.substr(start, end - start));
@@ -719,9 +735,10 @@ namespace mm {
 					double asplVal = stod(line.substr(start));
 
 					int memberIndex = memberIdUMap[memberId];
+					assert(memberIndex < numMembers);
 					aspl[memberIndex] = asplVal;
 				}
-
+				assert(asplRead == numMembers);
 				asplFile.close();
 			}
 			else
@@ -732,6 +749,7 @@ namespace mm {
 			{
 				bool isColumnHeader = true;
 				string line;
+				int fxRatesRead = 0;
 				while (std::getline(fxRatesFile, line, '\n'))
 				{
 					if (line.empty())
@@ -741,6 +759,7 @@ namespace mm {
 						isColumnHeader = false;
 						continue;
 					}
+					++fxRatesRead;
 					int start = 0;
 					int end = line.find_first_of(',', start);
 					int currencyId = stoi(line.substr(start, end - start));
@@ -750,10 +769,19 @@ namespace mm {
 					assert(end == string::npos);
 					double fxRateVal = stod(line.substr(start));
 
-					int currencyIndex = currencyIdUMap[currencyId];
-					fxRates[currencyIndex] = fxRateVal;
+					auto it = currencyIdUMap.find(currencyId);
+					if(it != currencyIdUMap.end())
+						fxRates[it->second] = fxRateVal;
+					else
+					{
+						int nextCurrencyIndex = currencyIdUMap.size();
+						currencyIdUMap[currencyId] = nextCurrencyIndex;
+						if (nextCurrencyIndex >= fxRates.size())
+							fxRates.resize(nextCurrencyIndex + 1);
+						fxRates[nextCurrencyIndex] = fxRateVal;
+					}
 				}
-
+				assert(fxRatesRead >= numCurrencies);
 				fxRatesFile.close();
 			}
 			else

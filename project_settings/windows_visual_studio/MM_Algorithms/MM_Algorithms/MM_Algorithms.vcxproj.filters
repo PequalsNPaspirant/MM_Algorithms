@@ -579,6 +579,9 @@
     <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_KnapsackProblem_0_1_bottom_up_space_efficient_v1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\src\Backtracking\Backtracking.h">
