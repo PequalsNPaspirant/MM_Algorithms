@@ -146,6 +146,10 @@ namespace mm {
 		int tradesSettled;
 		double amountSettled;
 		string durationStr;
+		unsigned long long numberOfFunctionCalls;
+		unsigned long long sizeOfHeap;
+
+		static TestStats currentTestStats;
 	};
 
 	void createTestCases();

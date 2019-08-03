@@ -25,6 +25,8 @@ namespace mm {
 	string settledAmountTag{ "Settled Amount: " };
 	string settledTradeIdsTag{ "Settled Trade Ids:" };
 
+	TestStats TestStats::currentTestStats;
+
 	string to_string_max_precision(double value)
 	{
 		std::stringstream buffer;
@@ -88,7 +90,7 @@ namespace mm {
 	void testFxSettlement(vector<TestCase>& testCases)
 	{
 		vector<TestStats> stats;
-		int columnWidth[9] = { 12, 12, 30, 10, 15, 12, 15, 15, 18 };
+		int columnWidth[11] = { 12, 12, 30, 10, 15, 12, 15, 15, 18, 15, 15 };
 		cout << "\n"
 			<< setw(columnWidth[0]) << std::left << "FilePrefix"
 			<< setw(columnWidth[1]) << std::left << "TestResult"
@@ -98,7 +100,9 @@ namespace mm {
 			<< setw(columnWidth[5]) << std::right << "numTrades"
 			<< setw(columnWidth[6]) << std::right << "TradesSettled"
 			<< setw(columnWidth[7]) << std::right << "AmountSettled"
-			<< setw(columnWidth[8]) << std::right << "Duration";
+			<< setw(columnWidth[8]) << std::right << "Duration"
+			<< setw(columnWidth[9]) << std::right << "FunCalls"
+			<< setw(columnWidth[10]) << std::right << "HeapSize";
 
 		for (int testCaseIndex = 0; testCaseIndex < testCases.size(); ++testCaseIndex)
 		{
@@ -109,6 +113,8 @@ namespace mm {
 				if (getAlgoInfo(AlgoType(i)).maxTrades < testCases[testCaseIndex].trades_.size())
 					continue;
 
+				TestStats::currentTestStats.numberOfFunctionCalls = 0;
+				TestStats::currentTestStats.sizeOfHeap = 0;
 				vector<bool> settleFlags(testCases[testCaseIndex].trades_.size(), false);
 				std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();
 				switch (AlgoType(i))
@@ -189,30 +195,32 @@ namespace mm {
 				buffer.imbue(std::locale(""));
 				buffer << std::fixed << duration;
 
-				TestStats testStats{
-					testCases[testCaseIndex].fileNamePrefix_,
-					verified,
-					getAlgoInfo(AlgoType(i)).algoName,
-					testCases[testCaseIndex].aspl_.size(),
-					testCases[testCaseIndex].spl_[0].size(),
-					testCases[testCaseIndex].trades_.size(),
-					actualSettledTradeIds.size(),
-					actualSettledAmount,
-					buffer.str() + " ns"
-				};
+				TestStats::currentTestStats.fileNamePrefix = testCases[testCaseIndex].fileNamePrefix_;
+				TestStats::currentTestStats.testCaseResult = verified;
+				TestStats::currentTestStats.algoType = getAlgoInfo(AlgoType(i)).algoName;
+				TestStats::currentTestStats.numMembers = testCases[testCaseIndex].aspl_.size();
+				TestStats::currentTestStats.numCurrencies = testCases[testCaseIndex].spl_[0].size();
+				TestStats::currentTestStats.numTrades = testCases[testCaseIndex].trades_.size();
+				TestStats::currentTestStats.tradesSettled = actualSettledTradeIds.size();
+				TestStats::currentTestStats.amountSettled = actualSettledAmount;
+				TestStats::currentTestStats.durationStr = buffer.str() + " ns";
+
 				//printOrWrite(testStats);
 				cout << "\n"
-					<< setw(columnWidth[0]) << std::left << testStats.fileNamePrefix
-					<< setw(columnWidth[1]) << std::left << (testStats.testCaseResult ? "SUCCESS" : "FAILED")
-					<< setw(columnWidth[2]) << std::left << testStats.algoType
-					<< setw(columnWidth[3]) << std::right << testStats.numMembers
-					<< setw(columnWidth[4]) << std::right << testStats.numCurrencies
-					<< setw(columnWidth[5]) << std::right << testStats.numTrades
-					<< setw(columnWidth[6]) << std::right << testStats.tradesSettled
-					<< setw(columnWidth[7]) << std::right << testStats.amountSettled
-					<< setw(columnWidth[8]) << std::right << testStats.durationStr;
+					<< setw(columnWidth[0]) << std::left << TestStats::currentTestStats.fileNamePrefix
+					<< setw(columnWidth[1]) << std::left << (TestStats::currentTestStats.testCaseResult ? "SUCCESS" : "FAILED")
+					<< setw(columnWidth[2]) << std::left << TestStats::currentTestStats.algoType
+					<< setw(columnWidth[3]) << std::right << TestStats::currentTestStats.numMembers
+					<< setw(columnWidth[4]) << std::right << TestStats::currentTestStats.numCurrencies
+					<< setw(columnWidth[5]) << std::right << TestStats::currentTestStats.numTrades
+					<< setw(columnWidth[6]) << std::right << TestStats::currentTestStats.tradesSettled
+					<< setw(columnWidth[7]) << std::right << TestStats::currentTestStats.amountSettled
+					<< setw(columnWidth[8]) << std::right << TestStats::currentTestStats.durationStr
+					<< setw(columnWidth[9]) << std::right << TestStats::currentTestStats.numberOfFunctionCalls
+					<< setw(columnWidth[10]) << std::right << TestStats::currentTestStats.sizeOfHeap;
+
 				
-				stats.push_back(std::move(testStats));
+				stats.push_back(std::move(TestStats::currentTestStats));
 
 				MM_EXPECT_TRUE(verified == true, verified);
 

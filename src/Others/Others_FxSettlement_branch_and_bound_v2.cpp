@@ -177,6 +177,9 @@ namespace mm {
 		while (!fxMaxHeap_v2.empty())
 			fxMaxHeap_v2.pop();
 
+		TestStats::currentTestStats.numberOfFunctionCalls = numberOfFunctionCalls;
+		TestStats::currentTestStats.sizeOfHeap = sizeOfHeap;
+
 		return maxValue;
 	}
 

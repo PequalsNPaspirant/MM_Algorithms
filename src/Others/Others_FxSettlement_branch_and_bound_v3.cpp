@@ -177,8 +177,11 @@ namespace mm {
 				fxMaxHeap_v3.push(pInclude);
 		}
 
-		while (!fxMaxHeap_v3.empty())
-			fxMaxHeap_v3.pop();
+		//while (!fxMaxHeap_v3.empty())
+		//	fxMaxHeap_v3.pop();
+		fxMaxHeap_v3.clear();
+		TestStats::currentTestStats.numberOfFunctionCalls = numberOfFunctionCalls;
+		TestStats::currentTestStats.sizeOfHeap = sizeOfHeap;
 
 		return maxValue;
 	}

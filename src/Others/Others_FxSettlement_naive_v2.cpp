@@ -20,6 +20,8 @@ namespace mm {
 		const vector<double>& aspl, 
 		const vector<double>& exchangeRates)
 	{
+		++(TestStats::currentTestStats.numberOfFunctionCalls);
+
 		if (currentTradeIndex == trades.size())
 			return 0.0;
 
