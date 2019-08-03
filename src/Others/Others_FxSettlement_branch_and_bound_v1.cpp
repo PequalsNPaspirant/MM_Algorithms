@@ -226,7 +226,7 @@ namespace mm {
 
 
 
-	bool verifySettlement(
+	bool verifySettlement_v1(
 		const vector< vector<double> >& updatedBalance,
 		const vector< vector<double> >& spl, 
 		const vector<double>& aspl, 
@@ -383,7 +383,7 @@ namespace mm {
 			include.currentBalance[trades[include.level].cPartyId_][static_cast<int>(trades[include.level].sellCurr_)] += trades[include.level].sellVol_;
 			
 			// Do rmt tests and update maxValue is rmt tests are passed
-			include.rmtPassed = verifySettlement(include.currentBalance, spl, aspl, exchangeRates);
+			include.rmtPassed = verifySettlement_v1(include.currentBalance, spl, aspl, exchangeRates);
 			include.settledAmount += (trades[include.level].buyVol_ * exchangeRates[static_cast<int>(trades[include.level].buyCurr_)]);
 			include.settleFlags[include.level] = true;
 			if (include.rmtPassed && maxValue < include.settledAmount)
