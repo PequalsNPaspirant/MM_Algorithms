@@ -279,22 +279,22 @@ namespace mm {
 			const vector<double>& aspl, 
 			const vector<double>& exchangeRates)
 		{
-			double invalidAmountInDollars = 0.0;
-			vector< vector<double> > totalBalance(currentBalance);
-			for (int memberIndex = 0; memberIndex < totalBalance.size(); ++memberIndex)
-			{
-				for (int currencyIndex = 0; currencyIndex < totalBalance.size(); ++currencyIndex)
-				{
-					totalBalance[memberIndex][currencyIndex] += cumulativeBalance[memberIndex][currencyIndex];
-					if (totalBalance[memberIndex][currencyIndex] < -spl[memberIndex][currencyIndex])
-						invalidAmountInDollars += ((-totalBalance[memberIndex][currencyIndex] - spl[memberIndex][currencyIndex]) * exchangeRates[currencyIndex]);
-				}
-			}
+			//double invalidAmountInDollars = 0.0;
+			//vector< vector<double> > totalBalance(currentBalance);
+			//for (int memberIndex = 0; memberIndex < totalBalance.size(); ++memberIndex)
+			//{
+			//	for (int currencyIndex = 0; currencyIndex < totalBalance.size(); ++currencyIndex)
+			//	{
+			//		totalBalance[memberIndex][currencyIndex] += cumulativeBalance[memberIndex][currencyIndex];
+			//		//if (totalBalance[memberIndex][currencyIndex] < -spl[memberIndex][currencyIndex])
+			//		//	invalidAmountInDollars += ((-totalBalance[memberIndex][currencyIndex] - spl[memberIndex][currencyIndex]) * exchangeRates[currencyIndex]);
+			//	}
+			//}
 
-			upperbound += cumulativeSettledAmount;
-			upperbound -= invalidAmountInDollars / 2.0;
-			if (upperbound < 0.0)
-				upperbound = 0.0;
+			upperbound = settledAmount + cumulativeSettledAmount;
+			//upperbound -= (invalidAmountInDollars / 2.0);
+			//if (upperbound < 0.0)
+			//	upperbound = 0.0;
 		}
 	};
 	struct fxDecisionTreeNodeCompare_v1
@@ -332,7 +332,10 @@ namespace mm {
 		for (int i = trades.size() - 1; i >= 0; --i)
 		{
 			if (i < trades.size() - 1)
+			{
 				cumulativeBalance[i] = cumulativeBalance[i + 1];
+				cumulativeSettledAmount[i] = cumulativeSettledAmount[i + 1];
+			}
 
 			cumulativeBalance[i][trades[i].partyId_][static_cast<int>(trades[i].buyCurr_)] += trades[i].buyVol_;
 			cumulativeBalance[i][trades[i].partyId_][static_cast<int>(trades[i].sellCurr_)] -= trades[i].sellVol_;

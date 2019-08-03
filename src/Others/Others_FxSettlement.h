@@ -2,6 +2,7 @@
 
 #include <sstream> // for std::stringstream
 #include <unordered_map>
+#include <limits>
 
 namespace mm {
 
@@ -33,6 +34,7 @@ namespace mm {
 	//FloatingPointComparator zero(0.000001);
 	constexpr const double zero = compile_time_pow(10, -maxPrecision + 1);
 	constexpr bool GlobalFlagWriteTestCasesToFile = false;
+	constexpr bool globalFlagOverwriteResults = true;
 
 	struct TestCaseInput
 	{
@@ -159,15 +161,21 @@ namespace mm {
 		totalAlgos
 	};
 
+	struct AlgoInfo
+	{
+		string algoName;
+		int maxTrades;
+	};
+
 	template<typename T = void>
-	string getString(AlgoType type)
+	AlgoInfo getAlgoInfo(AlgoType type)
 	{ 
-		static unordered_map<AlgoType, string> AlgoTypeStrings{
-		{ AlgoType::naive_v1 ,						"naive_v1"				},
-		{ AlgoType::naive_v2 ,						"naive_v2"				},
-		{ AlgoType::branch_and_bound_v1,			"branch_and_bound_v1"	}
+		static unordered_map<AlgoType, AlgoInfo> AlgoTypeInfo{
+		{ AlgoType::naive_v1 ,						{"naive_v1", 22}										},
+		{ AlgoType::naive_v2 ,						{"naive_v2", 22}										},
+		{ AlgoType::branch_and_bound_v1,			{"branch_and_bound_v1", numeric_limits<int>::max()}		}
 		}; 
-		return AlgoTypeStrings[type];
+		return AlgoTypeInfo[type];
 	}
 	//template<> string getString<AlgoType>() { return "naive_v2"; }
 

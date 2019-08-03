@@ -106,6 +106,9 @@ namespace mm {
 			double actualSettledAmount = 0.0;
 			for (int i = 0; i < static_cast<int>(AlgoType::totalAlgos); ++i)
 			{
+				if (getAlgoInfo(AlgoType(i)).maxTrades < testCases[testCaseIndex].trades_.size())
+					continue;
+
 				vector<bool> settleFlags(testCases[testCaseIndex].trades_.size(), false);
 				std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();
 				switch (AlgoType(i))
@@ -160,6 +163,8 @@ namespace mm {
 					if (settleFlags[i] == true)
 						actualSettledTradeIds.push_back(testCases[testCaseIndex].trades_[i].id_);
 
+				std::sort(actualSettledTradeIds.begin(), actualSettledTradeIds.end());
+
 				std::stringstream buffer;
 				buffer.imbue(std::locale(""));
 				buffer << std::fixed << duration;
@@ -167,7 +172,7 @@ namespace mm {
 				TestStats testStats{
 					testCases[testCaseIndex].fileNamePrefix_,
 					verified,
-					getString(AlgoType(i)),
+					getAlgoInfo(AlgoType(i)).algoName,
 					testCases[testCaseIndex].aspl_.size(),
 					testCases[testCaseIndex].spl_[0].size(),
 					testCases[testCaseIndex].trades_.size(),
@@ -189,12 +194,12 @@ namespace mm {
 				
 				stats.push_back(std::move(testStats));
 
-				//MM_EXPECT_TRUE(verified == true, verified);
+				MM_EXPECT_TRUE(verified == true, verified);
 
-				if (testCases[testCaseIndex].resultsAvailable)
+				if (testCases[testCaseIndex].resultsAvailable && !globalFlagOverwriteResults)
 				{
-					//MM_EXPECT_TRUE(fabs(actualSettledAmount - testCases[testCaseIndex].settledAmount_) < zero, actualSettledAmount, testCases[testCaseIndex].settledAmount_);
-					//MM_EXPECT_TRUE(actualSettledTradeIds == testCases[testCaseIndex].settledTradeIds_, actualSettledTradeIds, testCases[testCaseIndex].settledTradeIds_);
+					MM_EXPECT_TRUE(fabs(actualSettledAmount - testCases[testCaseIndex].settledAmount_) < zero, actualSettledAmount, testCases[testCaseIndex].settledAmount_);
+					MM_EXPECT_TRUE(actualSettledTradeIds == testCases[testCaseIndex].settledTradeIds_, actualSettledTradeIds, testCases[testCaseIndex].settledTradeIds_);
 				}
 				else if (!testCases[testCaseIndex].fileNamePrefix_.empty()) //File prefix is empty only for hardcoded tests
 				{
