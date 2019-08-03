@@ -153,12 +153,15 @@ namespace mm {
 			{
 				maxValue = include.settledAmount;
 				settleFlagsOut = include.settleFlags;
+
+				if ((current.upperbound + zero) < maxValue)
+					break;
 			}
 
 			//exclude current
 			// maxValue is kind of lower bound so far, so avoid the decision tree nodes having upper bound less than maxValue
-			if ((current.upperbound + zero) < maxValue)
-				fxMaxHeap_v3.pop();
+			//if ((current.upperbound + zero) < maxValue)
+			//	fxMaxHeap_v3.pop();
 
 			if (current.level == trades.size() - 1)
 			{
