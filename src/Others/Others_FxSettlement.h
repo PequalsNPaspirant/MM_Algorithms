@@ -163,6 +163,7 @@ namespace mm {
 		branch_and_bound_v1,
 		branch_and_bound_v2,
 		branch_and_bound_v3,
+		branch_and_bound_v4,
 
 		totalAlgos
 	};
@@ -181,7 +182,8 @@ namespace mm {
 		{ AlgoType::naive_v2 ,						{ "naive_v2", 20} },
 		{ AlgoType::branch_and_bound_v1,			{ "branch_and_bound_v1", 23	} },
 		{ AlgoType::branch_and_bound_v2,			{ "branch_and_bound_v2", 29 } },
-		{ AlgoType::branch_and_bound_v3,			{ "branch_and_bound_v3", numeric_limits<int>::max() }	}
+		{ AlgoType::branch_and_bound_v3,			{ "branch_and_bound_v3", numeric_limits<int>::max() } },
+		{ AlgoType::branch_and_bound_v4,			{ "branch_and_bound_v4", numeric_limits<int>::max() } }
 		}; 
 		return AlgoTypeInfo[type];
 	}
@@ -191,5 +193,6 @@ namespace mm {
 	double doSettlement_branch_and_bound_v1(vector<bool>& settleFlagsOut, vector<Trade>& trades, const vector< vector<double> >& spl, const vector<double>& aspl, const vector< vector<double> >& initialBalance, const vector<double>& exchangeRates);
 	double doSettlement_branch_and_bound_v2(vector<bool>& settleFlagsOut, vector<Trade>& trades, const vector< vector<double> >& spl, const vector<double>& aspl, const vector< vector<double> >& initialBalance, const vector<double>& exchangeRates);
 	double doSettlement_branch_and_bound_v3(vector<bool>& settleFlagsOut, vector<Trade>& trades, const vector< vector<double> >& spl, const vector<double>& aspl, const vector< vector<double> >& initialBalance, const vector<double>& exchangeRates);
+	double doSettlement_branch_and_bound_v4(vector<bool>& settleFlagsOut, vector<Trade>& trades, const vector< vector<double> >& spl, const vector<double>& aspl, const vector< vector<double> >& initialBalance, const vector<double>& exchangeRates);
 
 }
