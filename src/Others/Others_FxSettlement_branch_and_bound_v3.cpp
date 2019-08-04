@@ -1,5 +1,7 @@
 #include <vector>
 #include <queue>
+#include <bitset>
+#include <numeric>
 using namespace std;
 
 #include "Others/Others_FxSettlement.h"
@@ -8,24 +10,33 @@ using namespace std;
 namespace mm {
 
 	bool verifySettlement_v3(
-		const vector< vector<double> >& updatedBalance,
-		const vector< vector<double> >& spl, 
+		bitset<128>& rmtPassed,
+		const vector< vector<double> >& updatedBalance,		
+		const vector< int >& memberIndices,
+		const vector< vector<double> >& spl,
 		const vector<double>& aspl, 
 		 const vector<double>& exchangeRates)
 	{
+		// TODO: Avoid checking SPL for all currencies. 
+		// It can be checked only for two currencies which are changes because of settlement of the current trade if we remember SPL results for all currencies.
 		//rmt
-		int numMembers = updatedBalance.size();
+		//int numMembers = updatedBalance.size();
+		bool rmtSuccessful = true;
 		int numCurrencies = updatedBalance[0].size();
-		vector<double> currentAspl(numMembers);
-		vector<double> currentNov(numMembers);
-		for (int memberIndex = 0; memberIndex < numMembers; ++memberIndex)
+		for (int i = 0; i < memberIndices.size(); ++i)
 		{
+			int memberIndex = memberIndices[i];
 			double asplTemp = 0.0;
 			double novTemp = 0.0;
+			bool splPassed = true;
 			for (int currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
 			{
 				if (updatedBalance[memberIndex][currencyIndex] + zero < -spl[memberIndex][currencyIndex])
-					return false;
+				{
+					//rmtPassed[memberIndex] = false;
+					splPassed = false;
+					break;
+				}
 
 				double currentBalanceInDollars = updatedBalance[memberIndex][currencyIndex] * exchangeRates[currencyIndex];
 				novTemp += currentBalanceInDollars;
@@ -33,14 +44,16 @@ namespace mm {
 					asplTemp += currentBalanceInDollars;
 			}
 
-			if (novTemp < -zero)
-				return false;
-
-			if (asplTemp + zero < -aspl[memberIndex])
-				return false;
+			if (!splPassed || (asplTemp + zero < -aspl[memberIndex]) || (novTemp < -zero))
+			{
+				rmtPassed[memberIndex] = false;
+				rmtSuccessful = false;
+			}
+			else
+				rmtPassed[memberIndex] = true;
 		}
-
-		return true;
+		
+		return rmtSuccessful;
 	}
 
 	struct fxDecisionTreeNode_v3
@@ -51,7 +64,7 @@ namespace mm {
 		vector< vector<double> > currentBalance;
 		double settledAmount;
 		vector<bool> settleFlags;
-		bool rmtPassed;
+		bitset<128> rmtPassed{ 0 };
 
 		inline void calculateAndSetUpperBound(const double cumulativeSettledAmount)
 		{
@@ -100,9 +113,13 @@ namespace mm {
 		current.level = -1;
 		current.currentBalance = initialBalance;
 		current.settledAmount = 0.0;
-		current.rmtPassed = false;
 		current.upperbound = 0.0;
 		current.settleFlags.resize(trades.size(), false);
+		
+		std::vector<int> memberIndices(aspl.size());
+		std::iota(memberIndices.begin(), memberIndices.end(), 0); // Fill with 0, 1, ..., aspl.size() - 1
+		current.rmtPassed.flip();
+		verifySettlement_v3(current.rmtPassed, current.currentBalance, memberIndices, spl, aspl, exchangeRates);
 		current.calculateAndSetUpperBound(cumulativeSettledAmount[0]);
 		fxMaxHeap_v3.push(pObj);
 
@@ -138,16 +155,20 @@ namespace mm {
 			fxDecisionTreeNode_v3& include = *pInclude;
 			include = current;
 			// Update current balance
-			include.currentBalance[trades[include.level].partyId_][static_cast<int>(trades[include.level].buyCurr_)] += trades[include.level].buyVol_;
-			include.currentBalance[trades[include.level].partyId_][static_cast<int>(trades[include.level].sellCurr_)] -= trades[include.level].sellVol_;
-			include.currentBalance[trades[include.level].cPartyId_][static_cast<int>(trades[include.level].buyCurr_)] -= trades[include.level].buyVol_;
-			include.currentBalance[trades[include.level].cPartyId_][static_cast<int>(trades[include.level].sellCurr_)] += trades[include.level].sellVol_;
+			int partyId = trades[include.level].partyId_;
+			int cPartyId = trades[include.level].cPartyId_;
+			int buyCurrId = static_cast<int>(trades[include.level].buyCurr_);
+			int sellCurrId = static_cast<int>(trades[include.level].sellCurr_);
+			include.currentBalance[partyId][buyCurrId] += trades[include.level].buyVol_;
+			include.currentBalance[partyId][sellCurrId] -= trades[include.level].sellVol_;
+			include.currentBalance[cPartyId][buyCurrId] -= trades[include.level].buyVol_;
+			include.currentBalance[cPartyId][sellCurrId] += trades[include.level].sellVol_;
 			
-			// Do rmt tests and update maxValue if rmt tests are passed
-			include.rmtPassed = verifySettlement_v3(include.currentBalance, spl, aspl, exchangeRates);
+
+			verifySettlement_v3(include.rmtPassed, include.currentBalance, { partyId, cPartyId }, spl, aspl, exchangeRates);
 			include.settledAmount += (trades[include.level].buyVol_ * exchangeRates[static_cast<int>(trades[include.level].buyCurr_)]);
 			include.settleFlags[include.level] = true;
-			if (include.rmtPassed && maxValue < include.settledAmount)
+			if (include.rmtPassed.all() && maxValue < include.settledAmount)
 			{
 				maxValue = include.settledAmount;
 				settleFlagsOut = include.settleFlags;
@@ -174,8 +195,6 @@ namespace mm {
 				fxMaxHeap_v3.pop();
 		}
 
-		//while (!fxMaxHeap_v3.empty())
-		//	fxMaxHeap_v3.pop();
 		fxMaxHeap_v3.clear();
 		TestStats::currentTestStats.numberOfFunctionCalls = numberOfFunctionCalls;
 		TestStats::currentTestStats.sizeOfHeap = sizeOfHeap;

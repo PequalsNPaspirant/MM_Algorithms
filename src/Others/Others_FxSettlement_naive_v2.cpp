@@ -39,6 +39,7 @@ namespace mm {
 		int cPartyIndex = trades[currentTradeIndex].cPartyId_;
 		int buyCurrIndex = static_cast<int>(trades[currentTradeIndex].buyCurr_);
 		int sellCurrIndex = static_cast<int>(trades[currentTradeIndex].sellCurr_);
+		int numMembers = currentBalanceOut.size();
 		int numCurrencies = currentBalanceOut[0].size();
 		
 		vector< vector<double> > currentBalanceInclude{ currentBalanceOut };
@@ -67,9 +68,9 @@ namespace mm {
 			bool rmtTestResult = true;
 			int memberIndices[2] = { partyIndex , cPartyIndex };
 
-			for (int i = 0; rmtTestResult && i < 2; ++i)
+			for (int memberIndex = 0; rmtTestResult && memberIndex < numMembers; ++memberIndex)
 			{
-				int memberIndex = memberIndices[i];
+				//int memberIndex = memberIndices[i];
 				double asplTemp = 0.0;
 				double novTemp = 0.0;
 				for (int currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
