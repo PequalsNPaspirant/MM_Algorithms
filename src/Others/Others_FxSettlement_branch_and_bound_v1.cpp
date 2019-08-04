@@ -304,7 +304,6 @@ namespace mm {
 			return lhs.upperbound < rhs.upperbound;
 		}
 	};
-	std::priority_queue<fxDecisionTreeNode_v1, vector<fxDecisionTreeNode_v1>, fxDecisionTreeNodeCompare_v1> fxMaxHeap_v1;
 
 	double doSettlement_branch_and_bound_v1(
 		vector<bool>& settleFlagsOut,
@@ -344,6 +343,8 @@ namespace mm {
 
 			cumulativeSettledAmount[i] += (trades[i].buyVol_ * exchangeRates[static_cast<int>(trades[i].buyCurr_)]);
 		}
+
+		std::priority_queue<fxDecisionTreeNode_v1, vector<fxDecisionTreeNode_v1>, fxDecisionTreeNodeCompare_v1> fxMaxHeap_v1;
 
 		fxDecisionTreeNode_v1 current;
 		current.level = -1;
