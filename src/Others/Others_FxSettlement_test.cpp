@@ -90,7 +90,7 @@ namespace mm {
 	void testFxSettlement(vector<TestCase>& testCases)
 	{
 		vector<TestStats> stats;
-		int columnWidth[11] = { 12, 12, 30, 10, 15, 12, 15, 15, 18, 15, 15 };
+		int columnWidth[11] = { 12, 12, 30, 10, 15, 12, 15, 18, 18, 15, 15 };
 		cout << "\n"
 			<< setw(columnWidth[0]) << std::left << "FilePrefix"
 			<< setw(columnWidth[1]) << std::left << "TestResult"
@@ -206,6 +206,9 @@ namespace mm {
 				TestStats::currentTestStats.durationStr = buffer.str() + " ns";
 
 				//printOrWrite(testStats);
+				std::cout.imbue(std::locale(""));
+				std::cout << std::fixed;
+				std::cout << std::setprecision(4);
 				cout << "\n"
 					<< setw(columnWidth[0]) << std::left << TestStats::currentTestStats.fileNamePrefix
 					<< setw(columnWidth[1]) << std::left << (TestStats::currentTestStats.testCaseResult ? "SUCCESS" : "FAILED")

@@ -53,9 +53,7 @@ namespace mm {
 		vector<bool> settleFlags;
 		bool rmtPassed;
 
-		inline void calculateAndSetUpperBound(
-			const double cumulativeSettledAmount
-		)
+		inline void calculateAndSetUpperBound(const double cumulativeSettledAmount)
 		{
 			upperbound = settledAmount + cumulativeSettledAmount;
 		}
@@ -145,7 +143,7 @@ namespace mm {
 			include.currentBalance[trades[include.level].cPartyId_][static_cast<int>(trades[include.level].buyCurr_)] -= trades[include.level].buyVol_;
 			include.currentBalance[trades[include.level].cPartyId_][static_cast<int>(trades[include.level].sellCurr_)] += trades[include.level].sellVol_;
 			
-			// Do rmt tests and update maxValue is rmt tests are passed
+			// Do rmt tests and update maxValue if rmt tests are passed
 			include.rmtPassed = verifySettlement_v3(include.currentBalance, spl, aspl, exchangeRates);
 			include.settledAmount += (trades[include.level].buyVol_ * exchangeRates[static_cast<int>(trades[include.level].buyCurr_)]);
 			include.settleFlags[include.level] = true;
@@ -163,18 +161,17 @@ namespace mm {
 			//if ((current.upperbound + zero) < maxValue)
 			//	fxMaxHeap_v3.pop();
 
-			if (current.level == trades.size() - 1)
+			if (current.level < trades.size() - 1)
 			{
-				fxMaxHeap_v3.pop();
-				continue;
+				//include.calculateAndSetUpperBound(cumulativeBalance[include.level + 1], cumulativeSettledAmount[include.level + 1], spl, aspl, exchangeRates);
+				include.calculateAndSetUpperBound(cumulativeSettledAmount[include.level + 1]);
+
+				// maxValue is kind of lower bound so far, so avoid the decision tree nodes having upper bound less than maxValue
+				if ((include.upperbound + zero) >= maxValue)
+					fxMaxHeap_v3.push(pInclude);
 			}
-
-			//include.calculateAndSetUpperBound(cumulativeBalance[include.level + 1], cumulativeSettledAmount[include.level + 1], spl, aspl, exchangeRates);
-			include.calculateAndSetUpperBound(cumulativeSettledAmount[include.level + 1]);
-
-			// maxValue is kind of lower bound so far, so avoid the decision tree nodes having upper bound less than maxValue
-			if ((include.upperbound + zero) >= maxValue)
-				fxMaxHeap_v3.push(pInclude);
+			else
+				fxMaxHeap_v3.pop();
 		}
 
 		//while (!fxMaxHeap_v3.empty())

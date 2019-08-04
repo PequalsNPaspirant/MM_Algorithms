@@ -145,7 +145,7 @@ namespace mm {
 			include.currentBalance[trades[include.level].cPartyId_][static_cast<int>(trades[include.level].buyCurr_)] -= trades[include.level].buyVol_;
 			include.currentBalance[trades[include.level].cPartyId_][static_cast<int>(trades[include.level].sellCurr_)] += trades[include.level].sellVol_;
 			
-			// Do rmt tests and update maxValue is rmt tests are passed
+			// Do rmt tests and update maxValue if rmt tests are passed
 			include.rmtPassed = verifySettlement_v2(include.currentBalance, spl, aspl, exchangeRates);
 			include.settledAmount += (trades[include.level].buyVol_ * exchangeRates[static_cast<int>(trades[include.level].buyCurr_)]);
 			include.settleFlags[include.level] = true;
