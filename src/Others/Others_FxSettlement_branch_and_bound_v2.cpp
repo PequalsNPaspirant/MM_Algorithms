@@ -7,6 +7,11 @@ using namespace std;
 
 namespace mm {
 
+	/*
+	What's new:
+	Use MM_Heap<> onstead of std::priority_queue<>
+	*/
+
 	bool verifySettlement_v2(
 		const vector< vector<double> >& updatedBalance,
 		const vector< vector<double> >& spl, 

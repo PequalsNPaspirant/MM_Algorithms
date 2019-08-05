@@ -159,8 +159,8 @@ namespace mm {
 						testCases[testCaseIndex].exchangeRates_
 					);
 					break;
-				case AlgoType::branch_and_bound_v3:
-					actualSettledAmount = doSettlement_branch_and_bound_v3(
+				case AlgoType::branch_and_bound_v3a:
+					actualSettledAmount = doSettlement_branch_and_bound_v3a(
 						settleFlags,
 						testCases[testCaseIndex].trades_,
 						testCases[testCaseIndex].spl_,
@@ -169,8 +169,8 @@ namespace mm {
 						testCases[testCaseIndex].exchangeRates_
 					);
 					break;
-				case AlgoType::branch_and_bound_v4:
-					actualSettledAmount = doSettlement_branch_and_bound_v4(
+				case AlgoType::branch_and_bound_v3b:
+					actualSettledAmount = doSettlement_branch_and_bound_v3b(
 						settleFlags,
 						testCases[testCaseIndex].trades_,
 						testCases[testCaseIndex].spl_,
