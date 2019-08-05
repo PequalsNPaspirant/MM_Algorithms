@@ -164,6 +164,8 @@ namespace mm {
 		branch_and_bound_v2,
 		branch_and_bound_v3a,
 		branch_and_bound_v3b,
+		branch_and_bound_v4a,
+		branch_and_bound_v4b,
 
 		totalAlgos
 	};
@@ -183,7 +185,9 @@ namespace mm {
 		{ AlgoType::branch_and_bound_v1,			{ "branch_and_bound_v1", 23	} },
 		{ AlgoType::branch_and_bound_v2,			{ "branch_and_bound_v2", 29 } },
 		{ AlgoType::branch_and_bound_v3a,			{ "branch_and_bound_v3a", numeric_limits<int>::max() } },
-		{ AlgoType::branch_and_bound_v3b,			{ "branch_and_bound_v3b", numeric_limits<int>::max() } }
+		{ AlgoType::branch_and_bound_v3b,			{ "branch_and_bound_v3b", numeric_limits<int>::max() } },
+		{ AlgoType::branch_and_bound_v4a,			{ "branch_and_bound_v4a", numeric_limits<int>::max() } },
+		{ AlgoType::branch_and_bound_v4b,			{ "branch_and_bound_v4b", numeric_limits<int>::max() } }
 		}; 
 		return AlgoTypeInfo[type];
 	}
@@ -194,5 +198,7 @@ namespace mm {
 	double doSettlement_branch_and_bound_v2(vector<bool>& settleFlagsOut, vector<Trade>& trades, const vector< vector<double> >& spl, const vector<double>& aspl, const vector< vector<double> >& initialBalance, const vector<double>& exchangeRates);
 	double doSettlement_branch_and_bound_v3a(vector<bool>& settleFlagsOut, vector<Trade>& trades, const vector< vector<double> >& spl, const vector<double>& aspl, const vector< vector<double> >& initialBalance, const vector<double>& exchangeRates);
 	double doSettlement_branch_and_bound_v3b(vector<bool>& settleFlagsOut, vector<Trade>& trades, const vector< vector<double> >& spl, const vector<double>& aspl, const vector< vector<double> >& initialBalance, const vector<double>& exchangeRates);
+	double doSettlement_branch_and_bound_v4a(vector<bool>& settleFlagsOut, vector<Trade>& trades, const vector< vector<double> >& spl, const vector<double>& aspl, const vector< vector<double> >& initialBalance, const vector<double>& exchangeRates);
+	double doSettlement_branch_and_bound_v4b(vector<bool>& settleFlagsOut, vector<Trade>& trades, const vector< vector<double> >& spl, const vector<double>& aspl, const vector< vector<double> >& initialBalance, const vector<double>& exchangeRates);
 
 }

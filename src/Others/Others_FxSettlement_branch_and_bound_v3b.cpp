@@ -11,7 +11,7 @@ using namespace std;
 namespace mm {
 
 	/*
-	Whats new:
+	Whats new - v3b
 	Instead of running rmt tests every time we condsider a trade as settled, rmt test is done only at the bottom level of solution tree
 	*/
 

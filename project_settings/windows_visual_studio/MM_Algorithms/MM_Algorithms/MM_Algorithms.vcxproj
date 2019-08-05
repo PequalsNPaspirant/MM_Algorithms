@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v4a.cpp" />
+    <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v4b.cpp" />
     <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v3b.cpp" />
     <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v3a.cpp" />
     <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v2.cpp" />

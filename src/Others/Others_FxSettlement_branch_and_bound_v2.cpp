@@ -8,7 +8,7 @@ using namespace std;
 namespace mm {
 
 	/*
-	What's new:
+	What's new - v2
 	Use MM_Heap<> onstead of std::priority_queue<>
 	*/
 
