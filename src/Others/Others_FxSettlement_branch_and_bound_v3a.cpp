@@ -111,7 +111,9 @@ namespace mm {
 			if (i < trades.size() - 1)
 				cumulativeSettledAmount[i] = cumulativeSettledAmount[i + 1];
 
-			cumulativeSettledAmount[i] += (trades[i].buyVol_ * exchangeRates[static_cast<int>(trades[i].buyCurr_)]);
+			cumulativeSettledAmount[i] += (
+				trades[i].buyVol_ * exchangeRates[static_cast<int>(trades[i].buyCurr_)]
+				+ trades[i].sellVol_ * exchangeRates[static_cast<int>(trades[i].sellCurr_)]);
 		}
 
 		fxDecisionTreeNode_v3a* pObj = fxMaxHeap_v3a.getNextAvailableElement();
@@ -171,7 +173,9 @@ namespace mm {
 			include.currentBalance[cPartyId][sellCurrId] += trades[include.level].sellVol_;
 			
 			verifySettlement_v3a(include.rmtPassed, include.currentBalance, { partyId, cPartyId }, spl, aspl, exchangeRates);
-			include.settledAmount += (trades[include.level].buyVol_ * exchangeRates[static_cast<int>(trades[include.level].buyCurr_)]);
+			include.settledAmount += (
+				trades[include.level].buyVol_ * exchangeRates[static_cast<int>(trades[include.level].buyCurr_)]
+				+ trades[include.level].sellVol_ * exchangeRates[static_cast<int>(trades[include.level].sellCurr_)]);
 			include.settleFlags[include.level] = true;
 			if (include.rmtPassed.all() && maxValue < include.settledAmount)
 			{

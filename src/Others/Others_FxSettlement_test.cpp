@@ -47,7 +47,10 @@ namespace mm {
 		{
 			if (!settleFlags[i]) continue;
 
-			amountSettled += trades[i].buyVol_ * exchangeRates[static_cast<int>(trades[i].buyCurr_)];
+			amountSettled += (
+				trades[i].buyVol_ * exchangeRates[static_cast<int>(trades[i].buyCurr_)]
+				+ trades[i].sellVol_ * exchangeRates[static_cast<int>(trades[i].sellCurr_)]
+				);
 
 			int partyIndex = trades[i].partyId_;
 			int cPartyIndex = trades[i].cPartyId_;
@@ -90,7 +93,7 @@ namespace mm {
 	void testFxSettlement(vector<TestCase>& testCases)
 	{
 		vector<TestStats> stats;
-		int columnWidth[11] = { 12, 12, 30, 10, 15, 12, 15, 18, 18, 15, 15 };
+		int columnWidth[11] = { 12, 12, 30, 10, 15, 12, 15, 18, 20, 15, 15 };
 		cout << "\n"
 			<< setw(columnWidth[0]) << std::left << "FilePrefix"
 			<< setw(columnWidth[1]) << std::left << "TestResult"
@@ -191,6 +194,26 @@ namespace mm {
 					break;
 				case AlgoType::branch_and_bound_v4b:
 					actualSettledAmount = doSettlement_branch_and_bound_v4b(
+						settleFlags,
+						testCases[testCaseIndex].trades_,
+						testCases[testCaseIndex].spl_,
+						testCases[testCaseIndex].aspl_,
+						testCases[testCaseIndex].initialBalance_,
+						testCases[testCaseIndex].exchangeRates_
+					);
+					break;
+				case AlgoType::branch_and_bound_v5a:
+					actualSettledAmount = doSettlement_branch_and_bound_v5a(
+						settleFlags,
+						testCases[testCaseIndex].trades_,
+						testCases[testCaseIndex].spl_,
+						testCases[testCaseIndex].aspl_,
+						testCases[testCaseIndex].initialBalance_,
+						testCases[testCaseIndex].exchangeRates_
+					);
+					break;
+				case AlgoType::branch_and_bound_v5b:
+					actualSettledAmount = doSettlement_branch_and_bound_v5b(
 						settleFlags,
 						testCases[testCaseIndex].trades_,
 						testCases[testCaseIndex].spl_,

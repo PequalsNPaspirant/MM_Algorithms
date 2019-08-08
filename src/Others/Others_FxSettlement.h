@@ -34,7 +34,7 @@ namespace mm {
 	//FloatingPointComparator zero(0.000001);
 	constexpr const double zero = compile_time_pow(10, -maxPrecision + 1);
 	constexpr bool GlobalFlagWriteTestCasesToFile = false;
-	constexpr bool globalFlagOverwriteResults = false;
+	constexpr bool globalFlagOverwriteResults = true;
 
 	struct TestCaseInput
 	{
@@ -166,6 +166,8 @@ namespace mm {
 		branch_and_bound_v3b,
 		branch_and_bound_v4a,
 		branch_and_bound_v4b,
+		branch_and_bound_v5a,
+		branch_and_bound_v5b,
 
 		totalAlgos
 	};
@@ -182,12 +184,14 @@ namespace mm {
 		static unordered_map<AlgoType, AlgoInfo> AlgoTypeInfo{
 		{ AlgoType::naive_v1 ,						{ "naive_v1", 20} },
 		{ AlgoType::naive_v2 ,						{ "naive_v2", 20} },
-		{ AlgoType::branch_and_bound_v1,			{ "branch_and_bound_v1", 23	} },
-		{ AlgoType::branch_and_bound_v2,			{ "branch_and_bound_v2", 29 } },
-		{ AlgoType::branch_and_bound_v3a,			{ "branch_and_bound_v3a", numeric_limits<int>::max() } },
-		{ AlgoType::branch_and_bound_v3b,			{ "branch_and_bound_v3b", numeric_limits<int>::max() } },
-		{ AlgoType::branch_and_bound_v4a,			{ "branch_and_bound_v4a", numeric_limits<int>::max() } },
-		{ AlgoType::branch_and_bound_v4b,			{ "branch_and_bound_v4b", numeric_limits<int>::max() } }
+		{ AlgoType::branch_and_bound_v1,			{ "branch_and_bound_v1", 20	} },
+		{ AlgoType::branch_and_bound_v2,			{ "branch_and_bound_v2", 20 } },
+		{ AlgoType::branch_and_bound_v3a,			{ "branch_and_bound_v3a", 20 } },
+		{ AlgoType::branch_and_bound_v3b,			{ "branch_and_bound_v3b", 20 } },
+		{ AlgoType::branch_and_bound_v4a,			{ "branch_and_bound_v4a", 20 } },
+		{ AlgoType::branch_and_bound_v4b,			{ "branch_and_bound_v4b", 20 } },
+		{ AlgoType::branch_and_bound_v5a,			{ "branch_and_bound_v5a", numeric_limits<int>::max() } },
+		{ AlgoType::branch_and_bound_v5b,			{ "branch_and_bound_v5b", numeric_limits<int>::max() } }
 		}; 
 		return AlgoTypeInfo[type];
 	}
@@ -200,5 +204,7 @@ namespace mm {
 	double doSettlement_branch_and_bound_v3b(vector<bool>& settleFlagsOut, vector<Trade>& trades, const vector< vector<double> >& spl, const vector<double>& aspl, const vector< vector<double> >& initialBalance, const vector<double>& exchangeRates);
 	double doSettlement_branch_and_bound_v4a(vector<bool>& settleFlagsOut, vector<Trade>& trades, const vector< vector<double> >& spl, const vector<double>& aspl, const vector< vector<double> >& initialBalance, const vector<double>& exchangeRates);
 	double doSettlement_branch_and_bound_v4b(vector<bool>& settleFlagsOut, vector<Trade>& trades, const vector< vector<double> >& spl, const vector<double>& aspl, const vector< vector<double> >& initialBalance, const vector<double>& exchangeRates);
+	double doSettlement_branch_and_bound_v5a(vector<bool>& settleFlagsOut, vector<Trade>& trades, const vector< vector<double> >& spl, const vector<double>& aspl, const vector< vector<double> >& initialBalance, const vector<double>& exchangeRates);
+	double doSettlement_branch_and_bound_v5b(vector<bool>& settleFlagsOut, vector<Trade>& trades, const vector< vector<double> >& spl, const vector<double>& aspl, const vector< vector<double> >& initialBalance, const vector<double>& exchangeRates);
 
 }

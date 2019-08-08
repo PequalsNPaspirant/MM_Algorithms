@@ -323,7 +323,8 @@ namespace mm {
 
 		std::sort(trades.begin(), trades.end(),
 			[&exchangeRates](const Trade& lhs, const Trade& rhs) -> bool {
-			return lhs.buyVol_ * exchangeRates[static_cast<int>(lhs.buyCurr_)] > rhs.buyVol_ * exchangeRates[static_cast<int>(rhs.buyCurr_)];
+			return (lhs.buyVol_ * exchangeRates[static_cast<int>(lhs.buyCurr_)] + lhs.sellVol_ * exchangeRates[static_cast<int>(lhs.sellCurr_)])
+			> (rhs.buyVol_ * exchangeRates[static_cast<int>(rhs.buyCurr_)] + rhs.sellVol_ * exchangeRates[static_cast<int>(rhs.sellCurr_)]);
 		});
 
 		vector< vector< vector<double> > > cumulativeBalance(trades.size(), vector< vector<double> >(spl.size(), vector<double>(spl[0].size(), 0.0)));
@@ -341,7 +342,9 @@ namespace mm {
 			cumulativeBalance[i][trades[i].cPartyId_][static_cast<int>(trades[i].buyCurr_)] -= trades[i].buyVol_;
 			cumulativeBalance[i][trades[i].cPartyId_][static_cast<int>(trades[i].sellCurr_)] += trades[i].sellVol_;
 
-			cumulativeSettledAmount[i] += (trades[i].buyVol_ * exchangeRates[static_cast<int>(trades[i].buyCurr_)]);
+			cumulativeSettledAmount[i] += (
+				trades[i].buyVol_ * exchangeRates[static_cast<int>(trades[i].buyCurr_)]
+				+ trades[i].sellVol_ * exchangeRates[static_cast<int>(trades[i].sellCurr_)]);
 		}
 
 		std::priority_queue<fxDecisionTreeNode_v1, vector<fxDecisionTreeNode_v1>, fxDecisionTreeNodeCompare_v1> fxMaxHeap_v1;
@@ -385,7 +388,9 @@ namespace mm {
 			
 			// Do rmt tests and update maxValue if rmt tests are passed
 			include.rmtPassed = verifySettlement_v1(include.currentBalance, spl, aspl, exchangeRates);
-			include.settledAmount += (trades[include.level].buyVol_ * exchangeRates[static_cast<int>(trades[include.level].buyCurr_)]);
+			include.settledAmount += (
+				trades[include.level].buyVol_ * exchangeRates[static_cast<int>(trades[include.level].buyCurr_)]
+				+ trades[include.level].sellVol_ * exchangeRates[static_cast<int>(trades[include.level].sellCurr_)]);
 			include.settleFlags[include.level] = true;
 			if (include.rmtPassed && maxValue < include.settledAmount)
 			{

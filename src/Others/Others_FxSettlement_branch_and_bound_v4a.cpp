@@ -2,6 +2,7 @@
 #include <queue>
 #include <bitset>
 #include <numeric>
+#include <cassert>
 using namespace std;
 
 #include "Others/Others_FxSettlement.h"
@@ -14,6 +15,7 @@ namespace mm {
 	Instead of running emt tests for all members every time, we are keeping a cached rmt results for every member
 	and redoing rmt tests for only two members involved in the trade when it is settled
 	Whats new - v4a
+	Use 
 	Use improved upper bound
 	*/
 
@@ -74,9 +76,33 @@ namespace mm {
 		vector<bool> settleFlags;
 		bitset<128> rmtPassed{ 0 };
 
-		inline void calculateAndSetUpperBound(const double cumulativeSettledAmount)
+		inline void calculateAndSetUpperBound(
+			const vector< vector<double> >& cumulativeBalance,
+			const double cumulativeSettledAmount,
+			const vector< vector<double> >& spl,
+			const vector<double>& aspl,
+			const vector<double>& exchangeRates
+		)
 		{
-			upperbound = settledAmount + cumulativeSettledAmount;
+			double excessSettledAmountInDollars = 0.0;
+			vector< vector<double> > totalBalance(currentBalance);
+			for (int memberIndex = 0; memberIndex < totalBalance.size(); ++memberIndex)
+			{
+				for (int currencyIndex = 0; currencyIndex < totalBalance.size(); ++currencyIndex)
+				{
+					totalBalance[memberIndex][currencyIndex] += cumulativeBalance[memberIndex][currencyIndex];
+					if (totalBalance[memberIndex][currencyIndex] + zero < -spl[memberIndex][currencyIndex])
+						excessSettledAmountInDollars += ((-totalBalance[memberIndex][currencyIndex] - spl[memberIndex][currencyIndex]) * exchangeRates[currencyIndex]);
+				}
+			}
+
+			if (cumulativeSettledAmount > excessSettledAmountInDollars)
+			{
+				//_CrtDbgBreak();
+				int x = 0;
+				++x;
+			}
+			upperbound = settledAmount + cumulativeSettledAmount - excessSettledAmountInDollars;
 		}
 	};
 	struct fxDecisionTreeNodeCompare_v4a
@@ -97,7 +123,8 @@ namespace mm {
 	{
 		std::sort(trades.begin(), trades.end(),
 			[&exchangeRates](const Trade& lhs, const Trade& rhs) -> bool {
-			return lhs.buyVol_ * exchangeRates[static_cast<int>(lhs.buyCurr_)] > rhs.buyVol_ * exchangeRates[static_cast<int>(rhs.buyCurr_)];
+			return (lhs.buyVol_ * exchangeRates[static_cast<int>(lhs.buyCurr_)] + lhs.sellVol_ * exchangeRates[static_cast<int>(lhs.sellCurr_)])
+			> (rhs.buyVol_ * exchangeRates[static_cast<int>(rhs.buyCurr_)] + rhs.sellVol_ * exchangeRates[static_cast<int>(rhs.sellCurr_)]);
 		});
 
 		int initialHeapCapacity = 10000;
@@ -107,13 +134,25 @@ namespace mm {
 		for (int i = 0; i < initialHeapCapacity; ++i)
 			fxMaxHeap_v4a.addToData(&heapObjectsGrowingPool[0][i]);
 
+		vector< vector< vector<double> > > cumulativeBalance(trades.size(), vector< vector<double> >(spl.size(), vector<double>(spl[0].size(), 0.0)));
 		vector<double> cumulativeSettledAmount(trades.size(), 0.0);
 		for (int i = trades.size() - 1; i >= 0; --i)
 		{
 			if (i < trades.size() - 1)
+			{
+				cumulativeBalance[i] = cumulativeBalance[i + 1];
 				cumulativeSettledAmount[i] = cumulativeSettledAmount[i + 1];
+			}
 
-			cumulativeSettledAmount[i] += (trades[i].buyVol_ * exchangeRates[static_cast<int>(trades[i].buyCurr_)]);
+			cumulativeBalance[i][trades[i].partyId_][static_cast<int>(trades[i].buyCurr_)] += trades[i].buyVol_;
+			cumulativeBalance[i][trades[i].partyId_][static_cast<int>(trades[i].sellCurr_)] -= trades[i].sellVol_;
+			cumulativeBalance[i][trades[i].cPartyId_][static_cast<int>(trades[i].buyCurr_)] -= trades[i].buyVol_;
+			cumulativeBalance[i][trades[i].cPartyId_][static_cast<int>(trades[i].sellCurr_)] += trades[i].sellVol_;
+
+			cumulativeSettledAmount[i] += (
+				trades[i].buyVol_ * exchangeRates[static_cast<int>(trades[i].buyCurr_)]
+				+ trades[i].sellVol_ * exchangeRates[static_cast<int>(trades[i].sellCurr_)]
+				);
 		}
 
 		fxDecisionTreeNode_v4a* pObj = fxMaxHeap_v4a.getNextAvailableElement();
@@ -128,7 +167,12 @@ namespace mm {
 		std::iota(memberIndices.begin(), memberIndices.end(), 0); // Fill with 0, 1, ..., aspl.size() - 1
 		current.rmtPassed.flip();
 		verifySettlement_v4a(current.rmtPassed, current.currentBalance, memberIndices, spl, aspl, exchangeRates);
-		current.calculateAndSetUpperBound(cumulativeSettledAmount[0]);
+		current.calculateAndSetUpperBound(
+			cumulativeBalance[current.level + 1], 
+			cumulativeSettledAmount[current.level + 1],
+			spl, 
+			aspl, 
+			exchangeRates);
 		fxMaxHeap_v4a.push(pObj);
 
 		double maxValue = 0.0;
@@ -144,12 +188,13 @@ namespace mm {
 			fxDecisionTreeNode_v4a* pCurrent = fxMaxHeap_v4a.top();
 			fxDecisionTreeNode_v4a& current = *pCurrent;
 
-			if ((current.upperbound + zero) < maxValue)
+			if ((current.upperbound + zero) <= maxValue)
 				break;
 
+			//exclude current
 			current.level += 1;
 
-			//include this item
+			//Grow the heap if required
 			if (fxMaxHeap_v4a.capacity() == fxMaxHeap_v4a.size()) //need to grow pool
 			{
 				heapObjectsGrowingPool.push_back(vector<fxDecisionTreeNode_v4a>(initialHeapCapacity));
@@ -159,6 +204,7 @@ namespace mm {
 					fxMaxHeap_v4a.addToData(&heapObjectsGrowingPool[lastIndex][i]);
 			}
 
+			//include this item
 			fxDecisionTreeNode_v4a* pInclude = fxMaxHeap_v4a.getNextAvailableElement();
 			fxDecisionTreeNode_v4a& include = *pInclude;
 			include = current;
@@ -173,7 +219,10 @@ namespace mm {
 			include.currentBalance[cPartyId][sellCurrId] += trades[include.level].sellVol_;
 			
 			verifySettlement_v4a(include.rmtPassed, include.currentBalance, { partyId, cPartyId }, spl, aspl, exchangeRates);
-			include.settledAmount += (trades[include.level].buyVol_ * exchangeRates[static_cast<int>(trades[include.level].buyCurr_)]);
+			include.settledAmount += (
+				trades[include.level].buyVol_ * exchangeRates[static_cast<int>(trades[include.level].buyCurr_)]
+				+ trades[include.level].sellVol_ * exchangeRates[static_cast<int>(trades[include.level].sellCurr_)]
+				);
 			include.settleFlags[include.level] = true;
 			if (include.rmtPassed.all() && maxValue < include.settledAmount)
 			{
@@ -184,7 +233,6 @@ namespace mm {
 					break;
 			}
 
-			//exclude current
 			// maxValue is kind of lower bound so far, so avoid the decision tree nodes having upper bound less than maxValue
 			//if ((current.upperbound + zero) < maxValue)
 			//	fxMaxHeap_v4a.pop();
@@ -192,7 +240,12 @@ namespace mm {
 			if (current.level < trades.size() - 1)
 			{
 				//include.calculateAndSetUpperBound(cumulativeBalance[include.level + 1], cumulativeSettledAmount[include.level + 1], spl, aspl, exchangeRates);
-				include.calculateAndSetUpperBound(cumulativeSettledAmount[include.level + 1]);
+				include.calculateAndSetUpperBound(
+					cumulativeBalance[include.level + 1],
+					cumulativeSettledAmount[include.level + 1],
+					spl,
+					aspl,
+					exchangeRates);
 
 				// maxValue is kind of lower bound so far, so avoid the decision tree nodes having upper bound less than maxValue
 				if ((include.upperbound + zero) >= maxValue)

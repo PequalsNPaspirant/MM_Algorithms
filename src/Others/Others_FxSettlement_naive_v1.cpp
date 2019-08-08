@@ -47,7 +47,7 @@ namespace mm {
 			//Need to correct fx rates
 			int i = 0;
 		}
-		double currentSettledAmount = buyVolInDollars;
+		double currentSettledAmount = buyVolInDollars + sellVolInDollars;
 		//Update Balances for current trade
 		currentBalanceInclude[partyIndex][buyCurrIndex] += trades[currentTradeIndex].buyVol_;
 		currentBalanceInclude[partyIndex][sellCurrIndex] -= trades[currentTradeIndex].sellVol_;
