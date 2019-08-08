@@ -160,6 +160,7 @@ namespace mm {
 	{
 		naive_v1 = 0,
 		naive_v2,
+		naive_v3,
 		branch_and_bound_v1,
 		branch_and_bound_v2,
 		branch_and_bound_v3a,
@@ -184,6 +185,7 @@ namespace mm {
 		static unordered_map<AlgoType, AlgoInfo> AlgoTypeInfo{
 		{ AlgoType::naive_v1 ,						{ "naive_v1", 20} },
 		{ AlgoType::naive_v2 ,						{ "naive_v2", 20} },
+		{ AlgoType::naive_v3 ,						{ "naive_v3", 30 } },
 		{ AlgoType::branch_and_bound_v1,			{ "branch_and_bound_v1", 20	} },
 		{ AlgoType::branch_and_bound_v2,			{ "branch_and_bound_v2", 20 } },
 		{ AlgoType::branch_and_bound_v3a,			{ "branch_and_bound_v3a", 20 } },
@@ -198,6 +200,7 @@ namespace mm {
 
 	double doSettlement_naive_v1(vector<bool>& settleFlagsOut, const vector<Trade>& trades, const vector< vector<double> >& spl, const vector<double>& aspl, const vector< vector<double> >& initialBalance, const vector<double>& exchangeRates);
 	double doSettlement_naive_v2(vector<bool>& settleFlagsOut, const vector<Trade>& trades, const vector< vector<double> >& spl, const vector<double>& aspl, const vector< vector<double> >& initialBalance, const vector<double>& exchangeRates);
+	double doSettlement_naive_v3(vector<bool>& settleFlagsOut, const vector<Trade>& trades, const vector< vector<double> >& spl, const vector<double>& aspl, const vector< vector<double> >& initialBalance, const vector<double>& exchangeRates);
 	double doSettlement_branch_and_bound_v1(vector<bool>& settleFlagsOut, vector<Trade>& trades, const vector< vector<double> >& spl, const vector<double>& aspl, const vector< vector<double> >& initialBalance, const vector<double>& exchangeRates);
 	double doSettlement_branch_and_bound_v2(vector<bool>& settleFlagsOut, vector<Trade>& trades, const vector< vector<double> >& spl, const vector<double>& aspl, const vector< vector<double> >& initialBalance, const vector<double>& exchangeRates);
 	double doSettlement_branch_and_bound_v3a(vector<bool>& settleFlagsOut, vector<Trade>& trades, const vector< vector<double> >& spl, const vector<double>& aspl, const vector< vector<double> >& initialBalance, const vector<double>& exchangeRates);
