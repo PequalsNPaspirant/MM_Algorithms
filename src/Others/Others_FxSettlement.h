@@ -185,15 +185,15 @@ namespace mm {
 		static unordered_map<AlgoType, AlgoInfo> AlgoTypeInfo{
 		{ AlgoType::naive_v1 ,						{ "naive_v1", 20} },
 		{ AlgoType::naive_v2 ,						{ "naive_v2", 20} },
-		{ AlgoType::naive_v3 ,						{ "naive_v3", 30 } },
+		{ AlgoType::naive_v3 ,						{ "naive_v3", 24 } },
 		{ AlgoType::branch_and_bound_v1,			{ "branch_and_bound_v1", 20	} },
 		{ AlgoType::branch_and_bound_v2,			{ "branch_and_bound_v2", 20 } },
 		{ AlgoType::branch_and_bound_v3a,			{ "branch_and_bound_v3a", 20 } },
 		{ AlgoType::branch_and_bound_v3b,			{ "branch_and_bound_v3b", 20 } },
 		{ AlgoType::branch_and_bound_v4a,			{ "branch_and_bound_v4a", 20 } },
 		{ AlgoType::branch_and_bound_v4b,			{ "branch_and_bound_v4b", 20 } },
-		{ AlgoType::branch_and_bound_v5a,			{ "branch_and_bound_v5a", numeric_limits<int>::max() } },
-		{ AlgoType::branch_and_bound_v5b,			{ "branch_and_bound_v5b", numeric_limits<int>::max() } }
+		{ AlgoType::branch_and_bound_v5a,			{ "branch_and_bound_v5a", 30 } }, //numeric_limits<int>::max()
+		{ AlgoType::branch_and_bound_v5b,			{ "branch_and_bound_v5b", 27 } }
 		}; 
 		return AlgoTypeInfo[type];
 	}

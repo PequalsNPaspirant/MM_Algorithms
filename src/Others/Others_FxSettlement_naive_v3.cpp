@@ -5,16 +5,15 @@ using namespace std;
 
 namespace mm {
 
-	struct Result
-	{
-		double settledAmount;
-
-	};
+	/*
+	Whats new - v3
+	Remove all vector<vector<>>
+	*/
 
 	double doSettlement_naive_v3(
 		int currentTradeIndex, 
 		vector<bool>& settleFlagsOut, 
-		vector< vector<double> >& currentBalanceOut,
+		vector<double>& currentBalanceOut,
 		const vector<Trade>& trades, 
 		const vector< vector<double> >& spl, 
 		const vector<double>& aspl, 
@@ -30,7 +29,7 @@ namespace mm {
 		//vector<double> currentNOVExclude{ currentNOV };
 		//vector< vector<double> > currentSPExclude{ currentSP };
 		//vector<double> currentASPExclude{ currentASP };
-		vector< vector<double> > currentBalanceExclude{ currentBalanceOut };
+		vector<double> currentBalanceExclude{ currentBalanceOut };
 		double exclude = doSettlement_naive_v3(currentTradeIndex + 1, settleFlagsExclude, currentBalanceExclude, trades, spl, aspl, exchangeRates);
 
 		//Try to settle this trade
@@ -39,10 +38,10 @@ namespace mm {
 		int cPartyIndex = trades[currentTradeIndex].cPartyId_;
 		int buyCurrIndex = static_cast<int>(trades[currentTradeIndex].buyCurr_);
 		int sellCurrIndex = static_cast<int>(trades[currentTradeIndex].sellCurr_);
-		int numMembers = currentBalanceOut.size();
-		int numCurrencies = currentBalanceOut[0].size();
+		int numMembers = spl.size();
+		int numCurrencies = spl[0].size();
 		
-		vector< vector<double> > currentBalanceInclude{ currentBalanceOut };
+		vector<double> currentBalanceInclude{ currentBalanceOut };
 		double buyVolInDollars = trades[currentTradeIndex].buyVol_ * exchangeRates[buyCurrIndex];
 		double sellVolInDollars = trades[currentTradeIndex].sellVol_ * exchangeRates[sellCurrIndex];
 		if (fabs(buyVolInDollars - sellVolInDollars) > zero)
@@ -52,10 +51,10 @@ namespace mm {
 		}
 		double currentSettledAmount = buyVolInDollars + sellVolInDollars;
 		//Update Balances for current trade
-		currentBalanceInclude[partyIndex][buyCurrIndex] += trades[currentTradeIndex].buyVol_;
-		currentBalanceInclude[partyIndex][sellCurrIndex] -= trades[currentTradeIndex].sellVol_;
-		currentBalanceInclude[cPartyIndex][buyCurrIndex] -= trades[currentTradeIndex].buyVol_;
-		currentBalanceInclude[cPartyIndex][sellCurrIndex] += trades[currentTradeIndex].sellVol_;
+		currentBalanceInclude[numMembers * partyIndex + buyCurrIndex] += trades[currentTradeIndex].buyVol_;
+		currentBalanceInclude[numMembers * partyIndex + sellCurrIndex] -= trades[currentTradeIndex].sellVol_;
+		currentBalanceInclude[numMembers * cPartyIndex + buyCurrIndex] -= trades[currentTradeIndex].buyVol_;
+		currentBalanceInclude[numMembers * cPartyIndex + sellCurrIndex] += trades[currentTradeIndex].sellVol_;
 		settleFlagsInclude[currentTradeIndex] = true;
 
 		double include = currentSettledAmount + doSettlement_naive_v3(currentTradeIndex + 1, settleFlagsInclude, currentBalanceInclude,
@@ -75,13 +74,13 @@ namespace mm {
 				double novTemp = 0.0;
 				for (int currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
 				{
-					if (currentBalanceInclude[memberIndex][currencyIndex] + zero < -spl[memberIndex][currencyIndex])
+					if (currentBalanceInclude[numMembers * memberIndex + currencyIndex] + zero < -spl[memberIndex][currencyIndex])
 					{
 						rmtTestResult = false;
 						break;
 					}
 
-					double currentBalanceInDollars = currentBalanceInclude[memberIndex][currencyIndex] * exchangeRates[currencyIndex];
+					double currentBalanceInDollars = currentBalanceInclude[numMembers * memberIndex + currencyIndex] * exchangeRates[currencyIndex];
 					novTemp += currentBalanceInDollars;
 					if (currentBalanceInDollars < -zero)
 						asplTemp += currentBalanceInDollars;
@@ -219,7 +218,16 @@ namespace mm {
 		//	currentNOV[memberIndex] = novTemp;
 		//	currentASP[memberIndex] = asplTemp;
 		//}
-		vector< vector<double> > currentBalance{ initialBalance };
+		int numMembers = spl.size();
+		int numCurrencies = spl[0].size();
+		vector<double> currentBalance(numMembers * numCurrencies);
+		for (int memberIndex = 0; memberIndex < numMembers; ++memberIndex)
+		{
+			for (int currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
+			{
+				currentBalance[numMembers * memberIndex + currencyIndex] = initialBalance[memberIndex][currencyIndex];
+			}
+		}
 		return doSettlement_naive_v3(0, settleFlagsOut, currentBalance, trades, spl, aspl, exchangeRates);
 	}
 }

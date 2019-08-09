@@ -5,12 +5,6 @@ using namespace std;
 
 namespace mm {
 
-	struct Result
-	{
-		double settledAmount;
-
-	};
-
 	double doSettlement_naive_v2(
 		int currentTradeIndex, 
 		vector<bool>& settleFlagsOut, 

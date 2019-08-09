@@ -84,9 +84,11 @@ namespace mm {
 		{
 			double excessSettledAmountInDollars = 0.0;
 			vector< vector<double> > totalBalance(currentBalance);
-			for (int memberIndex = 0; memberIndex < totalBalance.size(); ++memberIndex)
+			int numMembers = spl.size();
+			int numCurrencies = spl[0].size();
+			for (int memberIndex = 0; memberIndex < numMembers; ++memberIndex)
 			{
-				for (int currencyIndex = 0; currencyIndex < totalBalance.size(); ++currencyIndex)
+				for (int currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
 				{
 					totalBalance[memberIndex][currencyIndex] += cumulativeBalance[memberIndex][currencyIndex];
 					if (totalBalance[memberIndex][currencyIndex] + zero < -spl[memberIndex][currencyIndex])

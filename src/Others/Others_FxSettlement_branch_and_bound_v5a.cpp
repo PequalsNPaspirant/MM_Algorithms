@@ -15,13 +15,14 @@ namespace mm {
 	Instead of running emt tests for all members every time, we are keeping a cached rmt results for every member
 	and redoing rmt tests for only two members involved in the trade when it is settled
 	Whats new - v4a
-	Use 
 	Use improved upper bound
+	Whats new - v5a
+	Remove all vector<vector<>>
 	*/
 
 	bool verifySettlement_v5a(
 		bitset<128>& rmtPassed,
-		const vector< vector<double> >& updatedBalance,		
+		const vector<double>& updatedBalance,		
 		const vector< int >& memberIndices,
 		const vector< vector<double> >& spl,
 		const vector<double>& aspl, 
@@ -32,23 +33,25 @@ namespace mm {
 		//rmt
 		//int numMembers = updatedBalance.size();
 		bool rmtSuccessful = true;
-		int numCurrencies = updatedBalance[0].size();
+		int numMembers = spl.size();
+		int numCurrencies = spl[0].size();
 		for (int i = 0; i < memberIndices.size(); ++i)
 		{
 			int memberIndex = memberIndices[i];
 			double asplTemp = 0.0;
 			double novTemp = 0.0;
 			bool splPassed = true;
+			
 			for (int currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
 			{
-				if (updatedBalance[memberIndex][currencyIndex] + zero < -spl[memberIndex][currencyIndex])
+				if (updatedBalance[numMembers *  memberIndex + currencyIndex] + zero < -spl[memberIndex][currencyIndex])
 				{
 					//rmtPassed[memberIndex] = false;
 					splPassed = false;
 					break;
 				}
 
-				double currentBalanceInDollars = updatedBalance[memberIndex][currencyIndex] * exchangeRates[currencyIndex];
+				double currentBalanceInDollars = updatedBalance[numMembers *  memberIndex + currencyIndex] * exchangeRates[currencyIndex];
 				novTemp += currentBalanceInDollars;
 				if (currentBalanceInDollars < -zero)
 					asplTemp += currentBalanceInDollars;
@@ -71,13 +74,13 @@ namespace mm {
 		int level;
 		double upperbound;
 
-		vector< vector<double> > currentBalance;
+		vector<double> currentBalance;
 		double settledAmount;
 		vector<bool> settleFlags;
 		bitset<128> rmtPassed{ 0 };
 
 		inline void calculateAndSetUpperBound(
-			const vector< vector<double> >& cumulativeBalance,
+			const vector<double>& cumulativeBalance,
 			const double cumulativeSettledAmount,
 			const vector< vector<double> >& spl,
 			const vector<double>& aspl,
@@ -85,14 +88,18 @@ namespace mm {
 		)
 		{
 			double excessSettledAmountInDollars = 0.0;
-			vector< vector<double> > totalBalance(currentBalance);
-			for (int memberIndex = 0; memberIndex < totalBalance.size(); ++memberIndex)
+			vector<double> totalBalance(currentBalance);
+			int numMembers = spl.size();
+			int numCurrencies = spl[0].size();
+			int startIndex = -1;
+			for (int memberIndex = 0; memberIndex < numMembers; ++memberIndex)
 			{
-				for (int currencyIndex = 0; currencyIndex < totalBalance.size(); ++currencyIndex)
+				for (int currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
 				{
-					totalBalance[memberIndex][currencyIndex] += cumulativeBalance[memberIndex][currencyIndex];
-					if (totalBalance[memberIndex][currencyIndex] + zero < -spl[memberIndex][currencyIndex])
-						excessSettledAmountInDollars += ((-totalBalance[memberIndex][currencyIndex] - spl[memberIndex][currencyIndex]) * exchangeRates[currencyIndex]);
+					++startIndex;
+					totalBalance[startIndex] += cumulativeBalance[startIndex];
+					if (totalBalance[startIndex] + zero < -spl[memberIndex][currencyIndex])
+						excessSettledAmountInDollars += ((-totalBalance[startIndex] - spl[memberIndex][currencyIndex]) * exchangeRates[currencyIndex]);
 				}
 			}
 
@@ -121,6 +128,9 @@ namespace mm {
 		const vector< vector<double> >& initialBalance,
 		const vector<double>& exchangeRates)
 	{
+		int numMembers = spl.size();
+		int numCurrencies = spl[0].size();
+
 		std::sort(trades.begin(), trades.end(),
 			[&exchangeRates](const Trade& lhs, const Trade& rhs) -> bool {
 			return (lhs.buyVol_ * exchangeRates[static_cast<int>(lhs.buyCurr_)] + lhs.sellVol_ * exchangeRates[static_cast<int>(lhs.sellCurr_)])
@@ -134,7 +144,7 @@ namespace mm {
 		for (int i = 0; i < initialHeapCapacity; ++i)
 			fxMaxHeap_v5a.addToData(&heapObjectsGrowingPool[0][i]);
 
-		vector< vector< vector<double> > > cumulativeBalance(trades.size(), vector< vector<double> >(spl.size(), vector<double>(spl[0].size(), 0.0)));
+		vector< vector<double> > cumulativeBalance(trades.size(), vector<double>(numMembers * numCurrencies, 0.0));
 		vector<double> cumulativeSettledAmount(trades.size(), 0.0);
 		for (int i = trades.size() - 1; i >= 0; --i)
 		{
@@ -144,10 +154,10 @@ namespace mm {
 				cumulativeSettledAmount[i] = cumulativeSettledAmount[i + 1];
 			}
 
-			cumulativeBalance[i][trades[i].partyId_][static_cast<int>(trades[i].buyCurr_)] += trades[i].buyVol_;
-			cumulativeBalance[i][trades[i].partyId_][static_cast<int>(trades[i].sellCurr_)] -= trades[i].sellVol_;
-			cumulativeBalance[i][trades[i].cPartyId_][static_cast<int>(trades[i].buyCurr_)] -= trades[i].buyVol_;
-			cumulativeBalance[i][trades[i].cPartyId_][static_cast<int>(trades[i].sellCurr_)] += trades[i].sellVol_;
+			cumulativeBalance[i][numMembers * trades[i].partyId_ + static_cast<int>(trades[i].buyCurr_)] += trades[i].buyVol_;
+			cumulativeBalance[i][numMembers * trades[i].partyId_ + static_cast<int>(trades[i].sellCurr_)] -= trades[i].sellVol_;
+			cumulativeBalance[i][numMembers * trades[i].cPartyId_ + static_cast<int>(trades[i].buyCurr_)] -= trades[i].buyVol_;
+			cumulativeBalance[i][numMembers * trades[i].cPartyId_ + static_cast<int>(trades[i].sellCurr_)] += trades[i].sellVol_;
 
 			cumulativeSettledAmount[i] += (
 				trades[i].buyVol_ * exchangeRates[static_cast<int>(trades[i].buyCurr_)]
@@ -158,7 +168,15 @@ namespace mm {
 		fxDecisionTreeNode_v5a* pObj = fxMaxHeap_v5a.getNextAvailableElement();
 		fxDecisionTreeNode_v5a& current = *pObj;
 		current.level = -1;
-		current.currentBalance = initialBalance;
+		current.currentBalance.resize(numMembers * numCurrencies, 0.0);
+		int startIndex = -1;
+		for (int memberIndex = 0; memberIndex < numMembers; ++memberIndex)
+		{
+			for (int currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
+			{
+				current.currentBalance[++startIndex] = initialBalance[memberIndex][currencyIndex];
+			}
+		}
 		current.settledAmount = 0.0;
 		current.upperbound = 0.0;
 		current.settleFlags.resize(trades.size(), false);
@@ -213,10 +231,10 @@ namespace mm {
 			int cPartyId = trades[include.level].cPartyId_;
 			int buyCurrId = static_cast<int>(trades[include.level].buyCurr_);
 			int sellCurrId = static_cast<int>(trades[include.level].sellCurr_);
-			include.currentBalance[partyId][buyCurrId] += trades[include.level].buyVol_;
-			include.currentBalance[partyId][sellCurrId] -= trades[include.level].sellVol_;
-			include.currentBalance[cPartyId][buyCurrId] -= trades[include.level].buyVol_;
-			include.currentBalance[cPartyId][sellCurrId] += trades[include.level].sellVol_;
+			include.currentBalance[numMembers * partyId + buyCurrId] += trades[include.level].buyVol_;
+			include.currentBalance[numMembers * partyId + sellCurrId] -= trades[include.level].sellVol_;
+			include.currentBalance[numMembers * cPartyId + buyCurrId] -= trades[include.level].buyVol_;
+			include.currentBalance[numMembers * cPartyId + sellCurrId] += trades[include.level].sellVol_;
 			
 			verifySettlement_v5a(include.rmtPassed, include.currentBalance, { partyId, cPartyId }, spl, aspl, exchangeRates);
 			include.settledAmount += (
