@@ -1,3 +1,29 @@
+//=======================================================================================================//
+//   Copyright (c) 2018 Maruti Mhetre                                                                    //
+//   All rights reserved.                                                                                //
+//=======================================================================================================//
+//   Redistribution and use of this software in source and binary forms, with or without modification,   //
+//   are permitted for personal, educational or non-commercial purposes provided that the following      //
+//   conditions are met:                                                                                 //
+//   1. Redistributions of source code must retain the above copyright notice, this list of conditions   //
+//      and the following disclaimer.                                                                    //
+//   2. Redistributions in binary form must reproduce the above copyright notice, this list of           //
+//      conditions and the following disclaimer in the documentation and/or other materials provided     //
+//      with the distribution.                                                                           //
+//   3. Neither the name of the copyright holder nor the names of its contributors may be used to        //
+//      endorse or promote products derived from this software without specific prior written            //
+//      permission.                                                                                      //
+//=======================================================================================================//
+//   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR      //
+//   IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND    //
+//   FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR          //
+//   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL   //
+//   DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,   //
+//   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER  //
+//   IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT   //
+//   OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                     //
+//=======================================================================================================//
+
 #include <vector>
 using namespace std;
 
@@ -15,7 +41,7 @@ namespace mm {
 		vector<bool>& settleFlagsOut, 
 		vector<double>& currentBalanceOut,
 		const vector<Trade>& trades, 
-		const vector< vector<double> >& spl, 
+		const vector<double>& spl, 
 		const vector<double>& aspl, 
 		const vector<double>& exchangeRates)
 	{
@@ -27,7 +53,7 @@ namespace mm {
 		//Do not settle this trade
 		vector<bool> settleFlagsExclude{ settleFlagsOut };
 		//vector<double> currentNOVExclude{ currentNOV };
-		//vector< vector<double> > currentSPExclude{ currentSP };
+		//vector<double> currentSPExclude{ currentSP };
 		//vector<double> currentASPExclude{ currentASP };
 		vector<double> currentBalanceExclude{ currentBalanceOut };
 		double exclude = doSettlement_naive_v3(currentTradeIndex + 1, settleFlagsExclude, currentBalanceExclude, trades, spl, aspl, exchangeRates);
@@ -38,8 +64,8 @@ namespace mm {
 		int cPartyIndex = trades[currentTradeIndex].cPartyId_;
 		int buyCurrIndex = static_cast<int>(trades[currentTradeIndex].buyCurr_);
 		int sellCurrIndex = static_cast<int>(trades[currentTradeIndex].sellCurr_);
-		int numMembers = spl.size();
-		int numCurrencies = spl[0].size();
+		int numMembers = aspl.size();
+		int numCurrencies = spl.size() / aspl.size();
 		
 		vector<double> currentBalanceInclude{ currentBalanceOut };
 		double buyVolInDollars = trades[currentTradeIndex].buyVol_ * exchangeRates[buyCurrIndex];
@@ -74,13 +100,14 @@ namespace mm {
 				double novTemp = 0.0;
 				for (int currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
 				{
-					if (currentBalanceInclude[numMembers * memberIndex + currencyIndex] + zero < -spl[memberIndex][currencyIndex])
+					int index = numMembers * memberIndex + currencyIndex;
+					if (currentBalanceInclude[index] + zero < -spl[index])
 					{
 						rmtTestResult = false;
 						break;
 					}
 
-					double currentBalanceInDollars = currentBalanceInclude[numMembers * memberIndex + currencyIndex] * exchangeRates[currencyIndex];
+					double currentBalanceInDollars = currentBalanceInclude[index] * exchangeRates[currencyIndex];
 					novTemp += currentBalanceInDollars;
 					if (currentBalanceInDollars < -zero)
 						asplTemp += currentBalanceInDollars;
@@ -112,7 +139,7 @@ namespace mm {
 		return exclude;
 		
 		//vector<double> currentNOVInclude{ currentNOV };
-		//vector< vector<double> > currentSPInclude{ currentSP };
+		//vector<double> currentSPInclude{ currentSP };
 		//vector<double> currentASPInclude{ currentASP };
 
 		//Back up all previous NOV, SPL and ASPL to revert later for backtracking
@@ -192,13 +219,13 @@ namespace mm {
 	double doSettlement_naive_v3(
 		vector<bool>& settleFlagsOut, 
 		const vector<Trade>& trades, 
-		const vector< vector<double> >& spl, 
+		const vector<double>& spl, 
 		const vector<double>& aspl, 
-		const vector< vector<double> >& initialBalance, 
+		const vector<double>& initialBalance, 
 		const vector<double>& exchangeRates)
 	{
 		//vector<double> currentNOV(aspl.size(), 0.0);
-		//vector< vector<double> > currentSP{ initialBalance };
+		//vector<double> currentSP{ initialBalance };
 		//vector<double> currentASP(aspl.size(), 0.0);
 
 		//int numMembers = initialBalance.size();
@@ -218,16 +245,17 @@ namespace mm {
 		//	currentNOV[memberIndex] = novTemp;
 		//	currentASP[memberIndex] = asplTemp;
 		//}
-		int numMembers = spl.size();
-		int numCurrencies = spl[0].size();
-		vector<double> currentBalance(numMembers * numCurrencies);
-		for (int memberIndex = 0; memberIndex < numMembers; ++memberIndex)
-		{
-			for (int currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
-			{
-				currentBalance[numMembers * memberIndex + currencyIndex] = initialBalance[memberIndex][currencyIndex];
-			}
-		}
+		int numMembers = aspl.size();
+		int numCurrencies = spl.size() / aspl.size();
+		vector<double> currentBalance{ initialBalance };
+		//for (int memberIndex = 0; memberIndex < numMembers; ++memberIndex)
+		//{
+		//	for (int currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
+		//	{
+		//		int i
+		//		currentBalance[numMembers * memberIndex + currencyIndex] = initialBalance[memberIndex][currencyIndex];
+		//	}
+		//}
 		return doSettlement_naive_v3(0, settleFlagsOut, currentBalance, trades, spl, aspl, exchangeRates);
 	}
 }

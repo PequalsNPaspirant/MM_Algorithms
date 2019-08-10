@@ -1,3 +1,29 @@
+//=======================================================================================================//
+//   Copyright (c) 2018 Maruti Mhetre                                                                    //
+//   All rights reserved.                                                                                //
+//=======================================================================================================//
+//   Redistribution and use of this software in source and binary forms, with or without modification,   //
+//   are permitted for personal, educational or non-commercial purposes provided that the following      //
+//   conditions are met:                                                                                 //
+//   1. Redistributions of source code must retain the above copyright notice, this list of conditions   //
+//      and the following disclaimer.                                                                    //
+//   2. Redistributions in binary form must reproduce the above copyright notice, this list of           //
+//      conditions and the following disclaimer in the documentation and/or other materials provided     //
+//      with the distribution.                                                                           //
+//   3. Neither the name of the copyright holder nor the names of its contributors may be used to        //
+//      endorse or promote products derived from this software without specific prior written            //
+//      permission.                                                                                      //
+//=======================================================================================================//
+//   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR      //
+//   IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND    //
+//   FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR          //
+//   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL   //
+//   DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,   //
+//   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER  //
+//   IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT   //
+//   OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                     //
+//=======================================================================================================//
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -153,13 +179,13 @@ namespace mm {
 				}
 
 				//Create SPLs
-				vector< vector<double> > spl(numMembers, vector<double>(numCurrencies, 0.0));
+				vector<double> spl(numMembers * numCurrencies, 0.0);
 				for (int memberIndex = 0; memberIndex < numMembers; ++memberIndex)
 				{
 					for (int currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
 					{
 						double splAmount = dist_double(mt);
-						spl[memberIndex][currencyIndex] = splAmount;
+						spl[numMembers * memberIndex + currencyIndex] = splAmount;
 					}
 				}
 
@@ -172,13 +198,13 @@ namespace mm {
 				}
 
 				//create initial balances
-				vector< vector<double> > initialBalance(numMembers, vector<double>(numCurrencies, 0.0));
+				vector<double> initialBalance(numMembers + numCurrencies, 0.0);
 				for (int memberIndex = 0; memberIndex < numMembers; ++memberIndex)
 				{
 					for (int currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
 					{
 						double balance = dist_double(mt);
-						initialBalance[memberIndex][currencyIndex] = balance;
+						initialBalance[numMembers * memberIndex + currencyIndex] = balance;
 					}
 				}
 
@@ -276,15 +302,15 @@ namespace mm {
 				{
 					string columnNames{ "MEMBER_ID,CURR_ID,BALANCE" };
 					initialBalancesFile.write(columnNames.c_str(), columnNames.length());
-					for (int m = 0; m < initialBalance.size(); ++m)
+					for (int m = 0; m < numMembers; ++m)
 					{
-						for (int c = 0; c < initialBalance[m].size(); ++c)
+						for (int c = 0; c < numCurrencies; ++c)
 						{
 							string row{
 								"\n" +
 								to_string(m) + "," +
 								to_string(c) + "," +
-								to_string_max_precision(initialBalance[m][c])
+								to_string_max_precision(initialBalance[numMembers * m + c])
 							};
 							initialBalancesFile.write(row.c_str(), row.length());
 						}
@@ -295,15 +321,15 @@ namespace mm {
 				{
 					string columnNames{ "MEMBER_ID,CURR_ID,SPL" };
 					splFile.write(columnNames.c_str(), columnNames.length());
-					for (int m = 0; m < spl.size(); ++m)
+					for (int m = 0; m < numMembers; ++m)
 					{
-						for (int c = 0; c < spl[m].size(); ++c)
+						for (int c = 0; c < numCurrencies; ++c)
 						{
 							string row{
 								"\n" +
 								to_string(m) + "," +
 								to_string(c) + "," +
-								to_string_max_precision(spl[m][c])
+								to_string_max_precision(spl[numMembers * m + c])
 							};
 							splFile.write(row.c_str(), row.length());
 						}
@@ -528,9 +554,9 @@ namespace mm {
 
 			bool resultsAvailable = resultsFile.good();
 
-			vector< vector<double> > initialBalance{};
+			vector<double> initialBalance{};
 			vector<Trade> trades{};
-			vector< vector<double> > spl{};
+			vector<double> spl{};
 			vector<double> aspl{};
 			vector<double> fxRates{};
 
@@ -584,22 +610,22 @@ namespace mm {
 				numMembers = memberIdUMap.size();
 				numCurrencies = currencyIdUMap.size();
 
-				initialBalance.resize(numMembers);
-				spl.resize(numMembers);
+				initialBalance.resize(numMembers * numCurrencies);
+				spl.resize(numMembers * numCurrencies);
 				aspl.resize(numMembers);
 				fxRates.resize(numCurrencies);
-				for (int i = 0; i < numMembers; ++i)
-				{
-					initialBalance[i].resize(numCurrencies);
-					spl[i].resize(numCurrencies);
-				}
+				//for (int i = 0; i < numMembers; ++i)
+				//{
+				//	initialBalance[i].resize(numCurrencies);
+				//	spl[i].resize(numCurrencies);
+				//}
 
 				for (auto it = memberCurrencyBalanceUMap.begin(); it != memberCurrencyBalanceUMap.end(); ++it)
 				{
 					pair<int, int> memberCurrency = it->first;
 					int memberIndex = memberIdUMap[memberCurrency.first];
 					int currencyIndex = currencyIdUMap[memberCurrency.second];
-					initialBalance[memberIndex][currencyIndex] = it->second;
+					initialBalance[numMembers * memberIndex + currencyIndex] = it->second;
 				}
 
 				initialBalancesFile.close();
@@ -701,7 +727,7 @@ namespace mm {
 					int currencyIndex = currencyIdUMap[currencyId];
 					assert(memberIndex < numMembers);
 					assert(currencyIndex < numCurrencies);
-					spl[memberIndex][currencyIndex] = splVal;
+					spl[numMembers * memberIndex + currencyIndex] = splVal;
 				}
 				assert(splRead == numMembers * numCurrencies);
 				splFile.close();

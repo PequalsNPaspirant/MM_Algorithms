@@ -1,3 +1,29 @@
+//=======================================================================================================//
+//   Copyright (c) 2018 Maruti Mhetre                                                                    //
+//   All rights reserved.                                                                                //
+//=======================================================================================================//
+//   Redistribution and use of this software in source and binary forms, with or without modification,   //
+//   are permitted for personal, educational or non-commercial purposes provided that the following      //
+//   conditions are met:                                                                                 //
+//   1. Redistributions of source code must retain the above copyright notice, this list of conditions   //
+//      and the following disclaimer.                                                                    //
+//   2. Redistributions in binary form must reproduce the above copyright notice, this list of           //
+//      conditions and the following disclaimer in the documentation and/or other materials provided     //
+//      with the distribution.                                                                           //
+//   3. Neither the name of the copyright holder nor the names of its contributors may be used to        //
+//      endorse or promote products derived from this software without specific prior written            //
+//      permission.                                                                                      //
+//=======================================================================================================//
+//   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR      //
+//   IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND    //
+//   FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR          //
+//   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL   //
+//   DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,   //
+//   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER  //
+//   IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT   //
+//   OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                     //
+//=======================================================================================================//
+
 #include <vector>
 #include <queue>
 using namespace std;
@@ -13,14 +39,15 @@ namespace mm {
 	*/
 
 	bool verifySettlement_v2(
-		const vector< vector<double> >& updatedBalance,
-		const vector< vector<double> >& spl, 
+		const vector<double>& updatedBalance,
+		const vector<double>& spl, 
 		const vector<double>& aspl, 
 		 const vector<double>& exchangeRates)
 	{
 		//rmt
-		int numMembers = updatedBalance.size();
-		int numCurrencies = updatedBalance[0].size();
+		int numMembers = aspl.size();
+		int numCurrencies = spl.size() / aspl.size();
+
 		vector<double> currentAspl(numMembers);
 		vector<double> currentNov(numMembers);
 		for (int memberIndex = 0; memberIndex < numMembers; ++memberIndex)
@@ -29,10 +56,11 @@ namespace mm {
 			double novTemp = 0.0;
 			for (int currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
 			{
-				if (updatedBalance[memberIndex][currencyIndex] + zero < -spl[memberIndex][currencyIndex])
+				int index = numMembers * memberIndex + currencyIndex;
+				if (updatedBalance[index] + zero < -spl[index])
 					return false;
 
-				double currentBalanceInDollars = updatedBalance[memberIndex][currencyIndex] * exchangeRates[currencyIndex];
+				double currentBalanceInDollars = updatedBalance[index] * exchangeRates[currencyIndex];
 				novTemp += currentBalanceInDollars;
 				if (currentBalanceInDollars < -zero)
 					asplTemp += currentBalanceInDollars;
@@ -53,7 +81,7 @@ namespace mm {
 		int level;
 		double upperbound;
 
-		vector< vector<double> > currentBalance;
+		vector<double> currentBalance;
 		double settledAmount;
 		vector<bool> settleFlags;
 		bool rmtPassed;
@@ -76,11 +104,14 @@ namespace mm {
 	double doSettlement_branch_and_bound_v2(
 		vector<bool>& settleFlagsOut,
 		vector<Trade>& trades,
-		const vector< vector<double> >& spl,
+		const vector<double>& spl,
 		const vector<double>& aspl,
-		const vector< vector<double> >& initialBalance,
+		const vector<double>& initialBalance,
 		const vector<double>& exchangeRates)
 	{
+		int numMembers = aspl.size();
+		int numCurrencies = spl.size() / aspl.size();
+
 		std::sort(trades.begin(), trades.end(),
 			[&exchangeRates](const Trade& lhs, const Trade& rhs) -> bool {
 			return (lhs.buyVol_ * exchangeRates[static_cast<int>(lhs.buyCurr_)] + lhs.sellVol_ * exchangeRates[static_cast<int>(lhs.sellCurr_)])
@@ -148,10 +179,10 @@ namespace mm {
 			fxDecisionTreeNode_v2& include = *pInclude;
 			include = current;
 			// Update current balance
-			include.currentBalance[trades[include.level].partyId_][static_cast<int>(trades[include.level].buyCurr_)] += trades[include.level].buyVol_;
-			include.currentBalance[trades[include.level].partyId_][static_cast<int>(trades[include.level].sellCurr_)] -= trades[include.level].sellVol_;
-			include.currentBalance[trades[include.level].cPartyId_][static_cast<int>(trades[include.level].buyCurr_)] -= trades[include.level].buyVol_;
-			include.currentBalance[trades[include.level].cPartyId_][static_cast<int>(trades[include.level].sellCurr_)] += trades[include.level].sellVol_;
+			include.currentBalance[numMembers * trades[include.level].partyId_  + static_cast<int>(trades[include.level].buyCurr_)] += trades[include.level].buyVol_;
+			include.currentBalance[numMembers * trades[include.level].partyId_  + static_cast<int>(trades[include.level].sellCurr_)] -= trades[include.level].sellVol_;
+			include.currentBalance[numMembers * trades[include.level].cPartyId_ + static_cast<int>(trades[include.level].buyCurr_)] -= trades[include.level].buyVol_;
+			include.currentBalance[numMembers * trades[include.level].cPartyId_ + static_cast<int>(trades[include.level].sellCurr_)] += trades[include.level].sellVol_;
 			
 			// Do rmt tests and update maxValue if rmt tests are passed
 			include.rmtPassed = verifySettlement_v2(include.currentBalance, spl, aspl, exchangeRates);

@@ -54,3 +54,4 @@
 /project_settings/windows_visual_studio/MM_Algorithms/MM_Algorithms/x64/Release/MM_Algorithms.tlog/unsuccessfulbuild
 /obj/windows_gcc/DynamicProgramming/*.o
 *.o
+/obj/windows_visual_studio/Debug_x64/*.enc

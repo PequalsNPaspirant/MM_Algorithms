@@ -1,3 +1,29 @@
+//=======================================================================================================//
+//   Copyright (c) 2018 Maruti Mhetre                                                                    //
+//   All rights reserved.                                                                                //
+//=======================================================================================================//
+//   Redistribution and use of this software in source and binary forms, with or without modification,   //
+//   are permitted for personal, educational or non-commercial purposes provided that the following      //
+//   conditions are met:                                                                                 //
+//   1. Redistributions of source code must retain the above copyright notice, this list of conditions   //
+//      and the following disclaimer.                                                                    //
+//   2. Redistributions in binary form must reproduce the above copyright notice, this list of           //
+//      conditions and the following disclaimer in the documentation and/or other materials provided     //
+//      with the distribution.                                                                           //
+//   3. Neither the name of the copyright holder nor the names of its contributors may be used to        //
+//      endorse or promote products derived from this software without specific prior written            //
+//      permission.                                                                                      //
+//=======================================================================================================//
+//   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR      //
+//   IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND    //
+//   FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR          //
+//   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL   //
+//   DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,   //
+//   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER  //
+//   IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT   //
+//   OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                     //
+//=======================================================================================================//
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -36,11 +62,20 @@ namespace mm {
 		return buffer.str();
 	}
 
-	bool verifySettlement(const vector<bool>& settleFlags, const vector<Trade>& trades, const vector< vector<double> >& spl, const vector<double>& aspl, const vector< vector<double> >& initialBalance, const vector<double>& exchangeRates, double actualSettledAmount)
+	bool verifySettlement(
+		const vector<bool>& settleFlags, 
+		const vector<Trade>& trades, 
+		const vector<double>& spl, 
+		const vector<double>& aspl, 
+		const vector<double>& initialBalance, 
+		const vector<double>& exchangeRates, 
+		double actualSettledAmount)
 	{
 		//rmt
+		int numMembers = aspl.size();
+		int numCurrencies = spl.size() / aspl.size();
 		double novVal = 0.0;
-		vector< vector<double> > updatedBalance{ initialBalance };
+		vector<double> updatedBalance{ initialBalance };
 
 		double amountSettled = 0.0;
 		for (int i = 0; i < trades.size(); ++i)
@@ -55,14 +90,12 @@ namespace mm {
 			int partyIndex = trades[i].partyId_;
 			int cPartyIndex = trades[i].cPartyId_;
 
-			updatedBalance[partyIndex][static_cast<int>(trades[i].buyCurr_)] += trades[i].buyVol_;
-			updatedBalance[partyIndex][static_cast<int>(trades[i].sellCurr_)] -= trades[i].sellVol_;
-			updatedBalance[cPartyIndex][static_cast<int>(trades[i].buyCurr_)] -= trades[i].buyVol_;
-			updatedBalance[cPartyIndex][static_cast<int>(trades[i].sellCurr_)] += trades[i].sellVol_;
+			updatedBalance[numMembers * partyIndex  + static_cast<int>(trades[i].buyCurr_)] += trades[i].buyVol_;
+			updatedBalance[numMembers * partyIndex  + static_cast<int>(trades[i].sellCurr_)] -= trades[i].sellVol_;
+			updatedBalance[numMembers * cPartyIndex + static_cast<int>(trades[i].buyCurr_)] -= trades[i].buyVol_;
+			updatedBalance[numMembers * cPartyIndex + static_cast<int>(trades[i].sellCurr_)] += trades[i].sellVol_;
 		}
 
-		int numMembers = updatedBalance.size();
-		int numCurrencies = updatedBalance[0].size();
 		vector<double> currentAspl(numMembers);
 		vector<double> currentNov(numMembers);
 		for (int memberIndex = 0; memberIndex < numMembers; ++memberIndex)
@@ -71,10 +104,11 @@ namespace mm {
 			double novTemp = 0.0;
 			for (int currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
 			{
-				if (updatedBalance[memberIndex][currencyIndex] + zero < -spl[memberIndex][currencyIndex])
+				int index = numMembers * memberIndex + currencyIndex;
+				if (updatedBalance[index] + zero < -spl[index])
 					return false;
 
-				double currentBalanceInDollars = updatedBalance[memberIndex][currencyIndex] * exchangeRates[currencyIndex];
+				double currentBalanceInDollars = updatedBalance[index] * exchangeRates[currencyIndex];
 				novTemp += currentBalanceInDollars;
 				if (currentBalanceInDollars < -zero)
 					asplTemp += currentBalanceInDollars;
@@ -262,7 +296,7 @@ namespace mm {
 				TestStats::currentTestStats.testCaseResult = verified;
 				TestStats::currentTestStats.algoType = getAlgoInfo(AlgoType(i)).algoName;
 				TestStats::currentTestStats.numMembers = testCases[testCaseIndex].aspl_.size();
-				TestStats::currentTestStats.numCurrencies = testCases[testCaseIndex].spl_[0].size();
+				TestStats::currentTestStats.numCurrencies = testCases[testCaseIndex].spl_.size() / testCases[testCaseIndex].aspl_.size();
 				TestStats::currentTestStats.numTrades = testCases[testCaseIndex].trades_.size();
 				TestStats::currentTestStats.tradesSettled = actualSettledTradeIds.size();
 				TestStats::currentTestStats.amountSettled = actualSettledAmount;

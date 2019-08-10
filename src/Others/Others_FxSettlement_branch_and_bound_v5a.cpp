@@ -1,3 +1,29 @@
+//=======================================================================================================//
+//   Copyright (c) 2018 Maruti Mhetre                                                                    //
+//   All rights reserved.                                                                                //
+//=======================================================================================================//
+//   Redistribution and use of this software in source and binary forms, with or without modification,   //
+//   are permitted for personal, educational or non-commercial purposes provided that the following      //
+//   conditions are met:                                                                                 //
+//   1. Redistributions of source code must retain the above copyright notice, this list of conditions   //
+//      and the following disclaimer.                                                                    //
+//   2. Redistributions in binary form must reproduce the above copyright notice, this list of           //
+//      conditions and the following disclaimer in the documentation and/or other materials provided     //
+//      with the distribution.                                                                           //
+//   3. Neither the name of the copyright holder nor the names of its contributors may be used to        //
+//      endorse or promote products derived from this software without specific prior written            //
+//      permission.                                                                                      //
+//=======================================================================================================//
+//   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR      //
+//   IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND    //
+//   FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR          //
+//   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL   //
+//   DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,   //
+//   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER  //
+//   IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT   //
+//   OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                     //
+//=======================================================================================================//
+
 #include <vector>
 #include <queue>
 #include <bitset>
@@ -24,7 +50,7 @@ namespace mm {
 		bitset<128>& rmtPassed,
 		const vector<double>& updatedBalance,		
 		const vector< int >& memberIndices,
-		const vector< vector<double> >& spl,
+		const vector<double>& spl,
 		const vector<double>& aspl, 
 		 const vector<double>& exchangeRates)
 	{
@@ -33,8 +59,8 @@ namespace mm {
 		//rmt
 		//int numMembers = updatedBalance.size();
 		bool rmtSuccessful = true;
-		int numMembers = spl.size();
-		int numCurrencies = spl[0].size();
+		int numMembers = aspl.size();
+		int numCurrencies = spl.size() / aspl.size();
 		for (int i = 0; i < memberIndices.size(); ++i)
 		{
 			int memberIndex = memberIndices[i];
@@ -44,14 +70,15 @@ namespace mm {
 			
 			for (int currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
 			{
-				if (updatedBalance[numMembers *  memberIndex + currencyIndex] + zero < -spl[memberIndex][currencyIndex])
+				int index = numMembers * memberIndex + currencyIndex;
+				if (updatedBalance[index] + zero < -spl[index])
 				{
 					//rmtPassed[memberIndex] = false;
 					splPassed = false;
 					break;
 				}
 
-				double currentBalanceInDollars = updatedBalance[numMembers *  memberIndex + currencyIndex] * exchangeRates[currencyIndex];
+				double currentBalanceInDollars = updatedBalance[index] * exchangeRates[currencyIndex];
 				novTemp += currentBalanceInDollars;
 				if (currentBalanceInDollars < -zero)
 					asplTemp += currentBalanceInDollars;
@@ -82,15 +109,15 @@ namespace mm {
 		inline void calculateAndSetUpperBound(
 			const vector<double>& cumulativeBalance,
 			const double cumulativeSettledAmount,
-			const vector< vector<double> >& spl,
+			const vector<double>& spl,
 			const vector<double>& aspl,
 			const vector<double>& exchangeRates
 		)
 		{
 			double excessSettledAmountInDollars = 0.0;
 			vector<double> totalBalance(currentBalance);
-			int numMembers = spl.size();
-			int numCurrencies = spl[0].size();
+			int numMembers = aspl.size();
+			int numCurrencies = spl.size() / aspl.size();
 			int startIndex = -1;
 			for (int memberIndex = 0; memberIndex < numMembers; ++memberIndex)
 			{
@@ -98,8 +125,8 @@ namespace mm {
 				{
 					++startIndex;
 					totalBalance[startIndex] += cumulativeBalance[startIndex];
-					if (totalBalance[startIndex] + zero < -spl[memberIndex][currencyIndex])
-						excessSettledAmountInDollars += ((-totalBalance[startIndex] - spl[memberIndex][currencyIndex]) * exchangeRates[currencyIndex]);
+					if (totalBalance[startIndex] + zero < -spl[startIndex])
+						excessSettledAmountInDollars += ((-totalBalance[startIndex] - spl[startIndex]) * exchangeRates[currencyIndex]);
 				}
 			}
 
@@ -123,13 +150,13 @@ namespace mm {
 	double doSettlement_branch_and_bound_v5a(
 		vector<bool>& settleFlagsOut,
 		vector<Trade>& trades,
-		const vector< vector<double> >& spl,
+		const vector<double>& spl,
 		const vector<double>& aspl,
-		const vector< vector<double> >& initialBalance,
+		const vector<double>& initialBalance,
 		const vector<double>& exchangeRates)
 	{
-		int numMembers = spl.size();
-		int numCurrencies = spl[0].size();
+		int numMembers = aspl.size();
+		int numCurrencies = spl.size() / aspl.size();
 
 		std::sort(trades.begin(), trades.end(),
 			[&exchangeRates](const Trade& lhs, const Trade& rhs) -> bool {
@@ -174,7 +201,7 @@ namespace mm {
 		{
 			for (int currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
 			{
-				current.currentBalance[++startIndex] = initialBalance[memberIndex][currencyIndex];
+				current.currentBalance[++startIndex] = initialBalance[startIndex];
 			}
 		}
 		current.settledAmount = 0.0;
