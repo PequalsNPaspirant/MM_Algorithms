@@ -30,6 +30,9 @@
 #include <unordered_map>
 #include <limits>
 
+#include "DynamicProgramming/DP_KnapsackProblem_0_1.h" //For class MM_Heap
+#include "Others/Others_FxSettlement_branch_and_bound_v6a.h"
+
 namespace mm {
 
 	constexpr double compile_time_pow(double base, int power)
@@ -195,6 +198,7 @@ namespace mm {
 		branch_and_bound_v4b,
 		branch_and_bound_v5a,
 		branch_and_bound_v5b,
+		branch_and_bound_v6a,
 
 		totalAlgos
 	};
@@ -219,7 +223,8 @@ namespace mm {
 		{ AlgoType::branch_and_bound_v4a,			{ "branch_and_bound_v4a", 20 } },
 		{ AlgoType::branch_and_bound_v4b,			{ "branch_and_bound_v4b", 20 } },
 		{ AlgoType::branch_and_bound_v5a,			{ "branch_and_bound_v5a", 30 } }, //numeric_limits<int>::max()
-		{ AlgoType::branch_and_bound_v5b,			{ "branch_and_bound_v5b", 27 } }
+		{ AlgoType::branch_and_bound_v5b,			{ "branch_and_bound_v5b", 27 } },
+		{ AlgoType::branch_and_bound_v6a,			{ "branch_and_bound_v6a", 50 } }
 		}; 
 		return AlgoTypeInfo[type];
 	}
@@ -235,5 +240,6 @@ namespace mm {
 	double doSettlement_branch_and_bound_v4b(vector<bool>& settleFlagsOut, vector<Trade>& trades, const vector<double>& spl, const vector<double>& aspl, const vector<double>& initialBalance, const vector<double>& exchangeRates);
 	double doSettlement_branch_and_bound_v5a(vector<bool>& settleFlagsOut, vector<Trade>& trades, const vector<double>& spl, const vector<double>& aspl, const vector<double>& initialBalance, const vector<double>& exchangeRates);
 	double doSettlement_branch_and_bound_v5b(vector<bool>& settleFlagsOut, vector<Trade>& trades, const vector<double>& spl, const vector<double>& aspl, const vector<double>& initialBalance, const vector<double>& exchangeRates);
+	double doSettlement_branch_and_bound_v6a(vector<bool>& settleFlagsOut, vector<Trade>& trades, const vector<double>& spl, const vector<double>& aspl, const vector<double>& initialBalance, const vector<double>& exchangeRates, MM_Heap<fxDecisionTreeNode_v6a*, fxDecisionTreeNodeCompare_v6a>& fxMaxHeap_v6a, vector<vector<fxDecisionTreeNode_v6a>>& heapObjectsGrowingPool, int initialHeapCapacity);
 
 }

@@ -26,6 +26,7 @@
 
 #pragma once
 
+#include <functional> //for std::less
 #include <queue>
 using namespace std;
 

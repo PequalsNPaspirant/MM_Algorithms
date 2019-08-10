@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v6a.cpp" />
     <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement_naive_v3.cpp" />
     <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v5a.cpp" />
     <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v5b.cpp" />
@@ -218,6 +219,7 @@
     <ClCompile Include="..\..\..\..\src\_MM_Algorithms_main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v6a.h" />
     <ClInclude Include="..\..\..\..\src\Others\Others_RankInSortedArray.h" />
     <ClInclude Include="..\..\..\..\src\MM_UnitTestFramework\MM_UnitTestFramework.h" />
     <ClInclude Include="..\..\..\..\src\C++11_onwards\C++11_MoveSemantics.h" />
