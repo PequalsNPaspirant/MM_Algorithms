@@ -24,6 +24,7 @@
 //   OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                     //
 //=======================================================================================================//
 
+#include <iostream>
 #include <vector>
 #include <queue>
 #include <bitset>
@@ -44,6 +45,7 @@ namespace mm {
 	v4a		Use improved upper bound
 	v5a		Remove all vector<vector<>>
 	v6a		Preallocate all memory. No dynamic memory allocation.
+			Check if upperbound is slightly more than max, break the loop
 	*/
 
 	void fxDecisionTreeNode_v6a::calculateAndSetUpperBound(
@@ -69,12 +71,13 @@ namespace mm {
 			}
 		}
 
-		if (cumulativeSettledAmount > excessSettledAmountInDollars)
-		{
-			//_CrtDbgBreak();
-			int x = 0;
-			++x;
-		}
+		//if (cumulativeSettledAmount < excessSettledAmountInDollars)
+		//{
+		//	//We may come here sometimes, if currentBalance is already short and cumulative balance makes if go down further
+		//	//_CrtDbgBreak();
+		//	int* p = nullptr;
+		//	*p = 10;
+		//}
 		upperbound = settledAmount + cumulativeSettledAmount - excessSettledAmountInDollars;
 	}
 
@@ -209,7 +212,7 @@ namespace mm {
 			fxDecisionTreeNode_v6a* pCurrent = fxMaxHeap_v6a.top();
 			fxDecisionTreeNode_v6a& current = *pCurrent;
 
-			if ((current.upperbound + zero) <= maxValue)
+			if ((current.upperbound - zero) <= maxValue)
 				break;
 
 			//exclude current
@@ -252,7 +255,14 @@ namespace mm {
 				maxValue = include.settledAmount;
 				settleFlagsOut = include.settleFlags;
 
-				if ((current.upperbound + zero) < maxValue)
+				//cout << "\n"
+				//	<< "Level: " << include.level
+				//	<< " numberOfFunctionCalls: " << numberOfFunctionCalls
+				//	<< " Heap size: " << fxMaxHeap_v6a.size()
+				//	<< " include.upperbound: " << include.upperbound
+				//	<< " include.settledAmount: " << include.settledAmount;
+
+				if ((current.upperbound - zero) <= maxValue)
 					break;
 			}
 

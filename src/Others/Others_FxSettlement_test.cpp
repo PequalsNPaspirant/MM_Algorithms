@@ -41,6 +41,7 @@ using namespace std;
 #include "MM_UnitTestFramework/MM_UnitTestFramework.h"
 
 #include "Others/Others_FxSettlement_branch_and_bound_v6a.h"
+#include "Others/Others_FxSettlement_branch_and_bound_v7a.h"
 
 namespace mm {
 
@@ -148,7 +149,7 @@ namespace mm {
 		{
 			cout << "\n";
 			double actualSettledAmount = 0.0;
-			for (int i = 0; i < static_cast<int>(AlgoType::totalAlgos); ++i)
+			for (int i = 1; i < static_cast<int>(AlgoType::totalAlgos); ++i)
 			{
 				if (getAlgoInfo(AlgoType(i)).maxTrades < testCases[testCaseIndex].trades_.size())
 					continue;
@@ -288,6 +289,30 @@ namespace mm {
 						testCases[testCaseIndex].initialBalance_,
 						testCases[testCaseIndex].exchangeRates_,
 						fxMaxHeap_v6a,
+						heapObjectsGrowingPool,
+						initialHeapCapacity
+					);
+					break;
+				}
+				case AlgoType::branch_and_bound_v7a:
+				{
+					int initialHeapCapacity = 1'000'000;
+					//Total memory = 1,000,000 * object size = 1,000,000 * (24 + (8 * members * currencies)) bytes = (24 + (8 * members * currencies)) MB
+					vector<vector<fxDecisionTreeNode_v7a>> heapObjectsGrowingPool(1, vector<fxDecisionTreeNode_v7a>(initialHeapCapacity, fxDecisionTreeNode_v7a{ testCases[testCaseIndex].initialBalance_.size() }));
+					MM_Heap<fxDecisionTreeNode_v7a*, fxDecisionTreeNodeCompare_v7a> fxMaxHeap_v7a(initialHeapCapacity);
+					//initialize the pool indices
+					for (int i = 0; i < initialHeapCapacity; ++i)
+						fxMaxHeap_v7a.addToData(&heapObjectsGrowingPool[0][i]);
+
+					start = std::chrono::high_resolution_clock::now();
+					actualSettledAmount = doSettlement_branch_and_bound_v7a(
+						settleFlags,
+						testCases[testCaseIndex].trades_,
+						testCases[testCaseIndex].spl_,
+						testCases[testCaseIndex].aspl_,
+						testCases[testCaseIndex].initialBalance_,
+						testCases[testCaseIndex].exchangeRates_,
+						fxMaxHeap_v7a,
 						heapObjectsGrowingPool,
 						initialHeapCapacity
 					);

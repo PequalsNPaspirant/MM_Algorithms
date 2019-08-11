@@ -226,7 +226,7 @@ namespace mm {
 			fxDecisionTreeNode_v5b* pCurrent = fxMaxHeap_v5b.top();
 			fxDecisionTreeNode_v5b& current = *pCurrent;
 
-			if ((current.upperbound + zero) < maxValue)
+			if ((current.upperbound - zero) <= maxValue)
 				break;
 
 			current.level += 1;
@@ -243,7 +243,7 @@ namespace mm {
 						maxValue = current.settledAmount;
 						settleFlagsOut = current.settleFlags;
 
-						if ((current.upperbound + zero) < maxValue)
+						if ((current.upperbound - zero) <= maxValue)
 							break;
 					}
 				}

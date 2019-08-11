@@ -35,27 +35,29 @@ using namespace std;
 
 namespace mm {
 
-	struct fxDecisionTreeNode_v6a
+	struct fxDecisionTreeNode_v7a
 	{
 		//Total size of object in bytes = 4 + 8 + (8 * members * currencies) + 8 + 4 * (members * currencies) / 32 + 4 = 24 + (8 * members * currencies) + 4 * (members * currencies) / 32 ~ 24 + (8 * members * currencies)
 		int level;
 		double upperbound;
+		bool upperboundRmtPassed = false;
 
 		vector<double> currentBalance;
 		double settledAmount;
 		vector<bool> settleFlags;
 		bitset<128> rmtPassed{ 0 }; //4 bytes (4 * 32 = 128)
 
-		fxDecisionTreeNode_v6a(size_t totalBalances)
+		fxDecisionTreeNode_v7a(size_t totalBalances)
 			: currentBalance(totalBalances, 0.0)
 			//settleFlags(totalTrades, false)
 		{
 
 		}
 
-		fxDecisionTreeNode_v6a(const fxDecisionTreeNode_v6a& rhs)
+		fxDecisionTreeNode_v7a(const fxDecisionTreeNode_v7a& rhs)
 			: level{ rhs.level },
 			upperbound{ rhs.upperbound },
+			upperboundRmtPassed{ rhs.upperboundRmtPassed },
 			currentBalance{ rhs.currentBalance },
 			settledAmount{ rhs.settledAmount },
 			settleFlags{ rhs.settleFlags },
@@ -63,10 +65,12 @@ namespace mm {
 		{
 		}
 
-		fxDecisionTreeNode_v6a& operator=(const fxDecisionTreeNode_v6a& rhs)
+		fxDecisionTreeNode_v7a& operator=(const fxDecisionTreeNode_v7a& rhs)
 		{
 			level = rhs.level;
 			upperbound = rhs.upperbound;
+			upperboundRmtPassed = rhs.upperboundRmtPassed;
+
 			if (currentBalance.size() != rhs.currentBalance.size())
 			{
 				//Ideally we should not come here
@@ -91,9 +95,9 @@ namespace mm {
 			const vector<double>& exchangeRates
 		);
 	};
-	struct fxDecisionTreeNodeCompare_v6a
+	struct fxDecisionTreeNodeCompare_v7a
 	{
-		bool operator()(const fxDecisionTreeNode_v6a* lhs, const fxDecisionTreeNode_v6a* rhs) const
+		bool operator()(const fxDecisionTreeNode_v7a* lhs, const fxDecisionTreeNode_v7a* rhs) const
 		{
 			return lhs->upperbound < rhs->upperbound;
 		}
