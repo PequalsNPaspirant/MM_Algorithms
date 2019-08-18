@@ -100,6 +100,8 @@ namespace mm {
 				if (!somethingSettled && tradeIndex == lastTradeSettledInLastPass)
 					break;
 
+				++(TestStats::currentTestStats.numberOfFunctionCalls);
+
 				if (settleFlagsOut[tradeIndex]) continue;
 
 				// Update current balance

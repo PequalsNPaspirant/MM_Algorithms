@@ -207,11 +207,20 @@ namespace mm {
 		int numMembers = aspl.size();
 		int numCurrencies = spl.size() / aspl.size();
 
-		std::sort(trades.begin(), trades.end(),
-			[&exchangeRates](const Trade& lhs, const Trade& rhs) -> bool {
-			return (lhs.buyVol_ * exchangeRates[static_cast<int>(lhs.buyCurr_)] + lhs.sellVol_ * exchangeRates[static_cast<int>(lhs.sellCurr_)])
-			> (rhs.buyVol_ * exchangeRates[static_cast<int>(rhs.buyCurr_)] + rhs.sellVol_ * exchangeRates[static_cast<int>(rhs.sellCurr_)]);
-		});
+		//std::sort(trades.begin(), trades.end(),
+		//	[&exchangeRates](const Trade& lhs, const Trade& rhs) -> bool {
+		//	return (lhs.buyVol_ * exchangeRates[static_cast<int>(lhs.buyCurr_)] + lhs.sellVol_ * exchangeRates[static_cast<int>(lhs.sellCurr_)])
+		//	> (rhs.buyVol_ * exchangeRates[static_cast<int>(rhs.buyCurr_)] + rhs.sellVol_ * exchangeRates[static_cast<int>(rhs.sellCurr_)]);
+		//});
+
+		double settledAmountGreedy = doSettlement_greedy_v1(
+			settleFlagsOut,
+			trades,
+			spl,
+			aspl,
+			initialBalance,
+			exchangeRates
+		);
 
 		vector< vector<double> > cumulativeBalance(trades.size(), vector<double>(numMembers * numCurrencies, 0.0));
 		vector<double> cumulativeSettledAmount(trades.size(), 0.0);
@@ -262,7 +271,7 @@ namespace mm {
 			exchangeRates);
 		fxMaxHeap_v8a.push(pObj);
 
-		double maxValue = 0.0;
+		double maxValue = settledAmountGreedy;
 		unsigned long long numberOfFunctionCalls = 0;
 		int sizeOfHeap = 0;
 
@@ -278,7 +287,7 @@ namespace mm {
 			if ((current.upperbound - zero) <= maxValue)
 				break;
 
-			if (current.upperboundRmtPassed)
+			if (current.upperboundRmtPassed && maxValue < current.settledAmount)
 			{
 				maxValue = current.settledAmount;
 				settleFlagsOut = current.settleFlags;
@@ -325,17 +334,9 @@ namespace mm {
 				maxValue = include.settledAmount;
 				settleFlagsOut = include.settleFlags;
 
-				debugPrint_v8a(include.level, numberOfFunctionCalls, fxMaxHeap_v8a.size(),
-					include.upperbound, include.upperboundRmtPassed, 
-					include.settledAmount, "");
-
-				//cout << "\n"
-				//	<< "Level: " << include.level
-				//	<< " numberOfFunctionCalls: " << numberOfFunctionCalls
-				//	<< " Heap size: " << fxMaxHeap_v8a.size()
-				//	<< " include.upperbound: " << include.upperbound
-				//	<< " include.upperboundRmtPassed: " << (include.upperboundRmtPassed ? "Yes" : "No")
-				//	<< " include.settledAmount: " << include.settledAmount;
+				//debugPrint_v8a(include.level, numberOfFunctionCalls, fxMaxHeap_v8a.size(),
+				//	include.upperbound, include.upperboundRmtPassed, 
+				//	include.settledAmount, "");
 
 				if ((current.upperbound - zero) <= maxValue)
 					break;
