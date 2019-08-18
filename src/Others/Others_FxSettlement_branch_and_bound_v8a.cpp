@@ -50,7 +50,9 @@ namespace mm {
 			Check if upperbound is slightly more than max, break the loop
 	v7a		While calculating upper bound, if all remaining trades are settled, then set rmtPassed = true and break the loop if this is upperbound
 			Consider ASPL and NOV as well while calculating upper bound
-	v8a		Start with greedy max settled amount instead of zero. Remove all elements from heap which has upper bound less than current settled amount
+	v8a		Start with greedy max settled amount instead of zero.
+	
+	Future	Remove all elements from heap which has upper bound less than current settled amount
 	*/
 
 	void fxDecisionTreeNode_v8a::calculateAndSetUpperBound(
