@@ -287,7 +287,7 @@ namespace mm {
 			fxDecisionTreeNode_v9a* pCurrent = fxMaxHeap_v9a.top();
 			fxDecisionTreeNode_v9a& current = *pCurrent;
 
-			if ((current.upperbound - zero) <= maxValue)
+			if ((current.upperbound + zero) < maxValue)
 				break;
 
 			if (current.upperboundRmtPassed && maxValue < current.settledAmount)
@@ -313,9 +313,11 @@ namespace mm {
 			}
 
 			//include this item
-			fxDecisionTreeNode_v9a* pInclude = fxMaxHeap_v9a.getNextAvailableElement();
-			fxDecisionTreeNode_v9a& include = *pInclude;
-			include = current;
+			fxDecisionTreeNode_v9a* pExclude = fxMaxHeap_v9a.getNextAvailableElement();
+			fxDecisionTreeNode_v9a& exclude = *pExclude;
+			exclude = current;
+
+			fxDecisionTreeNode_v9a& include = current;
 			// Update current balance
 			int partyId = trades[include.level].partyId_;
 			int cPartyId = trades[include.level].cPartyId_;
@@ -325,13 +327,13 @@ namespace mm {
 			include.currentBalance[numMembers * partyId + sellCurrId] -= trades[include.level].sellVol_;
 			include.currentBalance[numMembers * cPartyId + buyCurrId] -= trades[include.level].buyVol_;
 			include.currentBalance[numMembers * cPartyId + sellCurrId] += trades[include.level].sellVol_;
-			
-			verifySettlement_v9a(include.rmtPassed, include.currentBalance, { partyId, cPartyId }, spl, aspl, exchangeRates);
 			include.settledAmount += (
 				trades[include.level].buyVol_ * exchangeRates[static_cast<int>(trades[include.level].buyCurr_)]
 				+ trades[include.level].sellVol_ * exchangeRates[static_cast<int>(trades[include.level].sellCurr_)]
 				);
 			include.settleFlags[include.level] = true;
+
+			verifySettlement_v9a(include.rmtPassed, include.currentBalance, { partyId, cPartyId }, spl, aspl, exchangeRates);
 			if (include.rmtPassed.all() && maxValue < include.settledAmount)
 			{
 				maxValue = include.settledAmount;
@@ -341,7 +343,7 @@ namespace mm {
 				//	include.upperbound, include.upperboundRmtPassed, 
 				//	include.settledAmount, "");
 
-				if ((current.upperbound - zero) <= maxValue)
+				if ((current.upperbound + zero) <= maxValue)
 					break;
 			}
 
@@ -351,33 +353,32 @@ namespace mm {
 
 			if (current.level < trades.size() - 1)
 			{
-				//include.calculateAndSetUpperBound(cumulativeBalance[include.level + 1], cumulativeSettledAmount[include.level + 1], spl, aspl, exchangeRates);
-				include.calculateAndSetUpperBound(
-					cumulativeBalance[include.level + 1],
-					cumulativeSettledAmount[include.level + 1],
+				exclude.calculateAndSetUpperBound(
+					cumulativeBalance[exclude.level + 1],
+					cumulativeSettledAmount[exclude.level + 1],
 					spl,
 					aspl,
 					exchangeRates);
 
-				// maxValue is kind of lower bound so far, so avoid the decision tree nodes having upper bound less than maxValue
-				if ((include.upperbound + zero) >= maxValue)
-					fxMaxHeap_v9a.push(pInclude);
-
-				if (include.upperboundRmtPassed)
+				if (exclude.upperboundRmtPassed)
 				{
-					if (maxValue < include.settledAmount)
+					if (maxValue < exclude.settledAmount)
 					{
-						maxValue = include.settledAmount;
-						settleFlagsOut = include.settleFlags;
+						maxValue = exclude.settledAmount;
+						settleFlagsOut = exclude.settleFlags;
 					}
 
 					//debugPrint_v9a(include.level, numberOfFunctionCalls, fxMaxHeap_v9a.size(),
 					//	include.upperbound, include.upperboundRmtPassed,
 					//	include.settledAmount, "*");
 
-					//if ((current.upperbound - zero) <= maxValue)
-					//	break;
+					if ((current.upperbound - zero) <= maxValue)
+						break;
 				}
+
+				// maxValue is kind of lower bound so far, so avoid the decision tree nodes having upper bound less than maxValue
+				if ((exclude.upperbound - zero) > maxValue)
+					fxMaxHeap_v9a.push(pExclude);
 			}
 			else
 				fxMaxHeap_v9a.pop();
