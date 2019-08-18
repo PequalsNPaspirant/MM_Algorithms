@@ -33,6 +33,7 @@
 #include "DynamicProgramming/DP_KnapsackProblem_0_1.h" //For class MM_Heap
 #include "Others/Others_FxSettlement_branch_and_bound_v6a.h"
 #include "Others/Others_FxSettlement_branch_and_bound_v7a.h"
+#include "Others/Others_FxSettlement_branch_and_bound_v8a.h"
 
 namespace mm {
 
@@ -160,9 +161,9 @@ namespace mm {
 		vector<double> aspl_;
 		vector<double> initialBalance_;
 		vector<double> exchangeRates_;
-		double settledAmount_;
-		vector<int> settledTradeIds_;
-		bool resultsAvailable;
+		mutable double settledAmount_;
+		mutable vector<int> settledTradeIds_;
+		mutable bool resultsAvailable;
 	};
 
 	struct TestStats
@@ -175,6 +176,7 @@ namespace mm {
 		int numTrades;
 		int tradesSettled;
 		double amountSettled;
+		double percentageAmtSettled_;
 		string durationStr;
 		unsigned long long numberOfFunctionCalls;
 		unsigned long long sizeOfHeap;
@@ -188,7 +190,8 @@ namespace mm {
 	//Settlement Algos:
 	enum class AlgoType
 	{
-		sequential = 0,
+		greedy = 0,
+		sequential,
 		naive_v1,
 		naive_v2,
 		naive_v3,
@@ -202,6 +205,7 @@ namespace mm {
 		branch_and_bound_v5b,
 		branch_and_bound_v6a,
 		branch_and_bound_v7a,
+		branch_and_bound_v8a,
 
 		totalAlgos
 	};
@@ -216,6 +220,7 @@ namespace mm {
 	AlgoInfo getAlgoInfo(AlgoType type)
 	{ 
 		static unordered_map<AlgoType, AlgoInfo> AlgoTypeInfo{
+		{ AlgoType::greedy,							{ "greedy", numeric_limits<int>::max() } },
 		{ AlgoType::sequential ,					{ "sequential", numeric_limits<int>::max() } },
 		{ AlgoType::naive_v1 ,						{ "naive_v1", 20} },
 		{ AlgoType::naive_v2 ,						{ "naive_v2", 20} },
@@ -229,11 +234,14 @@ namespace mm {
 		{ AlgoType::branch_and_bound_v5a,			{ "branch_and_bound_v5a", 23 } }, 
 		{ AlgoType::branch_and_bound_v5b,			{ "branch_and_bound_v5b", 22 } },
 		{ AlgoType::branch_and_bound_v6a,			{ "branch_and_bound_v6a", 23 } },
-		{ AlgoType::branch_and_bound_v7a,			{ "branch_and_bound_v7a", 28 } }
+		{ AlgoType::branch_and_bound_v7a,			{ "branch_and_bound_v7a", 28 } },
+		{ AlgoType::branch_and_bound_v8a,			{ "branch_and_bound_v8a", 50 } }
 		}; 
 		return AlgoTypeInfo[type];
 	}
 
+	double doSettlement_greedy_v1(vector<bool>& settleFlagsOut, vector<Trade>& trades, const vector<double>& spl, const vector<double>& aspl, const vector<double>& initialBalance, const vector<double>& exchangeRates);
+	double doSettlement_sequential(vector<bool>& settleFlagsOut, const vector<Trade>& trades, const vector<double>& spl, const vector<double>& aspl, const vector<double>& initialBalance, const vector<double>& exchangeRates);
 	double doSettlement_naive_v1(vector<bool>& settleFlagsOut, const vector<Trade>& trades, const vector<double>& spl, const vector<double>& aspl, const vector<double>& initialBalance, const vector<double>& exchangeRates);
 	double doSettlement_naive_v2(vector<bool>& settleFlagsOut, const vector<Trade>& trades, const vector<double>& spl, const vector<double>& aspl, const vector<double>& initialBalance, const vector<double>& exchangeRates);
 	double doSettlement_naive_v3(vector<bool>& settleFlagsOut, const vector<Trade>& trades, const vector<double>& spl, const vector<double>& aspl, const vector<double>& initialBalance, const vector<double>& exchangeRates);
@@ -247,5 +255,6 @@ namespace mm {
 	double doSettlement_branch_and_bound_v5b(vector<bool>& settleFlagsOut, vector<Trade>& trades, const vector<double>& spl, const vector<double>& aspl, const vector<double>& initialBalance, const vector<double>& exchangeRates);
 	double doSettlement_branch_and_bound_v6a(vector<bool>& settleFlagsOut, vector<Trade>& trades, const vector<double>& spl, const vector<double>& aspl, const vector<double>& initialBalance, const vector<double>& exchangeRates, MM_Heap<fxDecisionTreeNode_v6a*, fxDecisionTreeNodeCompare_v6a>& fxMaxHeap_v6a, vector<vector<fxDecisionTreeNode_v6a>>& heapObjectsGrowingPool, int initialHeapCapacity);
 	double doSettlement_branch_and_bound_v7a(vector<bool>& settleFlagsOut, vector<Trade>& trades, const vector<double>& spl, const vector<double>& aspl, const vector<double>& initialBalance, const vector<double>& exchangeRates, MM_Heap<fxDecisionTreeNode_v7a*, fxDecisionTreeNodeCompare_v7a>& fxMaxHeap_v7a, vector<vector<fxDecisionTreeNode_v7a>>& heapObjectsGrowingPool, int initialHeapCapacity);
+	double doSettlement_branch_and_bound_v8a(vector<bool>& settleFlagsOut, vector<Trade>& trades, const vector<double>& spl, const vector<double>& aspl, const vector<double>& initialBalance, const vector<double>& exchangeRates, MM_Heap<fxDecisionTreeNode_v8a*, fxDecisionTreeNodeCompare_v8a>& fxMaxHeap_v8a, vector<vector<fxDecisionTreeNode_v8a>>& heapObjectsGrowingPool, int initialHeapCapacity);
 
 }

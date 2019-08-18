@@ -73,7 +73,8 @@ namespace mm {
 		const vector<double>& aspl, 
 		const vector<double>& initialBalance, 
 		const vector<double>& exchangeRates, 
-		double actualSettledAmount)
+		double actualSettledAmount,
+		bool verifySettledAmount)
 	{
 		//rmt
 		int numMembers = aspl.size();
@@ -125,13 +126,13 @@ namespace mm {
 				return false;
 		}
 
-		return fabs(actualSettledAmount - amountSettled) < zero;
+		return !verifySettledAmount || fabs(actualSettledAmount - amountSettled) < zero;
 	}
 
-	void testFxSettlement(vector<TestCase>& testCases)
+	void testFxSettlement(const vector<TestCase>& testCases)
 	{
 		vector<TestStats> stats;
-		int columnWidth[11] = { 12, 12, 30, 10, 15, 12, 15, 18, 20, 15, 15 };
+		int columnWidth[12] = { 12, 12, 30, 10, 15, 12, 15, 18, 15, 20, 15, 15 };
 		cout << "\n"
 			<< setw(columnWidth[0]) << std::left << "FilePrefix"
 			<< setw(columnWidth[1]) << std::left << "TestResult"
@@ -141,15 +142,26 @@ namespace mm {
 			<< setw(columnWidth[5]) << std::right << "numTrades"
 			<< setw(columnWidth[6]) << std::right << "TradesSettled"
 			<< setw(columnWidth[7]) << std::right << "AmountSettled"
-			<< setw(columnWidth[8]) << std::right << "Duration"
-			<< setw(columnWidth[9]) << std::right << "FunCalls"
-			<< setw(columnWidth[10]) << std::right << "HeapSize";
+			<< setw(columnWidth[8]) << std::right << "% Amt Settled"
+			<< setw(columnWidth[9]) << std::right << "Duration"
+			<< setw(columnWidth[10]) << std::right << "FunCalls"
+			<< setw(columnWidth[11]) << std::right << "HeapSize";
 
 		for (int testCaseIndex = 0; testCaseIndex < testCases.size(); ++testCaseIndex)
 		{
 			cout << "\n";
 			double actualSettledAmount = 0.0;
-			for (int i = 1; i < static_cast<int>(AlgoType::totalAlgos); ++i)
+
+			double totalTradesAmount = 0.0;
+			for (int tradeIndex = 0; tradeIndex < testCases[testCaseIndex].trades_.size(); ++tradeIndex)
+			{
+				const Trade& currentTrade = testCases[testCaseIndex].trades_[tradeIndex];
+				double currentTradeValue = currentTrade.buyVol_ * testCases[testCaseIndex].exchangeRates_[static_cast<int>(currentTrade.buyCurr_)]
+					+ currentTrade.sellVol_ * testCases[testCaseIndex].exchangeRates_[static_cast<int>(currentTrade.sellCurr_)];
+				totalTradesAmount += currentTradeValue;
+			}
+
+			for (int i = 0; i < static_cast<int>(AlgoType::totalAlgos); ++i)
 			{
 				if (getAlgoInfo(AlgoType(i)).maxTrades < testCases[testCaseIndex].trades_.size())
 					continue;
@@ -157,13 +169,38 @@ namespace mm {
 				TestStats::currentTestStats.numberOfFunctionCalls = 0;
 				TestStats::currentTestStats.sizeOfHeap = 0;
 				vector<bool> settleFlags(testCases[testCaseIndex].trades_.size(), false);
+				vector<Trade> trades{ testCases[testCaseIndex].trades_ };
+
 				std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();
+
 				switch (AlgoType(i))
 				{
+				case AlgoType::greedy:
+				{
+					actualSettledAmount = doSettlement_greedy_v1(
+						settleFlags,
+						trades,
+						testCases[testCaseIndex].spl_,
+						testCases[testCaseIndex].aspl_,
+						testCases[testCaseIndex].initialBalance_,
+						testCases[testCaseIndex].exchangeRates_
+					);
+					break;
+				}
+				case AlgoType::sequential:
+					actualSettledAmount = doSettlement_sequential(
+						settleFlags,
+						trades,
+						testCases[testCaseIndex].spl_,
+						testCases[testCaseIndex].aspl_,
+						testCases[testCaseIndex].initialBalance_,
+						testCases[testCaseIndex].exchangeRates_
+					);
+					break;
 				case AlgoType::naive_v1:
 					actualSettledAmount = doSettlement_naive_v1(
 						settleFlags,
-						testCases[testCaseIndex].trades_,
+						trades,
 						testCases[testCaseIndex].spl_,
 						testCases[testCaseIndex].aspl_,
 						testCases[testCaseIndex].initialBalance_,
@@ -173,7 +210,7 @@ namespace mm {
 				case AlgoType::naive_v2:
 					actualSettledAmount = doSettlement_naive_v2(
 						settleFlags,
-						testCases[testCaseIndex].trades_,
+						trades,
 						testCases[testCaseIndex].spl_,
 						testCases[testCaseIndex].aspl_,
 						testCases[testCaseIndex].initialBalance_,
@@ -183,7 +220,7 @@ namespace mm {
 				case AlgoType::naive_v3:
 					actualSettledAmount = doSettlement_naive_v3(
 						settleFlags,
-						testCases[testCaseIndex].trades_,
+						trades,
 						testCases[testCaseIndex].spl_,
 						testCases[testCaseIndex].aspl_,
 						testCases[testCaseIndex].initialBalance_,
@@ -191,85 +228,101 @@ namespace mm {
 					);
 					break;
 				case AlgoType::branch_and_bound_v1:
+				{
 					actualSettledAmount = doSettlement_branch_and_bound_v1(
 						settleFlags,
-						testCases[testCaseIndex].trades_,
+						trades,
 						testCases[testCaseIndex].spl_,
 						testCases[testCaseIndex].aspl_,
 						testCases[testCaseIndex].initialBalance_,
 						testCases[testCaseIndex].exchangeRates_
 					);
 					break;
+				}
 				case AlgoType::branch_and_bound_v2:
+				{
 					actualSettledAmount = doSettlement_branch_and_bound_v2(
 						settleFlags,
-						testCases[testCaseIndex].trades_,
+						trades,
 						testCases[testCaseIndex].spl_,
 						testCases[testCaseIndex].aspl_,
 						testCases[testCaseIndex].initialBalance_,
 						testCases[testCaseIndex].exchangeRates_
 					);
 					break;
+				}
 				case AlgoType::branch_and_bound_v3a:
+				{
 					actualSettledAmount = doSettlement_branch_and_bound_v3a(
 						settleFlags,
-						testCases[testCaseIndex].trades_,
+						trades,
 						testCases[testCaseIndex].spl_,
 						testCases[testCaseIndex].aspl_,
 						testCases[testCaseIndex].initialBalance_,
 						testCases[testCaseIndex].exchangeRates_
 					);
 					break;
+				}
 				case AlgoType::branch_and_bound_v3b:
+				{
 					actualSettledAmount = doSettlement_branch_and_bound_v3b(
 						settleFlags,
-						testCases[testCaseIndex].trades_,
+						trades,
 						testCases[testCaseIndex].spl_,
 						testCases[testCaseIndex].aspl_,
 						testCases[testCaseIndex].initialBalance_,
 						testCases[testCaseIndex].exchangeRates_
 					);
 					break;
+				}
 				case AlgoType::branch_and_bound_v4a:
+				{
 					actualSettledAmount = doSettlement_branch_and_bound_v4a(
 						settleFlags,
-						testCases[testCaseIndex].trades_,
+						trades,
 						testCases[testCaseIndex].spl_,
 						testCases[testCaseIndex].aspl_,
 						testCases[testCaseIndex].initialBalance_,
 						testCases[testCaseIndex].exchangeRates_
 					);
 					break;
+				}
 				case AlgoType::branch_and_bound_v4b:
+				{
 					actualSettledAmount = doSettlement_branch_and_bound_v4b(
 						settleFlags,
-						testCases[testCaseIndex].trades_,
+						trades,
 						testCases[testCaseIndex].spl_,
 						testCases[testCaseIndex].aspl_,
 						testCases[testCaseIndex].initialBalance_,
 						testCases[testCaseIndex].exchangeRates_
 					);
 					break;
+				}
 				case AlgoType::branch_and_bound_v5a:
+				{
 					actualSettledAmount = doSettlement_branch_and_bound_v5a(
 						settleFlags,
-						testCases[testCaseIndex].trades_,
+						trades,
 						testCases[testCaseIndex].spl_,
 						testCases[testCaseIndex].aspl_,
 						testCases[testCaseIndex].initialBalance_,
 						testCases[testCaseIndex].exchangeRates_
 					);
 					break;
+				}
 				case AlgoType::branch_and_bound_v5b:
+				{
 					actualSettledAmount = doSettlement_branch_and_bound_v5b(
 						settleFlags,
-						testCases[testCaseIndex].trades_,
+						trades,
 						testCases[testCaseIndex].spl_,
 						testCases[testCaseIndex].aspl_,
 						testCases[testCaseIndex].initialBalance_,
 						testCases[testCaseIndex].exchangeRates_
 					);
 					break;
+				}
 				case AlgoType::branch_and_bound_v6a:
 				{
 					int initialHeapCapacity = 1'000'000;
@@ -283,7 +336,7 @@ namespace mm {
 					start = std::chrono::high_resolution_clock::now();
 					actualSettledAmount = doSettlement_branch_and_bound_v6a(
 						settleFlags,
-						testCases[testCaseIndex].trades_,
+						trades,
 						testCases[testCaseIndex].spl_,
 						testCases[testCaseIndex].aspl_,
 						testCases[testCaseIndex].initialBalance_,
@@ -307,12 +360,36 @@ namespace mm {
 					start = std::chrono::high_resolution_clock::now();
 					actualSettledAmount = doSettlement_branch_and_bound_v7a(
 						settleFlags,
-						testCases[testCaseIndex].trades_,
+						trades,
 						testCases[testCaseIndex].spl_,
 						testCases[testCaseIndex].aspl_,
 						testCases[testCaseIndex].initialBalance_,
 						testCases[testCaseIndex].exchangeRates_,
 						fxMaxHeap_v7a,
+						heapObjectsGrowingPool,
+						initialHeapCapacity
+					);
+					break;
+				}
+				case AlgoType::branch_and_bound_v8a:
+				{
+					int initialHeapCapacity = 1'000'000;
+					//Total memory = 1,000,000 * object size = 1,000,000 * (24 + (8 * members * currencies)) bytes = (24 + (8 * members * currencies)) MB
+					vector<vector<fxDecisionTreeNode_v8a>> heapObjectsGrowingPool(1, vector<fxDecisionTreeNode_v8a>(initialHeapCapacity, fxDecisionTreeNode_v8a{ testCases[testCaseIndex].initialBalance_.size() }));
+					MM_Heap<fxDecisionTreeNode_v8a*, fxDecisionTreeNodeCompare_v8a> fxMaxHeap_v8a(initialHeapCapacity);
+					//initialize the pool indices
+					for (int i = 0; i < initialHeapCapacity; ++i)
+						fxMaxHeap_v8a.addToData(&heapObjectsGrowingPool[0][i]);
+
+					start = std::chrono::high_resolution_clock::now();
+					actualSettledAmount = doSettlement_branch_and_bound_v8a(
+						settleFlags,
+						trades,
+						testCases[testCaseIndex].spl_,
+						testCases[testCaseIndex].aspl_,
+						testCases[testCaseIndex].initialBalance_,
+						testCases[testCaseIndex].exchangeRates_,
+						fxMaxHeap_v8a,
 						heapObjectsGrowingPool,
 						initialHeapCapacity
 					);
@@ -324,19 +401,24 @@ namespace mm {
 				std::chrono::high_resolution_clock::time_point end = std::chrono::high_resolution_clock::now();
 				unsigned long long duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count();
 
+				bool verifySettledAmount = true;
+				if (AlgoType(i) == AlgoType::greedy || AlgoType(i) == AlgoType::sequential)
+					verifySettledAmount = false;
+					
 				bool verified = verifySettlement(
 					settleFlags,
-					testCases[testCaseIndex].trades_,
+					trades,
 					testCases[testCaseIndex].spl_,
 					testCases[testCaseIndex].aspl_,
 					testCases[testCaseIndex].initialBalance_,
 					testCases[testCaseIndex].exchangeRates_,
-					actualSettledAmount
+					actualSettledAmount,
+					verifySettledAmount
 				);
 				vector<int> actualSettledTradeIds;
 				for (int i = 0; i < settleFlags.size(); ++i)
 					if (settleFlags[i] == true)
-						actualSettledTradeIds.push_back(testCases[testCaseIndex].trades_[i].id_);
+						actualSettledTradeIds.push_back(trades[i].id_);
 
 				std::sort(actualSettledTradeIds.begin(), actualSettledTradeIds.end());
 
@@ -352,6 +434,7 @@ namespace mm {
 				TestStats::currentTestStats.numTrades = testCases[testCaseIndex].trades_.size();
 				TestStats::currentTestStats.tradesSettled = actualSettledTradeIds.size();
 				TestStats::currentTestStats.amountSettled = actualSettledAmount;
+				TestStats::currentTestStats.percentageAmtSettled_ = actualSettledAmount / totalTradesAmount * 100.0;
 				TestStats::currentTestStats.durationStr = buffer.str() + " ns";
 
 				//printOrWrite(testStats);
@@ -367,9 +450,10 @@ namespace mm {
 					<< setw(columnWidth[5]) << std::right << TestStats::currentTestStats.numTrades
 					<< setw(columnWidth[6]) << std::right << TestStats::currentTestStats.tradesSettled
 					<< setw(columnWidth[7]) << std::right << TestStats::currentTestStats.amountSettled
-					<< setw(columnWidth[8]) << std::right << TestStats::currentTestStats.durationStr
-					<< setw(columnWidth[9]) << std::right << TestStats::currentTestStats.numberOfFunctionCalls
-					<< setw(columnWidth[10]) << std::right << TestStats::currentTestStats.sizeOfHeap;
+					<< setw(columnWidth[8]) << std::right << TestStats::currentTestStats.percentageAmtSettled_
+					<< setw(columnWidth[9]) << std::right << TestStats::currentTestStats.durationStr
+					<< setw(columnWidth[10]) << std::right << TestStats::currentTestStats.numberOfFunctionCalls
+					<< setw(columnWidth[11]) << std::right << TestStats::currentTestStats.sizeOfHeap;
 
 				
 				stats.push_back(std::move(TestStats::currentTestStats));
@@ -378,8 +462,11 @@ namespace mm {
 
 				if (testCases[testCaseIndex].resultsAvailable && !globalFlagOverwriteResults)
 				{
-					MM_EXPECT_TRUE(fabs(actualSettledAmount - testCases[testCaseIndex].settledAmount_) < zero, actualSettledAmount, testCases[testCaseIndex].settledAmount_);
-					MM_EXPECT_TRUE(actualSettledTradeIds == testCases[testCaseIndex].settledTradeIds_, actualSettledTradeIds, testCases[testCaseIndex].settledTradeIds_);
+					if (AlgoType(i) != AlgoType::greedy && AlgoType(i) != AlgoType::sequential)
+					{
+						MM_EXPECT_TRUE(fabs(actualSettledAmount - testCases[testCaseIndex].settledAmount_) < zero, actualSettledAmount, testCases[testCaseIndex].settledAmount_);
+						MM_EXPECT_TRUE(actualSettledTradeIds == testCases[testCaseIndex].settledTradeIds_, actualSettledTradeIds, testCases[testCaseIndex].settledTradeIds_);
+					}
 				}
 				else if (!testCases[testCaseIndex].fileNamePrefix_.empty()) //File prefix is empty only for hardcoded tests
 				{
