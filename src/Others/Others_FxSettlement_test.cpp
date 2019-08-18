@@ -42,6 +42,8 @@ using namespace std;
 
 #include "Others/Others_FxSettlement_branch_and_bound_v6a.h"
 #include "Others/Others_FxSettlement_branch_and_bound_v7a.h"
+#include "Others/Others_FxSettlement_branch_and_bound_v8a.h"
+#include "Others/Others_FxSettlement_branch_and_bound_v9a.h"
 
 namespace mm {
 
@@ -395,6 +397,31 @@ namespace mm {
 					);
 					break;
 				}
+				case AlgoType::branch_and_bound_v9a:
+				{
+					int initialHeapCapacity = 1'000'000;
+					//Total memory = 1,000,000 * object size = 1,000,000 * (24 + (8 * members * currencies)) bytes = (24 + (8 * members * currencies)) MB
+					vector<vector<fxDecisionTreeNode_v9a>> heapObjectsGrowingPool(1, vector<fxDecisionTreeNode_v9a>(initialHeapCapacity, fxDecisionTreeNode_v9a{ testCases[testCaseIndex].initialBalance_.size() }));
+					MM_Heap<fxDecisionTreeNode_v9a*, fxDecisionTreeNodeCompare_v9a> fxMaxHeap_v9a(initialHeapCapacity);
+					//initialize the pool indices
+					for (int i = 0; i < initialHeapCapacity; ++i)
+						fxMaxHeap_v9a.addToData(&heapObjectsGrowingPool[0][i]);
+
+					start = std::chrono::high_resolution_clock::now();
+					actualSettledAmount = doSettlement_branch_and_bound_v9a(
+						settleFlags,
+						trades,
+						testCases[testCaseIndex].spl_,
+						testCases[testCaseIndex].aspl_,
+						testCases[testCaseIndex].initialBalance_,
+						testCases[testCaseIndex].exchangeRates_,
+						fxMaxHeap_v9a,
+						heapObjectsGrowingPool,
+						initialHeapCapacity
+					);
+					break;
+				}
+
 				default:
 					assert(false, "Algo type '" + to_string(i) + "' is not suported");
 				}
