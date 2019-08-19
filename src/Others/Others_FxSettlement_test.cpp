@@ -424,7 +424,8 @@ namespace mm {
 				}
 				case AlgoType::branch_and_bound_v10a:
 				{
-					int initialHeapCapacity = 1'000'000;
+					//int initialHeapCapacity = 1'000'000;
+					int initialHeapCapacity = 2 * trades.size();
 					//Total memory = 1,000,000 * object size = 1,000,000 * (24 + (8 * members * currencies)) bytes = (24 + (8 * members * currencies)) MB
 					vector<vector<fxDecisionTreeNode_v10a>> heapObjectsGrowingPool(1, vector<fxDecisionTreeNode_v10a>(initialHeapCapacity, fxDecisionTreeNode_v10a{ testCases[testCaseIndex].initialBalance_.size() }));
 					MM_Heap<fxDecisionTreeNode_v10a*, fxDecisionTreeNodeCompare_v10a> fxMaxHeap_v10a(initialHeapCapacity);
@@ -453,10 +454,11 @@ namespace mm {
 				std::chrono::high_resolution_clock::time_point end = std::chrono::high_resolution_clock::now();
 				unsigned long long duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count();
 
-				bool verifySettledAmount = true;
+				bool approximateAlgo = false;
 				if (AlgoType(i) == AlgoType::greedy || AlgoType(i) == AlgoType::sequential)
-					verifySettledAmount = false;
-					
+					approximateAlgo = true;
+
+				bool verifySettledAmount = !approximateAlgo;
 				bool verified = verifySettlement(
 					settleFlags,
 					trades,
@@ -512,34 +514,34 @@ namespace mm {
 
 				MM_EXPECT_TRUE(verified == true, verified);
 
-				if (testCases[testCaseIndex].resultsAvailable && !globalFlagOverwriteResults)
+				if (!approximateAlgo)
 				{
-					if (AlgoType(i) != AlgoType::greedy && AlgoType(i) != AlgoType::sequential)
+					if (testCases[testCaseIndex].resultsAvailable && !globalFlagOverwriteResults)
 					{
 						MM_EXPECT_TRUE(fabs(actualSettledAmount - testCases[testCaseIndex].settledAmount_) < zero, actualSettledAmount, testCases[testCaseIndex].settledAmount_);
 						MM_EXPECT_TRUE(actualSettledTradeIds == testCases[testCaseIndex].settledTradeIds_, actualSettledTradeIds, testCases[testCaseIndex].settledTradeIds_);
 					}
-				}
-				else if (!testCases[testCaseIndex].fileNamePrefix_.empty()) //File prefix is empty only for hardcoded tests
-				{
-					//Write results to csv file
-					ofstream resultsFile{ testDataPath + testCases[testCaseIndex].fileNamePrefix_ + "_" + resultsFileName };
-					if (resultsFile.is_open())
+					else if (!testCases[testCaseIndex].fileNamePrefix_.empty()) //File prefix is empty only for hardcoded tests
 					{
-						string settledAmount{ settledAmountTag + to_string_max_precision(actualSettledAmount) };
-						resultsFile.write(settledAmount.c_str(), settledAmount.length());
-						string settledTrades{ "\n" + settledTradeIdsTag };
-						resultsFile.write(settledTrades.c_str(), settledTrades.length());
-						for (int i = 0; i < actualSettledTradeIds.size(); ++i)
+						//Write results to csv file
+						ofstream resultsFile{ testDataPath + testCases[testCaseIndex].fileNamePrefix_ + "_" + resultsFileName };
+						if (resultsFile.is_open())
 						{
-							string tradeId{ "\n" + to_string(actualSettledTradeIds[i]) };
-							resultsFile.write(tradeId.c_str(), tradeId.length());
-						}
+							string settledAmount{ settledAmountTag + to_string_max_precision(actualSettledAmount) };
+							resultsFile.write(settledAmount.c_str(), settledAmount.length());
+							string settledTrades{ "\n" + settledTradeIdsTag };
+							resultsFile.write(settledTrades.c_str(), settledTrades.length());
+							for (int i = 0; i < actualSettledTradeIds.size(); ++i)
+							{
+								string tradeId{ "\n" + to_string(actualSettledTradeIds[i]) };
+								resultsFile.write(tradeId.c_str(), tradeId.length());
+							}
 
-						//Results are written to file. Now update the cached results
-						testCases[testCaseIndex].resultsAvailable = true;
-						testCases[testCaseIndex].settledAmount_ = actualSettledAmount;
-						testCases[testCaseIndex].settledTradeIds_ = actualSettledTradeIds;
+							//Results are written to file. Now update the cached results
+							testCases[testCaseIndex].resultsAvailable = true;
+							testCases[testCaseIndex].settledAmount_ = actualSettledAmount;
+							testCases[testCaseIndex].settledTradeIds_ = actualSettledTradeIds;
+						}
 					}
 				}
 			}

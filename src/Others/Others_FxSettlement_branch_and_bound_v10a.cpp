@@ -198,7 +198,8 @@ namespace mm {
 		const vector<double>& spl,
 		const vector<double>& aspl,
 		const vector<double>& initialBalance,
-		const vector<double>& exchangeRates, MM_Heap<fxDecisionTreeNode_v10a*, fxDecisionTreeNodeCompare_v10a>& fxMaxHeap_v10a,
+		const vector<double>& exchangeRates,
+		MM_Heap<fxDecisionTreeNode_v10a*, fxDecisionTreeNodeCompare_v10a>& fxMaxHeap_v10a,
 		vector<vector<fxDecisionTreeNode_v10a>>& heapObjectsGrowingPool,
 		int initialHeapCapacity)
 	{
@@ -414,6 +415,13 @@ namespace mm {
 					fxDecisionTreeNode_v10a* pExclude = fxMaxHeap_v10a.getNextAvailableElement();
 					fxDecisionTreeNode_v10a& exclude = *pExclude;
 					exclude = include;
+					if (excludeUpperboundRmtPassed)
+					{
+						exclude.settledAmount = excludeUpperbound;
+						for (int i = current.level + 1; i < current.settleFlags.size(); ++i)
+							exclude.settleFlags[i] = true;
+					}
+
 					//Revert the changes for include
 					exclude.currentBalance[numMembers * partyId + buyCurrId] -= trades[exclude.level].buyVol_;
 					exclude.currentBalance[numMembers * partyId + sellCurrId] += trades[exclude.level].sellVol_;

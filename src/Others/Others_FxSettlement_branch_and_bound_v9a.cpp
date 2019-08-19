@@ -204,7 +204,8 @@ namespace mm {
 		const vector<double>& spl,
 		const vector<double>& aspl,
 		const vector<double>& initialBalance,
-		const vector<double>& exchangeRates, MM_Heap<fxDecisionTreeNode_v9a*, fxDecisionTreeNodeCompare_v9a>& fxMaxHeap_v9a,
+		const vector<double>& exchangeRates,
+		MM_Heap<fxDecisionTreeNode_v9a*, fxDecisionTreeNodeCompare_v9a>& fxMaxHeap_v9a,
 		vector<vector<fxDecisionTreeNode_v9a>>& heapObjectsGrowingPool,
 		int initialHeapCapacity)
 	{

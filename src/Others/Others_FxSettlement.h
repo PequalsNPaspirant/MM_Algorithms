@@ -238,8 +238,8 @@ namespace mm {
 		{ AlgoType::branch_and_bound_v5a,			{ "branch_and_bound_v5a", 23 } }, 
 		{ AlgoType::branch_and_bound_v5b,			{ "branch_and_bound_v5b", 22 } },
 		{ AlgoType::branch_and_bound_v6a,			{ "branch_and_bound_v6a", 23 } },
-		{ AlgoType::branch_and_bound_v7a,			{ "branch_and_bound_v7a", 28 } },
-		{ AlgoType::branch_and_bound_v8a,			{ "branch_and_bound_v8a", 28 } },
+		{ AlgoType::branch_and_bound_v7a,			{ "branch_and_bound_v7a", 27 } },
+		{ AlgoType::branch_and_bound_v8a,			{ "branch_and_bound_v8a", 27 } },
 		{ AlgoType::branch_and_bound_v9a,			{ "branch_and_bound_v9a", 28 } },
 		{ AlgoType::branch_and_bound_v10a,			{ "branch_and_bound_v10a", 50 } }
 
