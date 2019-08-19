@@ -35,7 +35,7 @@
 using namespace std;
 
 #include "Others/Others_FxSettlement.h"
-#include "Others/Others_FxSettlement_branch_and_bound_v9a.h"
+#include "Others/Others_FxSettlement_branch_and_bound_v10a.h"
 #include "DynamicProgramming/DP_KnapsackProblem_0_1.h" //For class MM_Heap
 
 namespace mm {
@@ -53,11 +53,12 @@ namespace mm {
 	v8a		Start with greedy max settled amount instead of zero.
 			Not implemented (wrong logic) - Update current balances only if rmt passes and Calculate upperbound for exclude as well if include passes rmt tests.
 	v9a		calculate upperbound only for exclude case, not for include
+	v10a	Avoid creating exclude as a copy of current until we really need it
 
 	Future	Remove all elements from heap which has upper bound less than current settled amount
 	*/
 
-	void fxDecisionTreeNode_v9a::calculateAndSetUpperBound(
+	void fxDecisionTreeNode_v10a::calculateAndSetUpperBound(
 		const vector<double>& cumulativeBalance,
 		const double cumulativeSettledAmount,
 		const vector<double>& spl,
@@ -121,16 +122,9 @@ namespace mm {
 			//*p = 10;
 		}
 		upperbound = settledAmount + cumulativeSettledAmount + excessSettledAmountInDollars;
-
-		if (upperboundRmtPassed)
-		{
-			settledAmount = upperbound;
-			for (int i = level + 1; i < settleFlags.size(); ++i)
-				settleFlags[i] = true;
-		}
 	}
 
-	bool verifySettlement_v9a(
+	bool verifySettlement_v10a(
 		bitset<128>& rmtPassed,
 		const vector<double>& updatedBalance,		
 		const vector<int>& memberIndices,
@@ -180,7 +174,7 @@ namespace mm {
 		return rmtSuccessful;
 	}
 
-	void debugPrint_v9a(int level, unsigned long long numberOfFunctionCalls, size_t heapSize,
+	void debugPrint_v10a(int level, unsigned long long numberOfFunctionCalls, size_t heapSize,
 		double upperbound, bool upperboundRmtPassed,
 		double settledAmount, const string& key)
 	{
@@ -198,14 +192,14 @@ namespace mm {
 			<< " " << key;
 	}
 
-	double doSettlement_branch_and_bound_v9a(
+	double doSettlement_branch_and_bound_v10a(
 		vector<bool>& settleFlagsOut,
 		vector<Trade>& trades,
 		const vector<double>& spl,
 		const vector<double>& aspl,
 		const vector<double>& initialBalance,
-		const vector<double>& exchangeRates, MM_Heap<fxDecisionTreeNode_v9a*, fxDecisionTreeNodeCompare_v9a>& fxMaxHeap_v9a,
-		vector<vector<fxDecisionTreeNode_v9a>>& heapObjectsGrowingPool,
+		const vector<double>& exchangeRates, MM_Heap<fxDecisionTreeNode_v10a*, fxDecisionTreeNodeCompare_v10a>& fxMaxHeap_v10a,
+		vector<vector<fxDecisionTreeNode_v10a>>& heapObjectsGrowingPool,
 		int initialHeapCapacity)
 	{
 		int numMembers = aspl.size();
@@ -247,8 +241,8 @@ namespace mm {
 				);
 		}
 
-		fxDecisionTreeNode_v9a* pObj = fxMaxHeap_v9a.getNextAvailableElement();
-		fxDecisionTreeNode_v9a& current = *pObj;
+		fxDecisionTreeNode_v10a* pObj = fxMaxHeap_v10a.getNextAvailableElement();
+		fxDecisionTreeNode_v10a& current = *pObj;
 		current.level = -1;
 		current.currentBalance.resize(numMembers * numCurrencies, 0.0);
 		int startIndex = -1;
@@ -266,27 +260,28 @@ namespace mm {
 		std::vector<int> memberIndices(aspl.size());
 		std::iota(memberIndices.begin(), memberIndices.end(), 0); // Fill with 0, 1, ..., aspl.size() - 1
 		current.rmtPassed.flip();
-		verifySettlement_v9a(current.rmtPassed, current.currentBalance, memberIndices, spl, aspl, exchangeRates);
+		verifySettlement_v10a(current.rmtPassed, current.currentBalance, memberIndices, spl, aspl, exchangeRates);
 		current.calculateAndSetUpperBound(
 			cumulativeBalance[current.level + 1], 
 			cumulativeSettledAmount[current.level + 1],
 			spl, 
 			aspl, 
 			exchangeRates);
-		fxMaxHeap_v9a.push(pObj);
+		fxMaxHeap_v10a.push(pObj);
 
 		double maxValue = settledAmountGreedy;
 		unsigned long long numberOfFunctionCalls = 0;
 		int sizeOfHeap = 0;
 
-		while (!fxMaxHeap_v9a.empty())
+		while (!fxMaxHeap_v10a.empty())
 		{
 			++numberOfFunctionCalls;
-			if (sizeOfHeap < fxMaxHeap_v9a.size())
-				sizeOfHeap = fxMaxHeap_v9a.size();
+			if (sizeOfHeap < fxMaxHeap_v10a.size())
+				sizeOfHeap = fxMaxHeap_v10a.size();
 
-			fxDecisionTreeNode_v9a* pCurrent = fxMaxHeap_v9a.top();
-			fxDecisionTreeNode_v9a& current = *pCurrent;
+			fxDecisionTreeNode_v10a* pCurrent = fxMaxHeap_v10a.top();
+			fxDecisionTreeNode_v10a& current = *pCurrent;
+			current.level += 1;
 
 			/*
 			We have two options:
@@ -323,27 +318,42 @@ namespace mm {
 				break;
 			}
 
-			//exclude current
-			current.level += 1;
-
 			//Grow the heap if required
-			if (fxMaxHeap_v9a.capacity() == fxMaxHeap_v9a.size()) //need to grow pool
+			if (fxMaxHeap_v10a.capacity() == fxMaxHeap_v10a.size()) //need to grow pool
 			{
 				//Ideally the algorithm should be optimized in such a way that:
 				//    We dont need to come here and in case we do, growing the pool by trades.size() is enough
-				heapObjectsGrowingPool.push_back(vector<fxDecisionTreeNode_v9a>(initialHeapCapacity, fxDecisionTreeNode_v9a{ initialBalance.size() }));
-				fxMaxHeap_v9a.reserve(fxMaxHeap_v9a.capacity() + initialHeapCapacity);
+				heapObjectsGrowingPool.push_back(vector<fxDecisionTreeNode_v10a>(initialHeapCapacity, fxDecisionTreeNode_v10a{ initialBalance.size() }));
+				fxMaxHeap_v10a.reserve(fxMaxHeap_v10a.capacity() + initialHeapCapacity);
 				int lastIndex = heapObjectsGrowingPool.size() - 1;
 				for (int i = 0; i < initialHeapCapacity; ++i)
-					fxMaxHeap_v9a.addToData(&heapObjectsGrowingPool[lastIndex][i]);
+					fxMaxHeap_v10a.addToData(&heapObjectsGrowingPool[lastIndex][i]);
+			}
+
+			double excludeUpperbound = 0.0;
+			bool excludeUpperboundRmtPassed = false;
+			if (current.level < trades.size() - 1)
+			{
+				double currentUpperbound = current.upperbound;
+				bool currentUpperboundRmtPassed = current.upperboundRmtPassed;
+				//tempororily make use of current to calculate exclude upper bound before changing its balances for include option.
+				//See above table of comments.
+				current.calculateAndSetUpperBound(
+					cumulativeBalance[current.level + 1],
+					cumulativeSettledAmount[current.level + 1],
+					spl,
+					aspl,
+					exchangeRates);
+
+				excludeUpperbound = current.upperbound;
+				excludeUpperboundRmtPassed = current.upperboundRmtPassed;
+				//Revert back the current items upperbound
+				current.upperbound = currentUpperbound;
+				current.upperboundRmtPassed = currentUpperboundRmtPassed;
 			}
 
 			//include this item
-			fxDecisionTreeNode_v9a* pExclude = fxMaxHeap_v9a.getNextAvailableElement();
-			fxDecisionTreeNode_v9a& exclude = *pExclude;
-			exclude = current;
-
-			fxDecisionTreeNode_v9a& include = current;
+			fxDecisionTreeNode_v10a& include = current;
 			// Update current balance
 			int partyId = trades[include.level].partyId_;
 			int cPartyId = trades[include.level].cPartyId_;
@@ -359,13 +369,13 @@ namespace mm {
 				);
 			include.settleFlags[include.level] = true;
 
-			verifySettlement_v9a(include.rmtPassed, include.currentBalance, { partyId, cPartyId }, spl, aspl, exchangeRates);
+			verifySettlement_v10a(include.rmtPassed, include.currentBalance, { partyId, cPartyId }, spl, aspl, exchangeRates);
 			if (include.rmtPassed.all() && maxValue < include.settledAmount)
 			{
 				maxValue = include.settledAmount;
 				settleFlagsOut = include.settleFlags;
 
-				//debugPrint_v9a(include.level, numberOfFunctionCalls, fxMaxHeap_v9a.size(),
+				//debugPrint_v10a(include.level, numberOfFunctionCalls, fxMaxHeap_v10a.size(),
 				//	include.upperbound, include.upperboundRmtPassed, 
 				//	include.settledAmount, "");
 
@@ -375,26 +385,22 @@ namespace mm {
 
 			// maxValue is kind of lower bound so far, so avoid the decision tree nodes having upper bound less than maxValue
 			//if ((current.upperbound + zero) < maxValue)
-			//	fxMaxHeap_v9a.pop();
+			//	fxMaxHeap_v10a.pop();
 
 			if (current.level < trades.size() - 1)
 			{
-				exclude.calculateAndSetUpperBound(
-					cumulativeBalance[exclude.level + 1],
-					cumulativeSettledAmount[exclude.level + 1],
-					spl,
-					aspl,
-					exchangeRates);
-
-				if (exclude.upperboundRmtPassed)
+				if (excludeUpperboundRmtPassed)
 				{
-					if (maxValue < exclude.settledAmount)
+					if (maxValue < excludeUpperbound)
 					{
-						maxValue = exclude.settledAmount;
-						settleFlagsOut = exclude.settleFlags;
+						maxValue = excludeUpperbound;
+						settleFlagsOut = include.settleFlags;
+						settleFlagsOut[include.level] = false;
+						for (int i = current.level + 1; i < current.settleFlags.size(); ++i)
+							settleFlagsOut[i] = true;
 					}
 
-					//debugPrint_v9a(include.level, numberOfFunctionCalls, fxMaxHeap_v9a.size(),
+					//debugPrint_v10a(include.level, numberOfFunctionCalls, fxMaxHeap_v10a.size(),
 					//	include.upperbound, include.upperboundRmtPassed,
 					//	include.settledAmount, "*");
 
@@ -403,14 +409,29 @@ namespace mm {
 				}
 
 				// maxValue is kind of lower bound so far, so avoid the decision tree nodes having upper bound less than maxValue
-				if ((exclude.upperbound - zero) > maxValue)
-					fxMaxHeap_v9a.push(pExclude);
+				if ((excludeUpperbound - zero) > maxValue)
+				{
+					fxDecisionTreeNode_v10a* pExclude = fxMaxHeap_v10a.getNextAvailableElement();
+					fxDecisionTreeNode_v10a& exclude = *pExclude;
+					exclude = include;
+					//Revert the changes for include
+					exclude.currentBalance[numMembers * partyId + buyCurrId] -= trades[exclude.level].buyVol_;
+					exclude.currentBalance[numMembers * partyId + sellCurrId] += trades[exclude.level].sellVol_;
+					exclude.currentBalance[numMembers * cPartyId + buyCurrId] += trades[exclude.level].buyVol_;
+					exclude.currentBalance[numMembers * cPartyId + sellCurrId] -= trades[exclude.level].sellVol_;
+					exclude.settledAmount -= (
+						trades[exclude.level].buyVol_ * exchangeRates[static_cast<int>(trades[exclude.level].buyCurr_)]
+						+ trades[exclude.level].sellVol_ * exchangeRates[static_cast<int>(trades[exclude.level].sellCurr_)]
+						);
+					exclude.settleFlags[exclude.level] = false;
+					fxMaxHeap_v10a.push(pExclude);
+				}
 			}
 			else
-				fxMaxHeap_v9a.pop();
+				fxMaxHeap_v10a.pop();
 		}
 
-		fxMaxHeap_v9a.clear();
+		fxMaxHeap_v10a.clear();
 		TestStats::currentTestStats.numberOfFunctionCalls = numberOfFunctionCalls;
 		TestStats::currentTestStats.sizeOfHeap = sizeOfHeap;
 

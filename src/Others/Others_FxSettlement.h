@@ -35,6 +35,7 @@
 #include "Others/Others_FxSettlement_branch_and_bound_v7a.h"
 #include "Others/Others_FxSettlement_branch_and_bound_v8a.h"
 #include "Others/Others_FxSettlement_branch_and_bound_v9a.h"
+#include "Others/Others_FxSettlement_branch_and_bound_v10a.h"
 
 namespace mm {
 
@@ -208,6 +209,7 @@ namespace mm {
 		branch_and_bound_v7a,
 		branch_and_bound_v8a,
 		branch_and_bound_v9a,
+		branch_and_bound_v10a,
 
 		totalAlgos
 	};
@@ -238,7 +240,8 @@ namespace mm {
 		{ AlgoType::branch_and_bound_v6a,			{ "branch_and_bound_v6a", 23 } },
 		{ AlgoType::branch_and_bound_v7a,			{ "branch_and_bound_v7a", 28 } },
 		{ AlgoType::branch_and_bound_v8a,			{ "branch_and_bound_v8a", 28 } },
-		{ AlgoType::branch_and_bound_v9a,			{ "branch_and_bound_v9a", 50 } }
+		{ AlgoType::branch_and_bound_v9a,			{ "branch_and_bound_v9a", 28 } },
+		{ AlgoType::branch_and_bound_v10a,			{ "branch_and_bound_v10a", 50 } }
 
 		}; 
 		return AlgoTypeInfo[type];
@@ -261,5 +264,6 @@ namespace mm {
 	double doSettlement_branch_and_bound_v7a(vector<bool>& settleFlagsOut, vector<Trade>& trades, const vector<double>& spl, const vector<double>& aspl, const vector<double>& initialBalance, const vector<double>& exchangeRates, MM_Heap<fxDecisionTreeNode_v7a*, fxDecisionTreeNodeCompare_v7a>& fxMaxHeap_v7a, vector<vector<fxDecisionTreeNode_v7a>>& heapObjectsGrowingPool, int initialHeapCapacity);
 	double doSettlement_branch_and_bound_v8a(vector<bool>& settleFlagsOut, vector<Trade>& trades, const vector<double>& spl, const vector<double>& aspl, const vector<double>& initialBalance, const vector<double>& exchangeRates, MM_Heap<fxDecisionTreeNode_v8a*, fxDecisionTreeNodeCompare_v8a>& fxMaxHeap_v8a, vector<vector<fxDecisionTreeNode_v8a>>& heapObjectsGrowingPool, int initialHeapCapacity);
 	double doSettlement_branch_and_bound_v9a(vector<bool>& settleFlagsOut, vector<Trade>& trades, const vector<double>& spl, const vector<double>& aspl, const vector<double>& initialBalance, const vector<double>& exchangeRates, MM_Heap<fxDecisionTreeNode_v9a*, fxDecisionTreeNodeCompare_v9a>& fxMaxHeap_v9a, vector<vector<fxDecisionTreeNode_v9a>>& heapObjectsGrowingPool, int initialHeapCapacity);
+	double doSettlement_branch_and_bound_v10a(vector<bool>& settleFlagsOut, vector<Trade>& trades, const vector<double>& spl, const vector<double>& aspl, const vector<double>& initialBalance, const vector<double>& exchangeRates, MM_Heap<fxDecisionTreeNode_v10a*, fxDecisionTreeNodeCompare_v10a>& fxMaxHeap_v10a, vector<vector<fxDecisionTreeNode_v10a>>& heapObjectsGrowingPool, int initialHeapCapacity);
 
 }
