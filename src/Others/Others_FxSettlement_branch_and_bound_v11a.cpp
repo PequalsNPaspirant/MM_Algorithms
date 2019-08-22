@@ -54,6 +54,7 @@ namespace mm {
 			Not implemented (wrong logic) - Update current balances only if rmt passes and Calculate upperbound for exclude as well if include passes rmt tests.
 	v9a		calculate upperbound only for exclude case, not for include
 	v10a	Avoid creating exclude as a copy of current until we really need it
+	v11a	Avoid all dynamic memory allocation
 
 	Future	Remove all elements from heap which has upper bound less than current settled amount
 	*/
