@@ -54,7 +54,7 @@ namespace mm {
 			Not implemented (wrong logic) - Update current balances only if rmt passes and Calculate upperbound for exclude as well if include passes rmt tests.
 	v9a		calculate upperbound only for exclude case, not for include
 	v10a	Avoid creating exclude as a copy of current until we really need it
-	v11a	Avoid all dynamic memory allocation
+	v11a	Avoid all dynamic memory allocation. Code refactoring.
 
 	Future	Remove all elements from heap which has upper bound less than current settled amount
 	*/
@@ -308,6 +308,31 @@ namespace mm {
 		unsigned long long numberOfFunctionCalls = 0;
 		int sizeOfHeap = 0;
 
+		/*
+		We have two options:
+		1. Include current item
+		2. Exclude current item
+
+		The below is the difference for both options
+
+		------------------------------------------------------------------------------------------------------------
+		Term					Include current item					Exclude current item
+		------------------------------------------------------------------------------------------------------------
+		upperbound				same as current							need to recalculate
+		balances				need to recalculate						same as current
+		settled amount			need to recalculate						same as current
+		settled flag			make true for current					keep as false for current
+		rmt tests				need to redo as balances change			no need to redo as balances dont change
+		copy current object?	No, upperbound same, so reuse current	upperbound changes, so make a copy of current
+		update max				if rmt pass								if upperboundRmtPassed
+		push into heap?			N.A. (Already in heap)					push if max < upperbound
+		pop from heap?			pop if upperbound < max					N.A.
+		if current.level ==		consider this option					Do not consider this option because, at last level, for option include,
+		trades.size() - 1												if rmt passed, we already updated max i.e. it was excluding this item
+		------------------------------------------------------------------------------------------------------------
+
+		*/
+
 		while (!fxMaxHeap_v11a.empty())
 		{
 			++numberOfFunctionCalls;
@@ -316,70 +341,11 @@ namespace mm {
 
 			fxDecisionTreeNode_v11a* pCurrent = fxMaxHeap_v11a.top();
 			fxDecisionTreeNode_v11a& current = *pCurrent;
-			current.level += 1;
-
-			/*
-			We have two options:
-			1. Include current item
-			2. Exclude current item
-
-			The below is the difference for both options
-
-			------------------------------------------------------------------------------------------------------------
-			Term					Include current item					Exclude current item
-			------------------------------------------------------------------------------------------------------------
-			upperbound				same as current							need to recalculate
-			balances				need to recalculate						same as current
-			settled amount			need to recalculate						same as current
-			settled flag			make true for current					keep as false for current
-			rmt tests				need to redo as balances change			no need to redo as balances dont change
-			copy current object?	No, upperbound same, so reuse current	upperbound changes, so make a copy of current
-			update max				if rmt pass								if upperboundRmtPassed
-			push into heap?			N.A. (Already in heap)					push if max < upperbound
-			pop from heap?			pop if upperbound < max					N.A. 
-			if current.level ==		consider this option					Do not consider this option because, at last level, for option include, 
-			trades.size() - 1												if rmt passed, we already updated max i.e. it was excluding this item
-			------------------------------------------------------------------------------------------------------------
-
-			*/
 
 			if ((current.upperbound - zero) <= maxValue)
 				break;
 
-			if (current.upperboundRmtPassed)
-			{
-				int *p = nullptr;
-				*p = 10;
-
-				if (maxValue < current.settledAmount)
-				{
-					maxValue = current.settledAmount;
-					//settleFlagsOut = current.settleFlags;
-					for (int i = 0; i < current.settleFlags.size(); ++i)
-						settleFlagsOut[i] = current.settleFlags[i];
-				}
-				else
-				{
-					//we should not come here
-					int *p = nullptr;
-					*p = 10;
-				}
-				break;
-			}
-
-			//Grow the heap if required
-			if (fxMaxHeap_v11a.capacity() == fxMaxHeap_v11a.size()) //need to grow pool
-			{
-				int *p = nullptr;
-				*p = 10;
-				//Ideally the algorithm should be optimized in such a way that:
-				//    We dont need to come here and in case we do, growing the pool by trades.size() is enough
-				heapObjectsGrowingPool.push_back(vector<fxDecisionTreeNode_v11a>(initialHeapCapacity, fxDecisionTreeNode_v11a{ initialBalance.size(), trades.size() }));
-				fxMaxHeap_v11a.reserve(fxMaxHeap_v11a.capacity() + initialHeapCapacity);
-				int lastIndex = heapObjectsGrowingPool.size() - 1;
-				for (int i = 0; i < initialHeapCapacity; ++i)
-					fxMaxHeap_v11a.addToData(&heapObjectsGrowingPool[lastIndex][i]);
-			}
+			current.level += 1;
 
 			bitset<128> excludeRmtPassed = current.rmtPassed;
 
@@ -400,6 +366,19 @@ namespace mm {
 
 				excludeUpperbound = current.upperbound;
 				excludeUpperboundRmtPassed = current.upperboundRmtPassed;
+
+				if (excludeUpperboundRmtPassed)
+				{
+					if (maxValue < excludeUpperbound)
+					{
+						maxValue = excludeUpperbound;
+						settleFlagsOut = current.settleFlags;
+						settleFlagsOut[current.level] = false;
+						for (int i = current.level + 1; i < current.settleFlags.size(); ++i)
+							settleFlagsOut[i] = true;
+					}
+				}
+
 				//Revert back the current items upperbound
 				current.upperbound = currentUpperbound;
 				current.upperboundRmtPassed = currentUpperboundRmtPassed;
@@ -426,55 +405,28 @@ namespace mm {
 			if (include.rmtPassed.all() && maxValue < include.settledAmount)
 			{
 				maxValue = include.settledAmount;
-				//settleFlagsOut = include.settleFlags;
 				for (int i = 0; i < include.settleFlags.size(); ++i)
 					settleFlagsOut[i] = include.settleFlags[i];
-
-				//debugPrint_v11a(include.level, numberOfFunctionCalls, fxMaxHeap_v11a.size(),
-				//	include.upperbound, include.upperboundRmtPassed, 
-				//	include.settledAmount, "");
-
-				//if ((current.upperbound - zero) <= maxValue)
-				//	break;
 			}
-
-			// maxValue is kind of lower bound so far, so avoid the decision tree nodes having upper bound less than maxValue
-			//if ((current.upperbound + zero) < maxValue)
-			//	fxMaxHeap_v11a.pop();
 
 			if (current.level < trades.size() - 1)
 			{
-				if (excludeUpperboundRmtPassed)
-				{
-					if (maxValue < excludeUpperbound)
-					{
-						maxValue = excludeUpperbound;
-						settleFlagsOut = include.settleFlags;
-						settleFlagsOut[include.level] = false;
-						for (int i = current.level + 1; i < current.settleFlags.size(); ++i)
-							settleFlagsOut[i] = true;
-					}
-
-					//debugPrint_v11a(include.level, numberOfFunctionCalls, fxMaxHeap_v11a.size(),
-					//	include.upperbound, include.upperboundRmtPassed,
-					//	include.settledAmount, "*");
-
-					if ((current.upperbound - zero) <= maxValue)
-						break;
-				}
-
 				// maxValue is kind of lower bound so far, so avoid the decision tree nodes having upper bound less than maxValue
 				if ((excludeUpperbound - zero) > maxValue)
 				{
+					//Grow the heap if required
+					if (fxMaxHeap_v11a.capacity() == fxMaxHeap_v11a.size()) //need to grow pool
+					{
+						heapObjectsGrowingPool.push_back(vector<fxDecisionTreeNode_v11a>(initialHeapCapacity, fxDecisionTreeNode_v11a{ initialBalance.size(), trades.size() }));
+						fxMaxHeap_v11a.reserve(fxMaxHeap_v11a.capacity() + initialHeapCapacity);
+						int lastIndex = heapObjectsGrowingPool.size() - 1;
+						for (int i = 0; i < initialHeapCapacity; ++i)
+							fxMaxHeap_v11a.addToData(&heapObjectsGrowingPool[lastIndex][i]);
+					}
+
 					fxDecisionTreeNode_v11a* pExclude = fxMaxHeap_v11a.getNextAvailableElement();
 					fxDecisionTreeNode_v11a& exclude = *pExclude;
 					exclude = include;
-					if (excludeUpperboundRmtPassed)
-					{
-						exclude.settledAmount = excludeUpperbound;
-						for (int i = current.level + 1; i < current.settleFlags.size(); ++i)
-							exclude.settleFlags[i] = true;
-					}
 
 					//Revert the changes for include
 					exclude.rmtPassed = excludeRmtPassed;

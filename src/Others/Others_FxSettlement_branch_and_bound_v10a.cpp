@@ -312,22 +312,6 @@ namespace mm {
 			if ((current.upperbound - zero) <= maxValue)
 				break;
 
-			if (current.upperboundRmtPassed)
-			{
-				if (maxValue < current.settledAmount)
-				{
-					maxValue = current.settledAmount;
-					settleFlagsOut = current.settleFlags;
-				}
-				else
-				{
-					//we should not come here
-					int *p = nullptr;
-					*p = 10;
-				}
-				break;
-			}
-
 			//Grow the heap if required
 			if (fxMaxHeap_v10a.capacity() == fxMaxHeap_v10a.size()) //need to grow pool
 			{
@@ -342,6 +326,17 @@ namespace mm {
 
 			bitset<128> excludeRmtPassed = current.rmtPassed;
 
+//#define VERSION_v9a
+#define VERSION_v10a
+
+#ifdef VERSION_v9a
+			//include this item
+			fxDecisionTreeNode_v10a* pExclude = fxMaxHeap_v10a.getNextAvailableElement();
+			fxDecisionTreeNode_v10a& exclude = *pExclude;
+			exclude = current;
+#endif
+
+#ifdef VERSION_v10a
 			double excludeUpperbound = 0.0;
 			bool excludeUpperboundRmtPassed = false;
 			if (current.level < trades.size() - 1)
@@ -363,7 +358,7 @@ namespace mm {
 				current.upperbound = currentUpperbound;
 				current.upperboundRmtPassed = currentUpperboundRmtPassed;
 			}
-
+#endif
 			//include this item
 			fxDecisionTreeNode_v10a& include = current;
 			// Update current balance
@@ -386,21 +381,21 @@ namespace mm {
 			{
 				maxValue = include.settledAmount;
 				settleFlagsOut = include.settleFlags;
-
-				//debugPrint_v10a(include.level, numberOfFunctionCalls, fxMaxHeap_v10a.size(),
-				//	include.upperbound, include.upperboundRmtPassed, 
-				//	include.settledAmount, "");
-
-				//if ((current.upperbound - zero) <= maxValue)
-				//	break;
 			}
-
-			// maxValue is kind of lower bound so far, so avoid the decision tree nodes having upper bound less than maxValue
-			//if ((current.upperbound + zero) < maxValue)
-			//	fxMaxHeap_v10a.pop();
 
 			if (current.level < trades.size() - 1)
 			{
+#ifdef VERSION_v9a
+				exclude.calculateAndSetUpperBound(
+					cumulativeBalance[exclude.level + 1],
+					cumulativeSettledAmount[exclude.level + 1],
+					spl,
+					aspl,
+					exchangeRates);
+
+				double excludeUpperbound = exclude.upperbound;
+				double excludeUpperboundRmtPassed = exclude.upperboundRmtPassed;
+#endif
 				if (excludeUpperboundRmtPassed)
 				{
 					if (maxValue < excludeUpperbound)
@@ -411,27 +406,15 @@ namespace mm {
 						for (int i = current.level + 1; i < current.settleFlags.size(); ++i)
 							settleFlagsOut[i] = true;
 					}
-
-					//debugPrint_v10a(include.level, numberOfFunctionCalls, fxMaxHeap_v10a.size(),
-					//	include.upperbound, include.upperboundRmtPassed,
-					//	include.settledAmount, "*");
-
-					if ((current.upperbound - zero) <= maxValue)
-						break;
 				}
 
 				// maxValue is kind of lower bound so far, so avoid the decision tree nodes having upper bound less than maxValue
 				if ((excludeUpperbound - zero) > maxValue)
 				{
+#ifdef VERSION_v10a
 					fxDecisionTreeNode_v10a* pExclude = fxMaxHeap_v10a.getNextAvailableElement();
 					fxDecisionTreeNode_v10a& exclude = *pExclude;
 					exclude = include;
-					if (excludeUpperboundRmtPassed)
-					{
-						exclude.settledAmount = excludeUpperbound;
-						for (int i = current.level + 1; i < current.settleFlags.size(); ++i)
-							exclude.settleFlags[i] = true;
-					}
 
 					//Revert the changes for include
 					exclude.rmtPassed = excludeRmtPassed;
@@ -444,6 +427,7 @@ namespace mm {
 						+ trades[exclude.level].sellVol_ * exchangeRates[static_cast<int>(trades[exclude.level].sellCurr_)]
 						);
 					exclude.settleFlags[exclude.level] = false;
+#endif
 					fxMaxHeap_v10a.push(pExclude);
 				}
 			}
