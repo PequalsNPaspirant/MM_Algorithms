@@ -127,7 +127,7 @@ namespace mm {
 	bool verifySettlement_v11a(
 		bitset<128>& rmtPassed,
 		const vector<double>& updatedBalance,		
-		const vector<int>& memberIndices,
+		int memberIndex,
 		const vector<double>& spl,
 		const vector<double>& aspl, 
 		 const vector<double>& exchangeRates)
@@ -139,9 +139,9 @@ namespace mm {
 		bool rmtSuccessful = true;
 		int numMembers = aspl.size();
 		int numCurrencies = spl.size() / aspl.size();
-		for (int i = 0; i < memberIndices.size(); ++i)
+		//for (int i = 0; i < memberIndices.size(); ++i)
 		{
-			int memberIndex = memberIndices[i];
+			//int memberIndex = memberIndices[i];
 			double asplTemp = 0.0;
 			double novTemp = 0.0;
 			bool splPassed = true;
@@ -174,6 +174,37 @@ namespace mm {
 		return rmtSuccessful;
 	}
 
+	inline bool verifySettlement_pair_v11a(
+		bitset<128>& rmtPassed,
+		const vector<double>& updatedBalance,
+		int partyId, 
+		int cPartyId,
+		const vector<double>& spl,
+		const vector<double>& aspl,
+		const vector<double>& exchangeRates)
+	{
+		bool result1 = verifySettlement_v11a(rmtPassed, updatedBalance, partyId, spl, aspl, exchangeRates);
+		bool result2 = verifySettlement_v11a(rmtPassed, updatedBalance, cPartyId, spl, aspl, exchangeRates);
+		return result1 && result2;
+	}
+
+	inline bool verifySettlement_range_v11a(
+		bitset<128>& rmtPassed,
+		const vector<double>& updatedBalance,
+		int partyIdStart,
+		int partyIdEnd,
+		const vector<double>& spl,
+		const vector<double>& aspl,
+		const vector<double>& exchangeRates)
+	{
+		bool rmtSuccessful = true;
+		for(int memberIndex = partyIdStart; memberIndex <= partyIdEnd; ++memberIndex)
+			if(!verifySettlement_v11a(rmtPassed, updatedBalance, memberIndex, spl, aspl, exchangeRates))
+				rmtSuccessful = false;
+
+		return rmtSuccessful;
+	}
+
 	void debugPrint_v11a(int level, unsigned long long numberOfFunctionCalls, size_t heapSize,
 		double upperbound, bool upperboundRmtPassed,
 		double settledAmount, const string& key)
@@ -197,11 +228,13 @@ namespace mm {
 		vector<Trade>& trades,
 		const vector<double>& spl,
 		const vector<double>& aspl,
-		const vector<double>& initialBalance,
+		vector<double>& initialBalance,
 		const vector<double>& exchangeRates,
 		MM_Heap<fxDecisionTreeNode_v11a*, fxDecisionTreeNodeCompare_v11a>& fxMaxHeap_v11a,
 		vector<vector<fxDecisionTreeNode_v11a>>& heapObjectsGrowingPool,
-		int initialHeapCapacity)
+		int initialHeapCapacity,
+		vector< vector<double> >& cumulativeBalance,
+		vector<double>& cumulativeSettledAmount)
 	{
 		int numMembers = aspl.size();
 		int numCurrencies = spl.size() / aspl.size();
@@ -212,7 +245,20 @@ namespace mm {
 		//	> (rhs.buyVol_ * exchangeRates[static_cast<int>(rhs.buyCurr_)] + rhs.sellVol_ * exchangeRates[static_cast<int>(rhs.sellCurr_)]);
 		//});
 
-		double settledAmountGreedy = doSettlement_greedy_v1(
+		fxDecisionTreeNode_v11a* pObj = fxMaxHeap_v11a.getNextAvailableElement();
+		fxDecisionTreeNode_v11a& current = *pObj;
+		current.level = -1;
+		current.currentBalance.resize(numMembers * numCurrencies, 0.0);
+		int startIndex = -1;
+		for (int memberIndex = 0; memberIndex < numMembers; ++memberIndex)
+		{
+			for (int currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
+			{
+				current.currentBalance[++startIndex] = initialBalance[startIndex];
+			}
+		}
+
+		double maxValue = doSettlement_greedy_v1(
 			settleFlagsOut,
 			trades,
 			spl,
@@ -221,8 +267,8 @@ namespace mm {
 			exchangeRates
 		);
 
-		vector< vector<double> > cumulativeBalance(trades.size(), vector<double>(numMembers * numCurrencies, 0.0));
-		vector<double> cumulativeSettledAmount(trades.size(), 0.0);
+		//vector< vector<double> > cumulativeBalance(trades.size(), vector<double>(numMembers * numCurrencies, 0.0));
+		//vector<double> cumulativeSettledAmount(trades.size(), 0.0);
 		for (int i = trades.size() - 1; i >= 0; --i)
 		{
 			if (i < trades.size() - 1)
@@ -242,26 +288,14 @@ namespace mm {
 				);
 		}
 
-		fxDecisionTreeNode_v11a* pObj = fxMaxHeap_v11a.getNextAvailableElement();
-		fxDecisionTreeNode_v11a& current = *pObj;
-		current.level = -1;
-		current.currentBalance.resize(numMembers * numCurrencies, 0.0);
-		int startIndex = -1;
-		for (int memberIndex = 0; memberIndex < numMembers; ++memberIndex)
-		{
-			for (int currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
-			{
-				current.currentBalance[++startIndex] = initialBalance[startIndex];
-			}
-		}
 		current.settledAmount = 0.0;
 		current.upperbound = 0.0;
 		current.settleFlags.resize(trades.size(), false);
 		
-		std::vector<int> memberIndices(aspl.size());
-		std::iota(memberIndices.begin(), memberIndices.end(), 0); // Fill with 0, 1, ..., aspl.size() - 1
+		//std::vector<int> memberIndices(aspl.size());
+		//std::iota(memberIndices.begin(), memberIndices.end(), 0); // Fill with 0, 1, ..., aspl.size() - 1
 		current.rmtPassed.flip();
-		verifySettlement_v11a(current.rmtPassed, current.currentBalance, memberIndices, spl, aspl, exchangeRates);
+		verifySettlement_range_v11a(current.rmtPassed, current.currentBalance, 0, aspl.size() - 1, spl, aspl, exchangeRates);
 		current.calculateAndSetUpperBound(
 			cumulativeBalance[current.level + 1], 
 			cumulativeSettledAmount[current.level + 1],
@@ -270,7 +304,6 @@ namespace mm {
 			exchangeRates);
 		fxMaxHeap_v11a.push(pObj);
 
-		double maxValue = settledAmountGreedy;
 		unsigned long long numberOfFunctionCalls = 0;
 		int sizeOfHeap = 0;
 
@@ -314,10 +347,15 @@ namespace mm {
 
 			if (current.upperboundRmtPassed)
 			{
+				int *p = nullptr;
+				*p = 10;
+
 				if (maxValue < current.settledAmount)
 				{
 					maxValue = current.settledAmount;
-					settleFlagsOut = current.settleFlags;
+					//settleFlagsOut = current.settleFlags;
+					for (int i = 0; i < current.settleFlags.size(); ++i)
+						settleFlagsOut[i] = current.settleFlags[i];
 				}
 				else
 				{
@@ -331,9 +369,11 @@ namespace mm {
 			//Grow the heap if required
 			if (fxMaxHeap_v11a.capacity() == fxMaxHeap_v11a.size()) //need to grow pool
 			{
+				int *p = nullptr;
+				*p = 10;
 				//Ideally the algorithm should be optimized in such a way that:
 				//    We dont need to come here and in case we do, growing the pool by trades.size() is enough
-				heapObjectsGrowingPool.push_back(vector<fxDecisionTreeNode_v11a>(initialHeapCapacity, fxDecisionTreeNode_v11a{ initialBalance.size() }));
+				heapObjectsGrowingPool.push_back(vector<fxDecisionTreeNode_v11a>(initialHeapCapacity, fxDecisionTreeNode_v11a{ initialBalance.size(), trades.size() }));
 				fxMaxHeap_v11a.reserve(fxMaxHeap_v11a.capacity() + initialHeapCapacity);
 				int lastIndex = heapObjectsGrowingPool.size() - 1;
 				for (int i = 0; i < initialHeapCapacity; ++i)
@@ -381,11 +421,13 @@ namespace mm {
 				);
 			include.settleFlags[include.level] = true;
 
-			verifySettlement_v11a(include.rmtPassed, include.currentBalance, { partyId, cPartyId }, spl, aspl, exchangeRates);
+			verifySettlement_pair_v11a(include.rmtPassed, include.currentBalance, partyId, cPartyId, spl, aspl, exchangeRates);
 			if (include.rmtPassed.all() && maxValue < include.settledAmount)
 			{
 				maxValue = include.settledAmount;
-				settleFlagsOut = include.settleFlags;
+				//settleFlagsOut = include.settleFlags;
+				for (int i = 0; i < include.settleFlags.size(); ++i)
+					settleFlagsOut[i] = include.settleFlags[i];
 
 				//debugPrint_v11a(include.level, numberOfFunctionCalls, fxMaxHeap_v11a.size(),
 				//	include.upperbound, include.upperboundRmtPassed, 

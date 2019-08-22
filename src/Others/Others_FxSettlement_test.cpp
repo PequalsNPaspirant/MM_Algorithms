@@ -174,6 +174,11 @@ namespace mm {
 				TestStats::currentTestStats.sizeOfHeap = 0;
 				vector<bool> settleFlags(testCases[testCaseIndex].trades_.size(), false);
 				vector<Trade> trades{ testCases[testCaseIndex].trades_ };
+				vector<double> currentBalances{ testCases[testCaseIndex].initialBalance_ };
+				int numMembers = testCases[testCaseIndex].aspl_.size();
+				int numCurrencies = testCases[testCaseIndex].spl_.size() / numMembers;
+				vector< vector<double> > cumulativeBalance(trades.size(), vector<double>(numMembers * numCurrencies, 0.0));
+				vector<double> cumulativeSettledAmount(trades.size(), 0.0);
 
 				std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();
 
@@ -186,7 +191,7 @@ namespace mm {
 						trades,
 						testCases[testCaseIndex].spl_,
 						testCases[testCaseIndex].aspl_,
-						testCases[testCaseIndex].initialBalance_,
+						currentBalances,
 						testCases[testCaseIndex].exchangeRates_
 					);
 					break;
@@ -391,7 +396,7 @@ namespace mm {
 						trades,
 						testCases[testCaseIndex].spl_,
 						testCases[testCaseIndex].aspl_,
-						testCases[testCaseIndex].initialBalance_,
+						currentBalances,
 						testCases[testCaseIndex].exchangeRates_,
 						fxMaxHeap_v8a,
 						heapObjectsGrowingPool,
@@ -415,7 +420,7 @@ namespace mm {
 						trades,
 						testCases[testCaseIndex].spl_,
 						testCases[testCaseIndex].aspl_,
-						testCases[testCaseIndex].initialBalance_,
+						currentBalances,
 						testCases[testCaseIndex].exchangeRates_,
 						fxMaxHeap_v9a,
 						heapObjectsGrowingPool,
@@ -440,7 +445,7 @@ namespace mm {
 						trades,
 						testCases[testCaseIndex].spl_,
 						testCases[testCaseIndex].aspl_,
-						testCases[testCaseIndex].initialBalance_,
+						currentBalances,
 						testCases[testCaseIndex].exchangeRates_,
 						fxMaxHeap_v10a,
 						heapObjectsGrowingPool,
@@ -453,7 +458,7 @@ namespace mm {
 					//int initialHeapCapacity = 1'000'000;
 					int initialHeapCapacity = 2 * trades.size();
 					//Total memory = 1,000,000 * object size = 1,000,000 * (24 + (8 * members * currencies)) bytes = (24 + (8 * members * currencies)) MB
-					vector<vector<fxDecisionTreeNode_v11a>> heapObjectsGrowingPool(1, vector<fxDecisionTreeNode_v11a>(initialHeapCapacity, fxDecisionTreeNode_v11a{ testCases[testCaseIndex].initialBalance_.size() }));
+					vector<vector<fxDecisionTreeNode_v11a>> heapObjectsGrowingPool(1, vector<fxDecisionTreeNode_v11a>(initialHeapCapacity, fxDecisionTreeNode_v11a{ testCases[testCaseIndex].initialBalance_.size(), trades.size() }));
 					MM_Heap<fxDecisionTreeNode_v11a*, fxDecisionTreeNodeCompare_v11a> fxMaxHeap_v11a(initialHeapCapacity);
 					//initialize the pool indices
 					for (int i = 0; i < initialHeapCapacity; ++i)
@@ -465,11 +470,13 @@ namespace mm {
 						trades,
 						testCases[testCaseIndex].spl_,
 						testCases[testCaseIndex].aspl_,
-						testCases[testCaseIndex].initialBalance_,
+						currentBalances,
 						testCases[testCaseIndex].exchangeRates_,
 						fxMaxHeap_v11a,
 						heapObjectsGrowingPool,
-						initialHeapCapacity
+						initialHeapCapacity,
+						cumulativeBalance,
+						cumulativeSettledAmount
 					);
 					break;
 				}

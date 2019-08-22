@@ -47,9 +47,9 @@ namespace mm {
 		vector<bool> settleFlags;
 		bitset<128> rmtPassed{ 0 }; //4 bytes (4 * 32 = 128)
 
-		fxDecisionTreeNode_v11a(size_t totalBalances)
-			: currentBalance(totalBalances, 0.0)
-			//settleFlags(totalTrades, false)
+		fxDecisionTreeNode_v11a(size_t totalBalances, size_t totalTrades)
+			: currentBalance(totalBalances, 0.0),
+			settleFlags(totalTrades, false)
 		{
 
 		}
@@ -64,6 +64,17 @@ namespace mm {
 			rmtPassed{ rhs.rmtPassed }
 		{
 		}
+
+		fxDecisionTreeNode_v11a(fxDecisionTreeNode_v11a&& rhs) = delete;
+		//	: level{ std::move(rhs.level) },
+		//	upperbound{ std::move(rhs.upperbound) },
+		//	upperboundRmtPassed{ std::move(rhs.upperboundRmtPassed) },
+		//	currentBalance{ std::move(rhs.currentBalance) },
+		//	settledAmount{ std::move(rhs.settledAmount) },
+		//	settleFlags{ std::move(rhs.settleFlags) },
+		//	rmtPassed{ std::move(rhs.rmtPassed) }
+		//{
+		//}
 
 		fxDecisionTreeNode_v11a& operator=(const fxDecisionTreeNode_v11a& rhs)
 		{
@@ -81,7 +92,15 @@ namespace mm {
 				currentBalance[i] = rhs.currentBalance[i];
 			
 			settledAmount = rhs.settledAmount;
-			settleFlags = rhs.settleFlags;
+			if (settleFlags.size() != rhs.settleFlags.size())
+			{
+				//Ideally we should not come here
+				int* p = nullptr;
+				*p = 10;
+			}
+			for (int i = 0; i < settleFlags.size(); ++i)
+				settleFlags[i] = rhs.settleFlags[i];
+
 			rmtPassed = rhs.rmtPassed;
 
 			return *this;

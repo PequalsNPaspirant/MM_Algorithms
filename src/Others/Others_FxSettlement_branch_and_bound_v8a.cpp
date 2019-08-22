@@ -201,7 +201,7 @@ namespace mm {
 		vector<Trade>& trades,
 		const vector<double>& spl,
 		const vector<double>& aspl,
-		const vector<double>& initialBalance,
+		vector<double>& initialBalance,
 		const vector<double>& exchangeRates, MM_Heap<fxDecisionTreeNode_v8a*, fxDecisionTreeNodeCompare_v8a>& fxMaxHeap_v8a,
 		vector<vector<fxDecisionTreeNode_v8a>>& heapObjectsGrowingPool,
 		int initialHeapCapacity)
@@ -215,7 +215,20 @@ namespace mm {
 		//	> (rhs.buyVol_ * exchangeRates[static_cast<int>(rhs.buyCurr_)] + rhs.sellVol_ * exchangeRates[static_cast<int>(rhs.sellCurr_)]);
 		//});
 
-		double settledAmountGreedy = doSettlement_greedy_v1(
+		fxDecisionTreeNode_v8a* pObj = fxMaxHeap_v8a.getNextAvailableElement();
+		fxDecisionTreeNode_v8a& current = *pObj;
+		current.level = -1;
+		current.currentBalance.resize(numMembers * numCurrencies, 0.0);
+		int startIndex = -1;
+		for (int memberIndex = 0; memberIndex < numMembers; ++memberIndex)
+		{
+			for (int currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
+			{
+				current.currentBalance[++startIndex] = initialBalance[startIndex];
+			}
+		}
+
+		double maxValue = doSettlement_greedy_v1(
 			settleFlagsOut,
 			trades,
 			spl,
@@ -245,18 +258,6 @@ namespace mm {
 				);
 		}
 
-		fxDecisionTreeNode_v8a* pObj = fxMaxHeap_v8a.getNextAvailableElement();
-		fxDecisionTreeNode_v8a& current = *pObj;
-		current.level = -1;
-		current.currentBalance.resize(numMembers * numCurrencies, 0.0);
-		int startIndex = -1;
-		for (int memberIndex = 0; memberIndex < numMembers; ++memberIndex)
-		{
-			for (int currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
-			{
-				current.currentBalance[++startIndex] = initialBalance[startIndex];
-			}
-		}
 		current.settledAmount = 0.0;
 		current.upperbound = 0.0;
 		current.settleFlags.resize(trades.size(), false);
@@ -273,7 +274,6 @@ namespace mm {
 			exchangeRates);
 		fxMaxHeap_v8a.push(pObj);
 
-		double maxValue = settledAmountGreedy;
 		unsigned long long numberOfFunctionCalls = 0;
 		int sizeOfHeap = 0;
 

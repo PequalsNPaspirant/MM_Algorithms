@@ -33,7 +33,8 @@ namespace mm {
 
 	bool verifySettlement_greedy_v1(
 		const vector<double>& updatedBalance,
-		const vector<int>& memberIndices,
+		int partyId, 
+		int cPartyId,
 		const vector<double>& spl,
 		const vector<double>& aspl,
 		const vector<double>& exchangeRates)
@@ -41,9 +42,9 @@ namespace mm {
 		//TODO: we can avoid checking SPL for all currencies. No need to check it for all, we can check it only for 2 currencies involved in trade.
 		int numMembers = aspl.size();
 		int numCurrencies = spl.size() / aspl.size();
-		for (int tradeIndex = 0; tradeIndex < memberIndices.size(); ++tradeIndex)
+		for (int i = 0; i < 2; ++i)
 		{
-			int memberIndex = memberIndices[tradeIndex];
+			int memberIndex = i == 0 ? partyId : cPartyId;
 			double asplTemp = 0.0;
 			double novTemp = 0.0;
 
@@ -75,14 +76,14 @@ namespace mm {
 		vector<Trade>& trades,
 		const vector<double>& spl,
 		const vector<double>& aspl,
-		const vector<double>& initialBalance,
+		vector<double>& currentBalance,
 		const vector<double>& exchangeRates)
 	{
 		int numMembers = aspl.size();
 		int numCurrencies = spl.size() / aspl.size();
 
 		double amountSettled = 0.0;
-		vector<double> currentBalance{ initialBalance };
+		//vector<double> currentBalance{ initialBalance };
 		bool somethingSettled = true;
 		int lastTradeSettledInLastPass = trades.size();
 
@@ -114,7 +115,7 @@ namespace mm {
 				currentBalance[numMembers * cPartyId + buyCurrId] -= trades[tradeIndex].buyVol_;
 				currentBalance[numMembers * cPartyId + sellCurrId] += trades[tradeIndex].sellVol_;
 
-				if (verifySettlement_greedy_v1(currentBalance, { partyId, cPartyId }, spl, aspl, exchangeRates))
+				if (verifySettlement_greedy_v1(currentBalance, partyId, cPartyId, spl, aspl, exchangeRates))
 				{
 					amountSettled += (
 						trades[tradeIndex].buyVol_ * exchangeRates[static_cast<int>(trades[tradeIndex].buyCurr_)]
