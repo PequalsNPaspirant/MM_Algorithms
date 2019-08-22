@@ -389,9 +389,9 @@ namespace mm {
 
 				if (exclude.upperboundRmtPassed)
 				{
-					if (maxValue < exclude.settledAmount)
+					if (maxValue < exclude.upperbound)
 					{
-						maxValue = exclude.settledAmount;
+						maxValue = exclude.upperbound;
 						settleFlagsOut = exclude.settleFlags;
 					}
 

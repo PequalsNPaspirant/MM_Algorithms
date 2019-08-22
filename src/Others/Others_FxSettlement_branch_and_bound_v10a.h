@@ -99,7 +99,12 @@ namespace mm {
 	{
 		bool operator()(const fxDecisionTreeNode_v10a* lhs, const fxDecisionTreeNode_v10a* rhs) const
 		{
-			return lhs->upperbound < rhs->upperbound;
+			if (lhs->upperbound < rhs->upperbound)
+				return true;
+			else if (lhs->upperbound > rhs->upperbound)
+				return false;
+			else
+				return lhs->settledAmount < rhs->settledAmount;
 		}
 	};
 

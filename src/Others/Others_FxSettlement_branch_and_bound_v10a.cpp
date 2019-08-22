@@ -304,7 +304,7 @@ namespace mm {
 			push into heap?			N.A. (Already in heap)					push if max < upperbound
 			pop from heap?			pop if upperbound < max					N.A. 
 			if current.level ==		consider this option					Do not consider this option because, at last level, for option include, 
-			trades.size() - 1												if rmt passed, we already updated max
+			trades.size() - 1												if rmt passed, we already updated max i.e. it was excluding this item
 			------------------------------------------------------------------------------------------------------------
 
 			*/
@@ -312,10 +312,19 @@ namespace mm {
 			if ((current.upperbound - zero) <= maxValue)
 				break;
 
-			if (current.upperboundRmtPassed && maxValue < current.settledAmount)
+			if (current.upperboundRmtPassed)
 			{
-				maxValue = current.settledAmount;
-				settleFlagsOut = current.settleFlags;
+				if (maxValue < current.settledAmount)
+				{
+					maxValue = current.settledAmount;
+					settleFlagsOut = current.settleFlags;
+				}
+				else
+				{
+					//we should not come here
+					int *p = nullptr;
+					*p = 10;
+				}
 				break;
 			}
 
@@ -330,6 +339,8 @@ namespace mm {
 				for (int i = 0; i < initialHeapCapacity; ++i)
 					fxMaxHeap_v10a.addToData(&heapObjectsGrowingPool[lastIndex][i]);
 			}
+
+			bitset<128> excludeRmtPassed = current.rmtPassed;
 
 			double excludeUpperbound = 0.0;
 			bool excludeUpperboundRmtPassed = false;
@@ -380,8 +391,8 @@ namespace mm {
 				//	include.upperbound, include.upperboundRmtPassed, 
 				//	include.settledAmount, "");
 
-				if ((current.upperbound - zero) <= maxValue)
-					break;
+				//if ((current.upperbound - zero) <= maxValue)
+				//	break;
 			}
 
 			// maxValue is kind of lower bound so far, so avoid the decision tree nodes having upper bound less than maxValue
@@ -423,6 +434,7 @@ namespace mm {
 					}
 
 					//Revert the changes for include
+					exclude.rmtPassed = excludeRmtPassed;
 					exclude.currentBalance[numMembers * partyId + buyCurrId] -= trades[exclude.level].buyVol_;
 					exclude.currentBalance[numMembers * partyId + sellCurrId] += trades[exclude.level].sellVol_;
 					exclude.currentBalance[numMembers * cPartyId + buyCurrId] += trades[exclude.level].buyVol_;
