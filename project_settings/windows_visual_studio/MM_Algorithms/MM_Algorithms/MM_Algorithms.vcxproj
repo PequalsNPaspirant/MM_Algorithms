@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v11a.cpp" />
     <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v10a.cpp" />
     <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v9a.cpp" />
     <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v8a.cpp" />
@@ -225,6 +226,7 @@
     <ClCompile Include="..\..\..\..\src\_MM_Algorithms_main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v11a.h" />
     <ClInclude Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v10a.h" />
     <ClInclude Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v9a.h" />
     <ClInclude Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v8a.h" />

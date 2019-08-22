@@ -627,6 +627,9 @@
     <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v10a.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v11a.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\src\Backtracking\Backtracking.h">
@@ -1065,6 +1068,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v10a.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v11a.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
