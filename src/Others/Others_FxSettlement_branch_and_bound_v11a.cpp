@@ -291,7 +291,6 @@ namespace mm {
 
 		current.settledAmount = 0.0;
 		current.upperbound = 0.0;
-		current.settleFlags.resize(trades.size(), false);
 		
 		//std::vector<int> memberIndices(aspl.size());
 		//std::iota(memberIndices.begin(), memberIndices.end(), 0); // Fill with 0, 1, ..., aspl.size() - 1
