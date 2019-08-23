@@ -55,7 +55,7 @@ namespace mm {
 	v9a		calculate upperbound only for exclude case, not for include
 	v10a	Avoid creating exclude as a copy of current until we really need it
 	v11a	Avoid all dynamic memory allocation. Code refactoring.
-	v12a	What next??
+	v12a	if current.upperbound < current.settledAmount then pop that node from heap and do not proceed
 
 	Future	Remove all elements from heap which has upper bound less than current settled amount
 	*/
@@ -442,7 +442,10 @@ namespace mm {
 					fxMaxHeap_v12a.push(pExclude);
 				}
 			}
-			else
+
+			if(current.upperbound < current.settledAmount)
+				fxMaxHeap_v12a.pop();
+			else if(current.level == trades.size() - 1)
 				fxMaxHeap_v12a.pop();
 		}
 
