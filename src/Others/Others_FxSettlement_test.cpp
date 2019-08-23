@@ -47,6 +47,7 @@ using namespace std;
 #include "Others/Others_FxSettlement_branch_and_bound_v10a.h"
 #include "Others/Others_FxSettlement_branch_and_bound_v11a.h"
 #include "Others/Others_FxSettlement_branch_and_bound_v12a.h"
+#include "Others/Others_FxSettlement_branch_and_bound_v13a.h"
 
 namespace mm {
 
@@ -501,6 +502,33 @@ namespace mm {
 						currentBalances,
 						testCases[testCaseIndex].exchangeRates_,
 						fxMaxHeap_v12a,
+						heapObjectsGrowingPool,
+						initialHeapCapacity,
+						cumulativeBalance,
+						cumulativeSettledAmount
+					);
+					break;
+				}
+				case AlgoType::branch_and_bound_v13a:
+				{
+					//int initialHeapCapacity = 1'000'000;
+					int initialHeapCapacity = 2 * trades.size();
+					//Total memory = 1,000,000 * object size = 1,000,000 * (24 + (8 * members * currencies)) bytes = (24 + (8 * members * currencies)) MB
+					vector<vector<fxDecisionTreeNode_v13a>> heapObjectsGrowingPool(1, vector<fxDecisionTreeNode_v13a>(initialHeapCapacity, fxDecisionTreeNode_v13a{ testCases[testCaseIndex].initialBalance_.size(), trades.size() }));
+					MM_Heap<fxDecisionTreeNode_v13a*, fxDecisionTreeNodeCompare_v13a> fxMaxHeap_v13a(initialHeapCapacity);
+					//initialize the pool indices
+					for (int i = 0; i < initialHeapCapacity; ++i)
+						fxMaxHeap_v13a.addToData(&heapObjectsGrowingPool[0][i]);
+
+					start = std::chrono::high_resolution_clock::now();
+					actualSettledAmount = doSettlement_branch_and_bound_v13a(
+						settleFlags,
+						trades,
+						testCases[testCaseIndex].spl_,
+						testCases[testCaseIndex].aspl_,
+						currentBalances,
+						testCases[testCaseIndex].exchangeRates_,
+						fxMaxHeap_v13a,
 						heapObjectsGrowingPool,
 						initialHeapCapacity,
 						cumulativeBalance,
