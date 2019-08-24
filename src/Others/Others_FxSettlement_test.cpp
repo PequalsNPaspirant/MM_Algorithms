@@ -48,7 +48,7 @@ using namespace std;
 #include "Others/Others_FxSettlement_branch_and_bound_v11a.h"
 #include "Others/Others_FxSettlement_branch_and_bound_v12a.h"
 #include "Others/Others_FxSettlement_branch_and_bound_v13a.h"
-#include "Others/Others_FxSettlement_branch_and_bound_v14a.h"
+#include "Others/Others_FxSettlement_branch_and_bound_v13b.h"
 
 namespace mm {
 
@@ -537,26 +537,26 @@ namespace mm {
 					);
 					break;
 				}
-				case AlgoType::branch_and_bound_v14a:
+				case AlgoType::branch_and_bound_v13b:
 				{
 					//int initialHeapCapacity = 1'000'000;
 					int initialHeapCapacity = 2 * trades.size();
 					//Total memory = 1,000,000 * object size = 1,000,000 * (24 + (8 * members * currencies)) bytes = (24 + (8 * members * currencies)) MB
-					vector<vector<fxDecisionTreeNode_v14a>> heapObjectsGrowingPool(1, vector<fxDecisionTreeNode_v14a>(initialHeapCapacity, fxDecisionTreeNode_v14a{ testCases[testCaseIndex].initialBalance_.size(), trades.size() }));
-					MM_Heap<fxDecisionTreeNode_v14a*, fxDecisionTreeNodeCompare_v14a> fxMaxHeap_v14a(initialHeapCapacity);
+					vector<vector<fxDecisionTreeNode_v13b>> heapObjectsGrowingPool(1, vector<fxDecisionTreeNode_v13b>(initialHeapCapacity, fxDecisionTreeNode_v13b{ testCases[testCaseIndex].initialBalance_.size(), trades.size() }));
+					MM_Heap<fxDecisionTreeNode_v13b*, fxDecisionTreeNodeCompare_v13b> fxMaxHeap_v13b(initialHeapCapacity);
 					//initialize the pool indices
 					for (int i = 0; i < initialHeapCapacity; ++i)
-						fxMaxHeap_v14a.addToData(&heapObjectsGrowingPool[0][i]);
+						fxMaxHeap_v13b.addToData(&heapObjectsGrowingPool[0][i]);
 
 					start = std::chrono::high_resolution_clock::now();
-					actualSettledAmount = doSettlement_branch_and_bound_v14a(
+					actualSettledAmount = doSettlement_branch_and_bound_v13b(
 						settleFlags,
 						trades,
 						testCases[testCaseIndex].spl_,
 						testCases[testCaseIndex].aspl_,
 						currentBalances,
 						testCases[testCaseIndex].exchangeRates_,
-						fxMaxHeap_v14a,
+						fxMaxHeap_v13b,
 						heapObjectsGrowingPool,
 						initialHeapCapacity,
 						cumulativeBalance,

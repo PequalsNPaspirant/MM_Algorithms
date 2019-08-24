@@ -35,7 +35,7 @@
 using namespace std;
 
 #include "Others/Others_FxSettlement.h"
-#include "Others/Others_FxSettlement_branch_and_bound_v13a.h"
+#include "Others/Others_FxSettlement_branch_and_bound_v13b.h"
 #include "DynamicProgramming/DP_KnapsackProblem_0_1.h" //For class MM_Heap
 
 namespace mm {
@@ -57,79 +57,116 @@ namespace mm {
 	v11a	Avoid all dynamic memory allocation. Code refactoring.
 	v12a	if current.upperbound < current.settledAmount then pop that node from heap and do not proceed
 	v13a	upperbound calculations: remove all excessSPL + excessASPL + excessNOV from ideal settled amount
+	v14a	upperbound calculations: upper bound = greedy max value + partial settlement
 
-	Future	Remove all elements from heap which has upper bound less than current settled amount
+	Future	Remove all elements from heap which has upper bound less than current settled amount.
+			Consider all values in Dollars.
 	*/
-	
-	void fxDecisionTreeNode_v13a::calculateAndSetUpperBound(
-		const vector<double>& cumulativeBalance,
-		const double cumulativeSettledAmount,
+
+	void fxDecisionTreeNode_v13b::calculateAndSetUpperBound(
+		vector<double>& updatedBalance,
+		int level,
+		const vector<Trade>& trades,
 		const vector<double>& spl,
 		const vector<double>& aspl,
 		const vector<double>& exchangeRates
 	)
 	{
-		double excessSettledAmountInDollars = 0.0;
 		int numMembers = aspl.size();
 		int numCurrencies = spl.size() / aspl.size();
-		int startIndex = -1;
-		upperboundRmtPassed = true;
-		for (int memberIndex = 0; memberIndex < numMembers; ++memberIndex)
+		bool rmtSuccessful = true;
+
+		for (int i = 0; i < updatedBalance.size(); ++i)
 		{
-			double asplTemp = 0.0;
-			double novTemp = 0.0;
+			updatedBalance[i] = currentBalance[i];
+		}
+
+		double predictedSettledAmount = 0.0;
+		for (int tradeIndex = level; tradeIndex < trades.size(); ++tradeIndex)
+		{
+			// Update current balance
+			int partyId = trades[tradeIndex].partyId_;
+			int cPartyId = trades[tradeIndex].cPartyId_;
+			int buyCurrId = static_cast<int>(trades[tradeIndex].buyCurr_);
+			int sellCurrId = static_cast<int>(trades[tradeIndex].sellCurr_);
+			updatedBalance[numMembers * partyId + buyCurrId] += trades[tradeIndex].buyVol_;
+			updatedBalance[numMembers * partyId + sellCurrId] -= trades[tradeIndex].sellVol_;
+			updatedBalance[numMembers * cPartyId + buyCurrId] -= trades[tradeIndex].buyVol_;
+			updatedBalance[numMembers * cPartyId + sellCurrId] += trades[tradeIndex].sellVol_;
+			double currentTradeSettledAmount = (
+				trades[tradeIndex].buyVol_ * exchangeRates[static_cast<int>(trades[tradeIndex].buyCurr_)]
+				+ trades[tradeIndex].sellVol_ * exchangeRates[static_cast<int>(trades[tradeIndex].sellCurr_)]
+				);
+
 			double excessSPL = 0.0;
 			double excessASPL = 0.0;
 			double excessNOV = 0.0;
-			for (int currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
-			{
-				++startIndex;
-				double totalBalance = currentBalance[startIndex] + cumulativeBalance[startIndex];
-				double totalBalanceInDollars = totalBalance * exchangeRates[currencyIndex];
-				novTemp += totalBalanceInDollars;
+			double excessSettledAmount = 0.0;
 
-				if (totalBalance < -zero)
+			int index = numMembers * partyId + sellCurrId;
+			if (updatedBalance[index] + zero < -spl[index])
+			{
+				rmtSuccessful = false;
+				excessSPL = ((updatedBalance[index] - (-spl[index])) * exchangeRates[sellCurrId]);
+			}
+
+			index = numMembers * cPartyId + buyCurrId;
+			if (updatedBalance[index] + zero < -spl[index])
+			{
+				rmtSuccessful = false;
+				excessSPL = std::min(excessSPL, ((updatedBalance[index] - (-spl[index])) * exchangeRates[buyCurrId]));
+			}
+
+			int memberIndices[2] = { partyId, cPartyId };
+			for (int i = 0; i < 2; ++i)
+			{
+				int memberIndex = memberIndices[i];
+				double asplTemp = 0.0;
+				double novTemp = 0.0;
+
+				for (int currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
 				{
-					asplTemp += totalBalanceInDollars;
-					if (totalBalance + zero < -spl[startIndex])
-					{
-						upperboundRmtPassed = false;
-						excessSPL += ((totalBalance - (-spl[startIndex])) * exchangeRates[currencyIndex]);
-					}
+					int index = numMembers * memberIndex + currencyIndex;
+					double currentBalanceInDollars = updatedBalance[index] * exchangeRates[currencyIndex];
+					novTemp += currentBalanceInDollars;
+					if (currentBalanceInDollars < -zero)
+						asplTemp += currentBalanceInDollars;
+				}
+
+				if (asplTemp + zero < -aspl[memberIndex])
+				{
+					rmtSuccessful = false;
+					excessASPL = std::min(excessASPL, (asplTemp - (-aspl[memberIndex])));
+				}
+
+				if (novTemp < -zero)
+				{
+					rmtSuccessful = false;
+					excessNOV = std::min(excessNOV, novTemp);
 				}
 			}
 
-			if (asplTemp + zero < -aspl[memberIndex])
+			excessSettledAmount = 2 * std::min(std::min(excessSPL, excessASPL), excessNOV);
+			if (-excessSettledAmount < currentTradeSettledAmount)
 			{
-				upperboundRmtPassed = false;
-				double excessASPLInDollars = (asplTemp - (-aspl[memberIndex]));
-				excessASPL += excessASPLInDollars;
+				updatedBalance[numMembers * partyId + buyCurrId] += excessSettledAmount / exchangeRates[static_cast<int>(trades[tradeIndex].buyCurr_)];
+				updatedBalance[numMembers * partyId + sellCurrId] -= excessSettledAmount / exchangeRates[static_cast<int>(trades[tradeIndex].sellCurr_)];
+				updatedBalance[numMembers * cPartyId + buyCurrId] -= excessSettledAmount / exchangeRates[static_cast<int>(trades[tradeIndex].buyCurr_)];
+				updatedBalance[numMembers * cPartyId + sellCurrId] += excessSettledAmount / exchangeRates[static_cast<int>(trades[tradeIndex].sellCurr_)];
 			}
+			else
+				excessSettledAmount = -currentTradeSettledAmount;
 
-			if (novTemp < -zero)
-			{
-				upperboundRmtPassed = false;
-				double excessNOVInDollars = (novTemp - (-aspl[memberIndex]));
-				excessNOV += excessNOVInDollars;
-			}
-
-			//excessSettledAmountInDollars += std::min(std::min(excessSPL, excessASPL), excessNOV);
-			//excessSettledAmountInDollars += (2 * std::min(std::min(excessSPL, excessASPL), excessNOV));
-			excessSettledAmountInDollars += (excessSPL + excessASPL + excessNOV);
+			predictedSettledAmount += std::max(0.0, currentTradeSettledAmount + excessSettledAmount);
 		}
 
-		if (cumulativeSettledAmount < -excessSettledAmountInDollars)
-		{
-			//We may come here sometimes, if currentBalance is already short and cumulative balance makes if go down further
-			//_CrtDbgBreak();
-			//int* p = nullptr;
-			//*p = 10;
-		}
-		upperbound = settledAmount + cumulativeSettledAmount + excessSettledAmountInDollars;
-		//upperbound = actualSettledAmount + cumulativeSettledAmount + excessSettledAmountInDollars;
+		upperboundRmtPassed = rmtSuccessful;
+		
+		upperbound = actualSettledAmount + predictedSettledAmount;
+		//upperbound = settledAmount + predictedSettledAmount;
 	}
 
-	bool verifySettlement_v13a(
+	bool verifySettlement_v13b(
 		bitset<128>& rmtPassed,
 		const vector<double>& updatedBalance,		
 		int memberIndex,
@@ -179,7 +216,7 @@ namespace mm {
 		return rmtSuccessful;
 	}
 
-	inline bool verifySettlement_pair_v13a(
+	inline bool verifySettlement_pair_v13b(
 		bitset<128>& rmtPassed,
 		const vector<double>& updatedBalance,
 		int partyId, 
@@ -188,12 +225,12 @@ namespace mm {
 		const vector<double>& aspl,
 		const vector<double>& exchangeRates)
 	{
-		bool result1 = verifySettlement_v13a(rmtPassed, updatedBalance, partyId, spl, aspl, exchangeRates);
-		bool result2 = verifySettlement_v13a(rmtPassed, updatedBalance, cPartyId, spl, aspl, exchangeRates);
+		bool result1 = verifySettlement_v13b(rmtPassed, updatedBalance, partyId, spl, aspl, exchangeRates);
+		bool result2 = verifySettlement_v13b(rmtPassed, updatedBalance, cPartyId, spl, aspl, exchangeRates);
 		return result1 && result2;
 	}
 
-	inline bool verifySettlement_range_v13a(
+	inline bool verifySettlement_range_v13b(
 		bitset<128>& rmtPassed,
 		const vector<double>& updatedBalance,
 		int partyIdStart,
@@ -204,13 +241,13 @@ namespace mm {
 	{
 		bool rmtSuccessful = true;
 		for(int memberIndex = partyIdStart; memberIndex <= partyIdEnd; ++memberIndex)
-			if(!verifySettlement_v13a(rmtPassed, updatedBalance, memberIndex, spl, aspl, exchangeRates))
+			if(!verifySettlement_v13b(rmtPassed, updatedBalance, memberIndex, spl, aspl, exchangeRates))
 				rmtSuccessful = false;
 
 		return rmtSuccessful;
 	}
 
-	void debugPrint_v13a(int level, unsigned long long numberOfFunctionCalls, size_t heapSize,
+	void debugPrint_v13b(int level, unsigned long long numberOfFunctionCalls, size_t heapSize,
 		double upperbound, bool upperboundRmtPassed,
 		double settledAmount, const string& key)
 	{
@@ -228,15 +265,15 @@ namespace mm {
 			<< " " << key;
 	}
 
-	double doSettlement_branch_and_bound_v13a(
+	double doSettlement_branch_and_bound_v13b(
 		vector<bool>& settleFlagsOut,
 		vector<Trade>& trades,
 		const vector<double>& spl,
 		const vector<double>& aspl,
 		vector<double>& initialBalance,
 		const vector<double>& exchangeRates,
-		MM_Heap<fxDecisionTreeNode_v13a*, fxDecisionTreeNodeCompare_v13a>& fxMaxHeap_v13a,
-		vector<vector<fxDecisionTreeNode_v13a>>& heapObjectsGrowingPool,
+		MM_Heap<fxDecisionTreeNode_v13b*, fxDecisionTreeNodeCompare_v13b>& fxMaxHeap_v13b,
+		vector<vector<fxDecisionTreeNode_v13b>>& heapObjectsGrowingPool,
 		int initialHeapCapacity,
 		vector< vector<double> >& cumulativeBalance,
 		vector<double>& cumulativeSettledAmount)
@@ -250,8 +287,8 @@ namespace mm {
 		//	> (rhs.buyVol_ * exchangeRates[static_cast<int>(rhs.buyCurr_)] + rhs.sellVol_ * exchangeRates[static_cast<int>(rhs.sellCurr_)]);
 		//});
 
-		fxDecisionTreeNode_v13a* pObj = fxMaxHeap_v13a.getNextAvailableElement();
-		fxDecisionTreeNode_v13a& current = *pObj;
+		fxDecisionTreeNode_v13b* pObj = fxMaxHeap_v13b.getNextAvailableElement();
+		fxDecisionTreeNode_v13b& current = *pObj;
 		current.level = -1;
 		current.currentBalance.resize(numMembers * numCurrencies, 0.0);
 		int startIndex = -1;
@@ -300,14 +337,15 @@ namespace mm {
 		//std::vector<int> memberIndices(aspl.size());
 		//std::iota(memberIndices.begin(), memberIndices.end(), 0); // Fill with 0, 1, ..., aspl.size() - 1
 		current.rmtPassed.flip();
-		verifySettlement_range_v13a(current.rmtPassed, current.currentBalance, 0, aspl.size() - 1, spl, aspl, exchangeRates);
+		verifySettlement_range_v13b(current.rmtPassed, current.currentBalance, 0, aspl.size() - 1, spl, aspl, exchangeRates);
 		current.calculateAndSetUpperBound(
-			cumulativeBalance[current.level + 1],
-			cumulativeSettledAmount[current.level + 1],
-			spl,
-			aspl,
+			initialBalance,
+			current.level + 1, 
+			trades,
+			spl, 
+			aspl, 
 			exchangeRates);
-		fxMaxHeap_v13a.push(pObj);
+		fxMaxHeap_v13b.push(pObj);
 
 		unsigned long long numberOfFunctionCalls = 0;
 		int sizeOfHeap = 0;
@@ -337,14 +375,14 @@ namespace mm {
 
 		*/
 
-		while (!fxMaxHeap_v13a.empty())
+		while (!fxMaxHeap_v13b.empty())
 		{
 			++numberOfFunctionCalls;
-			if (sizeOfHeap < fxMaxHeap_v13a.size())
-				sizeOfHeap = fxMaxHeap_v13a.size();
+			if (sizeOfHeap < fxMaxHeap_v13b.size())
+				sizeOfHeap = fxMaxHeap_v13b.size();
 
-			fxDecisionTreeNode_v13a* pCurrent = fxMaxHeap_v13a.top();
-			fxDecisionTreeNode_v13a& current = *pCurrent;
+			fxDecisionTreeNode_v13b* pCurrent = fxMaxHeap_v13b.top();
+			fxDecisionTreeNode_v13b& current = *pCurrent;
 
 			if ((current.upperbound - zero) <= maxValue)
 				break;
@@ -362,8 +400,9 @@ namespace mm {
 				//tempororily make use of current to calculate exclude upper bound before changing its balances for include option.
 				//See above table of comments.
 				current.calculateAndSetUpperBound(
-					cumulativeBalance[current.level + 1],
-					cumulativeSettledAmount[current.level + 1],
+					initialBalance,
+					current.level + 1,
+					trades,
 					spl,
 					aspl,
 					exchangeRates);
@@ -389,7 +428,7 @@ namespace mm {
 			}
 
 			//include this item
-			fxDecisionTreeNode_v13a& include = current;
+			fxDecisionTreeNode_v13b& include = current;
 			// Update current balance
 			int partyId = trades[include.level].partyId_;
 			int cPartyId = trades[include.level].cPartyId_;
@@ -405,7 +444,7 @@ namespace mm {
 				);
 			include.settleFlags[include.level] = true;
 
-			verifySettlement_pair_v13a(include.rmtPassed, include.currentBalance, partyId, cPartyId, spl, aspl, exchangeRates);
+			verifySettlement_pair_v13b(include.rmtPassed, include.currentBalance, partyId, cPartyId, spl, aspl, exchangeRates);
 			if (include.rmtPassed.all() && maxValue < include.settledAmount)
 			{
 				include.actualSettledAmount = include.settledAmount;
@@ -420,17 +459,17 @@ namespace mm {
 				if ((excludeUpperbound - zero) > maxValue)
 				{
 					//Grow the heap if required
-					if (fxMaxHeap_v13a.capacity() == fxMaxHeap_v13a.size()) //need to grow pool
+					if (fxMaxHeap_v13b.capacity() == fxMaxHeap_v13b.size()) //need to grow pool
 					{
-						heapObjectsGrowingPool.push_back(vector<fxDecisionTreeNode_v13a>(initialHeapCapacity, fxDecisionTreeNode_v13a{ initialBalance.size(), trades.size() }));
-						fxMaxHeap_v13a.reserve(fxMaxHeap_v13a.capacity() + initialHeapCapacity);
+						heapObjectsGrowingPool.push_back(vector<fxDecisionTreeNode_v13b>(initialHeapCapacity, fxDecisionTreeNode_v13b{ initialBalance.size(), trades.size() }));
+						fxMaxHeap_v13b.reserve(fxMaxHeap_v13b.capacity() + initialHeapCapacity);
 						int lastIndex = heapObjectsGrowingPool.size() - 1;
 						for (int i = 0; i < initialHeapCapacity; ++i)
-							fxMaxHeap_v13a.addToData(&heapObjectsGrowingPool[lastIndex][i]);
+							fxMaxHeap_v13b.addToData(&heapObjectsGrowingPool[lastIndex][i]);
 					}
 
-					fxDecisionTreeNode_v13a* pExclude = fxMaxHeap_v13a.getNextAvailableElement();
-					fxDecisionTreeNode_v13a& exclude = *pExclude;
+					fxDecisionTreeNode_v13b* pExclude = fxMaxHeap_v13b.getNextAvailableElement();
+					fxDecisionTreeNode_v13b& exclude = *pExclude;
 					exclude = include;
 
 					//Revert the changes for include
@@ -444,17 +483,17 @@ namespace mm {
 						+ trades[exclude.level].sellVol_ * exchangeRates[static_cast<int>(trades[exclude.level].sellCurr_)]
 						);
 					exclude.settleFlags[exclude.level] = false;
-					fxMaxHeap_v13a.push(pExclude);
+					fxMaxHeap_v13b.push(pExclude);
 				}
 			}
 
 			if(current.upperbound < current.settledAmount)
-				fxMaxHeap_v13a.pop();
+				fxMaxHeap_v13b.pop();
 			else if(current.level == trades.size() - 1)
-				fxMaxHeap_v13a.pop();
+				fxMaxHeap_v13b.pop();
 		}
 
-		fxMaxHeap_v13a.clear();
+		fxMaxHeap_v13b.clear();
 		TestStats::currentTestStats.numberOfFunctionCalls = numberOfFunctionCalls;
 		TestStats::currentTestStats.sizeOfHeap = sizeOfHeap;
 

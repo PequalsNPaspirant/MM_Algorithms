@@ -636,7 +636,7 @@
     <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v13a.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v14a.cpp">
+    <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v13b.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1088,7 +1088,7 @@
     <ClInclude Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v13a.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v14a.h">
+    <ClInclude Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v13b.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
