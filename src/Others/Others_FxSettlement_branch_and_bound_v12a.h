@@ -33,6 +33,8 @@
 #include <cassert>
 using namespace std;
 
+#include "Others/Others_FxSettlement.h"
+
 namespace mm {
 
 	struct fxDecisionTreeNode_v12a
@@ -126,5 +128,7 @@ namespace mm {
 				return lhs->settledAmount < rhs->settledAmount;
 		}
 	};
+	
+	double doSettlement_branch_and_bound_v12a(vector<bool>& settleFlagsOut, vector<Trade>& trades, const vector<double>& spl, const vector<double>& aspl, vector<double>& initialBalance, const vector<double>& exchangeRates, MM_Heap<fxDecisionTreeNode_v12a*, fxDecisionTreeNodeCompare_v12a>& fxMaxHeap_v12a, vector<vector<fxDecisionTreeNode_v12a>>& heapObjectsGrowingPool, int initialHeapCapacity, vector< vector<double> >& cumulativeBalance, vector<double>& cumulativeSettledAmount);
 
 }
