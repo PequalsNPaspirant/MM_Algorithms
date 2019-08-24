@@ -37,7 +37,7 @@ using namespace std;
 
 namespace mm {
 
-	struct fxDecisionTreeNode_v13a
+	struct fxDecisionTreeNode_v14a
 	{
 		//Total size of object in bytes = 4 + 8 + (8 * members * currencies) + 8 + 4 * (members * currencies) / 32 + 4 = 24 + (8 * members * currencies) + 4 * (members * currencies) / 32 ~ 24 + (8 * members * currencies)
 		int level;
@@ -50,14 +50,14 @@ namespace mm {
 		vector<bool> settleFlags;
 		bitset<128> rmtPassed{ 0 }; //4 bytes (4 * 32 = 128)
 
-		fxDecisionTreeNode_v13a(size_t totalBalances, size_t totalTrades)
+		fxDecisionTreeNode_v14a(size_t totalBalances, size_t totalTrades)
 			: currentBalance(totalBalances, 0.0),
 			settleFlags(totalTrades, false)
 		{
 
 		}
 
-		fxDecisionTreeNode_v13a(const fxDecisionTreeNode_v13a& rhs)
+		fxDecisionTreeNode_v14a(const fxDecisionTreeNode_v14a& rhs)
 			: level{ rhs.level },
 			upperbound{ rhs.upperbound },
 			upperboundRmtPassed{ rhs.upperboundRmtPassed },
@@ -69,7 +69,7 @@ namespace mm {
 		{
 		}
 
-		fxDecisionTreeNode_v13a(fxDecisionTreeNode_v13a&& rhs) = delete;
+		fxDecisionTreeNode_v14a(fxDecisionTreeNode_v14a&& rhs) = delete;
 		//	: level{ std::move(rhs.level) },
 		//	upperbound{ std::move(rhs.upperbound) },
 		//	upperboundRmtPassed{ std::move(rhs.upperboundRmtPassed) },
@@ -80,7 +80,7 @@ namespace mm {
 		//{
 		//}
 
-		fxDecisionTreeNode_v13a& operator=(const fxDecisionTreeNode_v13a& rhs)
+		fxDecisionTreeNode_v14a& operator=(const fxDecisionTreeNode_v14a& rhs)
 		{
 			level = rhs.level;
 			upperbound = rhs.upperbound;
@@ -129,9 +129,9 @@ namespace mm {
 		//	const vector<double>& exchangeRates
 		//);
 	};
-	struct fxDecisionTreeNodeCompare_v13a
+	struct fxDecisionTreeNodeCompare_v14a
 	{
-		bool operator()(const fxDecisionTreeNode_v13a* lhs, const fxDecisionTreeNode_v13a* rhs) const
+		bool operator()(const fxDecisionTreeNode_v14a* lhs, const fxDecisionTreeNode_v14a* rhs) const
 		{
 			if (lhs->upperbound < rhs->upperbound)
 				return true;
@@ -142,6 +142,6 @@ namespace mm {
 		}
 	};
 
-	double doSettlement_branch_and_bound_v13a(vector<bool>& settleFlagsOut, vector<Trade>& trades, const vector<double>& spl, const vector<double>& aspl, vector<double>& initialBalance, const vector<double>& exchangeRates, MM_Heap<fxDecisionTreeNode_v13a*, fxDecisionTreeNodeCompare_v13a>& fxMaxHeap_v13a, vector<vector<fxDecisionTreeNode_v13a>>& heapObjectsGrowingPool, int initialHeapCapacity, vector< vector<double> >& cumulativeBalance, vector<double>& cumulativeSettledAmount);
+	double doSettlement_branch_and_bound_v14a(vector<bool>& settleFlagsOut, vector<Trade>& trades, const vector<double>& spl, const vector<double>& aspl, vector<double>& initialBalance, const vector<double>& exchangeRates, MM_Heap<fxDecisionTreeNode_v14a*, fxDecisionTreeNodeCompare_v14a>& fxMaxHeap_v14a, vector<vector<fxDecisionTreeNode_v14a>>& heapObjectsGrowingPool, int initialHeapCapacity, vector< vector<double> >& cumulativeBalance, vector<double>& cumulativeSettledAmount);
 
 }
