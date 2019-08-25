@@ -207,10 +207,11 @@ namespace mm {
 		branch_and_bound_v10a,
 		branch_and_bound_v11a,
 		branch_and_bound_v12a,
-		branch_and_bound_v13a,
-		branch_and_bound_v13b,
+		branch_and_bound_v13a, //v13a fails for test case no. 38
 
-		totalAlgos
+		totalAlgos,
+
+		branch_and_bound_v13b //v13b fails for lot of cases
 	};
 
 	struct AlgoInfo
