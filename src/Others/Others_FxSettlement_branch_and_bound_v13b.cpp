@@ -68,6 +68,8 @@ namespace mm {
 		const vector<double>& updatedBalance,
 		int partyId,
 		int cPartyId,
+		int buyCurrId,
+		int sellCurrId,
 		const vector<double>& spl,
 		const vector<double>& aspl,
 		const vector<double>& exchangeRates)
@@ -83,12 +85,18 @@ namespace mm {
 			double asplTemp = 0.0;
 			double novTemp = 0.0;
 
+			if (!(updatedBalance[numMembers * memberIndex + buyCurrId] + zero < -spl[numMembers * memberIndex + buyCurrId]
+				&& updatedBalance[numMembers * memberIndex + buyCurrId] + zero < -spl[numMembers * memberIndex + buyCurrId]
+				))
+				return false;
+
+			bool splPassed = true;
 			for (int currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
 			{
 				int index = numMembers * memberIndex + currencyIndex;
-				if (updatedBalance[index] + zero < -spl[index])
+				if (!rmtPassedCurrent[memberIndex] && updatedBalance[index] + zero < -spl[index])
 				{
-					return false;
+					splPassed = false;
 				}
 
 				double currentBalanceInDollars = updatedBalance[index] * exchangeRates[currencyIndex];
@@ -101,6 +109,8 @@ namespace mm {
 			{
 				return false;
 			}
+
+			rmtPassedCurrent[memberIndex] = splPassed;
 		}
 
 		return canThisTradeBeSettled;
@@ -138,8 +148,6 @@ namespace mm {
 				if (!somethingSettled && tradeIndex == lastTradeSettledInLastPass)
 					break;
 
-				++(TestStats::currentTestStats.numberOfFunctionCalls);
-
 				if (settleFlagsGreedy[tradeIndex - level]) continue;
 
 				// Update current balance
@@ -152,7 +160,7 @@ namespace mm {
 				updatedBalance[numMembers * cPartyId + buyCurrId] -= trades[tradeIndex].buyVol_;
 				updatedBalance[numMembers * cPartyId + sellCurrId] += trades[tradeIndex].sellVol_;
 
-				if (verifySettlement_greedy_v13b(rmtPassedCurrent, updatedBalance, partyId, cPartyId, spl, aspl, exchangeRates))
+				if (verifySettlement_greedy_v13b(rmtPassedCurrent, updatedBalance, partyId, cPartyId, buyCurrId, sellCurrId, spl, aspl, exchangeRates))
 				{
 					amountSettledGreedy += (
 						trades[tradeIndex].buyVol_ * exchangeRates[static_cast<int>(trades[tradeIndex].buyCurr_)]
@@ -161,8 +169,6 @@ namespace mm {
 
 					settleFlagsGreedy[tradeIndex - level] = true;
 					somethingSettled = true;
-					rmtPassedCurrent[partyId] = true;
-					rmtPassedCurrent[cPartyId] = true;
 					lastTradeSettledInLastPass = tradeIndex;
 					--totalTrades;
 				}

@@ -676,6 +676,7 @@ namespace mm {
 	MM_UNIT_TEST(Others_FxSettlement_sanity, Others_FxSettlement)
 	{
 		MM_PRINT_TEST_CASE_NUMBER(false);
+		MM_SET_PAUSE_ON_ERROR(false);
 
 		//createTestCases();
 		testFxSettlement(getTestCases());
