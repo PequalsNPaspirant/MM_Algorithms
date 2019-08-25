@@ -178,9 +178,8 @@ namespace mm {
 			}
 		}
 
-		//cout << "\nTotal remaining trades: " << totalTrades << "\n";
+		upperboundRmtPassed = (totalTrades == 0) && rmtPassedCurrent.all();
 
-		bool rmtSuccessful = true;
 		double predictedSettledAmount = 0.0;
 		for (int tradeIndex = level; tradeIndex < trades.size(); ++tradeIndex)
 		{
@@ -208,14 +207,12 @@ namespace mm {
 			int index = numMembers * partyId + sellCurrId;
 			if (updatedBalance[index] + zero < -spl[index])
 			{
-				rmtSuccessful = false;
 				excessSPL = ((updatedBalance[index] - (-spl[index])) * exchangeRates[sellCurrId]);
 			}
 
 			index = numMembers * cPartyId + buyCurrId;
 			if (updatedBalance[index] + zero < -spl[index])
 			{
-				rmtSuccessful = false;
 				excessSPL = std::min(excessSPL, ((updatedBalance[index] - (-spl[index])) * exchangeRates[buyCurrId]));
 			}
 
@@ -237,21 +234,13 @@ namespace mm {
 
 				if (asplTemp + zero < -aspl[memberIndex])
 				{
-					rmtSuccessful = false;
 					excessASPL = std::min(excessASPL, (asplTemp - (-aspl[memberIndex])));
 				}
 
 				if (novTemp < -zero)
 				{
-					rmtSuccessful = false;
 					excessNOV = std::min(excessNOV, novTemp);
 				}
-			}
-
-			if (rmtSuccessful)
-			{
-				//something is wrong
-				//cout << "\n======== Something is wrong =======\n";
 			}
 
 			excessSettledAmount = 2 * std::min(std::min(excessSPL, excessASPL), excessNOV);
@@ -267,8 +256,6 @@ namespace mm {
 
 			predictedSettledAmount += std::max(0.0, currentTradeSettledAmount + excessSettledAmount);
 		}
-
-		upperboundRmtPassed = rmtPassedCurrent.all() && rmtSuccessful;
 		
 		upperbound = settledAmount + amountSettledGreedy + predictedSettledAmount;
 	}
