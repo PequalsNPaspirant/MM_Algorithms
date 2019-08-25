@@ -46,7 +46,6 @@ namespace mm {
 
 		vector<double> currentBalance;
 		double settledAmount;
-		double actualSettledAmount;
 		vector<bool> settleFlags;
 		bitset<128> rmtPassed{ 0 }; //4 bytes (4 * 32 = 128)
 
@@ -63,7 +62,6 @@ namespace mm {
 			upperboundRmtPassed{ rhs.upperboundRmtPassed },
 			currentBalance{ rhs.currentBalance },
 			settledAmount{ rhs.settledAmount },
-			actualSettledAmount{ rhs.actualSettledAmount },
 			settleFlags{ rhs.settleFlags },
 			rmtPassed{ rhs.rmtPassed }
 		{
@@ -96,7 +94,6 @@ namespace mm {
 				currentBalance[i] = rhs.currentBalance[i];
 			
 			settledAmount = rhs.settledAmount;
-			actualSettledAmount = rhs.actualSettledAmount;
 
 			if (settleFlags.size() != rhs.settleFlags.size())
 			{

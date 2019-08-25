@@ -63,6 +63,49 @@ namespace mm {
 			Consider all values in Dollars.
 	*/
 
+	bool verifySettlement_greedy_v13b(
+		bitset<128>& rmtPassedCurrent,
+		const vector<double>& updatedBalance,
+		int partyId,
+		int cPartyId,
+		const vector<double>& spl,
+		const vector<double>& aspl,
+		const vector<double>& exchangeRates)
+	{
+		//TODO: we can avoid checking SPL for all currencies. No need to check it for all, we can check it only for 2 currencies involved in trade.
+		bool canThisTradeBeSettled = true;
+		int numMembers = aspl.size();
+		int numCurrencies = spl.size() / aspl.size();
+		int members[2] = { partyId, cPartyId };
+		for (int i = 0; i < 2; ++i)
+		{
+			int memberIndex = members[i];
+			double asplTemp = 0.0;
+			double novTemp = 0.0;
+
+			for (int currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
+			{
+				int index = numMembers * memberIndex + currencyIndex;
+				if (updatedBalance[index] + zero < -spl[index])
+				{
+					return false;
+				}
+
+				double currentBalanceInDollars = updatedBalance[index] * exchangeRates[currencyIndex];
+				novTemp += currentBalanceInDollars;
+				if (currentBalanceInDollars < -zero)
+					asplTemp += currentBalanceInDollars;
+			}
+
+			if ((asplTemp + zero < -aspl[memberIndex]) || (novTemp < -zero))
+			{
+				return false;
+			}
+		}
+
+		return canThisTradeBeSettled;
+	}
+
 	void fxDecisionTreeNode_v13b::calculateAndSetUpperBound(
 		vector<double>& updatedBalance,
 		int level,
@@ -74,16 +117,75 @@ namespace mm {
 	{
 		int numMembers = aspl.size();
 		int numCurrencies = spl.size() / aspl.size();
-		bool rmtSuccessful = true;
+		bitset<128> rmtPassedCurrent = rmtPassed;
 
 		for (int i = 0; i < updatedBalance.size(); ++i)
 		{
 			updatedBalance[i] = currentBalance[i];
 		}
 
+		double amountSettledGreedy = 0.0;
+		bool somethingSettled = true;
+		int lastTradeSettledInLastPass = trades.size();
+		bitset<128> settleFlagsGreedy{ false };
+		int totalTrades = trades.size() - level;
+
+		while (somethingSettled)
+		{
+			somethingSettled = false;
+			for (int tradeIndex = level; tradeIndex < trades.size(); ++tradeIndex)
+			{
+				if (!somethingSettled && tradeIndex == lastTradeSettledInLastPass)
+					break;
+
+				++(TestStats::currentTestStats.numberOfFunctionCalls);
+
+				if (settleFlagsGreedy[tradeIndex - level]) continue;
+
+				// Update current balance
+				int partyId = trades[tradeIndex].partyId_;
+				int cPartyId = trades[tradeIndex].cPartyId_;
+				int buyCurrId = static_cast<int>(trades[tradeIndex].buyCurr_);
+				int sellCurrId = static_cast<int>(trades[tradeIndex].sellCurr_);
+				updatedBalance[numMembers * partyId + buyCurrId] += trades[tradeIndex].buyVol_;
+				updatedBalance[numMembers * partyId + sellCurrId] -= trades[tradeIndex].sellVol_;
+				updatedBalance[numMembers * cPartyId + buyCurrId] -= trades[tradeIndex].buyVol_;
+				updatedBalance[numMembers * cPartyId + sellCurrId] += trades[tradeIndex].sellVol_;
+
+				if (verifySettlement_greedy_v13b(rmtPassedCurrent, updatedBalance, partyId, cPartyId, spl, aspl, exchangeRates))
+				{
+					amountSettledGreedy += (
+						trades[tradeIndex].buyVol_ * exchangeRates[static_cast<int>(trades[tradeIndex].buyCurr_)]
+						+ trades[tradeIndex].sellVol_ * exchangeRates[static_cast<int>(trades[tradeIndex].sellCurr_)]
+						);
+
+					settleFlagsGreedy[tradeIndex - level] = true;
+					somethingSettled = true;
+					rmtPassedCurrent[partyId] = true;
+					rmtPassedCurrent[cPartyId] = true;
+					lastTradeSettledInLastPass = tradeIndex;
+					--totalTrades;
+				}
+				else
+				{
+					settleFlagsGreedy[tradeIndex - level] = false;
+					//revert balance changes
+					updatedBalance[numMembers * partyId + buyCurrId] -= trades[tradeIndex].buyVol_;
+					updatedBalance[numMembers * partyId + sellCurrId] += trades[tradeIndex].sellVol_;
+					updatedBalance[numMembers * cPartyId + buyCurrId] += trades[tradeIndex].buyVol_;
+					updatedBalance[numMembers * cPartyId + sellCurrId] -= trades[tradeIndex].sellVol_;
+				}
+			}
+		}
+
+		//cout << "\nTotal remaining trades: " << totalTrades << "\n";
+
+		bool rmtSuccessful = true;
 		double predictedSettledAmount = 0.0;
 		for (int tradeIndex = level; tradeIndex < trades.size(); ++tradeIndex)
 		{
+			if (settleFlagsGreedy[tradeIndex - level]) continue;
+
 			// Update current balance
 			int partyId = trades[tradeIndex].partyId_;
 			int cPartyId = trades[tradeIndex].cPartyId_;
@@ -146,6 +248,12 @@ namespace mm {
 				}
 			}
 
+			if (rmtSuccessful)
+			{
+				//something is wrong
+				//cout << "\n======== Something is wrong =======\n";
+			}
+
 			excessSettledAmount = 2 * std::min(std::min(excessSPL, excessASPL), excessNOV);
 			if (-excessSettledAmount < currentTradeSettledAmount)
 			{
@@ -160,10 +268,9 @@ namespace mm {
 			predictedSettledAmount += std::max(0.0, currentTradeSettledAmount + excessSettledAmount);
 		}
 
-		upperboundRmtPassed = rmtSuccessful;
+		upperboundRmtPassed = rmtPassedCurrent.all() && rmtSuccessful;
 		
-		upperbound = actualSettledAmount + predictedSettledAmount;
-		//upperbound = settledAmount + predictedSettledAmount;
+		upperbound = settledAmount + amountSettledGreedy + predictedSettledAmount;
 	}
 
 	bool verifySettlement_v13b(
@@ -176,7 +283,8 @@ namespace mm {
 	{
 		// TODO: Avoid checking SPL for all currencies. 
 		// It can be checked only for two currencies which are changes because of settlement of the current trade if we remember SPL results for all currencies.
-		//rmt
+		// if rmt is already passed for this member, then check SPL for only changed currencies, otherwise we have to check SPL for all
+		
 		//int numMembers = updatedBalance.size();
 		bool rmtSuccessful = true;
 		int numMembers = aspl.size();
@@ -331,7 +439,6 @@ namespace mm {
 		}
 
 		current.settledAmount = 0.0;
-		current.actualSettledAmount = 0.0;
 		current.upperbound = 0.0;
 		
 		//std::vector<int> memberIndices(aspl.size());
@@ -447,7 +554,6 @@ namespace mm {
 			verifySettlement_pair_v13b(include.rmtPassed, include.currentBalance, partyId, cPartyId, spl, aspl, exchangeRates);
 			if (include.rmtPassed.all() && maxValue < include.settledAmount)
 			{
-				include.actualSettledAmount = include.settledAmount;
 				maxValue = include.settledAmount;
 				for (int i = 0; i < include.settleFlags.size(); ++i)
 					settleFlagsOut[i] = include.settleFlags[i];

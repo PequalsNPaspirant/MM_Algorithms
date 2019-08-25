@@ -294,7 +294,7 @@ namespace mm {
 		}
 
 		current.settledAmount = 0.0;
-		current.actualSettledAmount = 0.0;
+		//current.actualSettledAmount = 0.0;
 		current.upperbound = 0.0;
 		
 		//std::vector<int> memberIndices(aspl.size());
@@ -408,7 +408,7 @@ namespace mm {
 			verifySettlement_pair_v13a(include.rmtPassed, include.currentBalance, partyId, cPartyId, spl, aspl, exchangeRates);
 			if (include.rmtPassed.all() && maxValue < include.settledAmount)
 			{
-				include.actualSettledAmount = include.settledAmount;
+				//include.actualSettledAmount = include.settledAmount;
 				maxValue = include.settledAmount;
 				for (int i = 0; i < include.settleFlags.size(); ++i)
 					settleFlagsOut[i] = include.settleFlags[i];

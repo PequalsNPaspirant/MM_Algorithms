@@ -156,6 +156,9 @@ namespace mm {
 
 		for (int testCaseIndex = 0; testCaseIndex < testCases.size(); ++testCaseIndex)
 		{
+			//Only for debugging purpose
+			//testCaseIndex = 2;
+
 			cout << "\n";
 			double actualSettledAmount = 0.0;
 
@@ -170,6 +173,9 @@ namespace mm {
 
 			for (int i = 0; i < static_cast<int>(AlgoType::totalAlgos); ++i)
 			{
+				//Only for debugging purpose
+				//i = static_cast<int>(AlgoType::branch_and_bound_v13b);
+
 				if (getAlgoInfo(AlgoType(i)).maxTrades < testCases[testCaseIndex].trades_.size())
 					continue;
 
