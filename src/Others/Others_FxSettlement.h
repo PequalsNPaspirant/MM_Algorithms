@@ -208,9 +208,9 @@ namespace mm {
 		branch_and_bound_v11a,
 		branch_and_bound_v12a,
 		branch_and_bound_v13a, //v13a fails for test case no. 38
+		branch_and_bound_v14a,
 
 		totalAlgos,
-
 		branch_and_bound_v13b //v13b fails for lot of cases
 	};
 
@@ -243,9 +243,10 @@ namespace mm {
 		{ AlgoType::branch_and_bound_v9a,			{ "branch_and_bound_v9a", 27 } },
 		{ AlgoType::branch_and_bound_v10a,			{ "branch_and_bound_v10a", 28 } },
 		{ AlgoType::branch_and_bound_v11a,			{ "branch_and_bound_v11a", 28 } },
-		{ AlgoType::branch_and_bound_v12a,			{ "branch_and_bound_v12a", 50 } },
-		{ AlgoType::branch_and_bound_v13a,			{ "branch_and_bound_v13a", 50 } },
-		{ AlgoType::branch_and_bound_v13b,			{ "branch_and_bound_v13b", 50 } }
+		{ AlgoType::branch_and_bound_v12a,			{ "branch_and_bound_v12a", 34 } },
+		{ AlgoType::branch_and_bound_v13a,			{ "branch_and_bound_v13a", 34 } },
+		{ AlgoType::branch_and_bound_v13b,			{ "branch_and_bound_v13b", 34 } },
+		{ AlgoType::branch_and_bound_v14a,			{ "branch_and_bound_v14a", 50 } },
 
 		}; 
 		return AlgoTypeInfo[type];

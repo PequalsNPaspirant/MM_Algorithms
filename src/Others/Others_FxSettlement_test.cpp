@@ -49,6 +49,7 @@ using namespace std;
 #include "Others/Others_FxSettlement_branch_and_bound_v12a.h"
 #include "Others/Others_FxSettlement_branch_and_bound_v13a.h"
 #include "Others/Others_FxSettlement_branch_and_bound_v13b.h"
+#include "Others/Others_FxSettlement_branch_and_bound_v14a.h"
 
 namespace mm {
 
@@ -174,7 +175,7 @@ namespace mm {
 			for (int i = 0; i < static_cast<int>(AlgoType::totalAlgos); ++i)
 			{
 				//Only for debugging purpose
-				//i = static_cast<int>(AlgoType::branch_and_bound_v13b);
+				//i = static_cast<int>(AlgoType::branch_and_bound_v13a);
 
 				if (getAlgoInfo(AlgoType(i)).maxTrades < testCases[testCaseIndex].trades_.size())
 					continue;
@@ -563,6 +564,35 @@ namespace mm {
 						currentBalances,
 						testCases[testCaseIndex].exchangeRates_,
 						fxMaxHeap_v13b,
+						heapObjectsGrowingPool,
+						initialHeapCapacity,
+						cumulativeBalance,
+						cumulativeSettledAmount
+					);
+					break;
+				}
+				case AlgoType::branch_and_bound_v14a:
+				{
+					using decisionTreeNodeType = fxDecisionTreeNode_v14a;
+					using decisionTreeNodeCompare = fxDecisionTreeNodeCompare_v14a;
+					//int initialHeapCapacity = 1'000'000;
+					int initialHeapCapacity = 2 * trades.size();
+					//Total memory = 1,000,000 * object size = 1,000,000 * (24 + (8 * members * currencies)) bytes = (24 + (8 * members * currencies)) MB
+					vector<vector<decisionTreeNodeType>> heapObjectsGrowingPool(1, vector<decisionTreeNodeType>(initialHeapCapacity, decisionTreeNodeType{ testCases[testCaseIndex].initialBalance_.size(), trades.size() }));
+					MM_Heap<decisionTreeNodeType*, decisionTreeNodeCompare> fxMaxHeap(initialHeapCapacity);
+					//initialize the pool indices
+					for (int i = 0; i < initialHeapCapacity; ++i)
+						fxMaxHeap.addToData(&heapObjectsGrowingPool[0][i]);
+
+					start = std::chrono::high_resolution_clock::now();
+					actualSettledAmount = doSettlement_branch_and_bound_v14a(
+						settleFlags,
+						trades,
+						testCases[testCaseIndex].spl_,
+						testCases[testCaseIndex].aspl_,
+						currentBalances,
+						testCases[testCaseIndex].exchangeRates_,
+						fxMaxHeap,
 						heapObjectsGrowingPool,
 						initialHeapCapacity,
 						cumulativeBalance,
