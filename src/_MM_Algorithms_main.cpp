@@ -63,6 +63,7 @@ namespace mm {
 	MM_DEFINE_FLAG(false, String_FirstKNonRepeatingChars_optimized);
 	//Matrix
 	//Graphs
+	MM_DEFINE_FLAG(true, Graphs_RepresentationUnitTest);
 	//Array
 	MM_DEFINE_FLAG(false, SmallestPositiveIntNotPresentInArrayUnitTest);
 	//OTHERS	
@@ -77,7 +78,7 @@ namespace mm {
 	MM_DEFINE_FLAG(false, Others_EquityOrderManagementSystem);
 	MM_DEFINE_FLAG(false, Others_CarRentalSystem);
 	MM_DEFINE_FLAG(false, Others_PersonSort);
-	MM_DEFINE_FLAG(true, Others_FxSettlement);
+	MM_DEFINE_FLAG(false, Others_FxSettlement);
 	MM_DEFINE_FLAG(false, Others_GTS);
 	MM_DEFINE_FLAG(false, Others_FxRatesCache); //----TODO
 	MM_DEFINE_FLAG(false, Others_RankInSortedArray);
