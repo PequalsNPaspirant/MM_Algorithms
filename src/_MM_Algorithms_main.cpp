@@ -63,7 +63,7 @@ namespace mm {
 	MM_DEFINE_FLAG(false, String_FirstKNonRepeatingChars_optimized);
 	//Matrix
 	//Graphs
-	MM_DEFINE_FLAG(true, Graphs_RepresentationUnitTest);
+	MM_DEFINE_FLAG(false, Graphs_RepresentationUnitTest);
 	//Array
 	MM_DEFINE_FLAG(false, SmallestPositiveIntNotPresentInArrayUnitTest);
 	//OTHERS	
@@ -106,6 +106,9 @@ namespace mm {
 	//Miscellaneous
 	MM_DEFINE_FLAG(false, Miscellaneous_Others_atoi); //-----TODO
 	MM_DEFINE_FLAG(false, ReadWriteSubscriptOperators); //-----TODO
+	//Memory
+	MM_DEFINE_FLAG(false, Memory_Allocators_v1_unit_test);
+	MM_DEFINE_FLAG(true, Memory_Allocators_v2_unit_test);
 }
 
 using namespace mm;

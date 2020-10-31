@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\src\Memory\Memory_Allocators_v2.cpp" />
+    <ClCompile Include="..\..\..\..\src\Memory\Memory_Allocators_v1.cpp" />
     <ClCompile Include="..\..\..\..\src\Graphs\Graph_Representation.cpp" />
     <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v14a.cpp" />
     <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v13b.cpp" />
@@ -231,6 +233,8 @@
     <ClCompile Include="..\..\..\..\src\_MM_Algorithms_main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\src\Memory\Memory_Allocators_v2.h" />
+    <ClInclude Include="..\..\..\..\src\Memory\Memory_Allocators_v1.h" />
     <ClInclude Include="..\..\..\..\src\Graphs\Graph_Representation.h" />
     <ClInclude Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v14a.h" />
     <ClInclude Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v13b.h" />
