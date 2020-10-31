@@ -11,7 +11,7 @@ namespace mm {
 		virtual ~Vehicle() { }
 		virtual void startEngine() = 0;
 	};
-	class Car : public Vehicle {
+	class Bus : public Vehicle {
 	public:
 		virtual void startEngine() {};
 		virtual void openGasCap() {};
@@ -24,17 +24,17 @@ namespace mm {
 
 	void CastDerivedPtrToPtr()
 	{
-		Car*  carPtr = new Car;
+		Bus*  busPtr = new Bus;
 		NuclearSubmarine* nuclearSubmarinePtr = new NuclearSubmarine;
 
-		Vehicle* vehiclePtr = carPtr;
+		Vehicle* vehiclePtr = busPtr;
 		vehiclePtr = nuclearSubmarinePtr;
 
 		Vehicle** vehiclePtrPtr = nullptr;
 		//	Vehicle** vehiclePtrPtr = &carPtr;  // This is an error in C++
 		*vehiclePtrPtr = nuclearSubmarinePtr;
 		// This last line would have caused carPtr to point to sub !
-		carPtr->openGasCap();  // This might call fireNuclearMissile()!
+		busPtr->openGasCap();  // This might call fireNuclearMissile()!
 							   // ...
 	}
 

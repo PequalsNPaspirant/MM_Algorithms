@@ -57,7 +57,7 @@ namespace mm {
 	};
 
 	template <class T, std::size_t N>
-	class stack_allocator_v1
+	class StackAllocator_v1
 	{
 		arena_v1<N>& a_;
 
@@ -65,13 +65,13 @@ namespace mm {
 		typedef T value_type;
 
 	public:
-		template <class U> struct rebind { typedef stack_allocator_v1<U, N> other; };
+		template <class U> struct rebind { typedef StackAllocator_v1<U, N> other; };
 
-		explicit stack_allocator_v1(arena_v1<N>& a) : a_(a) {}
+		explicit StackAllocator_v1(arena_v1<N>& a) : a_(a) {}
 		template <class U>
-		stack_allocator_v1(const stack_allocator_v1<U, N>& a) : a_(a.a_) {}
-		stack_allocator_v1(const stack_allocator_v1&) = default;
-		stack_allocator_v1& operator=(const stack_allocator_v1&) = delete;
+		StackAllocator_v1(const StackAllocator_v1<U, N>& a) : a_(a.a_) {}
+		StackAllocator_v1(const StackAllocator_v1&) = default;
+		StackAllocator_v1& operator=(const StackAllocator_v1&) = delete;
 
 		T* allocate(std::size_t n)
 		{
@@ -84,20 +84,20 @@ namespace mm {
 		}
 
 		template <class T1, std::size_t N1, class U, std::size_t M>
-		friend bool	operator==(const stack_allocator_v1<T1, N1>& x, const stack_allocator_v1<U, M>& y);
+		friend bool	operator==(const StackAllocator_v1<T1, N1>& x, const StackAllocator_v1<U, M>& y);
 
 		template <class U, std::size_t M> 
-		friend class stack_allocator_v1;
+		friend class StackAllocator_v1;
 	};
 
 	template <class T, std::size_t N, class U, std::size_t M>
-	bool operator==(const stack_allocator_v1<T, N>& x, const stack_allocator_v1<U, M>& y)
+	bool operator==(const StackAllocator_v1<T, N>& x, const StackAllocator_v1<U, M>& y)
 	{
 		return N == M && &x.a_ == &y.a_;
 	}
 
 	template <class T, std::size_t N, class U, std::size_t M>
-	bool operator!=(const stack_allocator_v1<T, N>& x, const stack_allocator_v1<U, M>& y)
+	bool operator!=(const StackAllocator_v1<T, N>& x, const StackAllocator_v1<U, M>& y)
 	{
 		return !(x == y);
 	}

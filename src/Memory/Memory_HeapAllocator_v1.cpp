@@ -6,7 +6,7 @@
 #include <list>
 #include <forward_list>
 
-#include "Memory/Memory_Allocators_v1.h"
+#include "Memory/Memory_HeapAllocator_v1.h"
 #include "MM_UnitTestFramework/MM_UnitTestFramework.h"
 
 namespace mm {
@@ -87,16 +87,16 @@ namespace mm {
 		return retVal;
 	}
 
-	void compareResults_v1(size_t stdTime, size_t allocatorTime)
-	{
-		std::cout << " % time required : " << 100.0 * double(allocatorTime) / stdTime << " %" << std::endl;
-		std::cout << " improvement : " << double(stdTime) / allocatorTime << "x" << std::endl;
-		std::cout << std::endl;
-	}
-
 	template<typename DataType, typename Allocator>
-	void Memory_Allocators_v1_unit_test(size_t iterations, size_t repeat)
+	void Memory_HeapAllocator_v1_unit_test(size_t iterations, size_t repeat)
 	{
+		auto compareResults = [](size_t stdTime, size_t allocatorTime)
+		{
+			std::cout << " % time required : " << 100.0 * double(allocatorTime) / stdTime << " %" << std::endl;
+			std::cout << " improvement : " << double(stdTime) / allocatorTime << "x" << std::endl;
+			std::cout << std::endl;
+		};
+
 		size_t stdTime, allocatorTime;
 		string stlMsg{ " - Default STL Allocator : " };
 		string allocatorMsg{ " - Memory Pool Allocator : " };
@@ -112,7 +112,7 @@ namespace mm {
 			std::forward_list<int, Allocator> pushFrontForwardListTestFast;
 			allocatorTime = executeAndMeasure("ForwardList PushFront" + allocatorMsg, pushFrontForwardListTestFast, PushFrontTest{}, iterations, repeat);
 		}
-		compareResults_v1(stdTime, allocatorTime);
+		compareResults(stdTime, allocatorTime);
 		//--------------------
 		{
 			std::list<int> pushFrontListTestStl;
@@ -122,7 +122,7 @@ namespace mm {
 			std::list<int, Allocator> pushFrontListTestFast;
 			allocatorTime = executeAndMeasure("List PushFront" + allocatorMsg, pushFrontListTestFast, PushFrontTest{}, iterations, repeat);
 		}
-		compareResults_v1(stdTime, allocatorTime);
+		compareResults(stdTime, allocatorTime);
 		//--------------------
 		{
 			std::list<int> pushBackListTestStl;
@@ -132,7 +132,7 @@ namespace mm {
 			std::list<int, Allocator> pushBackListTestFast;
 			allocatorTime = executeAndMeasure("List PushBack" + allocatorMsg, pushBackListTestFast, PushBackTest{}, iterations, repeat);
 		}
-		compareResults_v1(stdTime, allocatorTime);
+		compareResults(stdTime, allocatorTime);
 		//--------------------
 		{
 			std::map<int, int, std::less<int>> mapTestStl;
@@ -142,7 +142,7 @@ namespace mm {
 			std::map<int, int, std::less<int>, Allocator> mapTestFast;
 			allocatorTime = executeAndMeasure("Map" + allocatorMsg, mapTestFast, MapTest{}, iterations, repeat);
 		}
-		compareResults_v1(stdTime, allocatorTime);
+		compareResults(stdTime, allocatorTime);
 		//--------------------
 		{
 			std::set<int, std::less<int>> setTestStl;
@@ -152,13 +152,13 @@ namespace mm {
 			std::set<int, std::less<int>, Allocator> setTestFast;
 			allocatorTime = executeAndMeasure("Set" + allocatorMsg, setTestFast, SetTest{}, iterations, repeat);
 		}
-		compareResults_v1(stdTime, allocatorTime);
+		compareResults(stdTime, allocatorTime);
 		//--------------------
 	}
 
-	MM_DECLARE_FLAG(Memory_Allocators_v1_unit_test);
+	MM_DECLARE_FLAG(Memory_HeapAllocator_v1);
 
-	MM_UNIT_TEST(Memory_Allocators_v1_unit_test_1, Memory_Allocators_v1_unit_test)
+	MM_UNIT_TEST(Memory_HeapAllocator_v1_unit_test_1, Memory_HeapAllocator_v1)
 	{
 		/*
 		1,000 int = 4 KB
@@ -170,8 +170,21 @@ namespace mm {
 		const int iterations = 10'000'000; //number of integers inserted which requires total 40 MB data
 
 		const std::size_t growSize = 1'000'000; //number of intergers = 4 MB
-		typedef Allocator_v1<int, growSize> Allocator;
+		typedef HeapAllocator_v1<int, growSize> Allocator;
 		
-		Memory_Allocators_v1_unit_test<int, Allocator>(iterations, repeat);
+		Memory_HeapAllocator_v1_unit_test<int, Allocator>(iterations, repeat);
+
+		/*
+		// Note: This allocator does not work for vector
+
+		const std::size_t N = growSize;
+		//arena_v1<N> a;
+		std::vector<int, HeapAllocator_v1<int, N>> v{};
+		v.reserve(100);
+		for (int i = 0; i < 100; ++i)
+			v.push_back(i);
+		std::vector<int, HeapAllocator_v1<int, N>> v2 = std::move(v);
+		v = v2;
+		*/
 	}
 }

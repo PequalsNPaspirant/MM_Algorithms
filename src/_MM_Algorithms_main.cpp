@@ -107,8 +107,11 @@ namespace mm {
 	MM_DEFINE_FLAG(false, Miscellaneous_Others_atoi); //-----TODO
 	MM_DEFINE_FLAG(false, ReadWriteSubscriptOperators); //-----TODO
 	//Memory
-	MM_DEFINE_FLAG(true, Memory_Allocators_v1_unit_test);
-	MM_DEFINE_FLAG(true, Memory_Allocators_v2_unit_test);
+	MM_DEFINE_FLAG(false, Memory_HeapAllocator_v1);
+	MM_DEFINE_FLAG(true, Memory_HeapAllocator_v2);
+	MM_DEFINE_FLAG(false, Memory_HeapAllocator_v3);
+	MM_DEFINE_FLAG(false, Memory_StackAllocator_v1);
+	MM_DEFINE_FLAG(false, Memory_Allocators);
 }
 
 using namespace mm;
