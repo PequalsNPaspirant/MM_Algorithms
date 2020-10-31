@@ -11,175 +11,167 @@
 
 namespace mm {
 
-
-	const int numberOfIterations = 2;
-
-	const std::size_t growSize =  1'000'000; //4 MB
-	const int randomRange      = 10'000'000; //requires total 10 * 4 MB
-	/*
-	         1,000 int = 4 KB
-	     1,000,000 int = 4 MB
-	 1,000,000,000 int = 4 GB
-	*/
-
-	template <typename Container>
-	class PerformanceTest
+	class PushFrontTest
 	{
-		virtual void testIteration(int newSize) = 0;
-
-
-	protected:
-
-		Container container;
-
-		std::default_random_engine randomNumberGenerator;
-		std::uniform_int_distribution<int> randomNumberDistribution;
-
-
 	public:
-
-		PerformanceTest() :
-			randomNumberGenerator(0),
-			randomNumberDistribution(0, randomRange)
-		{
-		}
-
-		size_t run()
-		{
-			auto from = std::chrono::high_resolution_clock::now();
-
-			for (int i = 0; i < numberOfIterations; i++)
-				//testIteration(randomNumberDistribution(randomNumberGenerator));
-				testIteration(randomRange);
-
-			auto to = std::chrono::high_resolution_clock::now();
-			return std::chrono::duration_cast<std::chrono::nanoseconds>(to - from).count();
-		}
-	};
-
-	template <typename Container>
-	class PushFrontTest : public PerformanceTest<Container>
-	{
-		virtual void testIteration(int newSize)
+		template <typename Container>
+		void operator()(Container& container, size_t iterations)
 		{
 			int size = 0;
+			while (size < iterations)
+				container.push_front(size++);
 
-			while (size < newSize)
-				this->container.push_front(size++);
-
-			for (; size > newSize; size--)
-				this->container.pop_front();
+			for (; size > iterations; size--)
+				container.pop_front();
 			//container.clear();
 		}
 	};
 
-	template <typename Container>
-	class PushBackTest : public PerformanceTest<Container>
+	class PushBackTest
 	{
-		virtual void testIteration(int newSize)
+	public:
+		template <typename Container>
+		void operator()(Container& container, size_t iterations)
 		{
 			int size = 0;
+			while (size < iterations)
+				container.push_back(size++);
 
-			while (size < newSize)
-				this->container.push_back(size++);
-
-			for (; size > newSize; size--)
-				this->container.pop_back();
+			for (; size > iterations; size--)
+				container.pop_back();
 			//container.clear();
 		}
 	};
 
-	template <typename Container>
-	class MapTest : public PerformanceTest<Container>
+	class MapTest
 	{
-		virtual void testIteration(int newSize)
+	public:
+		template <typename Container>
+		void operator()(Container& container, size_t iterations)
 		{
 			int size = 0;
+			while (size < iterations)
+				container.insert(std::pair<char, int>(size++, size));
 
-			while (size < newSize)
-				this->container.insert(std::pair<char, int>(size++, size));
-
-			//while (size > newSize)
-			//	this->container.erase(--size);
-			container.clear();
+			while (size > iterations)
+				container.erase(--size);
+			//container.clear();
 		}
 	};
 
-	template <typename Container>
-	class SetTest : public PerformanceTest<Container>
+	class SetTest
 	{
-		virtual void testIteration(int newSize)
+	public:
+		template <typename Container>
+		void operator()(Container& container, size_t iterations)
 		{
 			int size = 0;
+			while (size < iterations)
+				container.insert(size++);
 
-			while (size < newSize)
-				this->container.insert(size++);
-
-			//while (size > newSize)
-			//	this->container.erase(--size);
-			container.clear();
+			while (size > iterations)
+				container.erase(--size);
+			//container.clear();
 		}
 	};
 
-	template <typename StlContainer, typename FastContainer>
-	void printTestStatus(const char *name, StlContainer &stlContainer, FastContainer &fastContainer)
+	template <typename Container, typename Fun>
+	size_t executeAndMeasure(const string& msg, Container &container, Fun f, size_t iterations, size_t repeat)
 	{
-		std::cout << std::fixed;
-		std::cout << std::setprecision(2);
-		std::cout.imbue(std::locale(""));
-		size_t stdTime = stlContainer.run();
-		size_t newTime = fastContainer.run();
-		std::cout << name << " - Default STL Allocator : " << stdTime << " ns" << std::endl;
-		std::cout << name << " - Memory Pool Allocator : " << newTime << " ns" << std::endl;
-		std::cout << " % improvement : " << 100.0 * (stdTime - newTime) / double(stdTime) << " %" << std::endl;
-		std::cout << "   improvement : " << double(stdTime) / newTime << "x" << std::endl;
+		auto from = std::chrono::high_resolution_clock::now();
+		for (int i = 0; i < repeat; ++i)
+			f(container, iterations);
+		auto to = std::chrono::high_resolution_clock::now();
+		size_t retVal = std::chrono::duration_cast<std::chrono::nanoseconds>(to - from).count();
+		std::cout << msg << retVal << " ns" << std::endl;
+		return retVal;
+	}
+
+	void compareResults_v1(size_t stdTime, size_t allocatorTime)
+	{
+		std::cout << " % time required : " << 100.0 * double(allocatorTime) / stdTime << " %" << std::endl;
+		std::cout << " improvement : " << double(stdTime) / allocatorTime << "x" << std::endl;
 		std::cout << std::endl;
 	}
 
-	
-	void Memory_Allocators_v1_unit_test()
+	template<typename DataType, typename Allocator>
+	void Memory_Allocators_v1_unit_test(size_t iterations, size_t repeat)
 	{
-		typedef int DataType;
-		typedef Allocator_v1<DataType, growSize> MemoryPoolAllocator;
-
-		std::cout << "Allocator performance measurement example" << std::endl;
-		std::cout << "Version: 1.0" << std::endl << std::endl;
+		size_t stdTime, allocatorTime;
+		string stlMsg{ " - Default STL Allocator : " };
+		string allocatorMsg{ " - Memory Pool Allocator : " };
+		std::cout << std::fixed;
+		std::cout << std::setprecision(2);
+		std::cout.imbue(std::locale(""));
+		//--------------------
 		{
-			PushFrontTest<std::forward_list<DataType>> pushFrontForwardListTestStl;
-			PushFrontTest<std::forward_list<DataType, MemoryPoolAllocator>> pushFrontForwardListTestFast;
-			printTestStatus("ForwardList PushFront", pushFrontForwardListTestStl, pushFrontForwardListTestFast);
+			std::forward_list<int> pushFrontForwardListTestStl;
+			stdTime = executeAndMeasure("ForwardList PushFront" + stlMsg, pushFrontForwardListTestStl, PushFrontTest{}, iterations, repeat);
 		}
-
 		{
-			PushFrontTest<std::list<DataType>> pushFrontListTestStl;
-			PushFrontTest<std::list<DataType, MemoryPoolAllocator>> pushFrontListTestFast;
-			printTestStatus("List PushFront", pushFrontListTestStl, pushFrontListTestFast);
+			std::forward_list<int, Allocator> pushFrontForwardListTestFast;
+			allocatorTime = executeAndMeasure("ForwardList PushFront" + allocatorMsg, pushFrontForwardListTestFast, PushFrontTest{}, iterations, repeat);
 		}
-
+		compareResults_v1(stdTime, allocatorTime);
+		//--------------------
 		{
-			PushBackTest<std::list<DataType>> pushBackListTestStl;
-			PushBackTest<std::list<DataType, MemoryPoolAllocator>> pushBackListTestFast;
-			printTestStatus("List PushBack", pushBackListTestStl, pushBackListTestFast);
+			std::list<int> pushFrontListTestStl;
+			stdTime = executeAndMeasure("List PushFront" + stlMsg, pushFrontListTestStl, PushFrontTest{}, iterations, repeat);
 		}
-
 		{
-			MapTest<std::map<DataType, DataType, std::less<DataType>>> mapTestStl;
-			MapTest<std::map<DataType, DataType, std::less<DataType>, MemoryPoolAllocator>> mapTestFast;
-			printTestStatus("Map", mapTestStl, mapTestFast);
+			std::list<int, Allocator> pushFrontListTestFast;
+			allocatorTime = executeAndMeasure("List PushFront" + allocatorMsg, pushFrontListTestFast, PushFrontTest{}, iterations, repeat);
 		}
-
+		compareResults_v1(stdTime, allocatorTime);
+		//--------------------
 		{
-			SetTest<std::set<DataType, std::less<DataType>>> setTestStl;
-			SetTest<std::set<DataType, std::less<DataType>, MemoryPoolAllocator>> setTestFast;
-			printTestStatus("Set", setTestStl, setTestFast);
+			std::list<int> pushBackListTestStl;
+			stdTime = executeAndMeasure("List PushBack" + stlMsg, pushBackListTestStl, PushBackTest{}, iterations, repeat);
 		}
-
+		{
+			std::list<int, Allocator> pushBackListTestFast;
+			allocatorTime = executeAndMeasure("List PushBack" + allocatorMsg, pushBackListTestFast, PushBackTest{}, iterations, repeat);
+		}
+		compareResults_v1(stdTime, allocatorTime);
+		//--------------------
+		{
+			std::map<int, int, std::less<int>> mapTestStl;
+			stdTime = executeAndMeasure("Map" + stlMsg, mapTestStl, MapTest{}, iterations, repeat);
+		}
+		{
+			std::map<int, int, std::less<int>, Allocator> mapTestFast;
+			allocatorTime = executeAndMeasure("Map" + allocatorMsg, mapTestFast, MapTest{}, iterations, repeat);
+		}
+		compareResults_v1(stdTime, allocatorTime);
+		//--------------------
+		{
+			std::set<int, std::less<int>> setTestStl;
+			stdTime = executeAndMeasure("Set" + stlMsg, setTestStl, SetTest{}, iterations, repeat);
+		}
+		{
+			std::set<int, std::less<int>, Allocator> setTestFast;
+			allocatorTime = executeAndMeasure("Set" + allocatorMsg, setTestFast, SetTest{}, iterations, repeat);
+		}
+		compareResults_v1(stdTime, allocatorTime);
+		//--------------------
 	}
 
 	MM_DECLARE_FLAG(Memory_Allocators_v1_unit_test);
 
 	MM_UNIT_TEST(Memory_Allocators_v1_unit_test_1, Memory_Allocators_v1_unit_test)
 	{
-		Memory_Allocators_v1_unit_test();
+		/*
+		1,000 int = 4 KB
+		1,000,000 int = 4 MB
+		1,000,000,000 int = 4 GB
+		*/
+
+		const int repeat = 2; 
+		const int iterations = 10'000'000; //number of integers inserted which requires total 40 MB data
+
+		const std::size_t growSize = 1'000'000; //number of intergers = 4 MB
+		typedef Allocator_v1<int, growSize> Allocator;
+		
+		Memory_Allocators_v1_unit_test<int, Allocator>(iterations, repeat);
 	}
 }

@@ -89,7 +89,7 @@ namespace mm {
 		return retVal;
 	}
 
-	void compareResults(size_t stdTime, size_t allocatorTime)
+	void compareResults_v2(size_t stdTime, size_t allocatorTime)
 	{
 		std::cout << " % time required : " << 100.0 * double(allocatorTime) / stdTime << " %" << std::endl;
 		std::cout << " improvement : " << double(stdTime) / allocatorTime << "x" << std::endl;
@@ -115,7 +115,7 @@ namespace mm {
 			std::forward_list<int, Allocator> pushFrontForwardListTestFast{ Allocator(a) };
 			allocatorTime = executeAndMeasure("ForwardList PushFront" + allocatorMsg, pushFrontForwardListTestFast, PushFrontTest{}, iterations, repeat);
 		}
-		compareResults(stdTime, allocatorTime);
+		compareResults_v2(stdTime, allocatorTime);
 		//--------------------
 		{
 			std::list<int> pushFrontListTestStl;
@@ -125,7 +125,7 @@ namespace mm {
 			std::list<int, Allocator> pushFrontListTestFast{ Allocator(a) };
 			allocatorTime = executeAndMeasure("List PushFront" + allocatorMsg, pushFrontListTestFast, PushFrontTest{}, iterations, repeat);
 		}
-		compareResults(stdTime, allocatorTime);
+		compareResults_v2(stdTime, allocatorTime);
 		//--------------------
 		{
 			std::list<int> pushBackListTestStl;
@@ -135,7 +135,7 @@ namespace mm {
 			std::list<int, Allocator> pushBackListTestFast{ Allocator(a) };
 			allocatorTime = executeAndMeasure("List PushBack" + allocatorMsg, pushBackListTestFast, PushBackTest{}, iterations, repeat);
 		}
-		compareResults(stdTime, allocatorTime);
+		compareResults_v2(stdTime, allocatorTime);
 		//--------------------
 		{
 			std::map<int, int, std::less<int>> mapTestStl;
@@ -145,7 +145,7 @@ namespace mm {
 			std::map<int, int, std::less<int>, Allocator> mapTestFast{ Allocator(a) };
 			allocatorTime = executeAndMeasure("Map" + allocatorMsg, mapTestFast, MapTest{}, iterations, repeat);
 		}
-		compareResults(stdTime, allocatorTime);
+		compareResults_v2(stdTime, allocatorTime);
 		//--------------------
 		{
 			std::set<int, std::less<int>> setTestStl;
@@ -155,7 +155,7 @@ namespace mm {
 			std::set<int, std::less<int>, Allocator> setTestFast{ Allocator(a) };
 			allocatorTime = executeAndMeasure("Set" + allocatorMsg, setTestFast, SetTest{}, iterations, repeat);
 		}
-		compareResults(stdTime, allocatorTime);
+		compareResults_v2(stdTime, allocatorTime);
 		//--------------------
 	}
 
@@ -166,16 +166,18 @@ namespace mm {
 
 	MM_UNIT_TEST(Memory_Allocators_v2_unit_test_1, Memory_Allocators_v2_unit_test)
 	{
-		const int repeat = 2;
-		const int iterations  = 10'000'000; //number of integers which requires total 40 MB data
 		/*
 		1,000 int = 4 KB
 		1,000,000 int = 4 MB
 		1,000,000,000 int = 4 GB
 		*/
 
+		const int repeat = 2;
+		const int iterations  = 10'000'000; //number of integers inserted which requires total 40 MB data
+
 		constexpr const int initialSize = 1'000'000'000; //bytes = 1 GB
 		typedef stack_allocator_v1<int, initialSize> Allocator;
+		
 		Memory_Allocators_v2_unit_test<int, Allocator, initialSize>(iterations, repeat);
 
 		const std::size_t N = 1024;
