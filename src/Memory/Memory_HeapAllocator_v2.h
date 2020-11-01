@@ -109,9 +109,7 @@ namespace mm {
 	template <class T, size_t bufferSize = 1024>
 	class HeapAllocator_v2
 	{
-		//MemoryPool_v2<T, bufferSize>* pool_;
 		std::shared_ptr< MemoryPool_v2<T, bufferSize> > pool_;
-		//HeapAllocator_v2* copyAllocator = nullptr;
 		std::allocator<T>* rebindAllocator = nullptr;
 
 	public:
@@ -153,9 +151,6 @@ namespace mm {
 
 		pointer allocate(size_type n, const void* hint = 0)
 		{
-			//if (copyAllocator)
-			//	return copyAllocator->allocate(n, hint);
-
 #ifdef MM_DEBUG
 			cout << "\nHeapAllocator_v2: Allocate for type: " << typeid(T).name()
 				<< " Size: " << sizeof(T) 
@@ -173,11 +168,6 @@ namespace mm {
 
 		void deallocate(pointer p, size_type n)
 		{
-			//if (copyAllocator) {
-			//	copyAllocator->deallocate(p, n);
-			//	return;
-			//}
-
 			if (n != 1)
 				throw std::bad_alloc();
 
