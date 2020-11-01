@@ -169,7 +169,7 @@ namespace mm {
 		const int repeat = 2; 
 		const int iterations = 10'000'000; //number of integers inserted which requires total 40 MB data
 
-		const std::size_t growSize = 1'000'000; //number of integers = 4 MB
+		const std::size_t growSize = 40'000'000; //number of integers = 40 MB
 		typedef HeapAllocator_v1<int, growSize> Allocator;
 		
 		Memory_HeapAllocator_v1_unit_test<int, Allocator>(iterations, repeat);

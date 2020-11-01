@@ -93,10 +93,9 @@ namespace mm {
 	{
 		auto compareResults = [](const string& msg1, const string& msg2, size_t stdTime, size_t allocatorTime)
 		{
-			std::cout << "\n" << msg1 << stdTime << " ns";
-			std::cout << "\n" << msg2 << allocatorTime << " ns";
-			std::cout << "\n" << " % time required : " << 100.0 * double(allocatorTime) / stdTime << " %";
-			std::cout << "\n" << " improvement : " << double(stdTime) / allocatorTime << "x";
+			std::cout << "\n" << msg1 << std::setw(15) << std::right << stdTime << " ns (100.00 %)";
+			std::cout << "\n" << msg2 << std::setw(15) << std::right << allocatorTime << " ns (" << 100.0 * double(allocatorTime) / stdTime << " %)";
+			std::cout << "\n" << "Improvement in speed : " << double(stdTime) / allocatorTime << "x";
 			std::cout << "\n";
 		};
 
@@ -190,11 +189,12 @@ namespace mm {
 		1,000,000,000 int = 4 GB
 		*/
 
-		const int repeat = 2; 
+		const int repeat = 1; 
 		const int iterations = 10'000'000; //number of integers inserted which requires total 40 MB data
+		//const int iterations = 1;
 
-		const std::size_t growSize = 1'000'000; //number of integers = 4 MB
-		typedef HeapAllocator_v2<int, growSize> Allocator;
+		const std::size_t bufferSize = 40'000'000; //number of integers = 40 MB
+		typedef HeapAllocator_v2<int, bufferSize> Allocator;
 		
 		Memory_HeapAllocator_v2_unit_test<int, Allocator>(iterations, repeat);
 
