@@ -15,6 +15,8 @@ using namespace std;
 #include "Timer/Timer_Timer.h"
 #include "Utils/Utils_MM_Assert.h"
 
+// Work in progress to implement the variable size heap allocator...
+
 namespace mm {
 
 	template <std::size_t N>

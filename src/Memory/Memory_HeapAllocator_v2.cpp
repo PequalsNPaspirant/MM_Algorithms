@@ -6,8 +6,9 @@
 #include <list>
 #include <forward_list>
 
-#include "Memory/Memory_HeapAllocator_v1.h"
+#include "Memory/Memory_HeapAllocator_v2.h"
 #include "MM_UnitTestFramework/MM_UnitTestFramework.h"
+#include "Timer/Timer_Timer.h"
 
 namespace mm {
 
@@ -15,15 +16,18 @@ namespace mm {
 	{
 	public:
 		template <typename Container>
-		void operator()(Container& container, size_t iterations)
+		void operator()(Container& container, size_t iterations, size_t repeat)
 		{
-			int size = 0;
-			while (size < iterations)
-				container.push_front(size++);
+			for (int i = 0; i < repeat; ++i)
+			{
+				int size = 0;
+				while (size < iterations)
+					container.push_front(size++);
 
-			for (; size > iterations; size--)
-				container.pop_front();
-			//container.clear();
+				for (; size > iterations; size--)
+					container.pop_front();
+				//container.clear();
+			}
 		}
 	};
 
@@ -31,15 +35,18 @@ namespace mm {
 	{
 	public:
 		template <typename Container>
-		void operator()(Container& container, size_t iterations)
+		void operator()(Container& container, size_t iterations, size_t repeat)
 		{
-			int size = 0;
-			while (size < iterations)
-				container.push_back(size++);
+			for (int i = 0; i < repeat; ++i)
+			{
+				int size = 0;
+				while (size < iterations)
+					container.push_back(size++);
 
-			for (; size > iterations; size--)
-				container.pop_back();
-			//container.clear();
+				for (; size > iterations; size--)
+					container.pop_back();
+				//container.clear();
+			}
 		}
 	};
 
@@ -47,15 +54,18 @@ namespace mm {
 	{
 	public:
 		template <typename Container>
-		void operator()(Container& container, size_t iterations)
+		void operator()(Container& container, size_t iterations, size_t repeat)
 		{
-			int size = 0;
-			while (size < iterations)
-				container.insert(std::pair<char, int>(size++, size));
+			for (int i = 0; i < repeat; ++i)
+			{
+				int size = 0;
+				while (size < iterations)
+					container.insert(std::pair<char, int>(size++, size));
 
-			while (size > iterations)
-				container.erase(--size);
-			//container.clear();
+				while (size > iterations)
+					container.erase(--size);
+				//container.clear();
+			}
 		}
 	};
 
@@ -63,41 +73,35 @@ namespace mm {
 	{
 	public:
 		template <typename Container>
-		void operator()(Container& container, size_t iterations)
+		void operator()(Container& container, size_t iterations, size_t repeat)
 		{
-			int size = 0;
-			while (size < iterations)
-				container.insert(size++);
+			for (int i = 0; i < repeat; ++i)
+			{
+				int size = 0;
+				while (size < iterations)
+					container.insert(size++);
 
-			while (size > iterations)
-				container.erase(--size);
-			//container.clear();
+				while (size > iterations)
+					container.erase(--size);
+				//container.clear();
+			}
 		}
 	};
-
-	template <typename Container, typename Fun>
-	size_t executeAndMeasure(const string& msg, Container &container, Fun f, size_t iterations, size_t repeat)
-	{
-		auto from = std::chrono::high_resolution_clock::now();
-		for (int i = 0; i < repeat; ++i)
-			f(container, iterations);
-		auto to = std::chrono::high_resolution_clock::now();
-		size_t retVal = std::chrono::duration_cast<std::chrono::nanoseconds>(to - from).count();
-		std::cout << msg << retVal << " ns" << std::endl;
-		return retVal;
-	}
 
 	template<typename DataType, typename Allocator>
 	void Memory_HeapAllocator_v2_unit_test(size_t iterations, size_t repeat)
 	{
-		auto compareResults = [](size_t stdTime, size_t allocatorTime)
+		auto compareResults = [](const string& msg1, const string& msg2, size_t stdTime, size_t allocatorTime)
 		{
-			std::cout << " % time required : " << 100.0 * double(allocatorTime) / stdTime << " %" << std::endl;
-			std::cout << " improvement : " << double(stdTime) / allocatorTime << "x" << std::endl;
-			std::cout << std::endl;
+			std::cout << "\n" << msg1 << stdTime << " ns";
+			std::cout << "\n" << msg2 << allocatorTime << " ns";
+			std::cout << "\n" << " % time required : " << 100.0 * double(allocatorTime) / stdTime << " %";
+			std::cout << "\n" << " improvement : " << double(stdTime) / allocatorTime << "x";
+			std::cout << "\n";
 		};
 
-		size_t stdTime, allocatorTime;
+		size_t stdTime = 0;
+		size_t allocatorTime = 0;
 		string stlMsg{ " - Default STL Allocator : " };
 		string allocatorMsg{ " - Memory Pool Allocator : " };
 		std::cout << std::fixed;
@@ -105,54 +109,74 @@ namespace mm {
 		std::cout.imbue(std::locale(""));
 		//--------------------
 		{
-			std::forward_list<int> pushFrontForwardListTestStl;
-			stdTime = executeAndMeasure("ForwardList PushFront" + stlMsg, pushFrontForwardListTestStl, PushFrontTest{}, iterations, repeat);
+			Timer t;
+			std::forward_list<DataType> pushFrontForwardListTestStl;
+			PushFrontTest{}(pushFrontForwardListTestStl, iterations, repeat);
+			stdTime = t.getDurationTillNowInNanoSeconds();
 		}
 		{
-			std::forward_list<int, Allocator> pushFrontForwardListTestFast;
-			allocatorTime = executeAndMeasure("ForwardList PushFront" + allocatorMsg, pushFrontForwardListTestFast, PushFrontTest{}, iterations, repeat);
+			Timer t;
+			std::forward_list<DataType, Allocator> pushFrontForwardListTestFast;
+			PushFrontTest{}(pushFrontForwardListTestFast, iterations, repeat);
+			allocatorTime = t.getDurationTillNowInNanoSeconds();
 		}
-		compareResults(stdTime, allocatorTime);
+		compareResults("ForwardList PushFront" + stlMsg, "ForwardList PushFront" + allocatorMsg, stdTime, allocatorTime);
 		//--------------------
 		{
-			std::list<int> pushFrontListTestStl;
-			stdTime = executeAndMeasure("List PushFront" + stlMsg, pushFrontListTestStl, PushFrontTest{}, iterations, repeat);
+			Timer t;
+			std::list<DataType> pushFrontListTestStl;
+			PushFrontTest{}(pushFrontListTestStl, iterations, repeat);
+			stdTime = t.getDurationTillNowInNanoSeconds();
 		}
 		{
-			std::list<int, Allocator> pushFrontListTestFast;
-			allocatorTime = executeAndMeasure("List PushFront" + allocatorMsg, pushFrontListTestFast, PushFrontTest{}, iterations, repeat);
+			Timer t;
+			std::list<DataType, Allocator> pushFrontListTestFast;
+			PushFrontTest{}(pushFrontListTestFast, iterations, repeat);
+			allocatorTime = t.getDurationTillNowInNanoSeconds();
 		}
-		compareResults(stdTime, allocatorTime);
+		compareResults("List PushFront" + stlMsg, "List PushFront" + allocatorMsg, stdTime, allocatorTime);
 		//--------------------
 		{
-			std::list<int> pushBackListTestStl;
-			stdTime = executeAndMeasure("List PushBack" + stlMsg, pushBackListTestStl, PushBackTest{}, iterations, repeat);
+			Timer t;
+			std::list<DataType> pushBackListTestStl;
+			PushBackTest{}(pushBackListTestStl, iterations, repeat);
+			stdTime = t.getDurationTillNowInNanoSeconds();
 		}
 		{
-			std::list<int, Allocator> pushBackListTestFast;
-			allocatorTime = executeAndMeasure("List PushBack" + allocatorMsg, pushBackListTestFast, PushBackTest{}, iterations, repeat);
+			Timer t;
+			std::list<DataType, Allocator> pushBackListTestFast;
+			PushBackTest{}(pushBackListTestFast, iterations, repeat);
+			allocatorTime = t.getDurationTillNowInNanoSeconds();
 		}
-		compareResults(stdTime, allocatorTime);
+		compareResults("List PushBack" + stlMsg, "List PushBack" + allocatorMsg, stdTime, allocatorTime);
 		//--------------------
 		{
-			std::map<int, int, std::less<int>> mapTestStl;
-			stdTime = executeAndMeasure("Map" + stlMsg, mapTestStl, MapTest{}, iterations, repeat);
+			Timer t;
+			std::map<DataType, DataType, std::less<DataType>> mapTestStl;
+			MapTest{}(mapTestStl, iterations, repeat);
+			stdTime = t.getDurationTillNowInNanoSeconds();
 		}
 		{
-			std::map<int, int, std::less<int>, Allocator> mapTestFast;
-			allocatorTime = executeAndMeasure("Map" + allocatorMsg, mapTestFast, MapTest{}, iterations, repeat);
+			Timer t;
+			std::map<DataType, DataType, std::less<DataType>, Allocator> mapTestFast;
+			MapTest{}(mapTestFast, iterations, repeat);
+			allocatorTime = t.getDurationTillNowInNanoSeconds();
 		}
-		compareResults(stdTime, allocatorTime);
+		compareResults("Map" + stlMsg, "Map" + allocatorMsg, stdTime, allocatorTime);
 		//--------------------
 		{
-			std::set<int, std::less<int>> setTestStl;
-			stdTime = executeAndMeasure("Set" + stlMsg, setTestStl, SetTest{}, iterations, repeat);
+			Timer t;
+			std::set<DataType, std::less<DataType>> setTestStl;
+			SetTest{}(setTestStl, iterations, repeat);
+			stdTime = t.getDurationTillNowInNanoSeconds();
 		}
 		{
-			std::set<int, std::less<int>, Allocator> setTestFast;
-			allocatorTime = executeAndMeasure("Set" + allocatorMsg, setTestFast, SetTest{}, iterations, repeat);
+			Timer t;
+			std::set<DataType, std::less<DataType>, Allocator> setTestFast;
+			SetTest{}(setTestFast, iterations, repeat);
+			allocatorTime = t.getDurationTillNowInNanoSeconds();
 		}
-		compareResults(stdTime, allocatorTime);
+		compareResults("Set" + stlMsg, "Set" + allocatorMsg, stdTime, allocatorTime);
 		//--------------------
 	}
 
@@ -169,8 +193,8 @@ namespace mm {
 		const int repeat = 2; 
 		const int iterations = 10'000'000; //number of integers inserted which requires total 40 MB data
 
-		const std::size_t growSize = 1'000'000; //number of intergers = 4 MB
-		typedef HeapAllocator_v1<int, growSize> Allocator;
+		const std::size_t growSize = 1'000'000; //number of integers = 4 MB
+		typedef HeapAllocator_v2<int, growSize> Allocator;
 		
 		Memory_HeapAllocator_v2_unit_test<int, Allocator>(iterations, repeat);
 
@@ -179,11 +203,11 @@ namespace mm {
 
 		const std::size_t N = growSize;
 		//arena_v1<N> a;
-		std::vector<int, HeapAllocator_v1<int, N>> v{};
+		std::vector<int, HeapAllocator_v2<int, N>> v{};
 		v.reserve(100);
 		for (int i = 0; i < 100; ++i)
 			v.push_back(i);
-		std::vector<int, HeapAllocator_v1<int, N>> v2 = std::move(v);
+		std::vector<int, HeapAllocator_v2<int, N>> v2 = std::move(v);
 		v = v2;
 		*/
 	}

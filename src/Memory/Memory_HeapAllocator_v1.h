@@ -14,6 +14,8 @@ using namespace std;
 #include "Timer/Timer_Timer.h"
 #include "Utils/Utils_MM_Assert.h"
 
+// This is fixed size Heap Allocator
+
 namespace mm {
 
 	template <class T, std::size_t bufferSize = 1024>
@@ -170,7 +172,10 @@ namespace mm {
 	template <class T, std::size_t N, class U, std::size_t M>
 	bool operator==(const HeapAllocator_v1<T, N>& x, const HeapAllocator_v1<U, M>& y)
 	{
-		return N == M && &x.a_ == &y.a_;
+		return N == M
+			&& x.bufferHead_ == y.bufferHead_
+			&& x.freeBlockHead_ == y.freeBlockHead_
+			&& x.bufferedBlocks == y.bufferedBlocks;
 	}
 
 	template <class T, std::size_t N, class U, std::size_t M>

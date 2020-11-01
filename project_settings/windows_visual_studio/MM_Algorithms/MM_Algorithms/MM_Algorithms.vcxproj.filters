@@ -645,7 +645,7 @@
     <ClCompile Include="..\..\..\..\src\Graphs\Graph_Representation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\%40_Programming\Everything\MM_Algorithms\src\Memory\Memory_Allocators_test.cpp">
+    <ClCompile Include="..\..\..\..\src\Memory\Memory_Allocators_test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\src\Memory\Memory_HeapAllocator_v1.cpp">
@@ -657,7 +657,7 @@
     <ClCompile Include="..\..\..\..\src\Memory\Memory_HeapAllocator_v3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\%40_Programming\Everything\MM_Algorithms\src\Memory\Memory_HeapAllocator_v2.cpp">
+    <ClCompile Include="..\..\..\..\src\Memory\Memory_HeapAllocator_v2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1127,7 +1127,7 @@
     <ClInclude Include="..\..\..\..\src\Memory\Memory_HeapAllocator_v3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\..\%40_Programming\Everything\MM_Algorithms\src\Memory\Memory_HeapAllocator_v2.h">
+    <ClInclude Include="..\..\..\..\src\Memory\Memory_HeapAllocator_v2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

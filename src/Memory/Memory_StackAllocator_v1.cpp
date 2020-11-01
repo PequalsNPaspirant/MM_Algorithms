@@ -108,51 +108,51 @@ namespace mm {
 		std::cout.imbue(std::locale(""));
 		//--------------------
 		{
-			std::forward_list<int> pushFrontForwardListTestStl;
+			std::forward_list<DataType> pushFrontForwardListTestStl;
 			stdTime = executeAndMeasure("ForwardList PushFront" + stlMsg, pushFrontForwardListTestStl, PushFrontTest{}, iterations, repeat);
 		}
 		{
-			std::forward_list<int, Allocator> pushFrontForwardListTestFast{ Allocator{a} };
+			std::forward_list<DataType, Allocator> pushFrontForwardListTestFast{ Allocator{a} };
 			allocatorTime = executeAndMeasure("ForwardList PushFront" + allocatorMsg, pushFrontForwardListTestFast, PushFrontTest{}, iterations, repeat);
 		}
 		compareResults(stdTime, allocatorTime);
 		//--------------------
 		{
-			std::list<int> pushFrontListTestStl;
+			std::list<DataType> pushFrontListTestStl;
 			stdTime = executeAndMeasure("List PushFront" + stlMsg, pushFrontListTestStl, PushFrontTest{}, iterations, repeat);
 		}
 		{
-			std::list<int, Allocator> pushFrontListTestFast{ Allocator{a} };
+			std::list<DataType, Allocator> pushFrontListTestFast{ Allocator{a} };
 			allocatorTime = executeAndMeasure("List PushFront" + allocatorMsg, pushFrontListTestFast, PushFrontTest{}, iterations, repeat);
 		}
 		compareResults(stdTime, allocatorTime);
 		//--------------------
 		{
-			std::list<int> pushBackListTestStl;
+			std::list<DataType> pushBackListTestStl;
 			stdTime = executeAndMeasure("List PushBack" + stlMsg, pushBackListTestStl, PushBackTest{}, iterations, repeat);
 		}
 		{
-			std::list<int, Allocator> pushBackListTestFast{ Allocator{a} };
+			std::list<DataType, Allocator> pushBackListTestFast{ Allocator{a} };
 			allocatorTime = executeAndMeasure("List PushBack" + allocatorMsg, pushBackListTestFast, PushBackTest{}, iterations, repeat);
 		}
 		compareResults(stdTime, allocatorTime);
 		//--------------------
 		{
-			std::map<int, int, std::less<int>> mapTestStl;
+			std::map<DataType, DataType, std::less<DataType>> mapTestStl;
 			stdTime = executeAndMeasure("Map" + stlMsg, mapTestStl, MapTest{}, iterations, repeat);
 		}
 		{
-			std::map<int, int, std::less<int>, Allocator> mapTestFast{ Allocator{a} };
+			std::map<DataType, DataType, std::less<DataType>, Allocator> mapTestFast{ Allocator{a} };
 			allocatorTime = executeAndMeasure("Map" + allocatorMsg, mapTestFast, MapTest{}, iterations, repeat);
 		}
 		compareResults(stdTime, allocatorTime);
 		//--------------------
 		{
-			std::set<int, std::less<int>> setTestStl;
+			std::set<DataType, std::less<DataType>> setTestStl;
 			stdTime = executeAndMeasure("Set" + stlMsg, setTestStl, SetTest{}, iterations, repeat);
 		}
 		{
-			std::set<int, std::less<int>, Allocator> setTestFast{ Allocator{a} };
+			std::set<DataType, std::less<DataType>, Allocator> setTestFast{ Allocator{a} };
 			allocatorTime = executeAndMeasure("Set" + allocatorMsg, setTestFast, SetTest{}, iterations, repeat);
 		}
 		compareResults(stdTime, allocatorTime);

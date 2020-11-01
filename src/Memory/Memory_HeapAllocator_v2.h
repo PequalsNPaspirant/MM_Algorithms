@@ -14,6 +14,8 @@ using namespace std;
 #include "Timer/Timer_Timer.h"
 #include "Utils/Utils_MM_Assert.h"
 
+// This is fixed size Heap Allocator
+
 namespace mm {
 
 	template <class T, std::size_t bufferSize = 1024>
@@ -65,6 +67,7 @@ namespace mm {
 
 		T* allocate()
 		{
+			//cout << "\nMemoryPool_v2: Allocate for type: " << typeid(T).name();
 			if (freeBlockHead_) {
 				Block* block = freeBlockHead_;
 				freeBlockHead_ = block->next_;
@@ -81,6 +84,7 @@ namespace mm {
 
 		void deallocate(T* pointer)
 		{
+			//cout << "\nMemoryPool_v2: Deallocate for type: " << typeid(T).name();
 			Block* block = reinterpret_cast<Block*>(pointer);
 			block->next_ = freeBlockHead_;
 			freeBlockHead_ = block;
@@ -88,9 +92,11 @@ namespace mm {
 	};
 
 	template <class T, std::size_t bufferSize = 1024>
-	class HeapAllocator_v2 : private MemoryPool_v2<T, bufferSize>
+	class HeapAllocator_v2
 	{
-		HeapAllocator_v2* copyAllocator = nullptr;
+		//MemoryPool_v2<T, bufferSize>* pool_;
+		std::shared_ptr< MemoryPool_v2<T, bufferSize> > pool_;
+		//HeapAllocator_v2* copyAllocator = nullptr;
 		std::allocator<T>* rebindAllocator = nullptr;
 
 	public:
@@ -104,15 +110,20 @@ namespace mm {
 
 		template <class U> struct rebind { typedef HeapAllocator_v2<U, bufferSize> other; };
 
-		HeapAllocator_v2() = default;
-		HeapAllocator_v2(HeapAllocator_v2& allocator) : copyAllocator(&allocator) {}
-
-		template <class U>
-		HeapAllocator_v2(const HeapAllocator_v2<U, bufferSize>& other)
-		{
-			if (!std::is_same<T, U>::value)
-				rebindAllocator = new std::allocator<T>();
+		HeapAllocator_v2()
+			: pool_{ std::make_shared< MemoryPool_v2<T, bufferSize> >() }
+		{}
+		HeapAllocator_v2(HeapAllocator_v2&& allocator) = delete;
+		HeapAllocator_v2(const HeapAllocator_v2& allocator) : pool_{ allocator.pool_ } {
+			//cout << "\nHeapAllocator_v2: Copy Ctr";
 		}
+		//template <class U>
+		//HeapAllocator_v2(const HeapAllocator_v2<U, bufferSize>& other)
+		//{
+		//	if (!std::is_same<T, U>::value)
+		//		rebindAllocator = new std::allocator<T>();
+		//}
+		HeapAllocator_v2& operator=(HeapAllocator_v2&&) = delete;
 		HeapAllocator_v2& operator=(const HeapAllocator_v2&) = delete;
 
 		~HeapAllocator_v2()
@@ -122,8 +133,10 @@ namespace mm {
 
 		pointer allocate(size_type n, const void* hint = 0)
 		{
-			if (copyAllocator)
-				return copyAllocator->allocate(n, hint);
+			//if (copyAllocator)
+			//	return copyAllocator->allocate(n, hint);
+
+			//cout << "\nHeapAllocator_v2: Allocate for type: " << typeid(T).name() << " Size: " << n;
 
 			if (rebindAllocator)
 				return rebindAllocator->allocate(n, hint);
@@ -131,22 +144,27 @@ namespace mm {
 			if (n != 1 || hint)
 				throw std::bad_alloc();
 
-			return MemoryPool_v2<T, bufferSize>::allocate();
+			return pool_->allocate();
 		}
 
 		void deallocate(pointer p, size_type n)
 		{
-			if (copyAllocator) {
-				copyAllocator->deallocate(p, n);
-				return;
-			}
+			//if (copyAllocator) {
+			//	copyAllocator->deallocate(p, n);
+			//	return;
+			//}
+
+			if (n != 1)
+				throw std::bad_alloc();
+
+			//cout << "\nHeapAllocator_v2: Deallocate for type: " << typeid(T).name() << " Size: " << n;
 
 			if (rebindAllocator) {
 				rebindAllocator->deallocate(p, n);
 				return;
 			}
 
-			MemoryPool_v2<T, bufferSize>::deallocate(p);
+			pool_->deallocate(p);
 		}
 
 		void construct(pointer p, const_reference val)
@@ -170,7 +188,8 @@ namespace mm {
 	template <class T, std::size_t N, class U, std::size_t M>
 	bool operator==(const HeapAllocator_v2<T, N>& x, const HeapAllocator_v2<U, M>& y)
 	{
-		return N == M && &x.a_ == &y.a_;
+		return N == M 
+			&& x.pool_ == y.pool_;
 	}
 
 	template <class T, std::size_t N, class U, std::size_t M>

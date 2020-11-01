@@ -28,7 +28,9 @@ namespace mm {
 
 	public:
 		arena_v1() : ptr_(buf_) {}
+		arena_v1(arena_v1&&) = delete;
 		arena_v1(const arena_v1&) = delete;
+		arena_v1& operator=(arena_v1&&) = delete;
 		arena_v1& operator=(const arena_v1&) = delete;
 
 		char* allocate(std::size_t n)
