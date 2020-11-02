@@ -192,13 +192,20 @@ namespace mm {
 			pool_->deallocate(p);
 		}
 
-		void construct(pointer p, const_reference val)
+		template <typename... Args>
+		void construct(pointer p, Args&&... args)
 		{
-			new (p) T(val);
+#ifdef MM_DEBUG
+			cout << "\nHeapAllocator_v2: constructing object";
+#endif
+			new (p) T(std::forward<Args>(args)...);
 		}
 
 		void destroy(pointer p)
 		{
+#ifdef MM_DEBUG
+			cout << "\nHeapAllocator_v2: destroying object";
+#endif
 			p->~T();
 		}
 
