@@ -341,11 +341,15 @@ Set - Memory Pool Allocator :   6,814,775,600 ns (113.67 %)
 Improvement in speed : 0.88x
 
 
+
+
 const int repeat = 1'000;
 const int iterations = 10'000; //number of integers inserted which requires total 400 KB data
 //const int iterations = 1;
 //list, map and set requires one extra element/memory allocation than number of elements to be inserted
 const std::size_t bufferSize = 10'001; //number of integers = 40 MB
+
+1st test
 
 ForwardList PushFront - Default STL Allocator :   2,252,207,900 ns (100.00 %)
 ForwardList PushFront - Memory Pool Allocator :      62,007,800 ns (2.75 %)
@@ -366,6 +370,32 @@ Improvement in speed : 1.40x
 Set - Default STL Allocator :   1,843,220,700 ns (100.00 %)
 Set - Memory Pool Allocator :   1,536,003,300 ns (83.33 %)
 Improvement in speed : 1.20x
+
+
+2nd test
+
+ForwardList PushFront - Default STL Allocator :   2,259,136,400 ns (100.00 %)
+ForwardList PushFront - Memory Pool Allocator :      61,604,400 ns (2.73 %)
+Improvement in speed : 36.67x
+
+List PushFront - Default STL Allocator :     891,393,300 ns (100.00 %)
+List PushFront - Memory Pool Allocator :     225,721,200 ns (25.32 %)
+Improvement in speed : 3.95x
+
+List PushBack - Default STL Allocator :     780,009,100 ns (100.00 %)
+List PushBack - Memory Pool Allocator :     218,546,200 ns (28.02 %)
+Improvement in speed : 3.57x
+
+Map - Default STL Allocator :   1,880,609,100 ns (100.00 %)
+Map - Memory Pool Allocator :   1,300,304,900 ns (69.14 %)
+Improvement in speed : 1.45x
+
+Set - Default STL Allocator :   1,945,070,200 ns (100.00 %)
+Set - Memory Pool Allocator :   1,530,926,700 ns (78.71 %)
+Improvement in speed : 1.27x
+
+
+
 
 
 const int repeat = 1'000;
