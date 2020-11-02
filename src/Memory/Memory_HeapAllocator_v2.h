@@ -53,7 +53,13 @@ namespace mm {
 			}
 
 			if (!bufferHead_ || bufferHead_->isFull())
+			{
+#ifdef MM_DEBUG
+				if (bufferHead_)
+					cout << "\nbuffer full, reallocating memory";
+#endif
 				bufferHead_ = new Buffer(bufferHead_);
+			}
 
 			return bufferHead_->getNextBlock();
 		}

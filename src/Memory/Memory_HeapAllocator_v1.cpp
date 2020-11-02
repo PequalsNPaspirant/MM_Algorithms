@@ -5,9 +5,12 @@
 #include <map>
 #include <list>
 #include <forward_list>
+//#include <cassert>
 
 #include "Memory/Memory_HeapAllocator_v1.h"
 #include "MM_UnitTestFramework/MM_UnitTestFramework.h"
+#include "Timer/Timer_Timer.h"
+#include "Utils/Utils_MM_Assert.h"
 
 namespace mm {
 
@@ -17,13 +20,13 @@ namespace mm {
 		template <typename Container>
 		void operator()(Container& container, size_t iterations)
 		{
-			int size = 0;
-			while (size < iterations)
-				container.push_front(size++);
+			for (int size = 0; size < iterations; ++size)
+				container.push_front(size);
 
-			for (; size > iterations; size--)
+			for (int size = 0; size < iterations; ++size)
 				container.pop_front();
 			//container.clear();
+			MyAssert::myRunTimeAssert(container.empty());
 		}
 	};
 
@@ -33,13 +36,13 @@ namespace mm {
 		template <typename Container>
 		void operator()(Container& container, size_t iterations)
 		{
-			int size = 0;
-			while (size < iterations)
-				container.push_back(size++);
+			for (int size = 0; size < iterations; ++size)
+				container.push_back(size);
 
-			for (; size > iterations; size--)
+			for (int size = 0; size < iterations; ++size)
 				container.pop_back();
 			//container.clear();
+			MyAssert::myRunTimeAssert(container.empty());
 		}
 	};
 
@@ -49,13 +52,13 @@ namespace mm {
 		template <typename Container>
 		void operator()(Container& container, size_t iterations)
 		{
-			int size = 0;
-			while (size < iterations)
-				container.insert(std::pair<char, int>(size++, size));
+			for (int size = 0; size < iterations; ++size)
+				container.insert(std::pair<int, int>(size, size));
 
-			while (size > iterations)
-				container.erase(--size);
+			for (int size = 0; size < iterations; ++size)
+				container.erase(size);
 			//container.clear();
+			MyAssert::myRunTimeAssert(container.empty());
 		}
 	};
 
@@ -65,13 +68,13 @@ namespace mm {
 		template <typename Container>
 		void operator()(Container& container, size_t iterations)
 		{
-			int size = 0;
-			while (size < iterations)
-				container.insert(size++);
+			for (int size = 0; size < iterations; ++size)
+				container.insert(size);
 
-			while (size > iterations)
-				container.erase(--size);
+			for (int size = 0; size < iterations; ++size)
+				container.erase(size);
 			//container.clear();
+			MyAssert::myRunTimeAssert(container.empty());
 		}
 	};
 

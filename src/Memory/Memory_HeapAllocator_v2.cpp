@@ -9,6 +9,7 @@
 #include "Memory/Memory_HeapAllocator_v2.h"
 #include "MM_UnitTestFramework/MM_UnitTestFramework.h"
 #include "Timer/Timer_Timer.h"
+#include "Utils/Utils_MM_Assert.h"
 
 namespace mm {
 
@@ -20,13 +21,13 @@ namespace mm {
 		{
 			for (int i = 0; i < repeat; ++i)
 			{
-				int size = 0;
-				while (size < iterations)
-					container.push_front(size++);
+				for (int size = 0; size < iterations; ++size)
+					container.push_front(size);
 
-				for (; size > iterations; size--)
+				for (int size = 0; size < iterations; ++size)
 					container.pop_front();
 				//container.clear();
+				MyAssert::myRunTimeAssert(container.empty());
 			}
 		}
 	};
@@ -39,13 +40,13 @@ namespace mm {
 		{
 			for (int i = 0; i < repeat; ++i)
 			{
-				int size = 0;
-				while (size < iterations)
-					container.push_back(size++);
+				for (int size = 0; size < iterations; ++size)
+					container.push_back(size);
 
-				for (; size > iterations; size--)
+				for (int size = 0; size < iterations; ++size)
 					container.pop_back();
 				//container.clear();
+				MyAssert::myRunTimeAssert(container.empty());
 			}
 		}
 	};
@@ -58,13 +59,13 @@ namespace mm {
 		{
 			for (int i = 0; i < repeat; ++i)
 			{
-				int size = 0;
-				while (size < iterations)
-					container.insert(std::pair<char, int>(size++, size));
+				for (int size = 0; size < iterations; ++size)
+					container.insert(std::pair<int, int>(size, size));
 
-				while (size > iterations)
-					container.erase(--size);
+				for (int size = 0; size < iterations; ++size)
+					container.erase(size);
 				//container.clear();
+				MyAssert::myRunTimeAssert(container.empty());
 			}
 		}
 	};
@@ -77,13 +78,13 @@ namespace mm {
 		{
 			for (int i = 0; i < repeat; ++i)
 			{
-				int size = 0;
-				while (size < iterations)
-					container.insert(size++);
+				for (int size = 0; size < iterations; ++size)
+					container.insert(size);
 
-				while (size > iterations)
-					container.erase(--size);
+				for (int size = 0; size < iterations; ++size)
+					container.erase(size);
 				//container.clear();
+				MyAssert::myRunTimeAssert(container.empty());
 			}
 		}
 	};
@@ -189,10 +190,11 @@ namespace mm {
 		1,000,000,000 int = 4 GB
 		*/
 
-		const int repeat = 1'000; 
-		const int iterations = 100'000; //number of integers inserted which requires total 400 KB data
+		const int repeat = 1'000;
+		const int iterations = 10'000; //number of integers inserted which requires total 400 KB data
 		//const int iterations = 1;
-		const std::size_t bufferSize = 10'000'000; //number of integers = 40 MB
+		//list, map and set requires one extra element/memory allocation than number of elements to be inserted
+		const std::size_t bufferSize = 10'001; //number of integers = 40 MB 
 		typedef HeapAllocator_v2<int, bufferSize> Allocator;
 		
 		Memory_HeapAllocator_v2_unit_test<int, Allocator>(iterations, repeat);
@@ -338,5 +340,58 @@ Set - Default STL Allocator :   5,995,393,600 ns (100.00 %)
 Set - Memory Pool Allocator :   6,814,775,600 ns (113.67 %)
 Improvement in speed : 0.88x
 
+
+const int repeat = 1'000;
+const int iterations = 10'000; //number of integers inserted which requires total 400 KB data
+//const int iterations = 1;
+//list, map and set requires one extra element/memory allocation than number of elements to be inserted
+const std::size_t bufferSize = 10'001; //number of integers = 40 MB
+
+ForwardList PushFront - Default STL Allocator :   2,252,207,900 ns (100.00 %)
+ForwardList PushFront - Memory Pool Allocator :      62,007,800 ns (2.75 %)
+Improvement in speed : 36.32x
+
+List PushFront - Default STL Allocator :   1,009,119,400 ns (100.00 %)
+List PushFront - Memory Pool Allocator :     219,315,400 ns (21.73 %)
+Improvement in speed : 4.60x
+
+List PushBack - Default STL Allocator :     668,016,600 ns (100.00 %)
+List PushBack - Memory Pool Allocator :     213,593,800 ns (31.97 %)
+Improvement in speed : 3.13x
+
+Map - Default STL Allocator :   1,920,024,800 ns (100.00 %)
+Map - Memory Pool Allocator :   1,375,690,300 ns (71.65 %)
+Improvement in speed : 1.40x
+
+Set - Default STL Allocator :   1,843,220,700 ns (100.00 %)
+Set - Memory Pool Allocator :   1,536,003,300 ns (83.33 %)
+Improvement in speed : 1.20x
+
+
+const int repeat = 1'000;
+const int iterations = 100'000; //number of integers inserted which requires total 400 KB data
+//const int iterations = 1;
+//list, map and set requires one extra element/memory allocation than number of elements to be inserted
+const std::size_t bufferSize = 100'001; //number of integers = 40 MB
+
+ForwardList PushFront - Default STL Allocator :  10,894,181,000 ns (100.00 %)
+ForwardList PushFront - Memory Pool Allocator :     644,315,000 ns (5.91 %)
+Improvement in speed : 16.91x
+
+List PushFront - Default STL Allocator :   7,374,252,800 ns (100.00 %)
+List PushFront - Memory Pool Allocator :   2,303,687,100 ns (31.24 %)
+Improvement in speed : 3.20x
+
+List PushBack - Default STL Allocator :   7,451,352,100 ns (100.00 %)
+List PushBack - Memory Pool Allocator :   2,271,163,700 ns (30.48 %)
+Improvement in speed : 3.28x
+
+Map - Default STL Allocator :  23,172,814,800 ns (100.00 %)
+Map - Memory Pool Allocator :  20,804,684,500 ns (89.78 %)
+Improvement in speed : 1.11x
+
+Set - Default STL Allocator :  23,789,501,700 ns (100.00 %)
+Set - Memory Pool Allocator :  25,826,118,700 ns (108.56 %)
+Improvement in speed : 0.92x
 
 */
