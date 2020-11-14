@@ -5,6 +5,8 @@
 #include <map>
 #include <list>
 #include <forward_list>
+#include <unordered_map>
+#include <unordered_set>
 
 #include "Memory/Memory_HeapAllocator_v2.h"
 #include "MM_UnitTestFramework/MM_UnitTestFramework.h"
@@ -96,7 +98,7 @@ namespace mm {
 		{
 			std::cout << "\n" << msg1 << std::setw(15) << std::right << stdTime << " ns (100.00 %)";
 			std::cout << "\n" << msg2 << std::setw(15) << std::right << allocatorTime << " ns (" << 100.0 * double(allocatorTime) / stdTime << " %)";
-			std::cout << "\n" << "Improvement in speed : " << double(stdTime) / allocatorTime << "x";
+			std::cout << "\n" << "Performance improvement factor : " << double(stdTime) / allocatorTime << "x";
 			std::cout << "\n";
 		};
 
@@ -177,6 +179,34 @@ namespace mm {
 			allocatorTime = t.getDurationTillNowInNanoSeconds();
 		}
 		compareResults("Set" + stlMsg, "Set" + allocatorMsg, stdTime, allocatorTime);
+		//--------------------
+		//{
+		//	Timer t;
+		//	std::unordered_map<DataType, DataType, hash<DataType>, equal_to<DataType>> mapTestStl;
+		//	MapTest{}(mapTestStl, iterations, repeat);
+		//	stdTime = t.getDurationTillNowInNanoSeconds();
+		//}
+		//{
+		//	Timer t;
+		//	std::unordered_map<DataType, DataType, hash<DataType>, equal_to<DataType>, Allocator> mapTestFast;
+		//	MapTest{}(mapTestFast, iterations, repeat);
+		//	allocatorTime = t.getDurationTillNowInNanoSeconds();
+		//}
+		//compareResults("Unordered Map" + stlMsg, "Unordered Map" + allocatorMsg, stdTime, allocatorTime);
+		////--------------------
+		//{
+		//	Timer t;
+		//	std::unordered_set<DataType, hash<DataType>, equal_to<DataType>> setTestStl;
+		//	SetTest{}(setTestStl, iterations, repeat);
+		//	stdTime = t.getDurationTillNowInNanoSeconds();
+		//}
+		//{
+		//	Timer t;
+		//	std::unordered_set<DataType, hash<DataType>, equal_to<DataType>, Allocator> setTestFast;
+		//	SetTest{}(setTestFast, iterations, repeat);
+		//	allocatorTime = t.getDurationTillNowInNanoSeconds();
+		//}
+		//compareResults("Unordered Set" + stlMsg, "Unordered Set" + allocatorMsg, stdTime, allocatorTime);
 		//--------------------
 	}
 

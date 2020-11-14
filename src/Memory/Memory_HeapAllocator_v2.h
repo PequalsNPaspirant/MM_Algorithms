@@ -95,7 +95,7 @@ namespace mm {
 
 			T* getNextBlock()
 			{
-				return reinterpret_cast<T*>(&data[blockSize * index_++]);
+				return reinterpret_cast<T*>(&data_[blockSize * index_++]);
 			}
 
 			bool isFull()
@@ -104,7 +104,7 @@ namespace mm {
 			}
 
 		private:
-			uint8_t data[blockSize * bufferSize];
+			uint8_t data_[blockSize * bufferSize];
 			size_t index_;
 		};
 
@@ -115,9 +115,6 @@ namespace mm {
 	template <class T, size_t bufferSize = 1024>
 	class HeapAllocator_v2
 	{
-		std::shared_ptr< MemoryPool_v2<T, bufferSize> > pool_;
-		std::allocator<T>* rebindAllocator = nullptr;
-
 	public:
 		typedef size_t size_type;
 		typedef std::ptrdiff_t difference_type;
@@ -132,7 +129,12 @@ namespace mm {
 		HeapAllocator_v2()
 			: pool_{ std::make_shared< MemoryPool_v2<T, bufferSize> >() }
 		{}
-		HeapAllocator_v2(HeapAllocator_v2&& allocator) = delete;
+		HeapAllocator_v2(HeapAllocator_v2&& allocator) : pool_{ allocator.pool_ } {
+#ifdef MM_DEBUG
+			cout << "\nHeapAllocator_v2: Move Ctr";
+#endif
+			allocator.pool_.reset();
+		}
 		HeapAllocator_v2(const HeapAllocator_v2& allocator) : pool_{ allocator.pool_ } {
 #ifdef MM_DEBUG
 			cout << "\nHeapAllocator_v2: Copy Ctr";
@@ -146,14 +148,14 @@ namespace mm {
 			cout << "\nHeapAllocator_v2: Rebind Copy Ctr";
 #endif
 			if (!std::is_same<T, U>::value)
-				rebindAllocator = new std::allocator<T>();
+				rebindAllocator_ = new std::allocator<T>();
 		}
 		HeapAllocator_v2& operator=(HeapAllocator_v2&&) = delete;
 		HeapAllocator_v2& operator=(const HeapAllocator_v2&) = delete;
 
 		~HeapAllocator_v2()
 		{
-			delete rebindAllocator;
+			delete rebindAllocator_;
 		}
 
 		pointer allocate(size_type n, const void* hint = 0)
@@ -164,8 +166,8 @@ namespace mm {
 				<< " Num Elements: " << n;
 #endif
 
-			if (rebindAllocator)
-				return rebindAllocator->allocate(n, hint);
+			if (rebindAllocator_)
+				return rebindAllocator_->allocate(n, hint);
 
 			if (n != 1 || hint)
 				throw std::bad_alloc();
@@ -184,8 +186,8 @@ namespace mm {
 				<< " Num Elements: " << n;
 #endif
 
-			if (rebindAllocator) {
-				rebindAllocator->deallocate(p, n);
+			if (rebindAllocator_) {
+				rebindAllocator_->deallocate(p, n);
 				return;
 			}
 
@@ -212,9 +214,15 @@ namespace mm {
 		template <class T1, size_t N1, class U, size_t M>
 		friend bool	operator==(const HeapAllocator_v2<T1, N1>& x, const HeapAllocator_v2<U, M>& y);
 
+		template <class T1, size_t N1, class U, size_t M>
+		friend bool	operator!=(const HeapAllocator_v2<T1, N1>& x, const HeapAllocator_v2<U, M>& y);
+
 		template <class U, size_t M>
 		friend class HeapAllocator_v2;
 
+	private:
+		std::shared_ptr< MemoryPool_v2<T, bufferSize> > pool_;
+		std::allocator<T>* rebindAllocator_ = nullptr;
 	};
 
 	/*
