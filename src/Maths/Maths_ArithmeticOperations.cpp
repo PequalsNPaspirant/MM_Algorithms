@@ -7,6 +7,42 @@ using namespace std;
 
 namespace mm {
 
+	bool specialCase(double base, int exponent, double& result)
+	{
+		//if (base == 0.0 && exponent == 0)
+		//	return std::nan(""); //NaN
+		//else if (base == 0.0 && exponent < 0)
+		//	return 1.0/0.0; //infinity
+		//else if (base == 0.0)
+		//	return 0.0;
+		//else if (exponent == 0)
+		//	return 1;
+		//else if (exponent == 1)
+		//	return base;
+		//else if (exponent < 0)
+		//	return 1.0 / power_recursive(base, -exponent);
+
+		if (base == 0.0)
+		{
+			if (exponent == 0)
+				result = std::nan(""); //NaN
+			else if (exponent < 0)
+				result = std::numeric_limits<double>::infinity(); //infinity
+			else // exponent > 0
+				result = 0.0;
+		}
+		else if (exponent == 0)
+			result = 1;
+		else if (exponent == 1)
+			result = base;
+		//else if (exponent < 0)
+		//	return 1.0 / power_recursive(base, -exponent);
+		else
+			return false;
+
+		return true;
+	}
+
 	//Final methods (These are copy of power1 and power2 below)
 	//TODO: Handle negative exponents
 	/*
@@ -14,25 +50,24 @@ namespace mm {
 	x^15 = x * (x^7) * (x^7)
 	            x^7 = x * (x^3) * (x^3)
 				           x^3 = x * (x^1) * (x^1)
+
+	power(b, e) = (e % 2) == 0 ? power(b * b, e/2) : b * power(b * b, e/2)
+
+	OR
+
+	power(b, e) = ((e % 2) == 0 ? 1 : b) * power(b * b, e/2)
+
 	*/
 	double power_recursive(double base, int exponent)
 	{
-		if (exponent == 0)
-			return 1;
+		double res;
+		if (specialCase(base, exponent, res))
+			return res;
 
-		if (exponent == 1)
-			return base;
+		if (exponent < 0)
+			return 1.0 / power_recursive(base, -exponent);
 
-		double result = 1;
-		if (exponent % 2 == 1)
-			result = base * power_recursive(base, exponent - 1);
-		else
-		{
-			result = power_recursive(base, exponent / 2);
-			result *= result;
-		}
-
-		return result;
+		return (exponent % 2 == 0 ? 1 : base) * power_recursive(base * base, exponent / 2);
 	}
 
 	/*
@@ -53,6 +88,13 @@ namespace mm {
 	*/
 	double power_iterative(double base, int exponent)
 	{
+		double res;
+		if (specialCase(base, exponent, res))
+			return res;
+
+		if (exponent < 0)
+			return 1.0 / power_iterative(base, -exponent);
+
 		double result = 1;
 		double factor = base;
 		while (true)
@@ -73,11 +115,48 @@ namespace mm {
 	//Trial methods
 	double power1(double base, int exponent, int& numMultiplicatiions)
 	{
-		if (exponent == 0)
-			return 1;
+		double res;
+		if (specialCase(base, exponent, res))
+			return res;
 
-		if (exponent == 1)
-			return base;
+		if (exponent < 0)
+			return 1.0 / power3(base, -exponent, numMultiplicatiions);
+
+		if (exponent % 2 == 0)
+			numMultiplicatiions += 1;
+		else
+			numMultiplicatiions += 2;
+
+		return (exponent % 2 == 0 ? 1 : base) * power3(base * base, exponent / 2, numMultiplicatiions);
+	}
+
+	double power2(double base, int exponent, int& numMultiplicatiions)
+	{
+		double res;
+		if (specialCase(base, exponent, res))
+			return res;
+
+		if (exponent < 0)
+			return 1.0 / power2(base, -exponent, numMultiplicatiions);
+
+		if (exponent % 2 == 0)
+			numMultiplicatiions += 1;
+		else
+			numMultiplicatiions += 2;
+
+		return exponent % 2 == 0 
+			? power2(base * base, exponent / 2, numMultiplicatiions) 
+			: base * power2(base * base, exponent / 2, numMultiplicatiions);
+	}
+
+	double power3(double base, int exponent, int& numMultiplicatiions)
+	{
+		double res;
+		if (specialCase(base, exponent, res))
+			return res;
+
+		if (exponent < 0)
+			return 1.0 / power1(base, -exponent, numMultiplicatiions);
 
 		double result = 1;
 		if (exponent % 2 == 1)
@@ -94,10 +173,21 @@ namespace mm {
 
 		return result;
 	}
+
 	//The logic in followng function is made cleaner, clear and easy to understand in next version power2()
-	double power2(double base, int exponent, int& numMultiplicatiions)
+	double power4(double base, int exponent, int& numMultiplicatiions)
 	{
-		double result = 1;
+		double result = 1.0;
+		if (specialCase(base, exponent, result))
+			return result;
+
+		bool isNegExp = false;
+		if (exponent < 0)
+		{
+			exponent = -exponent;
+			isNegExp = true;
+		}
+
 		double factor = base;
 		while (true)
 		{
@@ -115,13 +205,21 @@ namespace mm {
 			++numMultiplicatiions;
 		}
 
-		return result;
+		return isNegExp ? 1.0 / result : result;
 	}
 
-	double power3(double base, int exponent, int& numMultiplicatiions)
+	double power5(double base, int exponent, int& numMultiplicatiions)
 	{
-		if (exponent == 0)
-			return 1;
+		double res;
+		if (specialCase(base, exponent, res))
+			return res;
+
+		bool isNegExp = false;
+		if (exponent < 0)
+		{
+			exponent = -exponent;
+			isNegExp = true;
+		}
 
 		double result = (exponent % 2 == 0) ? 1 : base;
 		double factor = base;
@@ -139,11 +237,22 @@ namespace mm {
 			}
 		}
 
-		return result;
+		return isNegExp ? 1.0 / result : result;
 	}
 
-	double power4(double base, int exponent, int& numMultiplicatiions)
+	double power6(double base, int exponent, int& numMultiplicatiions)
 	{
+		double res;
+		if (specialCase(base, exponent, res))
+			return res;
+
+		bool isNegExp = false;
+		if (exponent < 0)
+		{
+			exponent = -exponent;
+			isNegExp = true;
+		}
+
 		double result = (exponent % 2 == 1) ? base : 1;
 		double factor = base;
 		for (exponent /= 2; exponent > 0; exponent /= 2)
@@ -158,36 +267,59 @@ namespace mm {
 			}
 		}
 
-		return result;
+		return isNegExp ? 1.0 / result : result;
 	}
 
-	bool AreAllValuesEqual(double result1, double result2, double result3, double result4, double result5, double result6)
+	bool AreAllValuesEqual(const vector<double>& results)
 	{
-		return fabs(result1 - result2) < 0.0001
-			&& fabs(result2 - result3) < 0.0001
-			&& fabs(result3 - result4) < 0.0001
-			&& fabs(result4 - result5) < 0.0001
-			&& fabs(result5 - result6) < 0.0001;
+		for (int i = 1; i < results.size(); ++i)
+		{
+			if (fabs(results[i - 1] - results[i]) > 0.0001)
+				return false;
+		}
+
+		return true;
 	}
 
 	void testPower(double base, int exponent)
 	{
-		int mul1 = 0, mul2 = 0, mul3 = 0, mul4 = 0;
+		vector<int> mul(6, 0);
 		double result1 = power_recursive(base, exponent);
 		double result2 = power_iterative(base, exponent);
-		double result3 = power1(base, exponent, mul1);
-		double result4 = power2(base, exponent, mul2);
-		double result5 = power3(base, exponent, mul3);
-		double result6 = power4(base, exponent, mul4);
-		MM_EXPECT_TRUE(AreAllValuesEqual(result1, result2, result3, result4, result5, result6),
-			result1, result2, result3, result4, result5, result6)
-			MM_EXPECT_TRUE(mul1 == mul2 && mul2 == mul3 && mul3 == mul4, mul1, mul2, mul3, mul4)
+		double result3 = power1(base, exponent, mul[0]);
+		double result4 = power2(base, exponent, mul[1]);
+		double result5 = power3(base, exponent, mul[2]);
+		double result6 = power4(base, exponent, mul[3]);
+		double result7 = power5(base, exponent, mul[4]);
+		double result8 = power6(base, exponent, mul[5]);
+		//MM_EXPECT_TRUE(AreAllValuesEqual({ result1, result2, result3, result4, result5, result6, result7, result8 }),
+		//	base, exponent, result1, result2, result3, result4, result5, result6, result7, result8);
+		//MM_EXPECT_TRUE(mul1 == mul2 && mul2 == mul3 && mul3 == mul4, base, exponent, mul1, mul2, mul3, mul4);
+		cout << "\n" << std::right
+			<< std::setw(12) << base
+			<< std::setw(12) << exponent
+			<< std::setw(12) << mul[0]
+			<< std::setw(12) << mul[1]
+			<< std::setw(12) << mul[2]
+			<< std::setw(12) << mul[3]
+			<< std::setw(12) << mul[4]
+			<< std::setw(12) << mul[5];
 	}
 
 	MM_DECLARE_FLAG(arithmeticOperations_power);
 
 	MM_UNIT_TEST(arithmeticOperations_power_test_1, arithmeticOperations_power)
 	{
+		cout << "\n" << std::right
+			<< std::setw(12) << "base"
+			<< std::setw(12) << "exponent"
+			<< std::setw(12) << "mul"
+			<< std::setw(12) << "mul"
+			<< std::setw(12) << "mul"
+			<< std::setw(12) << "mul"
+			<< std::setw(12) << "mul"
+			<< std::setw(12) << "mul";
+
 		double base = 2;
 		for (int exponent = 0; exponent < 100; exponent++)
 			testPower(2, exponent);
