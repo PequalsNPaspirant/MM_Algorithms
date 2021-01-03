@@ -186,7 +186,7 @@ namespace mm {
 			MM_EXPECT_TRUE((actualResult = BinaryTree_CheckIfBST_recursive_5(data[i].bt.getRoot(), prevVal)) == data[i].result, data[i].result, actualResult);
 			//MM_EXPECT_TRUE((actualResult = BinaryTree_CheckIfBST_iterative_1(data[i].bt.getRoot())) == data[i].result, data[i].result, actualResult);
 
-			if (data[i].result != actualResult)
+			//if (data[i].result != actualResult)
 			{
 				BinaryTree::enableWideCharPrinting();
 				std::wcout << data[i].bt.convertToString();

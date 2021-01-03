@@ -166,7 +166,7 @@ namespace mm {
 
 			//(charWidth + clearance) should be divisible by 2
 			const int charWidth = 4;
-			const int clearance = 4;
+			const int clearance = 2;
 			
 			vector<int> currBarHalfWidths;
 			getStartSpaces(levels_, charWidth, clearance, currBarHalfWidths);
@@ -221,14 +221,13 @@ namespace mm {
 					retVal += wstring(2 * currBarHalfWidths[currentLevel] - charWidth, L' ');
 				}
 
+				wstring s;
 				if (currNode)
-				{ 
-					wstring s = to_wstring(currNode->data);
-					retVal += s;
-					retVal += wstring(charWidth - s.length(), L' ');
-				}
+					s = to_wstring(currNode->data);
 				else
-					retVal += L"*";
+					s = L"*";
+				retVal += s;
+				retVal += wstring(charWidth - s.length(), L' ');
 
 				if (++elements == elementsAtCurrentLevel)
 				{
