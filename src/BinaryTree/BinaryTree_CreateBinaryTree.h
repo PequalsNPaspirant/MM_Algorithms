@@ -23,7 +23,6 @@ namespace mm {
 		Node* right;
 	};
 
-
 	class BinaryTree
 	{
 	public:
@@ -57,24 +56,67 @@ namespace mm {
 			{
 				MM_EXPECT_TRUE(root == nullptr, root);
 
-				while (numbers[++index] == Empty)
-				{
-				}
-				root = Node::create(numbers[index]);
+				if (numbers[++index] != Empty)
+					root = Node::create(numbers[index]);
+
 				return;
 			}
 
 			if (!root)
+			{
+				index += static_cast<int>(pow(2, targetLevel - currentLevel));
 				return;
+			}
 
 			addLevel(root->left, currentLevel + 1, targetLevel, index, numbers);
 			addLevel(root->right, currentLevel + 1, targetLevel, index, numbers);
 		}
 
+		void addLevel2(int targetLevel, const vector<int>& numbers)
+		{
+			if (root_ == nullptr)
+			{
+				if (numbers[0] != Empty)
+					root_ = Node::create(numbers[0]);
+				return;
+			}
+
+			int currentLevel = 0;
+			std::queue<Node*> q;
+			q.push(root_);
+			++currentLevel;
+			while (++currentLevel < targetLevel)
+			{
+				int count = q.size();
+				while (count > 0)
+				{
+					Node* currNode = q.front();
+					q.pop();
+					--count;
+					q.push(currNode ? currNode->left : nullptr);
+					q.push(currNode ? currNode->right : nullptr);
+				}
+			}
+
+			for (int i = 0; i < numbers.size(); i += 2)
+			{
+				Node* currNode = q.front();
+				q.pop();
+				if (currNode != nullptr)
+				{
+					if (numbers[i] != Empty)
+						currNode->left = Node::create(numbers[i]);
+					if (numbers[i + 1] != Empty)
+						currNode->right = Node::create(numbers[i + 1]);
+				}
+			}
+		}
+
 		BinaryTree& addNextLevel(const vector<int>& numbers)
 		{
 			int index = -1;
-			addLevel(root_, 1, ++levels_, index, numbers);
+			//addLevel(root_, 1, ++levels_, index, numbers);
+			addLevel2(++levels_, numbers);
 
 			return *this;
 		}
@@ -218,4 +260,5 @@ namespace mm {
 		Node* root_;
 		int levels_;
 	};
+
 }

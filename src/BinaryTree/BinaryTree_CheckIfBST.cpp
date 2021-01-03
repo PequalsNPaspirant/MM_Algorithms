@@ -55,15 +55,17 @@ namespace mm {
 				return true;
 			}
 
-			bool BinaryTree_CheckIfBST_recursive_4(Node* root)
+			bool BinaryTree_CheckIfBST_recursive_4(Node* root, bool reset = true)
 			{
-				static int prevVal = std::numeric_limits<int>::min();
+				static int prevVal;
+				if(reset)
+					prevVal = std::numeric_limits<int>::min();
 
 				//This is like in-order traversal
 				if (!root)
 					return true;
 
-				if (!BinaryTree_CheckIfBST_recursive_4(root->left))
+				if (!BinaryTree_CheckIfBST_recursive_4(root->left, false))
 					return false;
 
 				if (!(prevVal <= root->data))
@@ -71,7 +73,7 @@ namespace mm {
 
 				prevVal = root->data;
 
-				if (!BinaryTree_CheckIfBST_recursive_4(root->right))
+				if (!BinaryTree_CheckIfBST_recursive_4(root->right, false))
 					return false;
 
 				return true;
@@ -125,6 +127,7 @@ namespace mm {
 			TestData& operator=(TestData&& rhs) = default;
 		};
 
+		const int& NA = BinaryTree::Empty;
 		vector<TestData> data;
 		data.push_back(TestData(
 			std::move(BinaryTree{}
@@ -135,16 +138,60 @@ namespace mm {
 			true)
 		);
 
+		data.push_back(TestData(
+			std::move(BinaryTree{}
+				.addNextLevel({                9              })
+				.addNextLevel({       5,              13      })
+				.addNextLevel({   3,     7,       11,      15  })
+				.addNextLevel({ 2, 4,  NA,  8,  10,  NA, 14,  16 })),
+			true)
+		);
+
+		data.push_back(TestData(
+			std::move(BinaryTree{}
+				.addNextLevel({                9             })
+				.addNextLevel({       5,             13      })
+				.addNextLevel({   3,     7,      11,      15  })
+				.addNextLevel({ 2, 4,  6,  15, 10,  12, 14,  16 })),
+			false)
+		);
+
+		data.push_back(TestData(
+			std::move(BinaryTree{}
+				.addNextLevel({                9             })
+				.addNextLevel({       5,             13      })
+				.addNextLevel({   3,     7,       1,      15  })
+				.addNextLevel({ 2, 4,  6,  8,  10,  12, 14,  16 })),
+			false)
+		);
+
+		data.push_back(TestData(
+			std::move(BinaryTree{}
+				.addNextLevel({                9             })
+				.addNextLevel({       5,             13      })
+				.addNextLevel({   3,     7,      11,      NA })
+				.addNextLevel({ 2, 4,  6,  8,  NA,  NA, NA,  NA })),
+			true)
+		);
+
 		for (int i = 0; i < data.size(); ++i)
 		{
-			BinaryTree::enableWideCharPrinting();
-			std::wcout << data[i].bt.convertToString();
-			BinaryTree::disableWideCharPrinting();
-
 			bool actualResult;
 			actualResult = true;
-			//MM_EXPECT_TRUE((actualResult = BinaryTree_CheckIfBST_recursive_1(data[i].bt.getRoot())) == data[i].result, 
-			//	data[i].bt.convertToString(), data[i].result, actualResult);
+			MM_EXPECT_TRUE((actualResult = BinaryTree_CheckIfBST_recursive_1(data[i].bt.getRoot())) == data[i].result, data[i].result, actualResult);
+			MM_EXPECT_TRUE((actualResult = BinaryTree_CheckIfBST_recursive_2(data[i].bt.getRoot())) == data[i].result, data[i].result, actualResult);
+			MM_EXPECT_TRUE((actualResult = BinaryTree_CheckIfBST_recursive_3(data[i].bt.getRoot())) == data[i].result, data[i].result, actualResult);
+			MM_EXPECT_TRUE((actualResult = BinaryTree_CheckIfBST_recursive_4(data[i].bt.getRoot())) == data[i].result, data[i].result, actualResult);
+			int prevVal = std::numeric_limits<int>::min();
+			MM_EXPECT_TRUE((actualResult = BinaryTree_CheckIfBST_recursive_5(data[i].bt.getRoot(), prevVal)) == data[i].result, data[i].result, actualResult);
+			//MM_EXPECT_TRUE((actualResult = BinaryTree_CheckIfBST_iterative_1(data[i].bt.getRoot())) == data[i].result, data[i].result, actualResult);
+
+			if (data[i].result != actualResult)
+			{
+				BinaryTree::enableWideCharPrinting();
+				std::wcout << data[i].bt.convertToString();
+				BinaryTree::disableWideCharPrinting();
+			}
 		}
 	}
 }
