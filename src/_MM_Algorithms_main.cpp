@@ -21,7 +21,7 @@ namespace mm {
 	MM_DEFINE_FLAG(false, BinaryTree_BuildFromArrayRepresentation);
 	MM_DEFINE_FLAG(false, BinaryTree_Traversals);
 	MM_DEFINE_FLAG(false, BinaryTree_CheckIfIdentical_UnitTests);
-	MM_DEFINE_FLAG(false, BinaryTree_CheckIfBST_UnitTests); //-----TODO
+	MM_DEFINE_FLAG(true, BinaryTree_CheckIfBST_UnitTests);
 	//Dynamic Programming
 	MM_DEFINE_FLAG(false, DP_HouseRobbery);
 	MM_DEFINE_FLAG(false, DP_Fibonacci);
@@ -92,7 +92,7 @@ namespace mm {
 	MM_DEFINE_FLAG(false, bitwiseOperations_reverseBits);
 	//Arithmatic Operations
 	MM_DEFINE_FLAG(false, arithmeticOperations_matrix);
-	MM_DEFINE_FLAG(true, arithmeticOperations_power);
+	MM_DEFINE_FLAG(false, arithmeticOperations_power);
 	//STL
 	MM_DEFINE_FLAG(false, MM_shared_ptr_UnitTest);
 	MM_DEFINE_FLAG(false, SharedPtrCyclicReferenceMemoryLeak);

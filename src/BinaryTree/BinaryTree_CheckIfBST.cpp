@@ -1,6 +1,7 @@
 #include <iostream>
 using namespace std;
 
+#include "BinaryTree/BinaryTree_CreateBinaryTree.h"
 #include "BinaryTree/BinaryTree_CheckIfBST.h"
 #include "MM_UnitTestFramework/MM_UnitTestFramework.h"
 
@@ -10,13 +11,6 @@ namespace mm {
 	{
 		namespace //unnamed namespace
 		{
-			struct Node
-			{
-				int data;
-				Node* left;
-				Node* right;
-			};
-
 			bool BinaryTree_CheckIfBST_recursive_1(Node* root, int left = numeric_limits<int>::min(), int right = numeric_limits<int>::max())
 			{
 				return root == nullptr ||
@@ -61,6 +55,48 @@ namespace mm {
 				return true;
 			}
 
+			bool BinaryTree_CheckIfBST_recursive_4(Node* root)
+			{
+				static int prevVal = std::numeric_limits<int>::min();
+
+				//This is like in-order traversal
+				if (!root)
+					return true;
+
+				if (!BinaryTree_CheckIfBST_recursive_4(root->left))
+					return false;
+
+				if (!(prevVal <= root->data))
+					return false;
+
+				prevVal = root->data;
+
+				if (!BinaryTree_CheckIfBST_recursive_4(root->right))
+					return false;
+
+				return true;
+			}
+
+			bool BinaryTree_CheckIfBST_recursive_5(Node* root, int& prevVal)
+			{
+				//This is like in-order traversal
+				if (!root)
+					return true;
+
+				if (!BinaryTree_CheckIfBST_recursive_5(root->left, prevVal))
+					return false;
+
+				if (!(prevVal <= root->data))
+					return false;
+
+				prevVal = root->data;
+
+				if (!BinaryTree_CheckIfBST_recursive_5(root->right, prevVal))
+					return false;
+
+				return true;
+			}
+
 			bool BinaryTree_CheckIfBST_iterative_1(Node* root)
 			{
 				//Hint: do post-order traversal (using stack)
@@ -76,15 +112,42 @@ namespace mm {
 	{
 		struct TestData
 		{
+			BinaryTree bt;
+			bool result;
 
+			TestData(BinaryTree&& btIn, bool resultIn)
+				: bt{ std::move(btIn) }, result{ resultIn }
+			{}
+
+			TestData(const TestData&) = delete;
+			TestData& operator=(const TestData&) = delete;
+			TestData(TestData&& rhs) = default;
+			TestData& operator=(TestData&& rhs) = default;
 		};
 
-		vector<TestData> testData;
+		vector<TestData> data;
+		/*
+		         5
+			3        7
+		  2   4    6  8
+		*/
+		data.push_back(TestData(
+			std::move(BinaryTree{}
+				.addNextLevel({                9             })
+				.addNextLevel({       5,             13      })
+				.addNextLevel({   3,     7,      11,      15  })
+				.addNextLevel({ 2, 4,  6,  8,  10,  12, 14,  16 })),
+			true)
+		);
 
-		for (int i = 0; i < testData.size(); ++i)
+		for (int i = 0; i < data.size(); ++i)
 		{
-			unsigned int actualResult;
-			//MM_EXPECT_TRUE((actualResult = reverseBits(testData[i].value)) == testData[i].reverse, testData[i].value, testData[i].reverse, actualResult);
+			std::wcout << data[i].bt.convertToString();
+
+			bool actualResult;
+			actualResult = true;
+			//MM_EXPECT_TRUE((actualResult = BinaryTree_CheckIfBST_recursive_1(data[i].bt.getRoot())) == data[i].result, 
+			//	data[i].bt.convertToString(), data[i].result, actualResult);
 		}
 	}
 }

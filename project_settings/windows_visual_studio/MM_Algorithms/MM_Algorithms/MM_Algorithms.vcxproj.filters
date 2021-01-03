@@ -1130,6 +1130,9 @@
     <ClInclude Include="..\..\..\..\src\Memory\Memory_HeapAllocator_v2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\src\BinaryTree\BinaryTree_CreateBinaryTree.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\..\..\src\Others\Others_EquityOrderManagementSystem_v1.data">
