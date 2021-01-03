@@ -87,68 +87,33 @@ namespace mm {
 		std::wstring convertToString()
 		{
 			/*
-			------5------
-			----/---\----
-			--3-------7--
-			-/-\-----/-\-
-			2---4---6---8
-			*/
-
-			/*
-			      8             8
-			     / \           / \
-			    /   \         /   \
-			   /     \       /     \
-			  5      10     5      10
-			 / \     / \   / \     / \
-			2   6   9  11 2   6   9  11
-
-			          8
-			__________|_______
-			|                 |
-
-			*/
-
-
-			/*
-			┴
-
-
-			                      1
-			┌────────────┬────────┴────────────────────┐
-			11           12                            13
-			┌────┼────┐    ┌──┴─┐                 ┌─────────┴────┬────┐
-			111  112  113  121  122               131            132  133
-			┌─────┼─────┐     ┌─────┼─────┐     ┌──┴──┐
-			1221  1222  1223  1311  1312  1313  1321  1322
-
-
-			                            1
-			               ┌────────────┴────────────────────┐
-			               11                                     13
-			      ┌────────┴────────┐                     ┌─────────┴────┬────┐
-			      111               113                 131            132  133
-			┌─────┴─────┐     ┌─────┴─────┐     ┌──┴──┐
-		    1221        1223  1311        1313  1321  1322
+			Output:
 			
-			
+//                                           9
+//                           ┌───────────────┴───────────────┐
+//                           5                               13
+//                   ┌───────┴───────┐               ┌───────┴───────┐
+//                   3               7               11              15
+//               ┌───┴───┐       ┌───┴───┐       ┌───┴───┐       ┌───┴───┐
+//               2       4       6       8       10      12      14      16
 
 
-
-			2x + charWidth + clearance
-			2x
+			Another way to try:
+//          			      8             8
+//          			     / \           / \
+//          			    /   \         /   \
+//          			   /     \       /     \
+//          			  5      10     5      10
+//          			 / \     / \   / \     / \
+//          			2   6   9  11 2   6   9  11
 
 			*/
-
-			_setmode(_fileno(stdout), _O_U16TEXT);
-			//wstring test(L"\n\n                      1\n         ┌────────────┴────────────────────┐\n         11                                     13\n┌────────┴────────┐                     ┌─────────┴────┬────┐\n\n");
-			//wcout << test;
 
 			auto getStartSpaces = [](int totalLevels, int charWidth, int clearance,	vector<int>& currBarHalfWidth)
 			{
-				int barHalfWidth = (charWidth + clearance) / 2;
 				currBarHalfWidth.resize(totalLevels, 0);
 				int i = totalLevels - 1;
+				int barHalfWidth = (charWidth + clearance) / 2;
 				currBarHalfWidth[i] = barHalfWidth;
 
 				for (--i; i >= 0; --i)
@@ -157,8 +122,7 @@ namespace mm {
 				}
 			};
 
-			//const int barHalfWidth = 10; //Half width of bar at lowest level
-			//charWidth + clearance should be divisible by 2
+			//(charWidth + clearance) should be divisible by 2
 			const int charWidth = 4;
 			const int clearance = 4;
 			
@@ -189,17 +153,12 @@ namespace mm {
 					
 					if (currentLevel != 0)
 					{
-						retVal += wstring(currBarHalfWidths[currentLevel], ' '); //space before starting printing bars
+						retVal += wstring(currBarHalfWidths[currentLevel], L' '); //space before starting printing bars
 						for (int i = 0; i < elementsAtCurrentLevel / 2; ++i)
 						{
 							if (i > 0)
 							{
-								//space between two bars
-								//if(currentLevel + 1 < currBarHalfWidths.size())
-								//	retVal += wstring(2 * currBarHalfWidths[currentLevel + 1] + charWidth + clearance, ' ');
-								//else
-								//	retVal += wstring(charWidth + clearance, ' ');
-								retVal += wstring(2 * currBarHalfWidths[currentLevel] - 1, ' ');
+								retVal += wstring(2 * currBarHalfWidths[currentLevel] - 1, L' ');
 							}
 
 							//Print bar
@@ -212,27 +171,19 @@ namespace mm {
 						retVal += L"\n"; //new line for printing numbers below bar
 					}
 
-					retVal += wstring(currBarHalfWidths[currentLevel], ' '); //space before starting printing numbers
+					retVal += wstring(currBarHalfWidths[currentLevel], L' '); //space before starting printing numbers
 				}
 				
 				if (elements > 0)
 				{
-					//if (elements % 2 == 0)
-					//{
-					//	if (currentLevel + 1 < currBarHalfWidths.size())
-					//		retVal += wstring(2 * currBarHalfWidths[currentLevel + 1] + clearance, ' ');
-					//	else
-					//		retVal += wstring(clearance, ' ');
-					//}
-					//else
-						retVal += wstring(2 * currBarHalfWidths[currentLevel] - charWidth, ' ');
+					retVal += wstring(2 * currBarHalfWidths[currentLevel] - charWidth, L' ');
 				}
 
 				if (currNode)
 				{ 
 					wstring s = to_wstring(currNode->data);
 					retVal += s;
-					retVal += wstring(charWidth - s.length(), ' ');
+					retVal += wstring(charWidth - s.length(), L' ');
 				}
 				else
 					retVal += L"*";
@@ -248,7 +199,19 @@ namespace mm {
 
 			retVal += L"\n";
 			retVal += L"\n";
+
 			return retVal;
+		}
+
+		static void enableWideCharPrinting()
+		{
+			//This is required to print wchar on console output
+			_setmode(_fileno(stdout), _O_U16TEXT);
+		}
+
+		static void disableWideCharPrinting()
+		{
+			_setmode(_fileno(stdout), _O_TEXT);
 		}
 
 	private:

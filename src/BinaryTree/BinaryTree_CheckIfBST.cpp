@@ -126,11 +126,6 @@ namespace mm {
 		};
 
 		vector<TestData> data;
-		/*
-		         5
-			3        7
-		  2   4    6  8
-		*/
 		data.push_back(TestData(
 			std::move(BinaryTree{}
 				.addNextLevel({                9             })
@@ -142,7 +137,9 @@ namespace mm {
 
 		for (int i = 0; i < data.size(); ++i)
 		{
+			BinaryTree::enableWideCharPrinting();
 			std::wcout << data[i].bt.convertToString();
+			BinaryTree::disableWideCharPrinting();
 
 			bool actualResult;
 			actualResult = true;
