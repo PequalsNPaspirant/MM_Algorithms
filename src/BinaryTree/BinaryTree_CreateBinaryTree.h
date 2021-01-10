@@ -151,58 +151,54 @@ namespace mm {
 
 			*/
 
-			auto getStartSpaces = [](int totalLevels, int charWidth, int clearance,	vector<int>& currBarHalfWidth)
-			{
-				currBarHalfWidth.resize(totalLevels, 0);
-				int i = totalLevels - 1;
-				int barHalfWidth = (charWidth + clearance) / 2;
-				currBarHalfWidth[i] = barHalfWidth;
-
-				for (--i; i >= 0; --i)
-				{
-					currBarHalfWidth[i] = 2 * currBarHalfWidth[i + 1];
-				}
-			};
-
-			//(charWidth + clearance) should be divisible by 2
+			// Note: (charWidth + clearance) should be divisible by 2
 			const int charWidth = 4;
 			const int clearance = 2;
 			
-			vector<int> currBarHalfWidths;
-			getStartSpaces(levels_, charWidth, clearance, currBarHalfWidths);
+			vector<int> currBarHalfWidths(levels_, 0);
+			int barHalfWidth = (charWidth + clearance) / 2;
+			currBarHalfWidths[levels_ - 1] = barHalfWidth;
+			//Initialize the widths at each level
+			for (int i = levels_ - 2; i >= 0; --i)
+			{
+				currBarHalfWidths[i] = 2 * currBarHalfWidths[i + 1];
+			}
 
 			int currentLevel = 0;
 			int elementsAtCurrentLevel = 1;
-			int elements = 0;
-			bool newLevel = true;
 
-			wstring retVal;
-			retVal += L"\n";
+			wstring retVal{ L"\n\n" };
 
 			std::queue<Node*> q;
 			q.push(root_);
-			while (!q.empty() && currentLevel < levels_)
+			while (!q.empty())
 			{
-				Node* currNode = q.front();
-				q.pop();
-				q.push(currNode ? currNode->left : nullptr);
-				q.push(currNode ? currNode->right : nullptr);
-
-				if (newLevel)
+				//Collect all nodes at this level
+				vector<Node*> nodesAtCurrentLevel;
+				for (int i = 0; i < elementsAtCurrentLevel; ++i)
 				{
-					newLevel = false;
-					retVal += L"\n"; //newline for bar
-					
-					if (currentLevel != 0)
+					Node* currNode = q.front();
+					nodesAtCurrentLevel.push_back(currNode);
+					q.pop();
+					if (currentLevel < levels_ - 1)
 					{
-						retVal += wstring(currBarHalfWidths[currentLevel], L' '); //space before starting printing bars
-						for (int i = 0; i < elementsAtCurrentLevel / 2; ++i)
-						{
-							if (i > 0)
-							{
-								retVal += wstring(2 * currBarHalfWidths[currentLevel] - 1, L' ');
-							}
+						q.push(currNode ? currNode->left : nullptr);
+						q.push(currNode ? currNode->right : nullptr);
+					}
+				}
 
+				//Print bars at this level
+				if (currentLevel != 0)
+				{
+					retVal += L"\n"; //newline for bar
+					retVal += wstring(currBarHalfWidths[currentLevel], L' '); //space before starting printing bars
+					for (int i = 0; i < elementsAtCurrentLevel / 2; ++i)
+					{
+						if (i > 0)
+							retVal += wstring(2 * currBarHalfWidths[currentLevel] - 1, L' ');
+
+						if (nodesAtCurrentLevel[2 * i] != nullptr || nodesAtCurrentLevel[2 * i + 1] != nullptr)
+						{
 							//Print bar
 							retVal += L"┌";
 							retVal += wstring(currBarHalfWidths[currentLevel] - 1, L'─');
@@ -210,36 +206,36 @@ namespace mm {
 							retVal += wstring(currBarHalfWidths[currentLevel] - 1, L'─');
 							retVal += L"┐";
 						}
-						retVal += L"\n"; //new line for printing numbers below bar
+						else
+							retVal += wstring(2 * currBarHalfWidths[currentLevel] + 1, L' ');
 					}
-
-					retVal += wstring(currBarHalfWidths[currentLevel], L' '); //space before starting printing numbers
+					retVal += L"\n"; //new line for printing numbers below bar
 				}
 				
-				if (elements > 0)
+				//Print data at each node in this level
+				for (int i = 0; i < elementsAtCurrentLevel; ++i)
 				{
-					retVal += wstring(2 * currBarHalfWidths[currentLevel] - charWidth, L' ');
+					//space before starting printing numbers
+					if (i == 0)
+						retVal += wstring(currBarHalfWidths[currentLevel], L' ');
+					else
+						retVal += wstring(2 * currBarHalfWidths[currentLevel] - charWidth, L' ');
+
+					wstring s;
+					Node* currNode = nodesAtCurrentLevel[i];
+					if (currNode)
+						s = to_wstring(currNode->data);
+					else
+						s = L"";
+					retVal += s;
+					retVal += wstring(charWidth - s.length(), L' ');
 				}
 
-				wstring s;
-				if (currNode)
-					s = to_wstring(currNode->data);
-				else
-					s = L"*";
-				retVal += s;
-				retVal += wstring(charWidth - s.length(), L' ');
-
-				if (++elements == elementsAtCurrentLevel)
-				{
-					elements = 0;
-					elementsAtCurrentLevel *= 2;
-					newLevel = true;
-					++currentLevel;
-				}
+				elementsAtCurrentLevel *= 2;
+				++currentLevel;
 			}
 
-			retVal += L"\n";
-			retVal += L"\n";
+			retVal += L"\n\n";
 
 			return retVal;
 		}
