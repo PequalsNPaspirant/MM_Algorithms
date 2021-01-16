@@ -4,6 +4,7 @@ using namespace std;
 
 #include "Maths/Maths_ArithmeticOperations.h"
 #include "MM_UnitTestFramework/MM_UnitTestFramework.h"
+#include "Utils/Utils_PrintUtils.h"
 
 namespace mm {
 
@@ -51,11 +52,13 @@ namespace mm {
 	            x^7 = x * (x^3) * (x^3)
 				           x^3 = x * (x^1) * (x^1)
 
-	power(b, e) = (e % 2) == 0 ? power(b * b, e/2) : b * power(b * b, e/2)
+	power(b, e) = ((e % 2) == 0 ? 1 : b) * power(b * b, e/2)
 
 	OR
 
-	power(b, e) = ((e % 2) == 0 ? 1 : b) * power(b * b, e/2)
+	Divide and Conquer
+
+	power(b, e) = ((e % 2) == 0 ? 1 : b) * power(b, e/2) * power(b, e/2)
 
 	*/
 	double power_recursive(double base, int exponent)
@@ -70,8 +73,156 @@ namespace mm {
 		return (exponent % 2 == 0 ? 1 : base) * power_recursive(base * base, exponent / 2);
 	}
 
-	/*
 
+	/*
+	This iterative version has almost exact behavior as above recursive version
+	x^15 = 
+	exponent	factor	result = result * factor
+	15			x		x
+	7			x^2		(x) * x^2
+	3			x^4		(x * x^2) * x^4
+	1			x^8		(x * x^2 * x^4) * x^8
+
+
+	exponent decay in recursion		exponent growth in iterative version
+	log2( 1) = 0;		// 1 = bx0000 0001		// 1							// 1
+	log2( 2) = 1;		// 2 = bx0000 0010		// 2, 1							// 1, 2
+	log2( 3) = 1.x;		// 2 = bx0000 0011		// 3, 1							// 1, 3,
+	log2( 4) = 2;		// 4 = bx0000 0100		// 4, 2, 1						// 1, 2, 4
+	log2( 5) = 2.x;		// 4 = bx0000 0101      // 5, 2, 1						// 1, 2, 5
+	log2( 6) = 2.x;		// 4 = bx0000 0110		// 6, 3, 1						// 1, 3, 6
+	log2( 7) = 2.x;		// 4 = bx0000 0111		// 7, 3, 1						// 1, 3, 7
+	log2( 8) = 3;		// 8 = bx0000 1000		// 8, 4, 2, 1					// 1, 2, 4,  8
+	log2( 9) = 3.x;		// 9 = bx0000 1001		// 9, 4, 2, 1					// 1, 2, 4,  9
+	log2(10) = 3.x;		//10 = bx0000 1010		//10, 5, 2, 1					// 1, 2, 5, 10
+	log2(11) = 3.x;		//10 = bx0000 1011		//11, 5, 2, 1					// 1, 2, 5, 11
+	log2(12) = 3.x;		//10 = bx0000 1100		//12, 6, 3, 1					// 1, 3, 6, 12
+	log2(13) = 3.x;		//10 = bx0000 1101		//13, 6, 3, 1					// 1, 3, 6, 13
+	log2(14) = 3.x;		//10 = bx0000 1110		//14, 7, 3, 1					// 1, 3, 7, 14
+	log2(15) = 3.x;		//10 = bx0000 1111		//15, 7, 3, 1					// 1, 3, 7, 15
+	log2(16) = 4;		//16 = bx0001 0000		//16, 8, 4, 2, 1				// 1, 2, 4,  8, 16
+
+	If the exponent is 13, in recursive version it will decay like 13, 6, 3, 1 ..i.e. right shifting of exponent (1101) 1 bit at a time
+	The base is doubled at each step, and multiplied by base if exponent at that stage is odd i.e. when the rightmost bit is 1
+
+	So if we want to implement the similar approach from bottom to up, exponent should grow like 1, 3, 6, 13
+	i.e. the exponent will be doubled, but will also be incremented by 1 at some steps when the ith bit from MSB is 1
+	i.e. for base = x, we should have something like:
+	i		result
+	0		1.0 * x
+	1		x^2 * x = x^3
+	2		x^6
+	3		x^13 * x = x^13
+
+	*/
+
+	double power_iterative_v1(double base, int exponent)
+	{
+		double result;
+		if (specialCase(base, exponent, result))
+			return result;
+
+		if (exponent < 0)
+			return 1.0 / power_iterative_v1(base, -exponent);
+
+		int mask = 1;
+		int exp = exponent;
+		for (; exp > 1; exp = exp >> 1)
+			mask = mask << 1;
+
+		exp = 0;
+		result = 1.0;
+		for (; mask > 0; ) //OR run this loop until exp != exponent
+		{
+			result = result * result;
+			exp *= 2; //for tally
+
+			if ((exponent & mask) > 0)
+			{
+				result *= base;
+				exp += 1; //for tally
+			}
+			
+			mask = mask >> 1;
+		}
+
+		MyAssert::myRunTimeAssert(exp == exponent, "exp not matching exponent");
+
+		return result;
+	}
+
+	double power_iterative_v2(double base, int exponent)
+	{
+		double result;
+		if (specialCase(base, exponent, result))
+			return result;
+
+		if (exponent < 0)
+			return 1.0 / power_iterative_v2(base, -exponent);
+
+		int positionOfMSB = static_cast<int>(floor(log2(static_cast<double>(exponent)))); //rightmost bit is at position 0
+		int mask = 1 << positionOfMSB;
+
+		int exp = 0;
+		result = 1.0;
+		for(; exp != exponent; ) //OR run this loop until mask > 0 OR for positionOfMSB times
+		{
+			result = result * result;
+			exp *= 2;
+
+			if ((exponent & mask) > 0)
+			{
+				result *= base;
+				exp += 1;
+			}
+			
+			mask = mask >> 1;
+		}
+
+		MyAssert::myRunTimeAssert(exp == exponent, "exp not matching exponent");
+
+		return result;
+	}
+
+	double power_iterative_v3(double base, int exponent)
+	{
+		double result;
+		if (specialCase(base, exponent, result))
+			return result;
+
+		if (exponent < 0)
+			return 1.0 / power_iterative_v3(base, -exponent);
+
+		int mask = 1;
+		int exp = exponent;
+		for (; exp > 1; exp = exp >> 1)
+			mask = mask << 1;
+
+		exp = 0;
+		result = 1.0;
+		for (; mask > 0; ) //OR run this loop until exp != exponent
+		{
+			result = result * result;
+			exp *= 2; //for tally
+
+			if ((exponent & mask) > 0)
+			{
+				result *= base;
+				exp += 1; //for tally
+			}
+			
+			mask = mask >> 1;
+		}
+
+		MyAssert::myRunTimeAssert(exp == exponent, "exp not matching exponent");
+
+		return result;
+	}
+
+	
+	
+
+	/*
 	Example:
 	x^15 = 
 	exponent	factor	result = result * factor
@@ -86,25 +237,22 @@ namespace mm {
 	15 = 2^3 + 2^2 + 2^1 + 2^0 = 8 + 4 + 2 + 1
 	So x^15 = x^8 * x^4 * x^2 * x^1
 	*/
-	double power_iterative(double base, int exponent)
+	double power_iterative_using_bits_in_exponent(double base, int exponent)
 	{
 		double res;
 		if (specialCase(base, exponent, res))
 			return res;
 
 		if (exponent < 0)
-			return 1.0 / power_iterative(base, -exponent);
+			return 1.0 / power_iterative_using_bits_in_exponent(base, -exponent);
 
 		double result = 1;
+		
 		double factor = base;
-		while (true)
+		for (; exponent > 0; exponent = exponent >> 1 /*or exponent /= 2*/)
 		{
-			if (exponent % 2 == 1) // instead we can also use (exponent & 1) == 1 
+			if ((exponent & 1) == 1) //exponent % 2 == 1 
 				result = result * factor;
-
-			exponent /= 2; // instead we can also use exponent = (exponent >> 1)
-			if (exponent == 0) 
-				break;
 
 			factor = factor * factor;
 		}
@@ -284,17 +432,21 @@ namespace mm {
 	void testPower(double base, int exponent)
 	{
 		vector<int> mul(6, 0);
-		double result1 = power_recursive(base, exponent);
-		double result2 = power_iterative(base, exponent);
-		double result3 = power1(base, exponent, mul[0]);
-		double result4 = power2(base, exponent, mul[1]);
-		double result5 = power3(base, exponent, mul[2]);
-		double result6 = power4(base, exponent, mul[3]);
-		double result7 = power5(base, exponent, mul[4]);
-		double result8 = power6(base, exponent, mul[5]);
-		//MM_EXPECT_TRUE(AreAllValuesEqual({ result1, result2, result3, result4, result5, result6, result7, result8 }),
-		//	base, exponent, result1, result2, result3, result4, result5, result6, result7, result8);
-		//MM_EXPECT_TRUE(mul1 == mul2 && mul2 == mul3 && mul3 == mul4, base, exponent, mul1, mul2, mul3, mul4);
+		vector<double> results;
+		results.push_back(power_recursive(base, exponent));
+		results.push_back(power_iterative_v1(base, exponent));
+		results.push_back(power_iterative_v2(base, exponent));
+		results.push_back(power_iterative_v3(base, exponent));
+		results.push_back(power_iterative_using_bits_in_exponent(base, exponent));
+		results.push_back(power1(base, exponent, mul[0]));
+		results.push_back(power2(base, exponent, mul[1]));
+		results.push_back(power3(base, exponent, mul[2]));
+		results.push_back(power4(base, exponent, mul[3]));
+		results.push_back(power5(base, exponent, mul[4]));
+		results.push_back(power6(base, exponent, mul[5]));
+		cout << "\n";
+		MM_EXPECT_TRUE(AreAllValuesEqual(results),
+			base, exponent, results);
 		cout << "\n" << std::right
 			<< std::setw(12) << base
 			<< std::setw(12) << exponent

@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\src\BitHacks\BitHacks.cpp" />
     <ClCompile Include="..\..\..\..\src\Memory\Memory_Allocators_test.cpp" />
     <ClCompile Include="..\..\..\..\src\Memory\Memory_HeapAllocator_v2.cpp" />
     <ClCompile Include="..\..\..\..\src\Memory\Memory_HeapAllocator_v3.cpp" />
@@ -236,6 +237,7 @@
     <ClCompile Include="..\..\..\..\src\_MM_Algorithms_main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\src\BitHacks\BitHacks.h" />
     <ClInclude Include="..\..\..\..\src\BinaryTree\BinaryTree_CreateBinaryTree.h" />
     <ClInclude Include="..\..\..\..\src\Memory\Memory_HeapAllocator_v2.h" />
     <ClInclude Include="..\..\..\..\src\Memory\Memory_HeapAllocator_v3.h" />

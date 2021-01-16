@@ -83,7 +83,7 @@ namespace mm {
 	MM_DEFINE_FLAG(false, Others_FxRatesCache); //----TODO
 	MM_DEFINE_FLAG(false, Others_RankInSortedArray);
 	//Others_h
-	MM_DEFINE_FLAG(true, Others_h_findDistrinctNumbersGenerated);
+	MM_DEFINE_FLAG(false, Others_h_findDistrinctNumbersGenerated);
 	//Others_L
 	MM_DEFINE_FLAG(false, Others_L_MaxFrequencyStack);
 	//Linear Recurrence Relations
@@ -92,7 +92,7 @@ namespace mm {
 	MM_DEFINE_FLAG(false, bitwiseOperations_reverseBits);
 	//Arithmatic Operations
 	MM_DEFINE_FLAG(false, arithmeticOperations_matrix);
-	MM_DEFINE_FLAG(false, arithmeticOperations_power);
+	MM_DEFINE_FLAG(true, arithmeticOperations_power);
 	//STL
 	MM_DEFINE_FLAG(false, MM_shared_ptr_UnitTest);
 	MM_DEFINE_FLAG(false, SharedPtrCyclicReferenceMemoryLeak);
@@ -112,6 +112,8 @@ namespace mm {
 	MM_DEFINE_FLAG(false, Memory_HeapAllocator_v3);
 	MM_DEFINE_FLAG(false, Memory_StackAllocator_v1);
 	MM_DEFINE_FLAG(false, Memory_Allocators);
+	//Bit hacks
+	MM_DEFINE_FLAG(false, bithacks);
 }
 
 using namespace mm;
