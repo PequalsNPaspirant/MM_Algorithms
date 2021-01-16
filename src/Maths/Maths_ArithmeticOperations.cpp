@@ -125,24 +125,22 @@ namespace mm {
 		if (exponent < 0)
 			return 1.0 / power_iterative_v1(base, -exponent);
 
-		int mask = 1;
-		int exp = exponent;
-		for (; exp > 1; exp = exp >> 1)
-			mask = mask << 1;
+		int positionOfMSB = static_cast<int>(floor(log2(static_cast<double>(exponent)))); //rightmost bit is at position 0
+		int mask = 1 << positionOfMSB;
 
-		exp = 0;
-		result = 1.0;
-		for (; mask > 0; ) //OR run this loop until exp != exponent
+		int exp = 0;
+		result = 1.0;  //result = base^exp = base^0
+		for (; exp != exponent; ) //OR run this loop until mask > 0 OR for positionOfMSB times
 		{
 			result = result * result;
-			exp *= 2; //for tally
+			exp *= 2;
 
 			if ((exponent & mask) > 0)
 			{
 				result *= base;
-				exp += 1; //for tally
+				exp += 1;
 			}
-			
+
 			mask = mask >> 1;
 		}
 
@@ -160,20 +158,22 @@ namespace mm {
 		if (exponent < 0)
 			return 1.0 / power_iterative_v2(base, -exponent);
 
-		int positionOfMSB = static_cast<int>(floor(log2(static_cast<double>(exponent)))); //rightmost bit is at position 0
-		int mask = 1 << positionOfMSB;
+		int mask = 1;
+		int exp = exponent;
+		for (; exp > 1; exp = exp >> 1)
+			mask = mask << 1;
 
-		int exp = 0;
-		result = 1.0;
-		for(; exp != exponent; ) //OR run this loop until mask > 0 OR for positionOfMSB times
+		exp = 0;
+		result = 1.0;  //result = base^exp = base^0
+		for (; mask > 0; ) //OR run this loop until exp != exponent
 		{
 			result = result * result;
-			exp *= 2;
+			exp *= 2; //for tally
 
 			if ((exponent & mask) > 0)
 			{
 				result *= base;
-				exp += 1;
+				exp += 1; //for tally
 			}
 			
 			mask = mask >> 1;
@@ -199,7 +199,7 @@ namespace mm {
 			mask = mask << 1;
 
 		exp = 0;
-		result = 1.0;
+		result = 1.0;  //result = base^exp = base^0
 		for (; mask > 0; ) //OR run this loop until exp != exponent
 		{
 			result = result * result;
