@@ -21,7 +21,7 @@ namespace mm {
 	MM_DEFINE_FLAG(false, BinaryTree_BuildFromArrayRepresentation);
 	MM_DEFINE_FLAG(false, BinaryTree_Traversals);
 	MM_DEFINE_FLAG(false, BinaryTree_CheckIfIdentical_UnitTests);
-	MM_DEFINE_FLAG(true, BinaryTree_CheckIfBST_UnitTests);
+	MM_DEFINE_FLAG(false, BinaryTree_CheckIfBST_UnitTests);
 	//Dynamic Programming
 	MM_DEFINE_FLAG(false, DP_HouseRobbery);
 	MM_DEFINE_FLAG(false, DP_Fibonacci);
@@ -83,7 +83,7 @@ namespace mm {
 	MM_DEFINE_FLAG(false, Others_FxRatesCache); //----TODO
 	MM_DEFINE_FLAG(false, Others_RankInSortedArray);
 	//Others_h
-	MM_DEFINE_FLAG(false, Others_h_findDistrinctNumbersGenerated);
+	MM_DEFINE_FLAG(true, Others_h_findDistrinctNumbersGenerated);
 	//Others_L
 	MM_DEFINE_FLAG(false, Others_L_MaxFrequencyStack);
 	//Linear Recurrence Relations

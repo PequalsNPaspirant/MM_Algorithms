@@ -5,6 +5,7 @@
 #include <iostream>
 #include <algorithm>
 #include <chrono>
+#include <locale> 
 using namespace std;
 
 #ifdef _MSC_VER
@@ -15,42 +16,15 @@ using namespace std;
 #include "Others_h/Others_h_DistinctNumbersGenerated.h"
 #include "MM_UnitTestFramework/MM_UnitTestFramework.h"
 
+/*
+Find the distinct numbers generated in the following series:
+Input integers: N, S, P, Q
+F(0) = S % 2^31
+F(n) = P * F(n-1) + Q % 2^31
+
+*/
+
 namespace mm {
-
-	string getCommaSeparatedTimeDuration(unsigned long long duration)
-	{
-		string durationStr = "000,000.000,000,000";
-		int pos = durationStr.length() - 1;
-		for (; pos > 0 && duration > 0; --pos)
-		{
-			if (durationStr[pos] == '0')
-			{
-				durationStr[pos] = '0' + duration % 10;
-				duration /= 10;
-			}
-		}
-		if (pos > 6)
-			pos = 6;
-		durationStr = durationStr.substr(pos);
-		durationStr += " sec";
-
-		return durationStr;
-	}
-
-#define MM_TIME2(msg, statement, time) \
-	std::chrono::steady_clock::time_point startTime = std::chrono::steady_clock::now(); \
-	statement; \
-	std::chrono::steady_clock::time_point endTime = std::chrono::steady_clock::now(); \
-	time = std::chrono::duration_cast<std::chrono::nanoseconds>(endTime - startTime).count(); \
-	int columnWidth = 25; \
-	cout << "\n" << setw(columnWidth) << std::right << msg; \
-	cout << setw(columnWidth) << std::right << getCommaSeparatedTimeDuration(time);
-
-#define MM_TIME(msg, statement) \
-	{ \
-	unsigned long long time; \
-	MM_TIME2(msg, statement, time) \
-	}
 
 	unsigned int findDistrinctNumbersGenerated_v1(unsigned long n, unsigned long s, unsigned long p, unsigned long q)
 	{
@@ -65,7 +39,7 @@ namespace mm {
 		unsigned int flag = (1u << (current & (31)));  // (1u << (current % 32))
 		cache[index] |= flag;
 		unsigned int numDistinctInts = 1u;
-		for (int i = 1; i < n; ++i)
+		for (unsigned int i = 1; i < n; ++i)
 		{
 			current = ((current * p) + q) & divisor;
 			unsigned int index = current >> 5; // = current / 32 
@@ -94,8 +68,8 @@ namespace mm {
 		//unsigned int index = current >> 5; // = current / 32
 		//unsigned int flag = (1u << (current & (31)));  // (1u << (current % 32))
 		//cache[index] |= flag;
-		unsigned int numDistinctInts = 0u;
-		for (int i = 0; i < n; ++i)
+		unsigned int numDistinctInts = 1u;
+		for (unsigned int i = 1; i < n; ++i)
 		{
 			current = ((current * p) + q) & divisor;
 			//unsigned int index = current >> 5; // = current / 32 
@@ -119,7 +93,8 @@ namespace mm {
         X             P
         --------------+------+
                       |      | 
-                      |      | Y
+					  |      +  Y = meeting point
+                      |      |
                       +------+
 
 			lenght of loop/cycle = period = λ = lambda
@@ -294,10 +269,10 @@ namespace mm {
 
 	*/
 
-	unsigned solve_p_even(unsigned n, unsigned s, unsigned p, unsigned q) 
+	unsigned int solve_p_even(unsigned int n, unsigned int s, unsigned int p, unsigned int q)
 	{
-		constexpr unsigned exponent = 31;
-		constexpr unsigned two_to_exponent = 1u << exponent;
+		constexpr unsigned int exponent = 31;
+		constexpr unsigned int two_to_exponent = 1u << exponent;
 
 		if (p == 0) {
 			if (s == q)
@@ -308,18 +283,20 @@ namespace mm {
 		if (s == 0 && q == 0)
 			return 1;
 
-		unsigned a1_minus_a0 = (p - 1) * s + q;
+		unsigned int a1_minus_a0 = (p - 1) * s + q;
+		//unsigned long long neg_a1_minus_a0 = -a1_minus_a0; //warning C4146: unary minus operator applied to unsigned type, result still unsigned
+		unsigned long long neg_a1_minus_a0 = ~a1_minus_a0 + 1; //Do Two's Complement which is equivalent of negation
 
-		unsigned numerator = exponent - __builtin_popcount((a1_minus_a0 & -a1_minus_a0) - 1);
-		unsigned denominator = __builtin_popcount((p & -p) - 1);
-		unsigned m = numerator / denominator + (numerator % denominator == 0 ? 1 : 2);
+		unsigned int numerator = exponent - __builtin_popcount((a1_minus_a0 & neg_a1_minus_a0) - 1);
+		unsigned int denominator = __builtin_popcount((p & -p) - 1);
+		unsigned int m = numerator / denominator + (numerator % denominator == 0 ? 1 : 2);
 		return std::min(m, n);
 	}
 
-	unsigned solve_p_odd(unsigned n, unsigned s, unsigned p, unsigned q) 
+	unsigned int solve_p_odd(unsigned int n, unsigned int s, unsigned int p, unsigned int q)
 	{
-		constexpr unsigned exponent = 31;
-		constexpr unsigned two_to_exponent = 1u << exponent;
+		constexpr unsigned int exponent = 31;
+		constexpr unsigned int two_to_exponent = 1u << exponent;
 
 		if (p == 1)
 			return q == 0 ? 1 : std::min(n, two_to_exponent / (q & -q));
@@ -327,12 +304,14 @@ namespace mm {
 		if (s == 0 && q == 0)
 			return 1;
 
-		unsigned           m = 1;
+		unsigned int       m = 1;
 		unsigned long long p_minus_1 = p - 1;
 		unsigned long long a1_minus_a0 = p_minus_1 * s + q;
+		//unsigned long long neg_a1_minus_a0 = -a1_minus_a0; //warning C4146: unary minus operator applied to unsigned type, result still unsigned
+		unsigned long long neg_a1_minus_a0 = ~a1_minus_a0 + 1; //Do Two's Complement which is equivalent of negation
 		unsigned long long p_to_m = p;
 		unsigned long long mask = (two_to_exponent *
-			(p_minus_1 & -p_minus_1) / (a1_minus_a0 & -a1_minus_a0)) - 1;
+			(p_minus_1 & -p_minus_1) / (a1_minus_a0 & neg_a1_minus_a0)) - 1;
 
 		while (m < n && (p_to_m & mask) != 1) {
 			p_to_m = p_to_m * p_to_m;
@@ -351,6 +330,68 @@ namespace mm {
 	}
 
 	//===============================================================================
+
+//#define MM_TIME(msg, statement) \
+//	unsigned long long time; \
+//	std::chrono::steady_clock::time_point startTime = std::chrono::steady_clock::now(); \
+//	statement; \
+//	std::chrono::steady_clock::time_point endTime = std::chrono::steady_clock::now(); \
+//	time = std::chrono::duration_cast<std::chrono::nanoseconds>(endTime - startTime).count(); \
+//	int columnWidth = 25; \
+//	cout.imbue(std::locale("")); \
+//	cout << "\n" << setw(columnWidth) << std::right << msg; \
+//	cout << setw(columnWidth) << std::right << time;
+
+	//template<typename FunctionType, typename... Args>
+	//unsigned int mm_time_1(const string& msg, FunctionType functionObj, Args... args)
+	//{
+	//	unsigned long long time;
+	//	std::chrono::steady_clock::time_point startTime = std::chrono::steady_clock::now();
+	//	unsigned int retVal = functionObj(args);
+	//	std::chrono::steady_clock::time_point endTime = std::chrono::steady_clock::now();
+	//	time = std::chrono::duration_cast<std::chrono::nanoseconds>(endTime - startTime).count();
+	//	int columnWidth = 25;
+	//	cout.imbue(std::locale(""));
+	//	cout << "\n" << setw(columnWidth) << std::right << msg;
+	//	cout << setw(columnWidth) << std::right << time;
+	//	return retVal;
+	//}
+
+	//// below function does not work unless we call it like:
+	//// mm_time_2<decltype(actualNum), decltype(findDistrinctNumbersGenerated_v1), unsigned long, unsigned long, unsigned long, unsigned long>("\nfindDistrinctNumbersGenerated_v2: ", findDistrinctNumbersGenerated_v2, testData[i].n_, testData[i].s_, testData[i].p_, testData[i].q_);
+	//template<typename ReturnType, typename FunctionType, typename... Args>
+	//ReturnType mm_time_2(const string& msg, FunctionType functionObj, Args... args)
+	//{
+	//	unsigned long long time;
+	//	std::chrono::steady_clock::time_point startTime = std::chrono::steady_clock::now();
+	//	ReturnType retVal = functionObj(args);
+	//	std::chrono::steady_clock::time_point endTime = std::chrono::steady_clock::now();
+	//	time = std::chrono::duration_cast<std::chrono::nanoseconds>(endTime - startTime).count();
+	//	int columnWidth = 25;
+	//	cout.imbue(std::locale(""));
+	//	cout << "\n" << setw(columnWidth) << std::right << msg;
+	//	cout << setw(columnWidth) << std::right << time;
+	//	return retVal;
+	//}
+
+	template<typename ReturnType>
+	class mm_time
+	{
+	public:
+		template<typename FunctionType, typename... Args>
+		ReturnType operator()(const string& msg, FunctionType functionObj, Args... args)
+		{
+			unsigned long long time;
+			std::chrono::steady_clock::time_point startTime = std::chrono::steady_clock::now();
+			ReturnType retVal = functionObj(args...);
+			std::chrono::steady_clock::time_point endTime = std::chrono::steady_clock::now();
+			time = std::chrono::duration_cast<std::chrono::nanoseconds>(endTime - startTime).count();
+			int columnWidth = 25;
+			cout << setw(columnWidth) << std::right << msg;
+			cout << setw(columnWidth) << std::right << time;
+			return retVal;
+		}
+	};
 
 	MM_DECLARE_FLAG(Others_h_findDistrinctNumbersGenerated);
 
@@ -377,17 +418,47 @@ namespace mm {
 		};
 
 		vector<testInputStruct> testData = {
-			{ 3, 1, 1, 1, 3 },
-			{ 10, 2, 3, 4, 10 },
-			{ 12345678, 524867, 4865215, 48976163, 12345678 },
-			{ 100'000'000, 1, 3, 1, 100'000'000 },
-			{ 100'000'000, 2'065'188'356, 657'733'125, 1'636'844'041, 100'000'000 }
+			{ 3,			1,				1,				1,				3 },
+			{ 10,			2,				3,				4,				10 },
+			{ 12345678,		524867,			4865215,		48976163,		12345678 },
+			{ 100'000'000,	1,				3,				1,				100'000'000 },
+			{ 100'000'000,	2'065'188'356,	657'733'125,	1'636'844'041,	100'000'000 },
+			{ 100'000'041,	18'467,			6'334,			26'500,			32 },
+			{ 100'019'169,	15'724,			11'478,			29'358,			31 },
+			{ 100'026'962,	24'464,			5'705,			28'145,			100'026'962 },
+			{ 100'023'281,	16'827,			9'961,			491,			100'023'281 },
+			{ 100'002'995,	11'942,			4'827,			5'436,			100'002'995 },
+			{ 100'032'391,	14'604,			3'902,			153,			32 },
+			{ 100'000'292,	12'382,			17'421,			18'716,			100'000'292 },
+			{ 100'019'718,	19'895,			5'447,			21'726,			67'108'864 },
+			{ 100'014'771,	11'538,			1'869,			19'912,			67'108'864 },
+			{ 100'025'667,	26'299,			17'035,			9'894,			100'025'667 },
+			{ 100'028'703,	23'811,			31'322,			30'333,			29 },
+			{ 100'017'673,	4'664,			15'141,			7'711,			100'017'673 },
+			{ 100'028'253,	6'868,			25'547,			27'644,			100'028'253 },
+			{ 100'032'662,	32'757,			20'037,			12'859,			100'032'662 },
+			{ 100'008'723,	9'741,			27'529,			778,			100'008'723 },
+			{ 100'012'316,	3'035,			22'190,			1'842,			32 },
+			{ 100'000'288,	30'106,			9'040,			8'942,			9 },
+			{ 100'019'264,	22'648,			27'446,			23'805,			32 },
+			{ 100'015'890,	6'729,			24'370,			15'350,			32 },
+			{ 100'015'006,	31'101,			24'393,			3'548,			100'015'006 },
+			{ 100'019'629,	12'623,			24'084,			19'954,			17 },
+			{ 100'018'756,	11'840,			4'966,			7'376,			28 },
+			{ 100'013'931,	26'308,			16'944,			32'439,			9 },
+			{ 100'024'626,	11'323,			5'537,			21'538,			100'024'626 },
+			{ 100'016'118,	2'082,			22'929,			16'541,			100'016'118 },
+			{ 100'004'833,	31'115,			4'639,			29'658,			33'554'432 },
+			{ 100'022'704,	9'930,			13'977,			2'306,			100'022'704 },
+			{ 100'031'673,	22'386,			5'021,			28'745,			100'031'673 },
+			{ 100'026'924,	19'072,			6'270,			5'829,			32 },
+			{ 100'026'777,	15'573,			5'097,			16'512,			100'026'777 },
 		};
 
 		//Generate random test data
-		testData.reserve(testData.size() + 10'000);
+		testData.reserve(testData.size() + 100);
 		constexpr unsigned two_to_exponent = 1u << 31;
-		for (int i = 0; i < 10'000; ++i)
+		for (int i = 0; i < 100; ++i)
 		{
 			unsigned long n = rand() % (two_to_exponent - 100'000'000) + 100'000'000; //range 100'000'000 to 2^31
 			unsigned long s = rand();
@@ -398,24 +469,38 @@ namespace mm {
 			testData.push_back({ n, s, p, q, result });
 		}
 
+		std::ios_base::fmtflags f(cout.flags());
+		cout.imbue(std::locale(""));
+
 		for (int i = 0; i < testData.size(); ++i)
 		{
 			unsigned int actualNum;
-			cout << endl;
-			MM_TIME("findDistrinctNumbersGenerated_v1: ", actualNum = findDistrinctNumbersGenerated_v1(testData[i].n_, testData[i].s_, testData[i].p_, testData[i].q_));
-			MM_EXPECT_TRUE(actualNum == testData[i].result_, actualNum, testData[i].result_);
-			cout << endl;
-			MM_TIME("findDistrinctNumbersGenerated_v2: ", actualNum = findDistrinctNumbersGenerated_v2(testData[i].n_, testData[i].s_, testData[i].p_, testData[i].q_));
-			MM_EXPECT_TRUE(actualNum == testData[i].result_, actualNum, testData[i].result_);
-			cout << endl;
-			MM_TIME("findDistrinctNumbersGenerated_v3: ", actualNum = findDistrinctNumbersGenerated_v3(testData[i].n_, testData[i].s_, testData[i].p_, testData[i].q_));
-			MM_EXPECT_TRUE(actualNum == testData[i].result_, actualNum, testData[i].result_);
-			cout << endl;
-			MM_TIME("findDistrinctNumbersGenerated_v4: ", actualNum = findDistrinctNumbersGenerated_v4(testData[i].n_, testData[i].s_, testData[i].p_, testData[i].q_));
-			MM_EXPECT_TRUE(actualNum == testData[i].result_, actualNum, testData[i].result_);
-			cout << endl;
-			MM_TIME("findDistrinctNumbersGenerated_v5: ", actualNum = findDistrinctNumbersGenerated_v5(testData[i].n_, testData[i].s_, testData[i].p_, testData[i].q_));
-			MM_EXPECT_TRUE(actualNum == testData[i].result_, actualNum, testData[i].result_);
+			actualNum = mm_time<decltype(actualNum)>{}("findDistrinctNumbersGenerated_v1: ", findDistrinctNumbersGenerated_v1, testData[i].n_, testData[i].s_, testData[i].p_, testData[i].q_);
+			//Set the result if its not set
+			if (testData[i].result_ == 0)
+				testData[i].result_ = actualNum;
+			MM_EXPECT_TRUE(actualNum == testData[i].result_, i, actualNum, testData[i].result_);
+			cout << "\n";
+			actualNum = mm_time<decltype(actualNum)>{}("findDistrinctNumbersGenerated_v2: ", findDistrinctNumbersGenerated_v2, testData[i].n_, testData[i].s_, testData[i].p_, testData[i].q_);
+			MM_EXPECT_TRUE(actualNum == testData[i].result_, i, actualNum, testData[i].result_);
+			cout << "\n";
+			actualNum = mm_time<decltype(actualNum)>{}("findDistrinctNumbersGenerated_v3: ", findDistrinctNumbersGenerated_v3, testData[i].n_, testData[i].s_, testData[i].p_, testData[i].q_);
+			MM_EXPECT_TRUE(actualNum == testData[i].result_, i, actualNum, testData[i].result_);
+			cout << "\n";
+			actualNum = mm_time<decltype(actualNum)>{}("findDistrinctNumbersGenerated_v4: ", findDistrinctNumbersGenerated_v4, testData[i].n_, testData[i].s_, testData[i].p_, testData[i].q_);
+			MM_EXPECT_TRUE(actualNum == testData[i].result_, i, actualNum, testData[i].result_);
+			cout << "\n";
+			actualNum = mm_time<decltype(actualNum)>{}("findDistrinctNumbersGenerated_v5: ", findDistrinctNumbersGenerated_v5, testData[i].n_, testData[i].s_, testData[i].p_, testData[i].q_);
+			MM_EXPECT_TRUE(actualNum == testData[i].result_, i, actualNum, testData[i].result_);
+			cout << "\n\n";
+
+		}
+
+		//Print the input and result of this random generted test case
+		cout.flags(f);
+		for (int i = 0; i < testData.size(); ++i)
+		{
+			cout << "\ni = " << i << " { " << testData[i].n_ << ", " << testData[i].s_ << ", " << testData[i].p_ << ", " << testData[i].q_ << ", " << testData[i].result_ << " }\n";
 		}
 	}
 
