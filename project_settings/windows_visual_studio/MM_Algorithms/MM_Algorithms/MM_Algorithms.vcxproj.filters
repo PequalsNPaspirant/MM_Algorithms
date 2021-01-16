@@ -663,6 +663,9 @@
     <ClCompile Include="..\..\..\..\src\BitHacks\BitHacks.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\src\Utils\Utils_TimerUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\src\Backtracking\Backtracking.h">
@@ -1137,6 +1140,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\src\BitHacks\BitHacks.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\Utils\Utils_TimerUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

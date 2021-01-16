@@ -15,6 +15,7 @@ using namespace std;
 
 #include "Others_h/Others_h_DistinctNumbersGenerated.h"
 #include "MM_UnitTestFramework/MM_UnitTestFramework.h"
+#include "Utils/Utils_TimerUtils.h"
 
 /*
 Find the distinct numbers generated in the following series:
@@ -273,6 +274,7 @@ namespace mm {
 	{
 		constexpr unsigned int exponent = 31;
 		constexpr unsigned int two_to_exponent = 1u << exponent;
+		unsigned int neg_p = ~p + 1;
 
 		if (p == 0) {
 			if (s == q)
@@ -288,7 +290,7 @@ namespace mm {
 		unsigned long long neg_a1_minus_a0 = ~a1_minus_a0 + 1; //Do Two's Complement which is equivalent of negation
 
 		unsigned int numerator = exponent - __builtin_popcount((a1_minus_a0 & neg_a1_minus_a0) - 1);
-		unsigned int denominator = __builtin_popcount((p & -p) - 1);
+		unsigned int denominator = __builtin_popcount((p & neg_p) - 1);
 		unsigned int m = numerator / denominator + (numerator % denominator == 0 ? 1 : 2);
 		return std::min(m, n);
 	}
@@ -297,21 +299,23 @@ namespace mm {
 	{
 		constexpr unsigned int exponent = 31;
 		constexpr unsigned int two_to_exponent = 1u << exponent;
+		unsigned int neg_q = ~q + 1;
 
 		if (p == 1)
-			return q == 0 ? 1 : std::min(n, two_to_exponent / (q & -q));
+			return q == 0 ? 1 : std::min(n, two_to_exponent / (q & neg_q));
 
 		if (s == 0 && q == 0)
 			return 1;
 
 		unsigned int       m = 1;
 		unsigned long long p_minus_1 = p - 1;
+		unsigned long long neg_p_minus_1 = ~p_minus_1 + 1;
 		unsigned long long a1_minus_a0 = p_minus_1 * s + q;
 		//unsigned long long neg_a1_minus_a0 = -a1_minus_a0; //warning C4146: unary minus operator applied to unsigned type, result still unsigned
 		unsigned long long neg_a1_minus_a0 = ~a1_minus_a0 + 1; //Do Two's Complement which is equivalent of negation
 		unsigned long long p_to_m = p;
 		unsigned long long mask = (two_to_exponent *
-			(p_minus_1 & -p_minus_1) / (a1_minus_a0 & neg_a1_minus_a0)) - 1;
+			(p_minus_1 & neg_p_minus_1) / (a1_minus_a0 & neg_a1_minus_a0)) - 1;
 
 		while (m < n && (p_to_m & mask) != 1) {
 			p_to_m = p_to_m * p_to_m;
@@ -330,68 +334,6 @@ namespace mm {
 	}
 
 	//===============================================================================
-
-//#define MM_TIME(msg, statement) \
-//	unsigned long long time; \
-//	std::chrono::steady_clock::time_point startTime = std::chrono::steady_clock::now(); \
-//	statement; \
-//	std::chrono::steady_clock::time_point endTime = std::chrono::steady_clock::now(); \
-//	time = std::chrono::duration_cast<std::chrono::nanoseconds>(endTime - startTime).count(); \
-//	int columnWidth = 25; \
-//	cout.imbue(std::locale("")); \
-//	cout << "\n" << setw(columnWidth) << std::right << msg; \
-//	cout << setw(columnWidth) << std::right << time;
-
-	//template<typename FunctionType, typename... Args>
-	//unsigned int mm_time_1(const string& msg, FunctionType functionObj, Args... args)
-	//{
-	//	unsigned long long time;
-	//	std::chrono::steady_clock::time_point startTime = std::chrono::steady_clock::now();
-	//	unsigned int retVal = functionObj(args);
-	//	std::chrono::steady_clock::time_point endTime = std::chrono::steady_clock::now();
-	//	time = std::chrono::duration_cast<std::chrono::nanoseconds>(endTime - startTime).count();
-	//	int columnWidth = 25;
-	//	cout.imbue(std::locale(""));
-	//	cout << "\n" << setw(columnWidth) << std::right << msg;
-	//	cout << setw(columnWidth) << std::right << time;
-	//	return retVal;
-	//}
-
-	//// below function does not work unless we call it like:
-	//// mm_time_2<decltype(actualNum), decltype(findDistrinctNumbersGenerated_v1), unsigned long, unsigned long, unsigned long, unsigned long>("\nfindDistrinctNumbersGenerated_v2: ", findDistrinctNumbersGenerated_v2, testData[i].n_, testData[i].s_, testData[i].p_, testData[i].q_);
-	//template<typename ReturnType, typename FunctionType, typename... Args>
-	//ReturnType mm_time_2(const string& msg, FunctionType functionObj, Args... args)
-	//{
-	//	unsigned long long time;
-	//	std::chrono::steady_clock::time_point startTime = std::chrono::steady_clock::now();
-	//	ReturnType retVal = functionObj(args);
-	//	std::chrono::steady_clock::time_point endTime = std::chrono::steady_clock::now();
-	//	time = std::chrono::duration_cast<std::chrono::nanoseconds>(endTime - startTime).count();
-	//	int columnWidth = 25;
-	//	cout.imbue(std::locale(""));
-	//	cout << "\n" << setw(columnWidth) << std::right << msg;
-	//	cout << setw(columnWidth) << std::right << time;
-	//	return retVal;
-	//}
-
-	template<typename ReturnType>
-	class mm_time
-	{
-	public:
-		template<typename FunctionType, typename... Args>
-		ReturnType operator()(const string& msg, FunctionType functionObj, Args... args)
-		{
-			unsigned long long time;
-			std::chrono::steady_clock::time_point startTime = std::chrono::steady_clock::now();
-			ReturnType retVal = functionObj(args...);
-			std::chrono::steady_clock::time_point endTime = std::chrono::steady_clock::now();
-			time = std::chrono::duration_cast<std::chrono::nanoseconds>(endTime - startTime).count();
-			int columnWidth = 25;
-			cout << setw(columnWidth) << std::right << msg;
-			cout << setw(columnWidth) << std::right << time;
-			return retVal;
-		}
-	};
 
 	MM_DECLARE_FLAG(Others_h_findDistrinctNumbersGenerated);
 
@@ -418,40 +360,40 @@ namespace mm {
 		};
 
 		vector<testInputStruct> testData = {
-			{ 3,			1,				1,				1,				3 },
-			{ 10,			2,				3,				4,				10 },
-			{ 12345678,		524867,			4865215,		48976163,		12345678 },
+			{ 3,			1,				1,				1,				3			},
+			{ 10,			2,				3,				4,				10			},
+			{ 12345678,		524867,			4865215,		48976163,		12345678	},
 			{ 100'000'000,	1,				3,				1,				100'000'000 },
 			{ 100'000'000,	2'065'188'356,	657'733'125,	1'636'844'041,	100'000'000 },
-			{ 100'000'041,	18'467,			6'334,			26'500,			32 },
-			{ 100'019'169,	15'724,			11'478,			29'358,			31 },
+			{ 100'000'041,	18'467,			6'334,			26'500,			32			},
+			{ 100'019'169,	15'724,			11'478,			29'358,			31			},
 			{ 100'026'962,	24'464,			5'705,			28'145,			100'026'962 },
 			{ 100'023'281,	16'827,			9'961,			491,			100'023'281 },
 			{ 100'002'995,	11'942,			4'827,			5'436,			100'002'995 },
-			{ 100'032'391,	14'604,			3'902,			153,			32 },
+			{ 100'032'391,	14'604,			3'902,			153,			32			},
 			{ 100'000'292,	12'382,			17'421,			18'716,			100'000'292 },
-			{ 100'019'718,	19'895,			5'447,			21'726,			67'108'864 },
-			{ 100'014'771,	11'538,			1'869,			19'912,			67'108'864 },
+			{ 100'019'718,	19'895,			5'447,			21'726,			67'108'864	},
+			{ 100'014'771,	11'538,			1'869,			19'912,			67'108'864	},
 			{ 100'025'667,	26'299,			17'035,			9'894,			100'025'667 },
-			{ 100'028'703,	23'811,			31'322,			30'333,			29 },
+			{ 100'028'703,	23'811,			31'322,			30'333,			29			},
 			{ 100'017'673,	4'664,			15'141,			7'711,			100'017'673 },
 			{ 100'028'253,	6'868,			25'547,			27'644,			100'028'253 },
 			{ 100'032'662,	32'757,			20'037,			12'859,			100'032'662 },
 			{ 100'008'723,	9'741,			27'529,			778,			100'008'723 },
-			{ 100'012'316,	3'035,			22'190,			1'842,			32 },
-			{ 100'000'288,	30'106,			9'040,			8'942,			9 },
-			{ 100'019'264,	22'648,			27'446,			23'805,			32 },
-			{ 100'015'890,	6'729,			24'370,			15'350,			32 },
+			{ 100'012'316,	3'035,			22'190,			1'842,			32			},
+			{ 100'000'288,	30'106,			9'040,			8'942,			9			},
+			{ 100'019'264,	22'648,			27'446,			23'805,			32			},
+			{ 100'015'890,	6'729,			24'370,			15'350,			32			},
 			{ 100'015'006,	31'101,			24'393,			3'548,			100'015'006 },
-			{ 100'019'629,	12'623,			24'084,			19'954,			17 },
-			{ 100'018'756,	11'840,			4'966,			7'376,			28 },
-			{ 100'013'931,	26'308,			16'944,			32'439,			9 },
+			{ 100'019'629,	12'623,			24'084,			19'954,			17			},
+			{ 100'018'756,	11'840,			4'966,			7'376,			28			},
+			{ 100'013'931,	26'308,			16'944,			32'439,			9			},
 			{ 100'024'626,	11'323,			5'537,			21'538,			100'024'626 },
 			{ 100'016'118,	2'082,			22'929,			16'541,			100'016'118 },
-			{ 100'004'833,	31'115,			4'639,			29'658,			33'554'432 },
+			{ 100'004'833,	31'115,			4'639,			29'658,			33'554'432	},
 			{ 100'022'704,	9'930,			13'977,			2'306,			100'022'704 },
 			{ 100'031'673,	22'386,			5'021,			28'745,			100'031'673 },
-			{ 100'026'924,	19'072,			6'270,			5'829,			32 },
+			{ 100'026'924,	19'072,			6'270,			5'829,			32			},
 			{ 100'026'777,	15'573,			5'097,			16'512,			100'026'777 },
 		};
 
