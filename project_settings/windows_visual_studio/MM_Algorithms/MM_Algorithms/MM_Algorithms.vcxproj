@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\src\Maths\Maths_Median.cpp" />
     <ClCompile Include="..\..\..\..\src\Utils\Utils_TimerUtils.cpp" />
     <ClCompile Include="..\..\..\..\src\BitHacks\BitHacks.cpp" />
     <ClCompile Include="..\..\..\..\src\Memory\Memory_Allocators_test.cpp" />

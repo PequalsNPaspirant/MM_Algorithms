@@ -92,7 +92,7 @@ namespace mm {
 	MM_DEFINE_FLAG(false, bitwiseOperations_reverseBits);
 	//Arithmatic Operations
 	MM_DEFINE_FLAG(false, arithmeticOperations_matrix);
-	MM_DEFINE_FLAG(true, arithmeticOperations_power);
+	MM_DEFINE_FLAG(false, arithmeticOperations_power);
 	//STL
 	MM_DEFINE_FLAG(false, MM_shared_ptr_UnitTest);
 	MM_DEFINE_FLAG(false, SharedPtrCyclicReferenceMemoryLeak);
@@ -114,6 +114,8 @@ namespace mm {
 	MM_DEFINE_FLAG(false, Memory_Allocators);
 	//Bit hacks
 	MM_DEFINE_FLAG(false, bithacks);
+	//Maths
+	MM_DEFINE_FLAG(true, Maths_FindMedian);
 }
 
 using namespace mm;
