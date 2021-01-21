@@ -8,7 +8,9 @@ using namespace std;
 
 namespace mm {
 
-
+//TODO: O(n) solution:
+//https://stackoverflow.com/questions/27425711/create-max-tree-in-order-n
+//https://github.com/cherryljr/LeetCode/blob/master/Maximum%20Binary%20Tree.java
 /*
 //Goal:
 //Solve the exercise in The Algorithm Design Manual - - Steven S. Skiena
