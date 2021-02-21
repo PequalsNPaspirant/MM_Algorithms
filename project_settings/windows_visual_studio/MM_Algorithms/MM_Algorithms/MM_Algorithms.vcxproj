@@ -19,6 +19,19 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\src\Maths\Maths_Median.cpp" />
+    <ClCompile Include="..\..\..\..\src\Utils\Utils_TimerUtils.cpp" />
+    <ClCompile Include="..\..\..\..\src\BitHacks\BitHacks.cpp" />
+    <ClCompile Include="..\..\..\..\src\Memory\Memory_Allocators_test.cpp" />
+    <ClCompile Include="..\..\..\..\src\Memory\Memory_HeapAllocator_v2.cpp" />
+    <ClCompile Include="..\..\..\..\src\Memory\Memory_HeapAllocator_v3.cpp" />
+    <ClCompile Include="..\..\..\..\src\Memory\Memory_StackAllocator_v1.cpp" />
+    <ClCompile Include="..\..\..\..\src\Memory\Memory_HeapAllocator_v1.cpp" />
+    <ClCompile Include="..\..\..\..\src\Graphs\Graph_Representation.cpp" />
+    <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v14a.cpp" />
+    <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v13b.cpp" />
+    <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v13a.cpp" />
+    <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v12a.cpp" />
     <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v11a.cpp" />
     <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v10a.cpp" />
     <ClCompile Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v9a.cpp" />
@@ -226,6 +239,18 @@
     <ClCompile Include="..\..\..\..\src\_MM_Algorithms_main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\src\Utils\Utils_TimerUtils.h" />
+    <ClInclude Include="..\..\..\..\src\BitHacks\BitHacks.h" />
+    <ClInclude Include="..\..\..\..\src\BinaryTree\BinaryTree_CreateBinaryTree.h" />
+    <ClInclude Include="..\..\..\..\src\Memory\Memory_HeapAllocator_v2.h" />
+    <ClInclude Include="..\..\..\..\src\Memory\Memory_HeapAllocator_v3.h" />
+    <ClInclude Include="..\..\..\..\src\Memory\Memory_StackAllocator_v1.h" />
+    <ClInclude Include="..\..\..\..\src\Memory\Memory_HeapAllocator_v1.h" />
+    <ClInclude Include="..\..\..\..\src\Graphs\Graph_Representation.h" />
+    <ClInclude Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v14a.h" />
+    <ClInclude Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v13b.h" />
+    <ClInclude Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v13a.h" />
+    <ClInclude Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v12a.h" />
     <ClInclude Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v11a.h" />
     <ClInclude Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v10a.h" />
     <ClInclude Include="..\..\..\..\src\Others\Others_FxSettlement_branch_and_bound_v9a.h" />
@@ -381,7 +406,7 @@
     <ProjectGuid>{DE6F4752-AA5A-4B93-AF6D-9A91DD0A7FDE}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>MM_NewProjectTemplate</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
