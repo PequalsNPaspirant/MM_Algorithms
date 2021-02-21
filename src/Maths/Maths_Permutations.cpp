@@ -4,9 +4,13 @@
 #include <iostream>
 #include <string>
 #include <cmath>
+#include <random>
+#include <unordered_set>
 using namespace std;
 
 #include "Maths/Maths_Permutations.h"
+#include "Utils/Utils_PrintUtils.h"
+#include "MM_UnitTestFramework/MM_UnitTestFramework.h"
 
 namespace mm {
 
@@ -16,9 +20,7 @@ namespace mm {
 		if (n > Limit)
 		{
 			cout << "Can not calculate";
-			//Crash the program
-			int* p = nullptr;
-			*p;
+			return 0;
 		}
 
 		static long fact[Limit];
@@ -46,6 +48,7 @@ namespace mm {
 
 		const int* begin = list.begin();
 		vector<int> source;
+		source.reserve(list.size());
 		for (int i = 0; i < totalVariables; i++)
 			source.push_back(*begin++);
 
@@ -54,7 +57,7 @@ namespace mm {
 			//Arranging n variables in p position - first position can be filled-in in n ways, second also can be in n ways as repetition is allowed
 			//This all p potions can be filled-in in n * n * n * ... p times i.e. n ^ p
 			int totalSets = pow(totalVariables, totalPositions);
-			output.resize(totalSets);
+			output.reserve(totalSets);
 			for (int i = 0; i < totalSets; i++)
 			{
 				vector<int> currentSet(totalPositions);
@@ -65,7 +68,7 @@ namespace mm {
 					int index = (i / remainingPermutations) % totalVariables;
 					currentSet[j] = source[index];
 				}
-				output[i] = currentSet;
+				output.push_back(std::move(currentSet));
 				currentSet.clear();
 			}
 		}
@@ -148,7 +151,6 @@ namespace mm {
 			//This all p potions can be filled-in in n * n * n * ... p times i.e. n ^ p
 			vector<int> currentSet(totalPositions);
 			generatePermutationSetWithRepeatition(output, currentSet, totalPositions, 0, totalVariables, source);
-
 		}
 		else
 		{
@@ -162,18 +164,18 @@ namespace mm {
 
 
 	//produce all combinations of words from given string
-	void Permutations::generateWordPermutations(string& str, const string& charSet, const int index, int& totalCombincations)
+	void Permutations::generateWordPermutations(string& str, const string& charSet, const int index, int& totalCombinations)
 	{
 		if (index == charSet.length())
 		{
-			cout << endl << totalCombincations++ << " : " << str;
+			cout << endl << totalCombinations++ << " : " << str;
 			return;
 		}
 
 		for (int i = 0; i < charSet.length(); i++)
 		{
 			str[index] = charSet[i];
-			generateWordPermutations(str, charSet, index + 1, totalCombincations);
+			generateWordPermutations(str, charSet, index + 1, totalCombinations);
 		}
 	}
 
@@ -185,15 +187,79 @@ namespace mm {
 		generateWordPermutations(temp, charSet, 0, totalCombincations);
 	}
 
+	vector<int> Permutations::generateRandomPermutation(const vector<int>& inputSet, int size)
+	{
+		vector<int> retVal;
+		retVal.reserve(size);
+
+		std::random_device rd;
+		std::default_random_engine e{ rd() }; //or use specific engine e.g. std::mt19937_64 m64;
+		int lastId = inputSet.size() - 1;
+		std::uniform_int_distribution<int> uid{ 0, lastId };
+		using params = std::uniform_int_distribution<int>::param_type;
+
+		vector<int> inputSetCopy{ inputSet.begin(), inputSet.end() };
+		for (int i = 0; i < size; ++i)
+		{
+			uid.param(params{ 0, lastId - i });
+			int p = uid(e);
+			retVal.push_back(inputSetCopy[p]);
+			std::swap(inputSetCopy[p], inputSetCopy[lastId - i]);
+		}
+
+		return retVal;
+	}
+
+	vector<int> Permutations::generateRandomSelection(const vector<int>& inputSet, int size)
+	{
+		vector<int> retVal;
+		retVal.reserve(size);
+
+		std::random_device rd;
+		std::default_random_engine e{ rd() }; //or use specific engine e.g. std::mt19937_64 m64;
+		std::uniform_int_distribution<int> uid{ 0, static_cast<int>(inputSet.size()) - 1 };
+		using params = std::uniform_int_distribution<int>::param_type;
+
+		vector<int> inputSetCopy{ inputSet.begin(), inputSet.end() };
+		unordered_set<int> retSet;
+		for (int i = 0; i < size; ++i)
+		{
+			uid.param(params{ 0, static_cast<int>(inputSet.size()) - size + i });
+			int p = uid(e);
+			int ele = inputSetCopy[inputSet.size() - size + i];
+			if(retSet.find(ele) != retSet.end())
+				retSet.insert(inputSetCopy[p]);
+			else
+				retSet.insert(ele);
+		}
+
+		for (const auto& e : retSet)
+			retVal.push_back(e);
+
+		return retVal;
+	}
 
 	void testPermutations()
 	{
-		Permutations::generateWordPermutations("");
-		Permutations::generateWordPermutations("A");
-		Permutations::generateWordPermutations("AB");
-		Permutations::generateWordPermutations("ABC");
-		Permutations::generateWordPermutations("ABCD");
+		//Permutations::generateWordPermutations("");
+		//Permutations::generateWordPermutations("A");
+		//Permutations::generateWordPermutations("AB");
+		//Permutations::generateWordPermutations("ABC");
+		//Permutations::generateWordPermutations("ABCD");
 		//Permutations::generateWordPermutations("ABCDE");
 		//Permutations::generateWordPermutations("ABCDEF");
+
+		for (int i = 1; i < 6; ++i)
+		{
+			cout << "\n" << Permutations::generateRandomPermutation({1,2,3,4,5,6,7,8,9,10}, i);
+			cout << "\n" << Permutations::generateRandomSelection({ 1,2,3,4,5,6,7,8,9,10 }, i);
+		}
+	}
+
+	MM_DECLARE_FLAG(Maths_Permutations);
+
+	MM_UNIT_TEST(Maths_Permutations_test_1, Maths_Permutations)
+	{
+		testPermutations();
 	}
 }

@@ -13,7 +13,7 @@ namespace mm {
 	MM_DEFINE_FLAG(false, CPU_findCasheSize); //-----TODO
 	MM_DEFINE_FLAG(false, CPU_falseSharing); //-----TODO
 	MM_DEFINE_FLAG(false, CPU_cacheCoherency); //-----TODO
-	MM_DEFINE_FLAG(true, CPU_branchPrediction); //-----TODO
+	MM_DEFINE_FLAG(false, CPU_branchPrediction); //-----TODO
 	//Binary Search Tree(BST)
 	MM_DEFINE_FLAG(false, BST_checkIfPreorderTraversalIsBST);
 	//Binary Tree
@@ -115,6 +115,7 @@ namespace mm {
 	//Bit hacks
 	MM_DEFINE_FLAG(false, bithacks);
 	//Maths
+	MM_DEFINE_FLAG(true, Maths_Permutations);
 	MM_DEFINE_FLAG(false, Maths_FindMedian);
 }
 
