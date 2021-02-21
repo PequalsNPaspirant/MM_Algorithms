@@ -25,6 +25,7 @@ namespace mm {
 	*/
 	int findKthSmallest_v1(const vector<int>& array, int k)
 	{
+		return 0;
 
 	}
 
@@ -45,7 +46,7 @@ namespace mm {
 	*/
 	int findKthSmallest_v2(const vector<int>& array, int k)
 	{
-
+		return 0;
 	}
 	int findMedian_v2(const vector<int>& array)
 	{
@@ -65,7 +66,7 @@ namespace mm {
 	*/
 	int findKthSmallest_v3(const vector<int>& array, int k)
 	{
-
+		return 0;
 	}
 	int findMedian_v3(const vector<int>& array)
 	{
@@ -79,7 +80,7 @@ namespace mm {
 	*/
 	int findKthSmallest_v4(const vector<int>& array, int k)
 	{
-
+		return 0;
 	}
 	int findMedian_v4(const vector<int>& array)
 	{
@@ -97,7 +98,7 @@ namespace mm {
 	*/
 	int findKthSmallest_v5(const vector<int>& array, int k)
 	{
-
+		return 0;
 	}
 	int findMedian_v5(const vector<int>& array)
 	{
@@ -211,7 +212,7 @@ namespace mm {
 	*/
 	int findKthSmallest_v6(const vector<int>& array, int k)
 	{
-
+		return 0;
 	}
 	int findMedian_v6(const vector<int>& array)
 	{
