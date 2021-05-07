@@ -159,7 +159,7 @@ namespace mm {
 			std::swap(pPrev, pCurrent);
 		}
 
-		int lastIndex = values.size() - 1;
+		size_t lastIndex = values.size() - 1;
 		auto it1 = pPrev->upper_bound(knapsackCapacity); // it1 is pPrev->end()
 		--it1;
 		auto it2 = pPrev->upper_bound(knapsackCapacity - weights[lastIndex]);

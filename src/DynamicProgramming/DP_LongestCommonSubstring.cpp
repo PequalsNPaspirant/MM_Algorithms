@@ -73,7 +73,7 @@ namespace mm {
 	*/
 
 	// Using vector
-	string getLongestCommonSubstring_top_down(const string& str1, int m, const string& str2, int n, vector< vector<string> >& lookupVector)
+	string getLongestCommonSubstring_top_down(const string& str1, size_t m, const string& str2, size_t n, vector< vector<string> >& lookupVector)
 	{
 		if (m < 0 || n < 0)
 			return "";
@@ -94,7 +94,7 @@ namespace mm {
 	}
 
 	// Using unordered_map
-	string getLongestCommonSubstring_top_down(const string& str1, int m, const string& str2, int n, unordered_map<string, string>& lookup)
+	string getLongestCommonSubstring_top_down(const string& str1, size_t m, const string& str2, size_t n, unordered_map<string, string>& lookup)
 	{
 		if (m < 0 || n < 0)
 			return "";
@@ -227,6 +227,8 @@ namespace mm {
 		case DP_Approach::others_1:
 			return getLongestCommonSubstring_usingSuffixTree(str1, str2);
 		}
+
+		return "";
 	}
 
 	MM_DECLARE_FLAG(DP_LongestCommonSubstring);

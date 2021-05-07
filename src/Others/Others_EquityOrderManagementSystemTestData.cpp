@@ -18,14 +18,14 @@ namespace mm {
 		{500, 500, 500000, 40, 40, 20},
 		{1000, 1000, 1000000, 40, 50, 10}
 	};
-	int vecTestDataStatsIndex = 0;
+	size_t vecTestDataStatsIndex = 0;
 
 	vector<string> listOfClients(0);
 	vector<string> listOfSymbols(0);
 	vector<OperationData> operations(0);
 	vector<vector<ClientSymbolPair>> finalSortedLists(0);	
-	unordered_map<string, int> clientNameToIdMap(0);
-	unordered_map<string, int> symbolNameToIdMap(0);
+	unordered_map<string, size_t> clientNameToIdMap(0);
+	unordered_map<string, size_t> symbolNameToIdMap(0);
 
 	vector<string> listOfClientsGenerated(0);
 	vector<string> listOfSymbolsGenerated(0);

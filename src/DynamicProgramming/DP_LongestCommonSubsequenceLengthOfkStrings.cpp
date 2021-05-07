@@ -149,12 +149,12 @@ namespace mm {
 	The recursive call stack : NOT APPLICABLE
 	*/
 	//TODO: modify to consider all LCSs, otherwise it does not give correct answer for k >= 3
-	int getLongestCommonSubsequenceLengthOfkStrings_bottom_up_space_efficient(const vector<string>& str)
+	size_t getLongestCommonSubsequenceLengthOfkStrings_bottom_up_space_efficient(const vector<string>& str)
 	{
-		vector<int> index(str.size(), 0);
+		//vector<int> index(str.size(), 0);
 		
 		string ref(str[0]);
-		for (int k = 1; k < str.size(); ++k)
+		for (size_t k = 1; k < str.size(); ++k)
 		{
 			vector<string> previous(str[k].size() + 1, "");
 			vector<string> current(str[k].size() + 1, "");
@@ -182,11 +182,11 @@ namespace mm {
 
 
 	// Testing
-	int getLongestCommonSubsequenceLengthOfkStrings(const vector<string>& str, DP_Approach approach)
+	size_t getLongestCommonSubsequenceLengthOfkStrings(const vector<string>& str, DP_Approach approach)
 	{
 		vector<int> index;
 		for (const string& s : str)
-			index.push_back(s.length() - 1);
+			index.push_back(static_cast<int>(s.length()) - 1);
 
 		switch (approach)
 		{
@@ -200,6 +200,8 @@ namespace mm {
 			case DP_Approach::bottom_up_space_efficient:
 				return getLongestCommonSubsequenceLengthOfkStrings_bottom_up_space_efficient(str);
 		}
+
+		return 0;
 	}
 
 	MM_DECLARE_FLAG(DP_LongestCommonSubsequenceLengthOfkStrings);
@@ -223,7 +225,7 @@ namespace mm {
 			{ { "abc", "def" }, 0 },
 			{ { "abcbdab", "bdcaba", "badacb" }, 4 }
 		};
-		int subSequenceLengthOfkStrings = 0;
+		size_t subSequenceLengthOfkStrings = 0;
 
 		for (int i = 0; i < testDataVector.size(); ++i)
 		{

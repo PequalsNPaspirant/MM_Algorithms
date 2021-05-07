@@ -101,12 +101,12 @@ namespace mm {
 		};
 
 		arena_v3<initialSize> a;
-		size_t stdTime, allocatorTime;
 		string stlMsg{ " - Default STL Allocator : " };
 		string allocatorMsg{ " - Memory Pool Allocator : " };
 		std::cout << std::fixed;
 		std::cout << std::setprecision(2);
 		std::cout.imbue(std::locale(""));
+		//size_t stdTime, allocatorTime;
 		//--------------------
 		//{
 		//	std::forward_list<DataType> pushFrontForwardListTestStl;

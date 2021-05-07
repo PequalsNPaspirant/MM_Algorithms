@@ -104,7 +104,7 @@ namespace mm {
 
 	string Timer::getDurationStringInNanoSeconds(long long duration)
 	{
-		int length = log10(duration + 1) + 1; //Avoid log(0)
+		int length = static_cast<int>(log10(duration + 1)) + 1; //Avoid log(0)
 		length = length + (length - 1) / 3 + 12;
 		static const string pattern("000,000,000,000,000,000,000,000,000,000,000,000,000 nanoseconds");
 		string durationString(pattern.end() - length, pattern.end());
@@ -190,14 +190,14 @@ namespace mm {
 		long long min = totalDurationInMins % 60;
 		long long hrs = totalDurationInHrs % 24;
 
-		auto binarySearch = [](const long long& days, const vector<int>& daysVector) -> int {
-			int start = 0;
-			int end = daysVector.size() - 1;
+		auto binarySearch = [](const long long& days, const vector<int>& daysVector) -> size_t {
+			size_t start = 0;
+			size_t end = daysVector.size() - 1;
 			MyAssert::myRunTimeAssert(days >= 0 && days <= daysVector[end], "Year out of range");
 
 			while (end - start > 1)
 			{
-				int mid = (start + end) / 2;
+				size_t mid = (start + end) / 2;
 				if (daysVector[mid] < days)
 					start = mid;
 				else
@@ -209,7 +209,7 @@ namespace mm {
 
 		int year0 = 1870;
 		const vector<int>& daysInYear = getDaysInYear();
-		int year = year0 + binarySearch(totalDurationInDays, daysInYear);
+		size_t year = year0 + binarySearch(totalDurationInDays, daysInYear);
 
 		long long remainingDaysInYear = totalDurationInDays - daysInYear[(year - 1) - year0];
 		static const vector<int> daysInMonthNonLeapYear({
@@ -242,9 +242,9 @@ namespace mm {
 			31 + 29 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31 + 30,
 			31 + 29 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31 + 30 + 31
 		});
-		auto isLeapYear = [](const int& year) -> bool { return (year % 100 == 0 && year % 400 == 0) || (year % 4 == 0); };
-		int month = 0;
-		int date = 0;
+		auto isLeapYear = [](size_t year) -> bool { return (year % 100 == 0 && year % 400 == 0) || (year % 4 == 0); };
+		size_t month = 0;
+		size_t date = 0;
 		if (isLeapYear(year))
 		{
 			month = binarySearch(remainingDaysInYear, daysInMonthLeapYear);

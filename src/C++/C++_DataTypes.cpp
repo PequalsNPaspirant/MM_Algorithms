@@ -377,14 +377,14 @@ namespace mm {
 
 	long long DataTypes::convertToIntegralType(string str)
 	{
-		long long retVal;
+		long long retVal = 0;
 		//TODO
 		return retVal;
 	}
 
 	long double DataTypes::convertToFloatingType(string str)
 	{
-		long double retVal;
+		long double retVal = 0.0;
 		//TODO
 		return retVal;
 	}

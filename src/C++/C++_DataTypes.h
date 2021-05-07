@@ -234,11 +234,11 @@ namespace mm {
 
 		const int bitsInByte = 8;
 		size_t sizeOfData = sizeof(data);
-		const int bitsInData = sizeOfData * bitsInByte;
+		const size_t bitsInData = sizeOfData * bitsInByte;
 		MyAssert::myRunTimeAssert(bitsInData >= bitIndex, "data size is smaller than bitIndex");
 
 		size_t sizeOfInt = sizeof(unsigned int);
-		const int bitsInInt = sizeOfInt * bitsInByte;
+		const size_t bitsInInt = sizeOfInt * bitsInByte;
 		if (sizeOfData > sizeOfInt && bitIndex >= bitsInInt)
 		{
 			start += (bitIndex / bitsInInt);
@@ -300,7 +300,7 @@ namespace mm {
 		if (!isFloating)
 		{
 			MyAssert::myRunTimeAssert(Bits::isBitON(obj, 3), "Source data is wrong");
-			MyAssert::myRunTimeAssert(obj == (pow(2, 3 - 1)), "Source data is wrong");
+			MyAssert::myRunTimeAssert(obj == static_cast<int>(pow(2, 3 - 1)), "Source data is wrong");
 		}
 
 		Bits::makeBitON(obj, 5);
@@ -309,7 +309,7 @@ namespace mm {
 		if (!isFloating)
 		{
 			MyAssert::myRunTimeAssert(Bits::isBitON(obj, 5), "Source data is wrong");
-			MyAssert::myRunTimeAssert(obj == (pow(2, 3 - 1) + pow(2, 5 - 1)), "Source data is wrong");
+			MyAssert::myRunTimeAssert(obj == static_cast<int>(pow(2, 3 - 1) + pow(2, 5 - 1)), "Source data is wrong");
 		}
 
 		Bits::makeBitOFF(obj, 3);
@@ -318,7 +318,7 @@ namespace mm {
 		if (!isFloating)
 		{
 			MyAssert::myRunTimeAssert(Bits::isBitOFF(obj, 3), "Source data is wrong");
-			MyAssert::myRunTimeAssert(obj == (pow(2, 5 - 1)), "Source data is wrong");
+			MyAssert::myRunTimeAssert(obj == static_cast<int>(pow(2, 5 - 1)), "Source data is wrong");
 		}
 
 		Bits::makeBitOFF(obj, 5);
@@ -336,7 +336,7 @@ namespace mm {
 		if (!isFloating)
 		{
 			MyAssert::myRunTimeAssert(Bits::isBitON(obj, numBits - 3 + 1), "Source data is wrong");
-			MyAssert::myRunTimeAssert(obj == (pow(2, numBits - 3)), "Source data is wrong");
+			MyAssert::myRunTimeAssert(obj == static_cast<int>(pow(2, numBits - 3)), "Source data is wrong");
 		}
 
 		Bits::makeBitON(obj, numBits - 5 + 1);
@@ -345,7 +345,7 @@ namespace mm {
 		if (!isFloating)
 		{
 			MyAssert::myRunTimeAssert(Bits::isBitON(obj, numBits - 5 + 1), "Source data is wrong");
-			MyAssert::myRunTimeAssert(obj == (pow(2, numBits - 3) + pow(2, numBits - 5)), "Source data is wrong");
+			MyAssert::myRunTimeAssert(obj == static_cast<int>(pow(2, numBits - 3) + pow(2, numBits - 5)), "Source data is wrong");
 		}
 	}
 

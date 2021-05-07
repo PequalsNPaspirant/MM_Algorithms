@@ -19,7 +19,7 @@ namespace mm {
 				hashTable[str[i]].index = i;
 		}
 
-		int minIndex = str.size();
+		size_t minIndex = str.size();
 		for (int i = 0; i < 256; ++i)
 		{
 			if (hashTable[i].count == 1 && hashTable[i].index < minIndex)

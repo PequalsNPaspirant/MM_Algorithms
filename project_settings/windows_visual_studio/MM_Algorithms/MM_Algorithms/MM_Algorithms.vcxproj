@@ -19,6 +19,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\src\Array\Array_SortArrayUsingSingleSwap.cpp" />
+    <ClCompile Include="..\..\..\..\src\Geometry\Geom_AngleBetTwoLines.cpp" />
+    <ClCompile Include="..\..\..\..\src\Geometry\Geom_AreaOverlappedRect.cpp" />
+    <ClCompile Include="..\..\..\..\src\Geometry\Geom_IntersectionLineLine.cpp" />
+    <ClCompile Include="..\..\..\..\src\Geometry\Geom_IntersectionLinePlane.cpp" />
+    <ClCompile Include="..\..\..\..\src\LinearProgramming\LPP_Sample.cpp" />
+    <ClCompile Include="..\..\..\..\src\PatternMatching\PatternMatching_Sample.cpp" />
+    <ClCompile Include="..\..\..\..\src\DataStructures\DS_LRU.cpp" />
     <ClCompile Include="..\..\..\..\src\Maths\Maths_Median.cpp" />
     <ClCompile Include="..\..\..\..\src\Utils\Utils_TimerUtils.cpp" />
     <ClCompile Include="..\..\..\..\src\BitHacks\BitHacks.cpp" />
@@ -127,7 +135,6 @@
     <ClCompile Include="..\..\..\..\src\Maths\Maths_RandomNumber.cpp" />
     <ClCompile Include="..\..\..\..\src\Others\Others_FloatingPoint.cpp" />
     <ClCompile Include="..\..\..\..\src\ScottMeyers\ScottMeyers_EffectiveModernCPP.cpp" />
-    <ClCompile Include="..\..\..\..\src\STL\STL_Allocators.cpp" />
     <ClCompile Include="..\..\..\..\src\STL\STL_Concurrency.cpp" />
     <ClCompile Include="..\..\..\..\src\STL\STL_Containers.cpp" />
     <ClCompile Include="..\..\..\..\src\STL\STL_Lambda.cpp" />
@@ -239,6 +246,14 @@
     <ClCompile Include="..\..\..\..\src\_MM_Algorithms_main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\src\Array\Array_SortArrayUsingSingleSwap.h" />
+    <ClInclude Include="..\..\..\..\src\Geometry\Geom_AngleBetTwoLines.h" />
+    <ClInclude Include="..\..\..\..\src\Geometry\Geom_AreaOverlappedRect.h" />
+    <ClInclude Include="..\..\..\..\src\Geometry\Geom_IntersectionLineLine.h" />
+    <ClInclude Include="..\..\..\..\src\Geometry\Geom_IntersectionLinePlane.h" />
+    <ClInclude Include="..\..\..\..\src\LinearProgramming\LPP_Sample.h" />
+    <ClInclude Include="..\..\..\..\src\PatternMatching\PatternMatching_Sample.h" />
+    <ClInclude Include="..\..\..\..\src\DataStructures\DS_LRU.h" />
     <ClInclude Include="..\..\..\..\src\Utils\Utils_TimerUtils.h" />
     <ClInclude Include="..\..\..\..\src\BitHacks\BitHacks.h" />
     <ClInclude Include="..\..\..\..\src\BinaryTree\BinaryTree_CreateBinaryTree.h" />
@@ -293,7 +308,6 @@
     <ClInclude Include="..\..\..\..\src\Maths\Maths_RandomNumber.h" />
     <ClInclude Include="..\..\..\..\src\Others\Others_FloatingPoint.h" />
     <ClInclude Include="..\..\..\..\src\ScottMeyers\ScottMeyers_EffectiveModernCPP.h" />
-    <ClInclude Include="..\..\..\..\src\STL\STL_Allocators.h" />
     <ClInclude Include="..\..\..\..\src\STL\STL_Concurrency.h" />
     <ClInclude Include="..\..\..\..\src\STL\STL_Containers.h" />
     <ClInclude Include="..\..\..\..\src\STL\STL_Lambda.h" />

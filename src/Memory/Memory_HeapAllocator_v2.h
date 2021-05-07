@@ -169,7 +169,8 @@ namespace mm {
 			if (rebindAllocator_)
 				return rebindAllocator_->allocate(n, hint);
 
-			if (n != 1 || hint)
+			if (n != 1   //Do not allow this function be called for array  allocation if client has overridden operator new[] or done something similar and calling MemoryAllocator::allocate() from there
+				|| hint) //Do not allow this function be called for memory allocation if client has overridden placement new  or done something similar and calling MemoryAllocator::allocate() from there
 				throw std::bad_alloc();
 
 			return pool_->allocate();
@@ -229,7 +230,7 @@ namespace mm {
 	operator== should be:
 	1. reflexive i.e. a == a
 	2. symmetric i.e if a == b then b == a
-	3. transitive i.e. if a = b and b = c, then a = c
+	3. transitive i.e. if a == b and b == c, then a == c
 	It should not exit via an exception.
 	*/
 	template <class T, size_t N, class U, size_t M>

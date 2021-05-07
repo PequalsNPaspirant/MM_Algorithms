@@ -124,7 +124,7 @@ namespace mm {
 	}
 
 	HouseRobberyProblem::HouseRobberyProblem(const vector<int>& treasurySet)
-		: m_numHouses(treasurySet.size()),
+		: m_numHouses(static_cast<int>(treasurySet.size())),
 		m_treasurySet(treasurySet),
 		m_allSolutions(m_numHouses + 1)
 	{

@@ -104,7 +104,7 @@ namespace mm {
 			0ull, 1ull
 		};
 
-		for (unsigned int power = index - 1; power > 0; power /= 2)
+		for (size_t power = index - 1; power > 0; power /= 2)
 		{
 			//General idea
 			//express power as binary number. power = a 2^0 + b 2^1 + c 2^2 + ...
@@ -166,7 +166,7 @@ namespace mm {
 			0ull, 1ull
 		};
 
-		for (unsigned int power = index - 1; power > 0; power /= 2)
+		for (size_t power = index - 1; power > 0; power /= 2)
 		{
 			//General idea
 			//express power as binary number. power = a 2^0 + b 2^1 + c 2^2 + ...
@@ -280,7 +280,7 @@ namespace mm {
 		const static long double phi = (1.0l + sqrt(5.0l)) / 2.0l;
 		//return round(pow(phi, index) / sqrt(5.0l));
 		long double retVal = pow(phi, index) / sqrt(5.0l) + 0.5l;
-		return floor(retVal);
+		return static_cast<size_t>(floor(retVal));
 	}
 
 	/*
@@ -319,7 +319,7 @@ namespace mm {
 		const static long double psi = 1.0l - phi;
 		//return round(pow(phi, index) / sqrt(5.0l));
 		long double retVal = (pow(phi, index) - pow(psi, index)) / sqrt(5.0l);
-		return round(retVal);
+		return static_cast<size_t>(round(retVal));
 	}
 
 	//Testing

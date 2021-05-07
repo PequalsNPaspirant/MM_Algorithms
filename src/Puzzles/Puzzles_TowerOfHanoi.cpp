@@ -124,7 +124,7 @@ namespace mm
 	*/
 	unsigned long long Puzzles_TowerOfHanoi_iterative_v2(stack<int>& from, stack<int>& to, stack<int>& aux)
 	{
-		int numDisks = from.size();
+		size_t numDisks = from.size();
 		if (numDisks == 0)
 			return 0;
 
@@ -248,7 +248,7 @@ namespace mm
 	*/
 	unsigned long long Puzzles_TowerOfHanoi_binary_v1(stack<int>& from, stack<int>& to, stack<int>& aux)
 	{
-		int numDisks = from.size();
+		size_t numDisks = from.size();
 		if (numDisks == 0)
 			return 0;
 
@@ -416,7 +416,7 @@ namespace mm
 	*/
 	unsigned long long Puzzles_TowerOfHanoi_binary_v2(stack<int>& from, stack<int>& to, stack<int>& aux)
 	{
-		int numDisks = from.size();
+		size_t numDisks = from.size();
 		if (numDisks == 0)
 			return 0;
 
@@ -496,7 +496,7 @@ namespace mm
 	*/
 	unsigned long long Puzzles_TowerOfHanoi_binary_v3(stack<int>& from, stack<int>& to, stack<int>& aux)
 	{
-		int numDisks = from.size();
+		size_t numDisks = from.size();
 		if (numDisks == 0)
 			return 0;
 
@@ -540,7 +540,7 @@ namespace mm
 
 	unsigned long long Puzzles_TowerOfHanoi_binary_v4(stack<int>& from, stack<int>& to, stack<int>& aux)
 	{
-		int numDisks = from.size();
+		size_t numDisks = from.size();
 		if (numDisks == 0)
 			return 0;
 

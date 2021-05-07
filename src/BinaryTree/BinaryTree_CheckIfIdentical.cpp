@@ -19,17 +19,17 @@ namespace mm {
 
 	MM_UNIT_TEST(BinaryTree_CheckIfIdentical_UnitTests_test_1, BinaryTree_CheckIfIdentical_UnitTests)
 	{
-		struct TestData
-		{
+		//struct TestData
+		//{
 
-		};
+		//};
 
-		vector<TestData> testData;
+		//vector<TestData> testData;
 
-		for (int i = 0; i < testData.size(); ++i)
-		{
-			unsigned int actualResult;
-			//MM_EXPECT_TRUE((actualResult = reverseBits(testData[i].value)) == testData[i].reverse, testData[i].value, testData[i].reverse, actualResult);
-		}
+		//for (int i = 0; i < testData.size(); ++i)
+		//{
+		//	unsigned int actualResult;
+		//	//MM_EXPECT_TRUE((actualResult = reverseBits(testData[i].value)) == testData[i].reverse, testData[i].value, testData[i].reverse, actualResult);
+		//}
 	}
 }

@@ -16,7 +16,7 @@ namespace mm {
 		buyIndex = 0, sellIndex = 0;
 		int maxProfit = 0;
 		int tempBuyIndex = 0, tempSellIndex = 0;
-		for (size_t i = 1; i < closingPricesIn.size(); ++i)
+		for (int i = 1; i < closingPricesIn.size(); ++i)
 		{
 			if (closingPricesIn[i] > closingPricesIn[tempSellIndex])
 			{
@@ -48,7 +48,7 @@ namespace mm {
 		buyIndex = 0, sellIndex = 0;
 		int maxProfit = 0;
 		int tempBuyIndex = 0;
-		for (size_t i = 1; i < closingPricesIn.size(); ++i)
+		for (int i = 1; i < closingPricesIn.size(); ++i)
 		{
 			// if we see more profit than before, preserve the data
 			int currentProfit = closingPricesIn[i] - closingPricesIn[tempBuyIndex];

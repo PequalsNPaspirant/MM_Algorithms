@@ -154,11 +154,11 @@ namespace mm {
 
 		{
 			Trie_implementationUsingHashMap t;
-			for (int i = 0; i < data.size(); ++i)
+			for (size_t i = 0; i < data.size(); ++i)
 				t.insert(data[i]);
 
-			for (int i = data.size() - 1; i >= 0; --i)
-				t.erase(data[i]);
+			for (size_t i = data.size(); i > 0; --i)
+				t.erase(data[i - 1]);
 		}
 		MM_EXPECT_TRUE(globalCounter == 0, globalCounter);
 	}

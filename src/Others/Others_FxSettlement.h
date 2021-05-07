@@ -168,10 +168,10 @@ namespace mm {
 		string fileNamePrefix;
 		bool testCaseResult;
 		string algoType;
-		int numMembers;
-		int numCurrencies;
-		int numTrades;
-		int tradesSettled;
+		size_t numMembers;
+		size_t numCurrencies;
+		size_t numTrades;
+		size_t tradesSettled;
 		double amountSettled;
 		double percentageAmtSettled_;
 		string durationStr;

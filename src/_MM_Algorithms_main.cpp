@@ -22,6 +22,8 @@ namespace mm {
 	MM_DEFINE_FLAG(false, BinaryTree_Traversals);
 	MM_DEFINE_FLAG(false, BinaryTree_CheckIfIdentical_UnitTests);
 	MM_DEFINE_FLAG(false, BinaryTree_CheckIfBST_UnitTests);
+	//Data Structures
+	MM_DEFINE_FLAG(true, LRU_v1);
 	//Dynamic Programming
 	MM_DEFINE_FLAG(false, DP_HouseRobbery);
 	MM_DEFINE_FLAG(false, DP_Fibonacci);
@@ -101,6 +103,7 @@ namespace mm {
 	MM_DEFINE_FLAG(false, STL_VectorUniquePtrToInt);
 	MM_DEFINE_FLAG(false, STL_unordered_map_UnitTest);
 	MM_DEFINE_FLAG(false, STL_vectorUnitTest);
+	MM_DEFINE_FLAG(true, CustomAllocators_v1);
 	//Geometry
 	//Pattern Matching
 	//Miscellaneous
@@ -115,7 +118,7 @@ namespace mm {
 	//Bit hacks
 	MM_DEFINE_FLAG(false, bithacks);
 	//Maths
-	MM_DEFINE_FLAG(true, Maths_Permutations);
+	MM_DEFINE_FLAG(false, Maths_Permutations);
 	MM_DEFINE_FLAG(false, Maths_FindMedian);
 }
 

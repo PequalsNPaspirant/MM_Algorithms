@@ -61,11 +61,11 @@ namespace mm {
 #ifdef READ_TEST_DATA_FROM_FILE
 		readTestEquityOMSDataFromFile();
 
-		int numClientsLoaded = listOfClients.size();
-		int numSymbolsLoaded = listOfSymbols.size();
-		int numOperationsLoaded = operations.size();
-		int numClientNameToIdMap = clientNameToIdMap.size();
-		int numsymbolNameToIdMap = symbolNameToIdMap.size();
+		size_t numClientsLoaded = listOfClients.size();
+		size_t numSymbolsLoaded = listOfSymbols.size();
+		size_t numOperationsLoaded = operations.size();
+		size_t numClientNameToIdMap = clientNameToIdMap.size();
+		size_t numsymbolNameToIdMap = symbolNameToIdMap.size();
 
 		cout << "\nTest case no.: " << vecTestDataStatsIndex + 1;
 		cout << "\nNumber of clients: " << vecTestDataStats[vecTestDataStatsIndex].numClients;
@@ -243,8 +243,8 @@ namespace mm {
 						for (; j < actualTop100v2.size() && actualTop100v2[j] != nullptr; ++j)
 						{
 							size_t separator = actualTop100v2[j]->find_first_of('-');
-							int clientId = clientNameToIdMap[actualTop100v2[j]->substr(0, separator)];
-							int symbolId = symbolNameToIdMap[actualTop100v2[j]->substr(separator + 1)];
+							size_t clientId = clientNameToIdMap[actualTop100v2[j]->substr(0, separator)];
+							size_t symbolId = symbolNameToIdMap[actualTop100v2[j]->substr(separator + 1)];
 							actualFinalSortedList[j] = ClientSymbolPair(clientId, symbolId);
 							if (operations[i].top100[j] != actualFinalSortedList[j])
 							{
@@ -339,8 +339,8 @@ namespace mm {
 		//return;
 #endif
 
-		int numTestToExecute = vecTestDataStats.size();
-		for (int i = 4; i < numTestToExecute; ++i)
+		size_t numTestToExecute = vecTestDataStats.size();
+		for (size_t i = 4; i < numTestToExecute; ++i)
 		{
 			vecTestDataStatsIndex = i;
 			test_Others_EquityOrderManagementSystem();

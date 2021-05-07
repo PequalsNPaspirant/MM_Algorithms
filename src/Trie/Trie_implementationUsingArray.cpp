@@ -180,10 +180,10 @@ namespace mm {
 
 		{
 			Trie_implementationUsingArray t;
-			for (int i = 0; i < data.size(); ++i)
+			for (size_t i = 0; i < data.size(); ++i)
 				t.insert(data[i]);
 
-			for (int i = data.size() - 1; i > 0; --i)
+			for (size_t i = data.size() - 1; i > 0; --i)
 				t.erase(data[i]);
 		}
 		MM_EXPECT_TRUE(globalCounter_implementationUsingArray == 0, globalCounter_implementationUsingArray);

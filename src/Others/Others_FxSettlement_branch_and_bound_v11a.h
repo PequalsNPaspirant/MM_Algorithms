@@ -129,6 +129,6 @@ namespace mm {
 		}
 	};
 
-	double doSettlement_branch_and_bound_v11a(vector<bool>& settleFlagsOut, vector<Trade>& trades, const vector<double>& spl, const vector<double>& aspl, vector<double>& initialBalance, const vector<double>& exchangeRates, MM_Heap<fxDecisionTreeNode_v11a*, fxDecisionTreeNodeCompare_v11a>& fxMaxHeap_v11a, vector<vector<fxDecisionTreeNode_v11a>>& heapObjectsGrowingPool, int initialHeapCapacity, vector< vector<double> >& cumulativeBalance, vector<double>& cumulativeSettledAmount);
+	double doSettlement_branch_and_bound_v11a(vector<bool>& settleFlagsOut, vector<Trade>& trades, const vector<double>& spl, const vector<double>& aspl, vector<double>& initialBalance, const vector<double>& exchangeRates, MM_Heap<fxDecisionTreeNode_v11a*, fxDecisionTreeNodeCompare_v11a>& fxMaxHeap_v11a, vector<vector<fxDecisionTreeNode_v11a>>& heapObjectsGrowingPool, size_t initialHeapCapacity, vector< vector<double> >& cumulativeBalance, vector<double>& cumulativeSettledAmount);
 
 }

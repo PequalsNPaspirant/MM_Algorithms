@@ -144,7 +144,7 @@ namespace mm {
 				MM_EXPECT_TRUE(fabs(actualResult - testData[i].rate) < FxRatesCache_v1::precision, actualResult, testData[i].rate);
 				break;
 			default:
-				assert(false, "unknown API");
+				assert(false); //unknown API
 			}
 		}		
 	}

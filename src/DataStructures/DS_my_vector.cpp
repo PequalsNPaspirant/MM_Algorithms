@@ -18,24 +18,24 @@ namespace mm {
 		MyVectorGrowingConstantTime(int size = 10)
 			: m_capacity(size)
 		{
-			m_data = new int[m_capacity];
+			m_data = new size_t[m_capacity];
 		}
 		void push_back(int n)
 		{
 
 		}
-		int getAt(int index)
+		size_t getAt(int index)
 		{
-			int* location = m_data;
+			size_t* location = m_data;
 			int maxIndex = m_capacity - 1;
 			while (index > maxIndex)
-				location = reinterpret_cast<int*>(location[maxIndex]);
+				location = reinterpret_cast<size_t*>(location[maxIndex]);
 
 			return location[index % m_capacity];
 		}
 
 	private:
-		int* m_data;
+		size_t* m_data;
 		const int m_capacity;
 	};
 

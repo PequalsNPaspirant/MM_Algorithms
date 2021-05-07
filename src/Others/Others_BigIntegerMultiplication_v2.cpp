@@ -12,7 +12,7 @@ namespace mm {
 	
 	static constexpr const unsigned int maxStringLength = 300;
 	static constexpr const unsigned int numMaxDigits = 9;
-	static const unsigned long long base = pow(10, numMaxDigits);
+	static const unsigned long long base = static_cast<size_t>(pow(10, numMaxDigits));
 	static vector<unsigned int> vec1(maxStringLength / numMaxDigits + 1, 0);
 	static vector<unsigned int> vec2(maxStringLength / numMaxDigits + 1, 0);
 	static vector<unsigned int> result(2 * (maxStringLength / numMaxDigits + 1), 0);
@@ -45,12 +45,12 @@ namespace mm {
 				//}
 				//else
 				//{
-					res[len3++] = n % base;
+					res[len3++] = static_cast<unsigned int>(n % base);
 					carry = n / base;
 				//}
 			}
 			//if (carry != 0)
-				res[len3++] = carry;
+				res[len3++] = static_cast<unsigned int>(carry);
 		}
 	}
 
@@ -58,9 +58,9 @@ namespace mm {
 	{
 		index = 0;
 		unsigned int digit = 0;
-		for (int end = num.size(); end >= 0; end -= numMaxDigits)
+		for (size_t end = num.size(); end >= 0; end -= numMaxDigits)
 		{
-			int start = end - numMaxDigits;
+			size_t start = end - numMaxDigits;
 			if (start < 0)
 				start = 0;
 			for (; start < end; ++start)
@@ -95,7 +95,7 @@ namespace mm {
 
 		string retVal = to_string(result[i]);
 		//result[i] = 0; //reset the global result vector to zero so that we can reuse it for next multiplication
-		int index = retVal.length() - 1;
+		size_t index = retVal.length() - 1;
 		retVal.resize(retVal.length() + i * numMaxDigits, '0');
 		for (--i; i >= 0; --i)
 		{
@@ -148,12 +148,12 @@ namespace mm {
 				//}
 				//else
 				//{
-				res[len3++] = n % base;
+				res[len3++] = static_cast<unsigned int>(n % base);
 				carry = n / base;
 				//}
 			}
 			//if (carry != 0)
-			res[len3++] = carry;
+			res[len3++] = static_cast<unsigned int>(carry);
 		}
 	}
 
@@ -161,9 +161,9 @@ namespace mm {
 	{
 		index = 0;
 		unsigned int digit = 0;
-		for (int end = num.size(); end >= 0; end -= numMaxDigits)
+		for (size_t end = num.size(); end >= 0; end -= numMaxDigits)
 		{
-			int start = end - numMaxDigits;
+			size_t start = end - numMaxDigits;
 			if (start < 0)
 				start = 0;
 			for (; start < end; ++start)
@@ -197,7 +197,7 @@ namespace mm {
 		while (i > 0 && result[--i] == 0);
 
 		string retVal = to_string(result[i]);
-		int index = retVal.length() - 1;
+		size_t index = retVal.length() - 1;
 		retVal.resize(retVal.length() + i * numMaxDigits, '0');
 		for (--i; i >= 0; --i)
 		{
@@ -242,12 +242,12 @@ namespace mm {
 				//else
 				//{
 				carry = n / base;
-				res[len3++] = n % base;
+				res[len3++] = static_cast<unsigned int>(n % base);
 				//res[len3++] = n - carry * base; // takes more time
 				//}
 			}
 			//if (carry != 0)
-			res[len3++] = carry;
+			res[len3++] = static_cast<unsigned int>(carry);
 		}
 	}
 
@@ -396,15 +396,17 @@ namespace mm {
 			case '9': return 99;
 			}
 		}
+
+		return 0;
 	}
 
 	void convertToVector_e3(const string& num, vector<unsigned int>& vec, int& index)
 	{
 		index = 0;
 		unsigned int digit = 0;
-		for (int end = num.size(); end >= 0; end -= numMaxDigits)
+		for (size_t end = num.size(); end >= 0; end -= numMaxDigits)
 		{
-			int start = end - numMaxDigits;
+			size_t start = end - numMaxDigits;
 			if (start < 0)
 				start = 0;
 			//for (; start < end; ++start)
@@ -448,7 +450,7 @@ namespace mm {
 		while (i > 0 && result[--i] == 0);
 
 		string retVal = to_string(result[i]);
-		int index = retVal.length() - 1;
+		size_t index = retVal.length() - 1;
 		retVal.resize(retVal.length() + i * numMaxDigits, '0');
 		for (--i; i >= 0; --i)
 		{
@@ -493,12 +495,12 @@ namespace mm {
 				//else
 				//{
 				carry = n / base;
-				res[len3++] = n % base;
+				res[len3++] = static_cast<unsigned int>(n % base);
 				//res[len3++] = n - carry * base; // takes more time
 				//}
 			}
 			//if (carry != 0)
-			res[len3++] = carry;
+			res[len3++] = static_cast<unsigned int>(carry);
 		}
 	}
 
@@ -506,9 +508,9 @@ namespace mm {
 	{
 		index = 0;
 		unsigned int digit = 0;
-		for (int end = num.size(); end >= 0; end -= numMaxDigits)
+		for (size_t end = num.size(); end >= 0; end -= numMaxDigits)
 		{
-			int start = end - numMaxDigits;
+			size_t start = end - numMaxDigits;
 			if (start < 0)
 				start = 0;
 			//for (; start < end; ++start)
@@ -563,7 +565,7 @@ namespace mm {
 		while (i > 0 && result[--i] == 0);
 
 		string retVal = to_string(result[i]);
-		int index = retVal.length() - 1;
+		size_t index = retVal.length() - 1;
 		retVal.resize(retVal.length() + i * numMaxDigits, '0');
 		for (--i; i >= 0; --i)
 		{
@@ -615,12 +617,12 @@ namespace mm {
 				//else
 				//{
 				carry = n / base;
-				res[len3++] = n % base;
+				res[len3++] = static_cast<unsigned int>(n % base);
 				//res[len3++] = n - carry * base; // takes more time
 				//}
 			}
 			//if (carry != 0)
-			res[len3++] = carry;
+			res[len3++] = static_cast<unsigned int>(carry);
 		}
 	}
 
@@ -628,9 +630,9 @@ namespace mm {
 	{
 		index = 0;
 		unsigned int digit = 0;
-		for (int end = num.size(); end >= 0; end -= numMaxDigits)
+		for (size_t end = num.size(); end >= 0; end -= numMaxDigits)
 		{
-			int start = end - numMaxDigits;
+			size_t start = end - numMaxDigits;
 			if (start < 0)
 				start = 0;
 			//for (; start < end; ++start)
@@ -682,7 +684,7 @@ namespace mm {
 		while (i > 0 && result[--i] == 0);
 
 		string retVal = to_string(result[i]);
-		int index = retVal.length() - 1;
+		size_t index = retVal.length() - 1;
 		retVal.resize(retVal.length() + i * numMaxDigits, '0');
 		for (--i; i >= 0; --i)
 		{

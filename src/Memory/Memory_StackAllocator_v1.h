@@ -36,7 +36,7 @@ namespace mm {
 		char* allocate(std::size_t n)
 		{
 			n = align_up(n);
-			if (buf_ + N - ptr_ >= n)
+			if (static_cast<size_t>(buf_ + N - ptr_) >= n)
 			{
 				char* r = ptr_;
 				ptr_ += n;

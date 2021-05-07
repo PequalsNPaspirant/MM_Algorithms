@@ -114,7 +114,7 @@ namespace mm {
 		};
 
 		//Helper functions
-		static void processUpdatedObject(OrderTable* pObj, int numObjects, double currentMarketPrice, double previousMinOffset);
+		static void processUpdatedObject(OrderTable* pObj, size_t numObjects, double currentMarketPrice, double previousMinOffset);
 
 		struct HasherOrderTablePrimaryKeyClientSymbolId
 		{
@@ -147,7 +147,7 @@ namespace mm {
 		
 		static CompareOrderTableIndexOffset comparator;
 		static vector<OrderTable> OrderTableData;
-		static int OrderTableDataIndex;
+		static size_t OrderTableDataIndex;
 		static vector<OrderTable*> UpdatedOrderTableData;
 		static int UpdatedOrderTableDataIndex;
 		static unordered_set<OrderTable*, HasherOrderTablePrimaryKeyClientSymbolId, IsEqualOrderTablePrimaryKeyClientSymbolId> OrderTablePrimaryKeyClientSymbolId;

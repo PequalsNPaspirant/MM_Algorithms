@@ -74,7 +74,7 @@ namespace mm {
 
 			//cout << "\nOutput: " << volume << " " << symbol << " @ " << std::fixed << std::setprecision(2) << actualPrice;
 			char buffer[256];
-			int len = sprintf(buffer, "%d %s @ %.2f\n", volume, symbol.c_str(), actualPrice);
+			int len = sprintf_s(buffer, "%d %s @ %.2f\n", volume, symbol.c_str(), actualPrice);
 			string output(buffer, buffer + len);
 			//cout << "\nOutput: " << output;
 			if (outputFile.is_open())
@@ -88,7 +88,7 @@ namespace mm {
 		}
 		else
 		{
-			assert(false, "\nERROR: unknown type: " << cdata->type);
+			assert(false); // , "\nERROR: unknown type: " << cdata->type);
 		}
 
 		return cdata->len;
@@ -127,7 +127,7 @@ namespace mm {
 		}
 		catch (std::ifstream::failure &readErr)
 		{
-			cout << "\nERROR: Can not open file: " << filePath << endl;
+			cout << "\nERROR: Can not open file: " << filePath << " Error: " << readErr.what() << endl;
 			return;
 		}
 		catch (...)

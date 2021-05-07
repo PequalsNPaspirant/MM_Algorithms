@@ -23,7 +23,7 @@ When Others_OMS_getTop100() is called, it uses flags on orders and symbols to ta
 This version uses min heap, max heap etc along with set to enhance performance
 */
 	vector<Others_OMS_v4f::OrderTable> Others_OMS_v4f::OrderTableData(0);
-	int Others_OMS_v4f::OrderTableDataIndex = -1;
+	size_t Others_OMS_v4f::OrderTableDataIndex = -1;
 	vector<Others_OMS_v4f::OrderTable*> Others_OMS_v4f::UpdatedOrderTableData(0);
 	int Others_OMS_v4f::UpdatedOrderTableDataIndex = -1;
 	unordered_set<Others_OMS_v4f::OrderTable*, Others_OMS_v4f::HasherOrderTablePrimaryKeyClientSymbolId, Others_OMS_v4f::IsEqualOrderTablePrimaryKeyClientSymbolId> 
@@ -373,7 +373,7 @@ Complexity:
 		//Test End
 	}
 
-	void Others_OMS_v4f::processUpdatedObject(OrderTable* pObj, int finalSortedListLen, double currentMarketPrice, double previousMinOffset)
+	void Others_OMS_v4f::processUpdatedObject(OrderTable* pObj, size_t finalSortedListLen, double currentMarketPrice, double previousMinOffset)
 	{
 		pObj->offset = 100 * fabs(pObj->orderPrice - currentMarketPrice) / currentMarketPrice;
 
@@ -393,7 +393,7 @@ Complexity:
 			OrderTableSortIndexOffsetMinHeapRest.clear();
 
 		OrderTableMaxHeapVectorIndex = -1;
-		int finalSortedListLen = std::min(100, OrderTableDataIndex + 1);
+		size_t finalSortedListLen = std::min(100ULL, OrderTableDataIndex + 1);
 		double previousMinOffset = minOffsetInSortestList;
 		numUpdatedFromTop100 = 0;
 
@@ -480,7 +480,7 @@ Complexity:
 
 		if (!OrderTableSortIndexOffsetMaxHeapMiddle.empty())
 		{
-			int numRequired = finalSortedListLen - OrderTableSortIndexOffsetMinHeapTop100.size();
+			size_t numRequired = finalSortedListLen - OrderTableSortIndexOffsetMinHeapTop100.size();
 			if (OrderTableSortIndexOffsetMaxHeapMiddle.size() > numRequired) // We have more objects updated object which lie in middle range
 			{
 				OrderTableSortIndexOffsetMaxHeapMiddle.heapify();
@@ -599,8 +599,8 @@ Complexity:
 			//We still need more in top100. Extract from rest to make top100 list.
 
 			//int requiredMinHeapSize = finalSortedListLen - (top100Index + 1) + 1;
-			int requiredMinHeapSize = finalSortedListLen - OrderTableSortIndexOffsetMinHeapTop100.size() + 1;
-			int i = 0;
+			size_t requiredMinHeapSize = finalSortedListLen - OrderTableSortIndexOffsetMinHeapTop100.size() + 1;
+			size_t i = 0;
 			for (; i <= OrderTableDataIndex && OrderTableSortIndexOffsetMinHeapRest.size() < requiredMinHeapSize; ++i)
 			{
 				if (OrderTableData[i].isPresentInSortedList == false)
@@ -704,7 +704,7 @@ Complexity:
 			OrderTableSortIndexOffsetMinHeapTop100Copy.addNext(OrderTableSortIndexOffsetMinHeapTop100.get(i));
 		}
 
-		int index = finalSortedListLen;
+		size_t index = finalSortedListLen;
 		while (index > 0)
 		{
 			retVal[--index] = &OrderTableSortIndexOffsetMinHeapTop100Copy.top()->clientSymbolPair;

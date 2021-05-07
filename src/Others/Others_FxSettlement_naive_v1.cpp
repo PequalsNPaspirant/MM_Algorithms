@@ -56,8 +56,8 @@ namespace mm {
 		int cPartyIndex = trades[currentTradeIndex].cPartyId_;
 		int buyCurrIndex = static_cast<int>(trades[currentTradeIndex].buyCurr_);
 		int sellCurrIndex = static_cast<int>(trades[currentTradeIndex].sellCurr_);
-		int numMembers = aspl.size();
-		int numCurrencies = spl.size() / aspl.size();
+		size_t numMembers = aspl.size();
+		size_t numCurrencies = spl.size() / aspl.size();
 		
 		vector<double> currentBalanceInclude{ currentBalanceOut };
 		double buyVolInDollars = trades[currentTradeIndex].buyVol_ * exchangeRates[buyCurrIndex];

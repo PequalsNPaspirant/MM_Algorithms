@@ -110,7 +110,7 @@ namespace mm {
 			//int numCountInMaxHeap;  // 0 = object not in heap, 1 = 1 copy of object present in Heap
 			bool isPresentInTop100;
 			bool isPresentInRest;
-			int indexInMinHeap;
+			size_t indexInMinHeap;
 			//int sortedArrayIndex;
 			//set<OrderTable*, CompareOrderTableIndexOffset>::iterator it;
 			SymbolTable* symbolPtr;
@@ -255,14 +255,14 @@ namespace mm {
 				else
 					siftUp(index);
 			}
-			inline void siftDown(int subTreeRootIndex, bool updateIndex = true)
+			inline void siftDown(size_t subTreeRootIndex, bool updateIndex = true)
 			{
-				int parentOfLastElement = getParent(index_);
+				size_t parentOfLastElement = getParent(index_);
 				T buffer = data_[subTreeRootIndex];
 				while (subTreeRootIndex <= parentOfLastElement)
 				{
-					int largestIndex = getLeftChild(subTreeRootIndex); // Assume left child is largest
-					int rightChildIndex = largestIndex + 1;
+					size_t largestIndex = getLeftChild(subTreeRootIndex); // Assume left child is largest
+					size_t rightChildIndex = largestIndex + 1;
 					if(rightChildIndex <= index_ && comparator_(data_[largestIndex], data_[rightChildIndex]))
 						largestIndex = rightChildIndex;
 
@@ -280,12 +280,12 @@ namespace mm {
 				//if(updateIndex)
 					data_[subTreeRootIndex]->indexInMinHeap = subTreeRootIndex;
 			}
-			inline void siftUp(int childIndex)
+			inline void siftUp(size_t childIndex)
 			{
 				T buffer = data_[childIndex];
 				while (childIndex > 0)
 				{
-					int parentIndex = getParent(childIndex);
+					size_t parentIndex = getParent(childIndex);
 					if (comparator_(data_[parentIndex], buffer))
 					{
 						data_[childIndex] = data_[parentIndex];
@@ -306,15 +306,15 @@ namespace mm {
 			int index_;
 			const C comparator_;
 
-			inline int getLeftChild(int index) {
+			inline size_t getLeftChild(size_t index) {
 				return ((index << 1) + 1);
 			}
 
-			inline int getRightChild(int index) {
+			inline size_t getRightChild(size_t index) {
 				return ((index << 1) + 2);
 			}
 
-			inline int getParent(int index) {
+			inline size_t getParent(size_t index) {
 				return ((index - 1) >> 1);
 			}
 		};

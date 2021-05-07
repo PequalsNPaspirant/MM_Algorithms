@@ -153,9 +153,9 @@ namespace mm {
 		{
 			testDataFile.open(fullFileName);
 		}
-		catch (std::ofstream::failure &writeErr)
+		catch (std::ofstream::failure& writeErr)
 		{
-			cout << "\nERROR: Can not open file: " << fullFileName << endl;
+			cout << "\nERROR: Can not open file: " << fullFileName << " Error: " << writeErr.what() << endl;
 			return;
 		}
 		catch (...)
@@ -217,7 +217,7 @@ namespace mm {
 		}
 		catch (std::ifstream::failure &readErr)
 		{
-			cout << "\nERROR: Can not open file: " << testCaseFullFileName << endl;
+			cout << "\nERROR: Can not open file: " << testCaseFullFileName << " Error: " << readErr.what() << endl;
 			return element;
 		}
 		catch (...)
@@ -279,7 +279,7 @@ namespace mm {
 			--maxValue;
 
 		std::default_random_engine generator;
-		std::uniform_int_distribution<unsigned long long> valueDistribution(minValue, maxValue);
+		std::uniform_int_distribution<unsigned long long> valueDistribution(static_cast<size_t>(minValue), static_cast<size_t>(maxValue));
 		auto valueGenerator = std::bind(valueDistribution, generator);
 		std::uniform_int_distribution<unsigned long long> weightDistribution(minWeight, maxWeight);
 		auto weightGenerator = std::bind(weightDistribution, generator);

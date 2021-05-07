@@ -5,6 +5,7 @@
 #include <iostream>
 #include <io.h>
 #include <fcntl.h>
+#include <cmath>
 using namespace std;
 
 #include "MM_UnitTestFramework/MM_UnitTestFramework.h"
@@ -87,7 +88,7 @@ namespace mm {
 			++currentLevel;
 			while (++currentLevel < targetLevel)
 			{
-				int count = q.size();
+				size_t count = q.size();
 				while (count > 0)
 				{
 					Node* currNode = q.front();
@@ -242,13 +243,17 @@ namespace mm {
 
 		static void enableWideCharPrinting()
 		{
+#ifdef _MSC_VER
 			//This is required to print wchar on console output
 			_setmode(_fileno(stdout), _O_U16TEXT);
+#endif
 		}
 
 		static void disableWideCharPrinting()
 		{
+#ifdef _MSC_VER
 			_setmode(_fileno(stdout), _O_TEXT);
+#endif
 		}
 
 	private:

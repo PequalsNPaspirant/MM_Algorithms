@@ -17,7 +17,7 @@ namespace mm {
 	The recursive call stack would grow with O(m + n)
 	*/
 
-	string getLongestCommonSubsequenceString_naive(const string& str1, int m, const string& str2, int n)
+	string getLongestCommonSubsequenceString_naive(const string& str1, size_t m, const string& str2, size_t n)
 	{
 		if (m < 0 || n < 0)
 			return "";
@@ -41,7 +41,7 @@ namespace mm {
 	*/
 
 	// Using vector
-	string getLongestCommonSubsequenceString_top_down(const string& str1, int m, const string& str2, int n, vector< vector<string> >& lookupVector)
+	string getLongestCommonSubsequenceString_top_down(const string& str1, size_t m, const string& str2, size_t n, vector< vector<string> >& lookupVector)
 	{
 		if (m < 0 || n < 0)
 			return "";
@@ -62,7 +62,7 @@ namespace mm {
 	}
 
 	// Using unordered_map
-	string getLongestCommonSubsequenceString_top_down(const string& str1, int m, const string& str2, int n, unordered_map<string, string>& lookup)
+	string getLongestCommonSubsequenceString_top_down(const string& str1, size_t m, const string& str2, size_t n, unordered_map<string, string>& lookup)
 	{
 		if (m < 0 || n < 0)
 			return "";
@@ -110,12 +110,12 @@ namespace mm {
 
 	string getLongestCommonSubsequenceString_bottom_up(const string& str1, const string& str2)
 	{
-		int m = str1.size();
-		int n = str2.size();
+		size_t m = str1.size();
+		size_t n = str2.size();
 		vector< vector<string> > subseqStr(m + 1, vector<string>(n + 1, ""));
-		for (int i = 1; i <= m; ++i)
+		for (size_t i = 1; i <= m; ++i)
 		{
-			for (int j = 1; j <= n; ++j)
+			for (size_t j = 1; j <= n; ++j)
 			{
 				if (str1[i - 1] == str2[j - 1])
 					subseqStr[i][j] = subseqStr[i - 1][j - 1] + str1[i - 1];
@@ -129,10 +129,10 @@ namespace mm {
 
 	string getLongestCommonSubsequenceString_bottom_up_space_efficient(const string& str1, const string& str2)
 	{
-		int m = str1.size();
-		int n = str2.size();
-		int minStrLength = min(m, n);
-		int maxStrLength = max(m, n);
+		size_t m = str1.size();
+		size_t n = str2.size();
+		size_t minStrLength = min(m, n);
+		size_t maxStrLength = max(m, n);
 		const string* pStr1 = &str1;
 		const string* pStr2 = &str2;
 		if (m != maxStrLength)
@@ -142,9 +142,9 @@ namespace mm {
 		}
 		vector<string> prevSubseqStrings(minStrLength + 1, "");
 		vector<string> currSubseqStrings(minStrLength + 1, "");
-		for (int i = 1; i <= maxStrLength; ++i)
+		for (size_t i = 1; i <= maxStrLength; ++i)
 		{
-			for (int j = 1; j <= minStrLength; ++j)
+			for (size_t j = 1; j <= minStrLength; ++j)
 			{
 				if ((*pStr1)[i - 1] == (*pStr2)[j - 1])
 					currSubseqStrings[j] = prevSubseqStrings[j - 1] + (*pStr1)[i - 1];
@@ -180,6 +180,8 @@ namespace mm {
 			case DP_Approach::bottom_up_space_efficient:
 				return getLongestCommonSubsequenceString_bottom_up_space_efficient(str1, str2);
 		}
+
+		return "";
 	}
 
 	MM_DECLARE_FLAG(DP_LongestCommonSubsequenceString);

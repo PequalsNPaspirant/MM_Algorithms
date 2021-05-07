@@ -121,14 +121,14 @@ namespace mm {
 		//if (n_max < k)
 		//	return lastResults[n_max];
 
-		for (int n = k; n <= n_max; ++n)
+		for (size_t n = k; n <= n_max; ++n)
 		{
 			size_t result = 0;
-			for (int i = k - 1; i >= 0; --i)
-				result += lastResults[i];
+			for (size_t i = k; i > 0; --i)
+				result += lastResults[i - 1];
 
 			// Update first k terms
-			for (int i = 1; i < k; ++i)
+			for (size_t i = 1; i < k; ++i)
 				lastResults[i - 1] = lastResults[i];
 			lastResults[k - 1] = result;
 		}
@@ -143,7 +143,7 @@ namespace mm {
 	{
 		const int n_size = 11;
 		const int k_size = 11;
-		size_t expectedValues[n_size][k_size] = 
+		int expectedValues[n_size][k_size] =
 		{
 			 //k = 0    1    2    3    4    5    6    7    8    9   10
 	/* n = 0 */{   0,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1 },
@@ -160,9 +160,9 @@ namespace mm {
 		};
 
 
-		for (size_t n = 0; n < n_size; ++n)
+		for (int n = 0; n < n_size; ++n)
 		{
-			for (size_t k = 0; k < k_size; ++k)
+			for (int k = 0; k < k_size; ++k)
 			{
 				size_t actualValue1 = getWaysToClimbNSteps_recursively(n, k);
 				size_t actualValue2 = getWaysToClimbNSteps_fibonacci_1(n, k);

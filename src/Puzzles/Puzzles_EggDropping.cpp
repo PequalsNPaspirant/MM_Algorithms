@@ -41,7 +41,7 @@ namespace mm {
 
 		for (int i = 0; i < testData.size(); ++i)
 		{
-			unsigned int actualResult;
+			//unsigned int actualResult;
 			//MM_EXPECT_TRUE((actualResult = reverseBits(testData[i].value)) == testData[i].reverse, testData[i].value, testData[i].reverse, actualResult);
 		}		
 	}

@@ -163,7 +163,7 @@ namespace mm {
 				if (poolIndices.empty()) //need to grow pool
 				{
 					heapObjectsGrowingPool.push_back(vector<decisionTreeNode_v6>(values.size()));
-					int lastIndex = heapObjectsGrowingPool.size() - 1;
+					size_t lastIndex = heapObjectsGrowingPool.size() - 1;
 					for (int i = 0; i < values.size(); ++i)
 						poolIndices.push(&heapObjectsGrowingPool[lastIndex][i]);
 				}

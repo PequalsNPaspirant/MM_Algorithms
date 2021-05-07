@@ -1,7 +1,7 @@
 #include <iostream>
 using namespace std;
 
-#include "BinaryTree/BinaryTree_sample.h"
+//#include "BinaryTree/BinaryTree_sample.h"
 #include "MM_UnitTestFramework/MM_UnitTestFramework.h"
 
 namespace mm {

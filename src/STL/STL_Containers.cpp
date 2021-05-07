@@ -110,11 +110,11 @@ void testVector_HowCapacityOfVectorIsIncreased()
 {
 	cout << "\n------------------ testVector_HowCapacityOfVectorIsIncreased ------------------\n";
 	vector<int> intVector;
-	int lastCapacity = 0;
+	size_t lastCapacity = 0;
 	for (int i = 0; i < 50; i++)
 	{
 		intVector.push_back(i);
-		int currentCapacity = intVector.capacity();
+		size_t currentCapacity = intVector.capacity();
 		cout << "\nSize = " << intVector.size()
 			<< " Capacity = " << currentCapacity
 			<< " Increased by " << (currentCapacity - lastCapacity);
@@ -837,7 +837,7 @@ void funWith_vector_bool()
 
 void test_array_basic()
 {
-	array<int, 5> arr;
+	//array<int, 5> arr;
 }
 
 void funWith_array()

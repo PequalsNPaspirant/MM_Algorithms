@@ -50,12 +50,12 @@ namespace mm {
 		MyAssert::myRunTimeAssert(m_columns == rhs.m_rows);
 
 		MM_Matrix result(m_rows, rhs.m_columns);
-		for (int i = 0; i < m_rows; ++i)
+		for (unsigned int i = 0; i < m_rows; ++i)
 		{
-			for (int j = 0; j < rhs.m_columns; ++j)
+			for (unsigned int j = 0; j < rhs.m_columns; ++j)
 			{
 				MM_MatrixElementType temp = 0;
-				for (int k = 0; k < m_columns; ++k) //OR for (int k = 0; k < rhs.m_rows; ++k)
+				for (unsigned int k = 0; k < m_columns; ++k) //OR for (int k = 0; k < rhs.m_rows; ++k)
 				{
 					temp += (m_values[i][k] * rhs.m_values[k][j]);
 				}
@@ -77,8 +77,8 @@ namespace mm {
 	{
 		if (m_rows != rhs.m_rows || m_columns != rhs.m_columns)
 			return false;
-		for (int i = 0; i < m_rows; ++i)
-			for (int j = 0; j < m_columns; ++j)
+		for (unsigned int i = 0; i < m_rows; ++i)
+			for (unsigned int j = 0; j < m_columns; ++j)
 				if (m_values[i][j] != rhs.m_values[i][j])
 					return false;
 
@@ -209,14 +209,14 @@ namespace mm {
 	{
 		MyAssert::myRunTimeAssert(m_rows == m_columns, "This should be square matrix");
 
-		for (int i = 0; i < m_rows; ++i)
+		for (unsigned int i = 0; i < m_rows; ++i)
 		{
-			for (int j = 0; j < m_columns; ++j)
+			for (unsigned int j = 0; j < m_columns; ++j)
 			{
 				if (i == j)
-					m_values[i][j] = 1.0;
+					m_values[i][j] = 1;
 				else
-					m_values[i][j] = 0.0;
+					m_values[i][j] = 0;
 			}
 		}
 	}

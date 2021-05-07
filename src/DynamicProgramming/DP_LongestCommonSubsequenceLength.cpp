@@ -118,12 +118,12 @@ namespace mm {
 	*/
 	int getLongestCommonSubsequenceLength_bottom_up(const string& str1, const string& str2)
 	{
-		int m = str1.size();
-		int n = str2.size();
+		size_t m = str1.size();
+		size_t n = str2.size();
 		vector< vector<int> > lengths(m + 1, vector<int>(n + 1, 0));
-		for (int i = 1; i <= m; ++i)
+		for (size_t i = 1; i <= m; ++i)
 		{
-			for (int j = 1; j <= n; ++j)
+			for (size_t j = 1; j <= n; ++j)
 			{
 				if (str1[i - 1] == str2[j - 1])
 					lengths[i][j] = 1 + lengths[i - 1][j - 1];
@@ -207,22 +207,26 @@ namespace mm {
 		switch (approach)
 		{
 			case DP_Approach::naive:
-				return getLongestCommonSubsequenceLength_naive(str1, str1.size() - 1, str2, str2.size() - 1);
+				return getLongestCommonSubsequenceLength_naive(str1, static_cast<int>(str1.size() - 1), str2, static_cast<int>(str2.size() - 1));
 			case DP_Approach::top_down_using_vector:
 			{
 				vector< vector<int> > lookupVector(str1.size(), vector<int>(str2.size(), -1));
-				return getLongestCommonSubsequenceLength_top_down(str1, str1.size() - 1, str2, str2.size() - 1, lookupVector);
+				return getLongestCommonSubsequenceLength_top_down(str1, static_cast<int>(str1.size() - 1), str2, static_cast<int>(str2.size() - 1), lookupVector);
 			}
 			case DP_Approach::top_down_using_map:
 			{
 				unordered_map<string, int> lookup;
-				return getLongestCommonSubsequenceLength_top_down(str1, str1.size() - 1, str2, str2.size() - 1, lookup);
+				return getLongestCommonSubsequenceLength_top_down(str1, static_cast<int>(str1.size() - 1), str2, static_cast<int>(str2.size() - 1), lookup);
 			}
 			case DP_Approach::bottom_up:
 				return getLongestCommonSubsequenceLength_bottom_up(str1, str2);
 			case DP_Approach::bottom_up_space_efficient:
 				return getLongestCommonSubsequenceLength_bottom_up_space_efficient(str1, str2);
+			default:
+				break;
 		}
+
+		return 0;
 	}
 
 	MM_DECLARE_FLAG(DP_LongestCommonSubsequenceLength);

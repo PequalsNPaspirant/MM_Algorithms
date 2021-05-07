@@ -20,7 +20,7 @@ namespace mm {
 	/*
 	Time complexity: O(n(k+n))
 	*/
-	unsigned int JosephusProblem_naive_v1(unsigned int n, unsigned int k, unsigned int s)
+	unsigned int JosephusProblem_naive_v1(int n, int k, int s)
 	{
 		//invalid case
 		if (n == 0 || s >= n)
@@ -100,7 +100,7 @@ namespace mm {
 			return 0; //ideally we should return -1 i.e. the invalid index
 
 		unsigned int retVal = 0;
-		for (int current_n = 2; current_n <= n; ++current_n)
+		for (unsigned int current_n = 2; current_n <= n; ++current_n)
 		{
 			retVal = ((k + 1) + retVal) % current_n;
 		}
@@ -148,7 +148,7 @@ namespace mm {
 		// Find value of 2 ^ (1 + floor(Log n)) 
 		// which is a power of 2 whose value 
 		// is just above n. 
-		int p = 1;
+		unsigned int p = 1;
 		while (p <= n)
 			p *= 2;
 

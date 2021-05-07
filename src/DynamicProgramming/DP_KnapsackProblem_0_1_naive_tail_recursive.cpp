@@ -90,6 +90,9 @@ namespace mm {
 			return DP_KnapsackProblem_0_1_naive(values, numItems - 1, weights, knapsackCapacity, selectedItems);
 		*/
 
+		if (numItems == 0 || knapsackCapacity == 0)
+			return 0;
+
 		//double exclude = DP_KnapsackProblem_0_1_naive(values, numItems - 1, weights, knapsackCapacity, selectedItems);
 		double include = 0;
 		if (weights[numItems - 1] <= knapsackCapacity)

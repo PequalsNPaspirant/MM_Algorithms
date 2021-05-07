@@ -52,7 +52,7 @@ namespace mm {
 			}
 
 			Proxy(const Proxy& rhs)
-				: m_refData(rhs.m_refData)
+				: m_refData(rhs.m_refData),
 				m_index(rhs.m_index)
 			{
 
@@ -169,13 +169,13 @@ namespace mm {
 
 	template<typename T>
 	Array<T>::Array(const std::initializer_list<T>& list)
-		:m_size(list.size()),
+		:m_size(static_cast<unsigned int>(list.size())),
 		m_pData(m_size > 0 ? new T[m_size] : nullptr),
 		m_pReadCount(m_size > 0 ? new unsigned int[m_size] : nullptr),
 		m_pWriteCount(m_size > 0 ? new unsigned int[m_size] : nullptr)
 	{
 		int i = 0;
-		for each (T var in list)
+		for (const T& var : list)
 		{
 			m_pData[i++] = var;
 		}

@@ -90,7 +90,7 @@ namespace mm {
 			cache_bottom_up[weights[i]] = std::max(cache_bottom_up[weights[i]], values[i]);
 		}
 
-		int lastIndex = values.size() - 1;
+		size_t lastIndex = values.size() - 1;
 		return std::max(cache_bottom_up[knapsackCapacity], values[lastIndex] + cache_bottom_up[knapsackCapacity - weights[lastIndex]]);
 	}
 }

@@ -85,8 +85,8 @@ namespace mm {
 		bool verifySettledAmount)
 	{
 		//rmt
-		int numMembers = aspl.size();
-		int numCurrencies = spl.size() / aspl.size();
+		size_t numMembers = aspl.size();
+		size_t numCurrencies = spl.size() / aspl.size();
 		double novVal = 0.0;
 		vector<double> updatedBalance{ initialBalance };
 
@@ -111,13 +111,13 @@ namespace mm {
 
 		vector<double> currentAspl(numMembers);
 		vector<double> currentNov(numMembers);
-		for (int memberIndex = 0; memberIndex < numMembers; ++memberIndex)
+		for (size_t memberIndex = 0; memberIndex < numMembers; ++memberIndex)
 		{
 			double asplTemp = 0.0;
 			double novTemp = 0.0;
-			for (int currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
+			for (size_t currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
 			{
-				int index = numMembers * memberIndex + currencyIndex;
+				size_t index = numMembers * memberIndex + currencyIndex;
 				if (updatedBalance[index] + zero < -spl[index])
 					return false;
 
@@ -185,8 +185,8 @@ namespace mm {
 				vector<bool> settleFlags(testCases[testCaseIndex].trades_.size(), false);
 				vector<Trade> trades{ testCases[testCaseIndex].trades_ };
 				vector<double> currentBalances{ testCases[testCaseIndex].initialBalance_ };
-				int numMembers = testCases[testCaseIndex].aspl_.size();
-				int numCurrencies = testCases[testCaseIndex].spl_.size() / numMembers;
+				size_t numMembers = testCases[testCaseIndex].aspl_.size();
+				size_t numCurrencies = testCases[testCaseIndex].spl_.size() / numMembers;
 				vector< vector<double> > cumulativeBalance(trades.size(), vector<double>(numMembers * numCurrencies, 0.0));
 				vector<double> cumulativeSettledAmount(trades.size(), 0.0);
 
@@ -441,12 +441,12 @@ namespace mm {
 				case AlgoType::branch_and_bound_v10a:
 				{
 					//int initialHeapCapacity = 1'000'000;
-					int initialHeapCapacity = 2 * trades.size();
+					size_t initialHeapCapacity = 2 * trades.size();
 					//Total memory = 1,000,000 * object size = 1,000,000 * (24 + (8 * members * currencies)) bytes = (24 + (8 * members * currencies)) MB
 					vector<vector<fxDecisionTreeNode_v10a>> heapObjectsGrowingPool(1, vector<fxDecisionTreeNode_v10a>(initialHeapCapacity, fxDecisionTreeNode_v10a{ testCases[testCaseIndex].initialBalance_.size() }));
 					MM_Heap<fxDecisionTreeNode_v10a*, fxDecisionTreeNodeCompare_v10a> fxMaxHeap_v10a(initialHeapCapacity);
 					//initialize the pool indices
-					for (int i = 0; i < initialHeapCapacity; ++i)
+					for (size_t i = 0; i < initialHeapCapacity; ++i)
 						fxMaxHeap_v10a.addToData(&heapObjectsGrowingPool[0][i]);
 
 					start = std::chrono::high_resolution_clock::now();
@@ -466,12 +466,12 @@ namespace mm {
 				case AlgoType::branch_and_bound_v11a:
 				{
 					//int initialHeapCapacity = 1'000'000;
-					int initialHeapCapacity = 2 * trades.size();
+					size_t initialHeapCapacity = 2 * trades.size();
 					//Total memory = 1,000,000 * object size = 1,000,000 * (24 + (8 * members * currencies)) bytes = (24 + (8 * members * currencies)) MB
 					vector<vector<fxDecisionTreeNode_v11a>> heapObjectsGrowingPool(1, vector<fxDecisionTreeNode_v11a>(initialHeapCapacity, fxDecisionTreeNode_v11a{ testCases[testCaseIndex].initialBalance_.size(), trades.size() }));
 					MM_Heap<fxDecisionTreeNode_v11a*, fxDecisionTreeNodeCompare_v11a> fxMaxHeap_v11a(initialHeapCapacity);
 					//initialize the pool indices
-					for (int i = 0; i < initialHeapCapacity; ++i)
+					for (size_t i = 0; i < initialHeapCapacity; ++i)
 						fxMaxHeap_v11a.addToData(&heapObjectsGrowingPool[0][i]);
 
 					start = std::chrono::high_resolution_clock::now();
@@ -493,12 +493,12 @@ namespace mm {
 				case AlgoType::branch_and_bound_v12a:
 				{
 					//int initialHeapCapacity = 1'000'000;
-					int initialHeapCapacity = 2 * trades.size();
+					size_t initialHeapCapacity = 2 * trades.size();
 					//Total memory = 1,000,000 * object size = 1,000,000 * (24 + (8 * members * currencies)) bytes = (24 + (8 * members * currencies)) MB
 					vector<vector<fxDecisionTreeNode_v12a>> heapObjectsGrowingPool(1, vector<fxDecisionTreeNode_v12a>(initialHeapCapacity, fxDecisionTreeNode_v12a{ testCases[testCaseIndex].initialBalance_.size(), trades.size() }));
 					MM_Heap<fxDecisionTreeNode_v12a*, fxDecisionTreeNodeCompare_v12a> fxMaxHeap_v12a(initialHeapCapacity);
 					//initialize the pool indices
-					for (int i = 0; i < initialHeapCapacity; ++i)
+					for (size_t i = 0; i < initialHeapCapacity; ++i)
 						fxMaxHeap_v12a.addToData(&heapObjectsGrowingPool[0][i]);
 
 					start = std::chrono::high_resolution_clock::now();
@@ -520,12 +520,12 @@ namespace mm {
 				case AlgoType::branch_and_bound_v13a:
 				{
 					//int initialHeapCapacity = 1'000'000;
-					int initialHeapCapacity = 2 * trades.size();
+					size_t initialHeapCapacity = 2 * trades.size();
 					//Total memory = 1,000,000 * object size = 1,000,000 * (24 + (8 * members * currencies)) bytes = (24 + (8 * members * currencies)) MB
 					vector<vector<fxDecisionTreeNode_v13a>> heapObjectsGrowingPool(1, vector<fxDecisionTreeNode_v13a>(initialHeapCapacity, fxDecisionTreeNode_v13a{ testCases[testCaseIndex].initialBalance_.size(), trades.size() }));
 					MM_Heap<fxDecisionTreeNode_v13a*, fxDecisionTreeNodeCompare_v13a> fxMaxHeap_v13a(initialHeapCapacity);
 					//initialize the pool indices
-					for (int i = 0; i < initialHeapCapacity; ++i)
+					for (size_t i = 0; i < initialHeapCapacity; ++i)
 						fxMaxHeap_v13a.addToData(&heapObjectsGrowingPool[0][i]);
 
 					start = std::chrono::high_resolution_clock::now();
@@ -547,12 +547,12 @@ namespace mm {
 				case AlgoType::branch_and_bound_v13b:
 				{
 					//int initialHeapCapacity = 1'000'000;
-					int initialHeapCapacity = 2 * trades.size();
+					size_t initialHeapCapacity = 2 * trades.size();
 					//Total memory = 1,000,000 * object size = 1,000,000 * (24 + (8 * members * currencies)) bytes = (24 + (8 * members * currencies)) MB
 					vector<vector<fxDecisionTreeNode_v13b>> heapObjectsGrowingPool(1, vector<fxDecisionTreeNode_v13b>(initialHeapCapacity, fxDecisionTreeNode_v13b{ testCases[testCaseIndex].initialBalance_.size(), trades.size() }));
 					MM_Heap<fxDecisionTreeNode_v13b*, fxDecisionTreeNodeCompare_v13b> fxMaxHeap_v13b(initialHeapCapacity);
 					//initialize the pool indices
-					for (int i = 0; i < initialHeapCapacity; ++i)
+					for (size_t i = 0; i < initialHeapCapacity; ++i)
 						fxMaxHeap_v13b.addToData(&heapObjectsGrowingPool[0][i]);
 
 					start = std::chrono::high_resolution_clock::now();
@@ -576,12 +576,12 @@ namespace mm {
 					using decisionTreeNodeType = fxDecisionTreeNode_v14a;
 					using decisionTreeNodeCompare = fxDecisionTreeNodeCompare_v14a;
 					//int initialHeapCapacity = 1'000'000;
-					int initialHeapCapacity = 2 * trades.size();
+					size_t initialHeapCapacity = 2 * trades.size();
 					//Total memory = 1,000,000 * object size = 1,000,000 * (24 + (8 * members * currencies)) bytes = (24 + (8 * members * currencies)) MB
 					vector<vector<decisionTreeNodeType>> heapObjectsGrowingPool(1, vector<decisionTreeNodeType>(initialHeapCapacity, decisionTreeNodeType{ testCases[testCaseIndex].initialBalance_.size(), trades.size() }));
 					MM_Heap<decisionTreeNodeType*, decisionTreeNodeCompare> fxMaxHeap(initialHeapCapacity);
 					//initialize the pool indices
-					for (int i = 0; i < initialHeapCapacity; ++i)
+					for (size_t i = 0; i < initialHeapCapacity; ++i)
 						fxMaxHeap.addToData(&heapObjectsGrowingPool[0][i]);
 
 					start = std::chrono::high_resolution_clock::now();
@@ -602,7 +602,7 @@ namespace mm {
 				}
 
 				default:
-					assert(false, "Algo type '" + to_string(i) + "' is not suported");
+					assert(false); // , "Algo type '" + to_string(i) + "' is not suported");
 				}
 				std::chrono::high_resolution_clock::time_point end = std::chrono::high_resolution_clock::now();
 				unsigned long long duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count();

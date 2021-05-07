@@ -168,25 +168,25 @@ namespace mm {
 				return false;
 		}
 
-		const unique_ptr<Car>& getCar(const string& licencePlateNumber)
+		const Car* getCar(const string& licencePlateNumber)
 		{
 			unique_ptr<Car> dummyCarPtr = make_unique<SUV>(licencePlateNumber, "", 0);
 			auto it = carCollection_.find(dummyCarPtr);
 			if (it != carCollection_.end())
-				return *it;
-			else
-				return nullptr;
+				return it->get();
+			
+			return nullptr;
 		}
 
-		int getTotalCars()
+		size_t getTotalCars()
 		{
 			return totalCars_;
 		}
-		int getTotalCarsRentedOut()
+		size_t getTotalCarsRentedOut()
 		{
 			return carsRentedOut_;
 		}
-		int getCarsAvailableForRent()
+		size_t getCarsAvailableForRent()
 		{
 			return totalCars_ - carsRentedOut_;
 		}
@@ -210,8 +210,8 @@ namespace mm {
 		//store cars in a hash set hashing done based on Licence Plate Number
 		unordered_set<unique_ptr<Car>, carHasher, checkCarEquality> carCollection_; 
 
-		int totalCars_;
-		int carsRentedOut_;
+		size_t totalCars_;
+		size_t carsRentedOut_;
 	};
 
 	//Testing:

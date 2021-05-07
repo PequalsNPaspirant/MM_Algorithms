@@ -773,9 +773,6 @@ namespace mm {
 
 	void testPowerFunction()
 	{
-		double base;
-		int index;
-
 		for (double base : {-0.12, -1.0, 0.0, 1.0, 1.5, 2.345})
 			for (int index : {-3, -2, -1, 0, 1, 2, 3})
 			{
@@ -924,7 +921,7 @@ namespace mm {
 		//Shortest duration finding wont work if some friend in above set has busy duration like 20.10 - 21.35
 		//In this case, the shortest duration may be 
 		double shortestInterval = findShortestIntervalCorrectWay(individuals);
-		const int size = 24.0 / shortestInterval;
+		const int size = static_cast<int>(24.0 / shortestInterval);
 		double* timePoints = new double[size];
 		timePoints[0] = 0.0;
 		for (int i = 1; i < size; i++)
@@ -973,10 +970,10 @@ namespace mm {
 
 	//#define MACRO_COMPILE_TIME_ASSERT_IF_EQUAL(a, b) {int x[((a - b) == 0 ? 0 : 1)];}
 	//#define MACRO_COMPILE_TIME_ASSERT_IF_NOT_EQUAL(a, b) {int x[((a - b) != 0 ? 0 : 1)];}
-#define MACRO_COMPILE_TIME_ASSERT_IF_EQUAL(a, b) {int x[((a == b) ? 0 : 1)];}
-#define MACRO_COMPILE_TIME_ASSERT_IF_NOT_EQUAL(a, b) {int x[((a == b) ? 1 : 0)];}
+#define MACRO_COMPILE_TIME_ASSERT_IF_EQUAL(a, b) {int x[((a == b) ? 0 : 1)]; x[0] = 0;}
+#define MACRO_COMPILE_TIME_ASSERT_IF_NOT_EQUAL(a, b) {int x[((a == b) ? 1 : 0)]; x[0] = 0;}
 
-#define MACRO_COMPILE_TIME_ASSERT(EXPRESSION) {int x[((EXPRESSION) ? 0 : 1)];} //Asserts when expression is true
+#define MACRO_COMPILE_TIME_ASSERT(EXPRESSION) {int x[((EXPRESSION) ? 0 : 1)]; x[0] = 0;} //Asserts when expression is true
 
 //inline void inlinefun_compile_time_assert_if_equal(const int a, const int b)
 //{

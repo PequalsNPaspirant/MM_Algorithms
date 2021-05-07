@@ -41,7 +41,7 @@ namespace mm {
 			{ 1067, 1599, 4611686018427387903 }
 		};
 
-		vector<int> basicVector;
+		vector<size_t> basicVector;
 		auto actualSize = basicVector.size();
 		auto actualCapacity = basicVector.capacity();
 		auto actual_max_size = basicVector.max_size();
@@ -51,9 +51,9 @@ namespace mm {
 			actualSize, sizeCapacityData[0].size, actualCapacity, sizeCapacityData[0].capacity, actual_max_size, sizeCapacityData[0].max_size);
 
 		int counter = 0;
-		for (int n = 1; n < sizeCapacityData.size(); ++n)
+		for (size_t n = 1; n < sizeCapacityData.size(); ++n)
 		{
-			for (int i = actualSize; i <= actualCapacity; ++i)
+			for (size_t i = actualSize; i <= actualCapacity; ++i)
 				basicVector.push_back(i);
 
 			actualSize = basicVector.size();

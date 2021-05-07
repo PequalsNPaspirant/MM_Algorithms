@@ -76,8 +76,8 @@ namespace mm {
 	{
 		//TODO: we can avoid checking SPL for all currencies. No need to check it for all, we can check it only for 2 currencies involved in trade.
 		bool canThisTradeBeSettled = true;
-		int numMembers = aspl.size();
-		int numCurrencies = spl.size() / aspl.size();
+		size_t numMembers = aspl.size();
+		size_t numCurrencies = spl.size() / aspl.size();
 		int members[2] = { partyId, cPartyId };
 		for (int i = 0; i < 2; ++i)
 		{
@@ -91,9 +91,9 @@ namespace mm {
 				return false;
 
 			bool splPassed = true;
-			for (int currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
+			for (size_t currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
 			{
-				int index = numMembers * memberIndex + currencyIndex;
+				size_t index = numMembers * memberIndex + currencyIndex;
 				if (!rmtPassedCurrent[memberIndex] && updatedBalance[index] + zero < -spl[index])
 				{
 					splPassed = false;
@@ -125,25 +125,25 @@ namespace mm {
 		const vector<double>& exchangeRates
 	)
 	{
-		int numMembers = aspl.size();
-		int numCurrencies = spl.size() / aspl.size();
+		size_t numMembers = aspl.size();
+		size_t numCurrencies = spl.size() / aspl.size();
 		bitset<128> rmtPassedCurrent = rmtPassed;
 
-		for (int i = 0; i < updatedBalance.size(); ++i)
+		for (size_t i = 0; i < updatedBalance.size(); ++i)
 		{
 			updatedBalance[i] = currentBalance[i];
 		}
 
 		double amountSettledGreedy = 0.0;
 		bool somethingSettled = true;
-		int lastTradeSettledInLastPass = trades.size();
+		size_t lastTradeSettledInLastPass = trades.size();
 		bitset<128> settleFlagsGreedy{ false };
-		int totalTrades = trades.size() - level;
+		size_t totalTrades = trades.size() - level;
 
 		while (somethingSettled)
 		{
 			somethingSettled = false;
-			for (int tradeIndex = level; tradeIndex < trades.size(); ++tradeIndex)
+			for (size_t tradeIndex = level; tradeIndex < trades.size(); ++tradeIndex)
 			{
 				if (!somethingSettled && tradeIndex == lastTradeSettledInLastPass)
 					break;
@@ -187,7 +187,7 @@ namespace mm {
 		upperboundRmtPassed = (totalTrades == 0) && rmtPassedCurrent.all();
 
 		double predictedSettledAmount = 0.0;
-		for (int tradeIndex = level; tradeIndex < trades.size(); ++tradeIndex)
+		for (size_t tradeIndex = level; tradeIndex < trades.size(); ++tradeIndex)
 		{
 			if (settleFlagsGreedy[tradeIndex - level]) continue;
 
@@ -210,7 +210,7 @@ namespace mm {
 			double excessNOV = 0.0;
 			double excessSettledAmount = 0.0;
 
-			int index = numMembers * partyId + sellCurrId;
+			size_t index = numMembers * partyId + sellCurrId;
 			if (updatedBalance[index] + zero < -spl[index])
 			{
 				excessSPL = ((updatedBalance[index] - (-spl[index])) * exchangeRates[sellCurrId]);
@@ -229,9 +229,9 @@ namespace mm {
 				double asplTemp = 0.0;
 				double novTemp = 0.0;
 
-				for (int currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
+				for (size_t currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
 				{
-					int index = numMembers * memberIndex + currencyIndex;
+					size_t index = numMembers * memberIndex + currencyIndex;
 					double currentBalanceInDollars = updatedBalance[index] * exchangeRates[currencyIndex];
 					novTemp += currentBalanceInDollars;
 					if (currentBalanceInDollars < -zero)
@@ -280,8 +280,8 @@ namespace mm {
 		
 		//int numMembers = updatedBalance.size();
 		bool rmtSuccessful = true;
-		int numMembers = aspl.size();
-		int numCurrencies = spl.size() / aspl.size();
+		size_t numMembers = aspl.size();
+		size_t numCurrencies = spl.size() / aspl.size();
 		//for (int i = 0; i < memberIndices.size(); ++i)
 		{
 			//int memberIndex = memberIndices[i];
@@ -289,9 +289,9 @@ namespace mm {
 			double novTemp = 0.0;
 			bool splPassed = true;
 			
-			for (int currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
+			for (size_t currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
 			{
-				int index = numMembers * memberIndex + currencyIndex;
+				size_t index = numMembers * memberIndex + currencyIndex;
 				if (updatedBalance[index] + zero < -spl[index])
 				{
 					//rmtPassed[memberIndex] = false;
@@ -375,12 +375,12 @@ namespace mm {
 		const vector<double>& exchangeRates,
 		MM_Heap<fxDecisionTreeNode_v13b*, fxDecisionTreeNodeCompare_v13b>& fxMaxHeap_v13b,
 		vector<vector<fxDecisionTreeNode_v13b>>& heapObjectsGrowingPool,
-		int initialHeapCapacity,
+		size_t initialHeapCapacity,
 		vector< vector<double> >& cumulativeBalance,
 		vector<double>& cumulativeSettledAmount)
 	{
-		int numMembers = aspl.size();
-		int numCurrencies = spl.size() / aspl.size();
+		size_t numMembers = aspl.size();
+		size_t numCurrencies = spl.size() / aspl.size();
 
 		//std::sort(trades.begin(), trades.end(),
 		//	[&exchangeRates](const Trade& lhs, const Trade& rhs) -> bool {
@@ -393,9 +393,9 @@ namespace mm {
 		current.level = -1;
 		current.currentBalance.resize(numMembers * numCurrencies, 0.0);
 		int startIndex = -1;
-		for (int memberIndex = 0; memberIndex < numMembers; ++memberIndex)
+		for (size_t memberIndex = 0; memberIndex < numMembers; ++memberIndex)
 		{
-			for (int currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
+			for (size_t currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
 			{
 				current.currentBalance[++startIndex] = initialBalance[startIndex];
 			}
@@ -412,8 +412,9 @@ namespace mm {
 
 		//vector< vector<double> > cumulativeBalance(trades.size(), vector<double>(numMembers * numCurrencies, 0.0));
 		//vector<double> cumulativeSettledAmount(trades.size(), 0.0);
-		for (int i = trades.size() - 1; i >= 0; --i)
+		for (size_t s = trades.size(); s > 0; --s)
 		{
+			size_t i = s - 1;
 			if (i < trades.size() - 1)
 			{
 				cumulativeBalance[i] = cumulativeBalance[i + 1];
@@ -437,7 +438,7 @@ namespace mm {
 		//std::vector<int> memberIndices(aspl.size());
 		//std::iota(memberIndices.begin(), memberIndices.end(), 0); // Fill with 0, 1, ..., aspl.size() - 1
 		current.rmtPassed.flip();
-		verifySettlement_range_v13b(current.rmtPassed, current.currentBalance, 0, aspl.size() - 1, spl, aspl, exchangeRates);
+		verifySettlement_range_v13b(current.rmtPassed, current.currentBalance, 0, static_cast<int>(aspl.size() - 1), spl, aspl, exchangeRates);
 		current.calculateAndSetUpperBound(
 			initialBalance,
 			current.level + 1, 
@@ -448,7 +449,7 @@ namespace mm {
 		fxMaxHeap_v13b.push(pObj);
 
 		unsigned long long numberOfFunctionCalls = 0;
-		int sizeOfHeap = 0;
+		size_t sizeOfHeap = 0;
 
 		/*
 		We have two options:
@@ -562,7 +563,7 @@ namespace mm {
 					{
 						heapObjectsGrowingPool.push_back(vector<fxDecisionTreeNode_v13b>(initialHeapCapacity, fxDecisionTreeNode_v13b{ initialBalance.size(), trades.size() }));
 						fxMaxHeap_v13b.reserve(fxMaxHeap_v13b.capacity() + initialHeapCapacity);
-						int lastIndex = heapObjectsGrowingPool.size() - 1;
+						size_t lastIndex = heapObjectsGrowingPool.size() - 1;
 						for (int i = 0; i < initialHeapCapacity; ++i)
 							fxMaxHeap_v13b.addToData(&heapObjectsGrowingPool[lastIndex][i]);
 					}

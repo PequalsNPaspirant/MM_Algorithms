@@ -104,7 +104,7 @@ namespace mm {
 	//Configuration options defined as global constants
 	map<string, string> globalConfig;
 
-	void encryptOrDecryptAndWriteToFile(string iFile, string oFile, char* key, int keyLen)
+	void encryptOrDecryptAndWriteToFile(string iFile, string oFile, char* key, size_t keyLen)
 	{
 		ifstream inputFile(iFile, ios::binary);
 
@@ -126,9 +126,13 @@ namespace mm {
 			{
 				streamoff currPos = inputFile.tellg();
 
-				int limit = keyLen;
-				if (keyLen > (endPos - currPos))
-					limit = int(endPos - currPos);
+				//size_t limit = keyLen;
+				//if (keyLen > static_cast<size_t>(endPos - currPos))
+				//	limit = static_cast<size_t>(endPos - currPos);
+
+				size_t limit = static_cast<size_t>(endPos - currPos);
+				if (limit > keyLen)
+					limit = keyLen;
 
 				memset(inputString, 0, keyLen);
 				inputFile.read(&inputString[0], keyLen);
@@ -153,7 +157,7 @@ namespace mm {
 			cout << "\nCould not open input file " << iFile;
 	}
 
-	void encryptOrDecryptAndDisplayOnSceen(string iFile, char* key, int keyLen)
+	void encryptOrDecryptAndDisplayOnSceen(string iFile, char* key, size_t keyLen)
 	{
 		ifstream inputFile(iFile, ios::binary);
 
@@ -173,9 +177,13 @@ namespace mm {
 			{
 				streamoff currPos = inputFile.tellg();
 
-				int limit = keyLen;
-				if (keyLen > (endPos - currPos))
-					limit = int(endPos - currPos);
+				//size_t limit = keyLen;
+				//if (keyLen > (endPos - currPos))
+				//	limit = endPos - currPos;
+
+				size_t limit = static_cast<size_t>(endPos - currPos);
+				if (limit > keyLen)
+					limit = keyLen;
 
 				memset(inputString, 0, keyLen);
 				inputFile.read(&inputString[0], keyLen);
@@ -305,19 +313,23 @@ namespace mm {
 
 		//Step 3
 		string str3;
-		for (int i = encryptionKeyForPassword.length() - 1; i > -1; i--)
+		for (size_t i = encryptionKeyForPassword.length(); i > 0; i--)
 		{
 			char ch = '\0';
-			for (int j = 0; j < sqrt(sqrt(encryptionKeyForPassword.length())); j++)
-				ch += str1[sqrt(sqrt(encryptionKeyForPassword.length())) + (i / sqrt(encryptionKeyForPassword.length())) + j] * encryptionKeyForPassword[(sqrt(encryptionKeyForPassword.length()) * 2) + (i % int(sqrt(encryptionKeyForPassword.length()))) + sqrt(encryptionKeyForPassword.length()) * j];
+			for (int j = 0; j < static_cast<int>(sqrt(sqrt(encryptionKeyForPassword.length()))); j++)
+				ch += str1[static_cast<int>(sqrt(sqrt(encryptionKeyForPassword.length())) + ((i - 1) / sqrt(encryptionKeyForPassword.length())) + j)]
+				* encryptionKeyForPassword[static_cast<int>((sqrt(encryptionKeyForPassword.length()) * 2) + (i % int(sqrt(encryptionKeyForPassword.length()))) + sqrt(encryptionKeyForPassword.length()) * j)];
 
 			str3 += ch;
 		}
 
 		//Step 4
 		string encryptedPassword;
-		for (int i = encryptionKeyForPassword.length() - 1; i > -1; i--)
-			encryptedPassword += (str2[i] + str3[i]);
+		for (size_t i = encryptionKeyForPassword.length(); i > 0; i--)
+		{
+			size_t k = i - 1;
+			encryptedPassword += (str2[k] + str3[k]);
+		}
 
 		//Just to make encryptionKeyForFile more complex, create a combination of above steps
 		encryptionKeyForFile = encryptionKeyForPassword + str1 + str2 + str3;
@@ -566,9 +578,9 @@ namespace mm {
 			return 0;
 		}
 
-		const int keyLen = keyForFile.length();
+		const size_t keyLen = keyForFile.length();
 		char* key = new char[keyLen];
-		for (int i = 0; i < keyLen; i++) key[i] = keyForFile[i];
+		for (size_t i = 0; i < keyLen; i++) key[i] = keyForFile[i];
 
 		string inputFileName = getFullFilePath(globalConfig["inputFileFullPath"]);
 		string outputFileName = globalConfig["outputFileFullPath"];

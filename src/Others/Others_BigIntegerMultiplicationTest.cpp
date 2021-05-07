@@ -71,7 +71,7 @@ namespace mm {
 				std::chrono::steady_clock::time_point endTime = std::chrono::steady_clock::now();
 				data[k].duration += std::chrono::duration_cast<std::chrono::nanoseconds>(endTime - startTime).count();
 
-				int start = actualResult.find_first_not_of('0');
+				size_t start = actualResult.find_first_not_of('0');
 				actualResult = actualResult.substr(start != string::npos ? start : actualResult.length(), string::npos);
 				if (actualResult.empty())
 					actualResult = "0";	

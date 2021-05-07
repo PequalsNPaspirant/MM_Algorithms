@@ -87,7 +87,7 @@ namespace mm {
 			}
 		}
 
-		int lastIndex = values.size() - 1;
+		size_t lastIndex = values.size() - 1;
 		if (knapsackCapacity < weights[lastIndex])
 			return cache_bottom_up[knapsackCapacity];
 		else

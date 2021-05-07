@@ -45,18 +45,18 @@ namespace mm {
 		 const vector<double>& exchangeRates)
 	{
 		//rmt
-		int numMembers = aspl.size();
-		int numCurrencies = spl.size() / aspl.size();
+		size_t numMembers = aspl.size();
+		size_t numCurrencies = spl.size() / aspl.size();
 
 		vector<double> currentAspl(numMembers);
 		vector<double> currentNov(numMembers);
-		for (int memberIndex = 0; memberIndex < numMembers; ++memberIndex)
+		for (size_t memberIndex = 0; memberIndex < numMembers; ++memberIndex)
 		{
 			double asplTemp = 0.0;
 			double novTemp = 0.0;
-			for (int currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
+			for (size_t currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
 			{
-				int index = numMembers * memberIndex + currencyIndex;
+				size_t index = numMembers * memberIndex + currencyIndex;
 				if (updatedBalance[index] + zero < -spl[index])
 					return false;
 
@@ -109,8 +109,8 @@ namespace mm {
 		const vector<double>& initialBalance,
 		const vector<double>& exchangeRates)
 	{
-		int numMembers = aspl.size();
-		int numCurrencies = spl.size() / aspl.size();
+		size_t numMembers = aspl.size();
+		size_t numCurrencies = spl.size() / aspl.size();
 
 		std::sort(trades.begin(), trades.end(),
 			[&exchangeRates](const Trade& lhs, const Trade& rhs) -> bool {
@@ -126,8 +126,9 @@ namespace mm {
 			fxMaxHeap_v2.addToData(&heapObjectsGrowingPool[0][i]);
 
 		vector<double> cumulativeSettledAmount(trades.size(), 0.0);
-		for (int i = trades.size() - 1; i >= 0; --i)
+		for (size_t s = trades.size(); s > 0; --s)
 		{
+			size_t i = s - 1;
 			if (i < trades.size() - 1)
 				cumulativeSettledAmount[i] = cumulativeSettledAmount[i + 1];
 
@@ -149,7 +150,7 @@ namespace mm {
 
 		double maxValue = 0.0;
 		int numberOfFunctionCalls = 0;
-		int sizeOfHeap = 0;
+		size_t sizeOfHeap = 0;
 
 		while (!fxMaxHeap_v2.empty())
 		{
@@ -170,7 +171,7 @@ namespace mm {
 			{
 				heapObjectsGrowingPool.push_back(vector<fxDecisionTreeNode_v2>(initialHeapCapacity));
 				fxMaxHeap_v2.reserve(fxMaxHeap_v2.capacity() + initialHeapCapacity);
-				int lastIndex = heapObjectsGrowingPool.size() - 1;
+				size_t lastIndex = heapObjectsGrowingPool.size() - 1;
 				for (int i = 0; i < initialHeapCapacity; ++i)
 					fxMaxHeap_v2.addToData(&heapObjectsGrowingPool[lastIndex][i]);
 			}

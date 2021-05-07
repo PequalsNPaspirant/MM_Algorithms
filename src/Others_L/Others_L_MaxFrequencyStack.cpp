@@ -173,13 +173,13 @@ namespace mm {
 	private:
 		struct data
 		{
-			data(int n, unsigned int freq, unsigned int ind)
-				: num(n), frequency_index(((unsigned long)freq << 32) | ind)
+			data(int n, size_t freq, unsigned int ind)
+				: num(n), frequency_index((freq << 32) | ind)
 			{
 			}
 
 			int num;
-			unsigned long frequency_index; // combined frequency and index
+			size_t frequency_index; // combined frequency and index
 		};
 
 		unsigned int index_;
@@ -283,10 +283,10 @@ namespace mm {
 			testData.push_back({ n, s, p, q, result });
 		}
 
-		for (int i = 0; i < testData.size(); ++i)
-		{
-			unsigned int actualNum;
-		}
+		//for (int i = 0; i < testData.size(); ++i)
+		//{
+		//	unsigned int actualNum;
+		//}
 
 		int n;
 		FreqStack_v4 s;

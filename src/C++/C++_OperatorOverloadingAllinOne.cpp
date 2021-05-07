@@ -240,7 +240,7 @@ namespace mm {
 		}
 
 		Array(const std::initializer_list<T>& list)
-			:m_size(list.size()),
+			:m_size(static_cast<unsigned int>(list.size())),
 			m_pData(new T[m_size])
 		{
 			int i = 0;

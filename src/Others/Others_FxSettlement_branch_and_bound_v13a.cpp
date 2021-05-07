@@ -70,18 +70,18 @@ namespace mm {
 	)
 	{
 		double excessSettledAmountInDollars = 0.0;
-		int numMembers = aspl.size();
-		int numCurrencies = spl.size() / aspl.size();
+		size_t numMembers = aspl.size();
+		size_t numCurrencies = spl.size() / aspl.size();
 		int startIndex = -1;
 		upperboundRmtPassed = true;
-		for (int memberIndex = 0; memberIndex < numMembers; ++memberIndex)
+		for (size_t memberIndex = 0; memberIndex < numMembers; ++memberIndex)
 		{
 			double asplTemp = 0.0;
 			double novTemp = 0.0;
 			double excessSPL = 0.0;
 			double excessASPL = 0.0;
 			double excessNOV = 0.0;
-			for (int currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
+			for (size_t currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
 			{
 				++startIndex;
 				double totalBalance = currentBalance[startIndex] + cumulativeBalance[startIndex];
@@ -142,8 +142,8 @@ namespace mm {
 		//rmt
 		//int numMembers = updatedBalance.size();
 		bool rmtSuccessful = true;
-		int numMembers = aspl.size();
-		int numCurrencies = spl.size() / aspl.size();
+		size_t numMembers = aspl.size();
+		size_t numCurrencies = spl.size() / aspl.size();
 		//for (int i = 0; i < memberIndices.size(); ++i)
 		{
 			//int memberIndex = memberIndices[i];
@@ -151,9 +151,9 @@ namespace mm {
 			double novTemp = 0.0;
 			bool splPassed = true;
 			
-			for (int currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
+			for (size_t currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
 			{
-				int index = numMembers * memberIndex + currencyIndex;
+				size_t index = numMembers * memberIndex + currencyIndex;
 				if (updatedBalance[index] + zero < -spl[index])
 				{
 					//rmtPassed[memberIndex] = false;
@@ -237,12 +237,12 @@ namespace mm {
 		const vector<double>& exchangeRates,
 		MM_Heap<fxDecisionTreeNode_v13a*, fxDecisionTreeNodeCompare_v13a>& fxMaxHeap_v13a,
 		vector<vector<fxDecisionTreeNode_v13a>>& heapObjectsGrowingPool,
-		int initialHeapCapacity,
+		size_t initialHeapCapacity,
 		vector< vector<double> >& cumulativeBalance,
 		vector<double>& cumulativeSettledAmount)
 	{
-		int numMembers = aspl.size();
-		int numCurrencies = spl.size() / aspl.size();
+		size_t numMembers = aspl.size();
+		size_t numCurrencies = spl.size() / aspl.size();
 
 		//std::sort(trades.begin(), trades.end(),
 		//	[&exchangeRates](const Trade& lhs, const Trade& rhs) -> bool {
@@ -255,9 +255,9 @@ namespace mm {
 		current.level = -1;
 		current.currentBalance.resize(numMembers * numCurrencies, 0.0);
 		int startIndex = -1;
-		for (int memberIndex = 0; memberIndex < numMembers; ++memberIndex)
+		for (size_t memberIndex = 0; memberIndex < numMembers; ++memberIndex)
 		{
-			for (int currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
+			for (size_t currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
 			{
 				current.currentBalance[++startIndex] = initialBalance[startIndex];
 			}
@@ -274,8 +274,9 @@ namespace mm {
 
 		//vector< vector<double> > cumulativeBalance(trades.size(), vector<double>(numMembers * numCurrencies, 0.0));
 		//vector<double> cumulativeSettledAmount(trades.size(), 0.0);
-		for (int i = trades.size() - 1; i >= 0; --i)
+		for (size_t s = trades.size(); s > 0; --s)
 		{
+			size_t i = s - 1;
 			if (i < trades.size() - 1)
 			{
 				cumulativeBalance[i] = cumulativeBalance[i + 1];
@@ -300,7 +301,7 @@ namespace mm {
 		//std::vector<int> memberIndices(aspl.size());
 		//std::iota(memberIndices.begin(), memberIndices.end(), 0); // Fill with 0, 1, ..., aspl.size() - 1
 		current.rmtPassed.flip();
-		verifySettlement_range_v13a(current.rmtPassed, current.currentBalance, 0, aspl.size() - 1, spl, aspl, exchangeRates);
+		verifySettlement_range_v13a(current.rmtPassed, current.currentBalance, 0, static_cast<int>(aspl.size() - 1), spl, aspl, exchangeRates);
 		current.calculateAndSetUpperBound(
 			cumulativeBalance[current.level + 1],
 			cumulativeSettledAmount[current.level + 1],
@@ -310,7 +311,7 @@ namespace mm {
 		fxMaxHeap_v13a.push(pObj);
 
 		unsigned long long numberOfFunctionCalls = 0;
-		int sizeOfHeap = 0;
+		size_t sizeOfHeap = 0;
 
 		/*
 		We have two options:
@@ -424,7 +425,7 @@ namespace mm {
 					{
 						heapObjectsGrowingPool.push_back(vector<fxDecisionTreeNode_v13a>(initialHeapCapacity, fxDecisionTreeNode_v13a{ initialBalance.size(), trades.size() }));
 						fxMaxHeap_v13a.reserve(fxMaxHeap_v13a.capacity() + initialHeapCapacity);
-						int lastIndex = heapObjectsGrowingPool.size() - 1;
+						size_t lastIndex = heapObjectsGrowingPool.size() - 1;
 						for (int i = 0; i < initialHeapCapacity; ++i)
 							fxMaxHeap_v13a.addToData(&heapObjectsGrowingPool[lastIndex][i]);
 					}

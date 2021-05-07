@@ -266,9 +266,9 @@ namespace mm {
 					asplFile.open(asplFileFullName);
 					fxRatesFile.open(fxRatesFileFullName);
 				}
-				catch (std::ofstream::failure &writeErr)
+				catch (std::ofstream::failure& writeErr)
 				{
-					cout << "\nERROR: Can not open file: " << endl;
+					cout << "\nERROR: Can not open file: " << writeErr.what() << endl;
 					throw;
 				}
 				catch (...)
@@ -536,7 +536,7 @@ namespace mm {
 			}
 			catch (std::ifstream::failure &readErr)
 			{
-				cout << "\nERROR: Can not open file: " << endl;
+				cout << "\nERROR: Can not open file. Error: " << readErr.what() << endl;
 				break;
 			}
 			catch (...)
@@ -561,9 +561,9 @@ namespace mm {
 			vector<double> fxRates{};
 
 			unordered_map<int, int> memberIdUMap;
-			unordered_map<int, int> currencyIdUMap;
-			int numMembers = 0;
-			int numCurrencies = 0;
+			unordered_map<int, size_t> currencyIdUMap;
+			size_t numMembers = 0;
+			size_t numCurrencies = 0;
 
 			//Read initial_balances
 			unordered_map<std::pair<int, int>, double, pair_hash> memberCurrencyBalanceUMap;
@@ -582,8 +582,8 @@ namespace mm {
 						isColumnHeader = false;
 						continue;
 					}
-					int start = 0;
-					int end = line.find_first_of(',', start);
+					size_t start = 0;
+					size_t end = line.find_first_of(',', start);
 					int memberId = stoi(line.substr(start, end - start));
 
 					start = end + 1;
@@ -624,7 +624,7 @@ namespace mm {
 				{
 					pair<int, int> memberCurrency = it->first;
 					int memberIndex = memberIdUMap[memberCurrency.first];
-					int currencyIndex = currencyIdUMap[memberCurrency.second];
+					size_t currencyIndex = currencyIdUMap[memberCurrency.second];
 					initialBalance[numMembers * memberIndex + currencyIndex] = it->second;
 				}
 
@@ -647,8 +647,8 @@ namespace mm {
 						isColumnHeader = false;
 						continue;
 					}
-					int start = 0;
-					int end = line.find_first_of(',', start);
+					size_t start = 0;
+					size_t end = line.find_first_of(',', start);
 					int tradeId = stoi(line.substr(start, end - start));
 
 					start = end + 1;
@@ -678,8 +678,8 @@ namespace mm {
 
 					int partyIndex = memberIdUMap[partyId];
 					int cPartyIndex = memberIdUMap[cPartyId];
-					int buyCurrIndex = currencyIdUMap[buyCurr];
-					int sellCurrIndex = currencyIdUMap[sellCurr];
+					size_t buyCurrIndex = currencyIdUMap[buyCurr];
+					size_t sellCurrIndex = currencyIdUMap[sellCurr];
 
 					assert(partyIndex < numMembers);
 					assert(cPartyIndex < numMembers);
@@ -710,8 +710,8 @@ namespace mm {
 						continue;
 					}
 					++splRead;
-					int start = 0;
-					int end = line.find_first_of(',', start);
+					size_t start = 0;
+					size_t end = line.find_first_of(',', start);
 					int memberId = stoi(line.substr(start, end - start));
 
 					start = end + 1;
@@ -724,7 +724,7 @@ namespace mm {
 					double splVal = stod(line.substr(start));
 
 					int memberIndex = memberIdUMap[memberId];
-					int currencyIndex = currencyIdUMap[currencyId];
+					size_t currencyIndex = currencyIdUMap[currencyId];
 					assert(memberIndex < numMembers);
 					assert(currencyIndex < numCurrencies);
 					spl[numMembers * memberIndex + currencyIndex] = splVal;
@@ -751,8 +751,8 @@ namespace mm {
 						continue;
 					}
 					++asplRead;
-					int start = 0;
-					int end = line.find_first_of(',', start);
+					size_t start = 0;
+					size_t end = line.find_first_of(',', start);
 					int memberId = stoi(line.substr(start, end - start));
 
 					start = end + 1;
@@ -786,8 +786,8 @@ namespace mm {
 						continue;
 					}
 					++fxRatesRead;
-					int start = 0;
-					int end = line.find_first_of(',', start);
+					size_t start = 0;
+					size_t end = line.find_first_of(',', start);
 					int currencyId = stoi(line.substr(start, end - start));
 
 					start = end + 1;
@@ -800,7 +800,7 @@ namespace mm {
 						fxRates[it->second] = fxRateVal;
 					else
 					{
-						int nextCurrencyIndex = currencyIdUMap.size();
+						size_t nextCurrencyIndex = currencyIdUMap.size();
 						currencyIdUMap[currencyId] = nextCurrencyIndex;
 						if (nextCurrencyIndex >= fxRates.size())
 							fxRates.resize(nextCurrencyIndex + 1);

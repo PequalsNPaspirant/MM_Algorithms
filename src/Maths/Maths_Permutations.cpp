@@ -14,23 +14,23 @@ using namespace std;
 
 namespace mm {
 
-	long Permutations::factorial(int n)
+	size_t Permutations::factorial(size_t n)
 	{
-		const int Limit = 50;
+		const size_t Limit = 50;
 		if (n > Limit)
 		{
 			cout << "Can not calculate";
 			return 0;
 		}
 
-		static long fact[Limit];
+		static size_t fact[Limit];
 		fact[0] = 1;
-		static int availableFactIndex = 0;
+		static size_t availableFactIndex = 0;
 
 		if (n > availableFactIndex)
 		{
-			long result = fact[availableFactIndex];
-			for (int i = availableFactIndex + 1; i <= n; i++)
+			size_t result = fact[availableFactIndex];
+			for (size_t i = availableFactIndex + 1; i <= n; i++)
 			{
 				result *= i;
 				fact[i] = result;
@@ -43,8 +43,8 @@ namespace mm {
 
 	void Permutations::generatePermutations(initializer_list<int> list, bool repeatition, vector< vector<int> >& output)
 	{
-		int totalVariables = list.size();
-		int totalPositions = list.size();
+		size_t totalVariables = list.size();
+		size_t totalPositions = list.size();
 
 		const int* begin = list.begin();
 		vector<int> source;
@@ -56,16 +56,16 @@ namespace mm {
 		{
 			//Arranging n variables in p position - first position can be filled-in in n ways, second also can be in n ways as repetition is allowed
 			//This all p potions can be filled-in in n * n * n * ... p times i.e. n ^ p
-			int totalSets = pow(totalVariables, totalPositions);
+			size_t totalSets = static_cast<size_t>(pow(totalVariables, totalPositions));
 			output.reserve(totalSets);
 			for (int i = 0; i < totalSets; i++)
 			{
 				vector<int> currentSet(totalPositions);
-				for (int j = 0; j < totalPositions; j++)
+				for (size_t j = 0; j < totalPositions; j++)
 				{
-					int remainingPositions = totalPositions - j - 1;
-					int remainingPermutations = pow(totalVariables, remainingPositions);
-					int index = (i / remainingPermutations) % totalVariables;
+					size_t remainingPositions = totalPositions - j - 1;
+					size_t remainingPermutations = static_cast<size_t>(pow(totalVariables, remainingPositions));
+					size_t index = (i / remainingPermutations) % totalVariables;
 					currentSet[j] = source[index];
 				}
 				output.push_back(std::move(currentSet));
@@ -77,19 +77,19 @@ namespace mm {
 			//Arranging n variables in p position - first position can be filled-in in n ways, second can be in (n-1) ways as repetition is NOT allowed
 			//This all p potions can be filled-in in n * (n-1) * (n-2) * ... * (n-(p-1)) when p < n. 
 			//When n = p, its n!. When p > n, its n! as extra positions will be vacant.
-			int totalSets = factorial(totalVariables);
+			size_t totalSets = factorial(totalVariables);
 			output.resize(totalSets);
 			for (int i = 0; i < totalSets; i++)
 			{
 				vector<int> currentSet(totalPositions);
 				vector<int> tempSource(source.begin(), source.end());
-				for (int j = 0; j < totalPositions; j++)
+				for (size_t j = 0; j < totalPositions; j++)
 				{
-					int remainingVariables = totalVariables - j - 1;
-					int remainingPositions = totalPositions - j - 1;
-					int remainingPermutations = factorial(remainingPositions);
-					int currentVariables = tempSource.size();  //OR remainingVariables + 1
-					int index = (i / remainingPermutations) % currentVariables;
+					size_t remainingVariables = totalVariables - j - 1;
+					size_t remainingPositions = totalPositions - j - 1;
+					size_t remainingPermutations = factorial(remainingPositions);
+					size_t currentVariables = tempSource.size();  //OR remainingVariables + 1
+					size_t index = (i / remainingPermutations) % currentVariables;
 					currentSet[j] = tempSource[index];
 					tempSource.erase(tempSource.begin() + index);
 				}
@@ -99,9 +99,9 @@ namespace mm {
 		}
 	}
 
-	void Permutations::generatePermutationSetWithRepeatition(vector< vector<int> >& output,
-		vector<int>& currenResultSet, const int& totalPositions, const int& currentPosition,
-		const int& totalVariables, const vector<int>& source)
+	void Permutations::generatePermutationSetWithRepeatition(vector< vector<size_t> >& output,
+		vector<size_t>& currenResultSet, const size_t& totalPositions, const size_t& currentPosition,
+		const size_t& totalVariables, const vector<size_t>& source)
 	{
 		if (currentPosition >= totalPositions)
 		{
@@ -116,9 +116,9 @@ namespace mm {
 		}
 	}
 
-	void Permutations::generatePermutationSetWithNoRepeatition(vector< vector<int> >& output,
-		vector<int>& currenResultSet, const int& totalPositions, const int& currentPosition,
-		const int& totalVariables, const vector<int>& source)
+	void Permutations::generatePermutationSetWithNoRepeatition(vector< vector<size_t> >& output,
+		vector<size_t>& currenResultSet, const size_t& totalPositions, const size_t& currentPosition,
+		const size_t& totalVariables, const vector<size_t>& source)
 	{
 		if (currentPosition >= totalPositions)
 		{
@@ -129,27 +129,27 @@ namespace mm {
 		for (int j = 0; j < totalVariables; j++)
 		{
 			currenResultSet[currentPosition] = source[j];
-			vector<int> sourceForNextIteration(source.begin(), source.end());
+			vector<size_t> sourceForNextIteration(source.begin(), source.end());
 			sourceForNextIteration.erase(sourceForNextIteration.begin() + j);
 			generatePermutationSetWithNoRepeatition(output, currenResultSet, totalPositions, currentPosition + 1, totalVariables - 1, sourceForNextIteration);
 		}
 	}
 
-	void Permutations::generatePermutationsUsingRecursion(initializer_list<int> list, bool repeatition, vector< vector<int> >& output)
+	void Permutations::generatePermutationsUsingRecursion(initializer_list<size_t> list, bool repeatition, vector< vector<size_t> >& output)
 	{
-		int totalVariables = list.size();
-		int totalPositions = list.size();
+		size_t totalVariables = list.size();
+		size_t totalPositions = list.size();
 
-		const int* begin = list.begin();
-		vector<int> source;
-		for (int i = 0; i < totalVariables; i++)
+		const size_t* begin = list.begin();
+		vector<size_t> source;
+		for (size_t i = 0; i < totalVariables; i++)
 			source.push_back(*begin++);
 
 		if (repeatition)
 		{
 			//Arranging n variables in p position - first position can be filled-in in n ways, second also can be in n ways as repetition is allowed
 			//This all p potions can be filled-in in n * n * n * ... p times i.e. n ^ p
-			vector<int> currentSet(totalPositions);
+			vector<size_t> currentSet(totalPositions);
 			generatePermutationSetWithRepeatition(output, currentSet, totalPositions, 0, totalVariables, source);
 		}
 		else
@@ -157,7 +157,7 @@ namespace mm {
 			//Arranging n variables in p position - first position can be filled-in in n ways, second can be in (n-1) ways as repetition is NOT allowed
 			//This all p potions can be filled-in in n * (n-1) * (n-2) * ... * (n-(p-1)) when p < n. 
 			//When n = p, its n!. When p > n, its n! as extra positions will be vacant.
-			vector<int> currentSet(totalPositions);
+			vector<size_t> currentSet(totalPositions);
 			generatePermutationSetWithNoRepeatition(output, currentSet, totalPositions, 0, totalVariables, source);
 		}
 	}
@@ -194,15 +194,15 @@ namespace mm {
 
 		std::random_device rd;
 		std::default_random_engine e{ rd() }; //or use specific engine e.g. std::mt19937_64 m64;
-		int lastId = inputSet.size() - 1;
-		std::uniform_int_distribution<int> uid{ 0, lastId };
-		using params = std::uniform_int_distribution<int>::param_type;
+		size_t lastId = inputSet.size() - 1;
+		std::uniform_int_distribution<size_t> uid{ 0, lastId };
+		using params = std::uniform_int_distribution<size_t>::param_type;
 
 		vector<int> inputSetCopy{ inputSet.begin(), inputSet.end() };
 		for (int i = 0; i < size; ++i)
 		{
 			uid.param(params{ 0, lastId - i });
-			int p = uid(e);
+			size_t p = uid(e);
 			retVal.push_back(inputSetCopy[p]);
 			std::swap(inputSetCopy[p], inputSetCopy[lastId - i]);
 		}

@@ -19,7 +19,7 @@ namespace mm {
 
 	int toggle1bitForMaxAdjacency(const vector<int> &A, int& bitIndex)
 	{
-		int n = A.size();
+		size_t n = A.size();
 		bitIndex = 0;
 		int result = 0;
 		for (int i = 0; i < n - 1; i++) {

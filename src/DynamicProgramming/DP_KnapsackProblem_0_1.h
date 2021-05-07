@@ -78,8 +78,8 @@ namespace mm {
 		StackMember(unsigned long long numItemsIn, unsigned long long knapsackCapacityIn, double* returnValuePlaceHolderIn)
 			: numItems(numItemsIn),
 			knapsackCapacity(knapsackCapacityIn),
-			exclude(numeric_limits<unsigned long long>::max()),
-			include(numeric_limits<unsigned long long>::max()),
+			exclude(numeric_limits<double>::max()),
+			include(numeric_limits<double>::max()),
 			returnValuePlaceHolder(returnValuePlaceHolderIn)
 		{}
 		unsigned long long numItems;
@@ -305,13 +305,13 @@ namespace mm {
 		}
 		void push(const T& obj)
 		{
-			unsigned int end = getTargetPosition();
+			size_t end = getTargetPosition();
 			data_[end] = obj;
 			++count_;
 		}
 		void push(T&& obj)
 		{
-			unsigned int end = getTargetPosition();
+			size_t end = getTargetPosition();
 			data_[end] = std::move(obj);
 			++count_;
 		}
@@ -347,24 +347,24 @@ namespace mm {
 
 	private:
 		vector<T> data_;
-		unsigned int start_;
-		unsigned int count_;
+		size_t start_;
+		size_t count_;
 
-		unsigned int getTargetPosition()
+		size_t getTargetPosition()
 		{
-			unsigned int end = 0;
+			size_t end = 0;
 			if (count_ == data_.size())
 			{
 				//Grow by factor of 1.5
 				vector<T> newVector(0);
-				int newSize = data_.size() * 1.5;
+				int newSize = static_cast<int>(data_.size() * 1.5);
 				if (newSize == 0)
 					newSize = 10; //default size
 				newVector.resize(newSize);
 				int index = -1;
-				for (int i = start_; i < data_.size(); ++i)
+				for (size_t i = start_; i < data_.size(); ++i)
 					newVector[++index] = std::move(data_[i]);
-				for (int i = 0; i < start_; ++i)
+				for (size_t i = 0; i < start_; ++i)
 					newVector[++index] = std::move(data_[i]);
 
 				data_.swap(newVector);
@@ -627,7 +627,7 @@ namespace mm {
 			vector<unsigned long long>::const_iterator iter = std::upper_bound(cumulativeWeights.begin() + level, cumulativeWeights.end(), targetCumulativeWeight);
 				//[&cumulativeWeights](unsigned long long targetCumulativeWeightIn, unsigned int indexIn) { return targetCumulativeWeightIn < cumulativeWeights[indexIn]; });
 
-			unsigned int index = iter - cumulativeWeights.begin();
+			unsigned long long index = iter - cumulativeWeights.begin();
 			unsigned long long currentKnapsackCapacity = totalWeight;
 			upperbound = maxValue;
 			if (index != level)

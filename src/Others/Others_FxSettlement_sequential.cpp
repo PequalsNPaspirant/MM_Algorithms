@@ -39,8 +39,8 @@ namespace mm {
 		const vector<double>& exchangeRates)
 	{
 		//TODO: we can avoid checking SPL for all currencies. No need to check it for all, we can check it only for 2 currencies involved in trade.
-		int numMembers = aspl.size();
-		int numCurrencies = spl.size() / aspl.size();
+		size_t numMembers = aspl.size();
+		size_t numCurrencies = spl.size() / aspl.size();
 		for (int tradeIndex = 0; tradeIndex < memberIndices.size(); ++tradeIndex)
 		{
 			int memberIndex = memberIndices[tradeIndex];
@@ -49,7 +49,7 @@ namespace mm {
 
 			for (int currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
 			{
-				int index = numMembers * memberIndex + currencyIndex;
+				size_t index = numMembers * memberIndex + currencyIndex;
 				if (updatedBalance[index] + zero < -spl[index])
 				{
 					return false;
@@ -78,12 +78,12 @@ namespace mm {
 		const vector<double>& initialBalance,
 		const vector<double>& exchangeRates)
 	{
-		int numMembers = aspl.size();
-		int numCurrencies = spl.size() / aspl.size();
+		size_t numMembers = aspl.size();
+		size_t numCurrencies = spl.size() / aspl.size();
 		double amountSettled = 0.0;
 		vector<double> currentBalance{ initialBalance };
 		bool somethingSettled = true;
-		int lastTradeSettledInLastPass = trades.size();
+		size_t lastTradeSettledInLastPass = trades.size();
 		while (somethingSettled)
 		{
 			somethingSettled = false;

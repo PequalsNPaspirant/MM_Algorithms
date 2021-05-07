@@ -59,8 +59,8 @@ namespace mm {
 		int cPartyIndex = trades[currentTradeIndex].cPartyId_;
 		int buyCurrIndex = static_cast<int>(trades[currentTradeIndex].buyCurr_);
 		int sellCurrIndex = static_cast<int>(trades[currentTradeIndex].sellCurr_);
-		int numMembers = aspl.size();
-		int numCurrencies = spl.size() / aspl.size();
+		size_t numMembers = aspl.size();
+		size_t numCurrencies = spl.size() / aspl.size();
 		
 		vector<double> currentBalanceInclude{ currentBalanceOut };
 		double buyVolInDollars = trades[currentTradeIndex].buyVol_ * exchangeRates[buyCurrIndex];
@@ -88,14 +88,14 @@ namespace mm {
 			bool rmtTestResult = true;
 			int memberIndices[2] = { partyIndex , cPartyIndex };
 
-			for (int memberIndex = 0; rmtTestResult && memberIndex < numMembers; ++memberIndex)
+			for (size_t memberIndex = 0; rmtTestResult && memberIndex < numMembers; ++memberIndex)
 			{
 				//int memberIndex = memberIndices[i];
 				double asplTemp = 0.0;
 				double novTemp = 0.0;
 				for (int currencyIndex = 0; currencyIndex < numCurrencies; ++currencyIndex)
 				{
-					int index = numMembers * memberIndex + currencyIndex;
+					size_t index = numMembers * memberIndex + currencyIndex;
 					if (currentBalanceInclude[index] + zero < -spl[index])
 					{
 						rmtTestResult = false;

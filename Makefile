@@ -4,14 +4,15 @@ OBJDIR := obj/windows_gcc
 OUTDIR := bin/windows_gcc
 APP := $(shell echo `pwd` | sed 's/^.*\///g')
 APP_NAME := $(OUTDIR)/$(APP)_gcc.exe
-THIRD_PARTY_INCLUDE := -I../MM_CommonUtils/src -I../MM_UnitTestFramework/src
+ THIRD_PARTY_INCLUDE := -I../MM_CommonUtils/src -I../MM_UnitTestFramework/src
+## THIRD_PARTY_INCLUDE :=
 
-LIBPATH := ../MM_CommonUtils/bin/windows_gcc
-LIBNAME := libMM_CommonUtils.a
-LDLIBS := MM_CommonUtils
-LDFLAGS := -static -L$(LIBPATH) -l$(LDLIBS)
+## LIBPATH := ../MM_CommonUtils/bin/windows_gcc
+## LIBNAME := libMM_CommonUtils.a
+## LDLIBS := MM_CommonUtils
+## LDFLAGS := -static -L$(LIBPATH) -l$(LDLIBS)
 
-CXX := g++-7.1.0
+CXX := g++
 CXXFLAGS_DEBUG := -Wall -g -m64 -std=c++1y
 CXXFLAGS_WARN := -Wall -m64 -std=c++1y
 CXXFLAGS_NO_WARN := -m64 -std=c++1y

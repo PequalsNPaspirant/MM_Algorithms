@@ -160,7 +160,7 @@ examples: [3,2,1,|6,|0,5]
 
 	Node* buildMaxTree_2(const vector<int>& values)
 	{
-		int size = values.size();
+		size_t size = values.size();
 		vector<int> indices(size);
 		for (int i = 0; i < size; ++i)
 			indices[i] = i;
@@ -179,7 +179,7 @@ examples: [3,2,1,|6,|0,5]
 	// Following algo is same as above, but only the sorting is done in a different way
 	Node* buildMaxTree_3(const vector<int>& values)
 	{
-		int size = values.size();
+		size_t size = values.size();
 		vector<int> indices(size);
 		for (int i = 0; i < size; ++i)
 			indices[i] = i;
@@ -238,7 +238,7 @@ examples: [3,2,1,|6,|0,5]
 				Node* root = nullptr;
 				switch (k)
 				{
-				case 0: root = buildMaxTree_1(testCases[i].input, 0, testCases[i].input.size() - 1);
+				case 0: root = buildMaxTree_1(testCases[i].input, 0, static_cast<int>(testCases[i].input.size() - 1));
 					break;
 				case 1: root = buildMaxTree_2(testCases[i].input);
 					break;

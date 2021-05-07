@@ -72,7 +72,7 @@ namespace mm {
 
 		// If we have knapsack with capacity zero, for any number of items, max price will be zero as we can not select any item
 		// zero'th column in above comments
-		int rowSize = knapsackCapacity + 1;
+		unsigned long long rowSize = knapsackCapacity + 1;
 		for (unsigned long long i = 0; i < values.size() + 1; ++i)
 			cache_bottom_up[i * rowSize + 0] = 0;
 

@@ -23,8 +23,8 @@ namespace mm {
 	static constexpr const unsigned int maxStringLength = 301;
 	static constexpr const unsigned int baseInput = 10;
 	static constexpr const unsigned int bitsInBase = sizeof(DIGIT_TYPE) * bitsInOneByte;
-	static const unsigned int numDigitsPerGroup = (bitsInBase * log(2) / log(baseInput)); /*= 9*/
-	static const unsigned long long maxValuePerDigit = pow(baseInput, numDigitsPerGroup);	
+	static const unsigned int numDigitsPerGroup = static_cast<unsigned int>(bitsInBase * log(2) / log(baseInput)); /*= 9*/
+	static const unsigned long long maxValuePerDigit = static_cast<unsigned long long>(pow(baseInput, numDigitsPerGroup));
 	//static const unsigned long long baseInternal = numeric_limits<unsigned int>::max() + 1;
 	static constexpr const unsigned long long baseInternal = 1ULL << bitsInBase;
 	static constexpr const unsigned long long longMask = (1ULL << bitsInBase) - 1;
@@ -39,7 +39,7 @@ namespace mm {
 		// TODO: Skip zeros at left
 		int firstNonZeroDigitIndex = 0;
 		unsigned long long carry = 0;
-		for (int i = vec.size() - 1; i >= start; --i)
+		for (size_t i = vec.size() - 1; i >= start; --i)
 		{
 			unsigned long long result = vec[i] * unsigned long long(singleDigit) + carry;
 			vec[i] = result & longMask;
@@ -47,12 +47,12 @@ namespace mm {
 		}
 
 		if(carry != 0)
-			vec[--start] = carry;
+			vec[--start] = static_cast<unsigned int>(carry);
 	}
 
 	void addSingleDigitBaseMaxInt_v1(vector<unsigned int>& vec, int& start, unsigned int singleDigit)
 	{
-		int lastDigitIndex = vec.size() - 1;
+		size_t lastDigitIndex = vec.size() - 1;
 		unsigned long long result = vec[lastDigitIndex] + unsigned long long(singleDigit);
 		vec[lastDigitIndex] = result & longMask;
 		if (lastDigitIndex - 1 < start)
@@ -80,12 +80,12 @@ namespace mm {
 		if (digitsInFirstGroup == 0)
 			digitsInFirstGroup = numDigitsPerGroup;
 		
-		start = vec.size();
+		start = static_cast<int>(vec.size());
 		vec[--start] = convertToNumber_v1(str1, 0, digitsInFirstGroup);
 
-		for (int strIndex = digitsInFirstGroup; strIndex < str1.length(); strIndex += numDigitsPerGroup)
+		for (unsigned int strIndex = digitsInFirstGroup; strIndex < str1.length(); strIndex += numDigitsPerGroup)
 		{
-			multiplyBySingleDigitBaseMaxInt_v1(vec, start, maxValuePerDigit);
+			multiplyBySingleDigitBaseMaxInt_v1(vec, start, static_cast<unsigned int>(maxValuePerDigit));
 			addSingleDigitBaseMaxInt_v1(vec, start, convertToNumber_v1(str1, strIndex, strIndex + numDigitsPerGroup));
 		}
 	}
@@ -93,17 +93,17 @@ namespace mm {
 	void multiply_v1(const vector<unsigned int>& vec1, int start1, const vector<unsigned int>& vec2, int start2, vector<unsigned int>& resultBaseMaxInt, int& start3)
 	{
 		// TODO: take len of each number as input, remove zeros at left
-		for (int i = start1 + start2 - 1; i < resultBaseMaxInt.size(); ++i)
+		for (size_t i = start1 + start2 - 1; i < resultBaseMaxInt.size(); ++i)
 			resultBaseMaxInt[i] = 0;
 
-		for (int i = vec1.size() - 1; i >= start1; --i)
+		for (size_t i = vec1.size() - 1; i >= start1; --i)
 		{
 			if (vec1[i] == 0)
 				continue;
 
-			start3 = resultBaseMaxInt.size() - (vec1.size() - i) + 1;
+			start3 = static_cast<int>(resultBaseMaxInt.size() - (vec1.size() - i) + 1);
 			unsigned long long carry = 0;
-			for (int j = vec2.size() - 1; j >= start2; --j)
+			for (size_t j = vec2.size() - 1; j >= start2; --j)
 			{
 				unsigned long long n = resultBaseMaxInt[--start3] + (unsigned long long(vec1[i]) * unsigned long long(vec2[j])) + carry;
 				resultBaseMaxInt[start3] = n & longMask;
@@ -111,7 +111,7 @@ namespace mm {
 			}
 
 			if(carry != 0)
-				resultBaseMaxInt[--start3] = carry;
+				resultBaseMaxInt[--start3] = static_cast<unsigned int>(carry);
 		}
 	}
 
@@ -121,12 +121,12 @@ namespace mm {
 	*/
 	string convertToString_v1(vector<unsigned int>& resultBaseMaxInt, const int start)
 	{
-		int index = retVal.length() - 1;
+		size_t index = retVal.length() - 1;
 		//TODO: skip zeros at left
-		for (int i = start; i < resultBaseMaxInt.size(); )
+		for (size_t i = start; i < resultBaseMaxInt.size(); )
 		{
 			unsigned long long remainder = 0;
-			for (int j = i; j < resultBaseMaxInt.size(); ++j)
+			for (size_t j = i; j < resultBaseMaxInt.size(); ++j)
 			{
 				unsigned long long n = (remainder << bitsInBase) | resultBaseMaxInt[j];
 				if (j == i && n < maxValuePerDigit)
@@ -136,12 +136,12 @@ namespace mm {
 				}
 				else
 				{
-					resultBaseMaxInt[j] = n / maxValuePerDigit;
+					resultBaseMaxInt[j] = static_cast<unsigned int>(n / maxValuePerDigit);
 					remainder = n % maxValuePerDigit;
 				}
 			}
 
-			int k = index;
+			size_t k = index;
 			index = (index < numDigitsPerGroup ? 0 : index - numDigitsPerGroup);
 			for (; k > index /*&& remainder > 0*/; --k)
 			{
@@ -186,7 +186,7 @@ namespace mm {
 		durations[1] += std::chrono::duration_cast<std::chrono::nanoseconds>(endTime - startTime).count();
 
 		startTime = std::chrono::steady_clock::now();
-		int start3 = resultBaseMaxInt.size() - 1;
+		int start3 = static_cast<int>(resultBaseMaxInt.size() - 1);
 		multiply_v1(vec1, start1, vec2, start2, resultBaseMaxInt, start3);
 		endTime = std::chrono::steady_clock::now();
 		durations[2] += std::chrono::duration_cast<std::chrono::nanoseconds>(endTime - startTime).count();
@@ -207,7 +207,7 @@ namespace mm {
 		// TODO: Skip zeros at left
 		int firstNonZeroDigitIndex = 0;
 		unsigned long long carry = singleDigitToAdd;
-		for (int i = vec.size() - 1; i >= start; --i)
+		for (size_t i = vec.size() - 1; i >= start; --i)
 		{
 			unsigned long long result = vec[i] * unsigned long long(singleDigitToMultiplyBy) + carry;
 			vec[i] = result & longMask;
@@ -215,7 +215,7 @@ namespace mm {
 		}
 
 		if(carry != 0)
-			vec[--start] = carry;
+			vec[--start] = static_cast<unsigned int>(carry);
 	}
 
 	unsigned int convertToNumber_v2(const string& str1, unsigned int start, unsigned int end)
@@ -234,29 +234,29 @@ namespace mm {
 		if (digitsInFirstGroup == 0)
 			digitsInFirstGroup = numDigitsPerGroup;
 		
-		start = vec.size();
+		start = static_cast<int>(vec.size());
 		vec[--start] = convertToNumber_v2(str1, 0, digitsInFirstGroup);
 
 		for (int strIndex = digitsInFirstGroup; strIndex < str1.length(); strIndex += numDigitsPerGroup)
 		{
-			multiplyByAndAddSingleDigitBaseMaxInt_v2(vec, start, maxValuePerDigit, convertToNumber_v2(str1, strIndex, strIndex + numDigitsPerGroup));
+			multiplyByAndAddSingleDigitBaseMaxInt_v2(vec, start, static_cast<unsigned int>(maxValuePerDigit), convertToNumber_v2(str1, strIndex, strIndex + numDigitsPerGroup));
 		}
 	}
 
 	void multiply_v2(const vector<unsigned int>& vec1, int start1, const vector<unsigned int>& vec2, int start2, vector<unsigned int>& resultBaseMaxInt, int& start3)
 	{
 		// TODO: take len of each number as input, remove zeros at left
-		for (int i = start1 + start2 - 1; i < resultBaseMaxInt.size(); ++i)
+		for (size_t i = start1 + start2 - 1; i < resultBaseMaxInt.size(); ++i)
 			resultBaseMaxInt[i] = 0;
 
-		for (int i = vec1.size() - 1; i >= start1; --i)
+		for (size_t i = vec1.size() - 1; i >= start1; --i)
 		{
 			if (vec1[i] == 0)
 				continue;
 
-			start3 = resultBaseMaxInt.size() - (vec1.size() - i) + 1;
+			start3 = static_cast<int>(resultBaseMaxInt.size() - (vec1.size() - i) + 1);
 			unsigned long long carry = 0;
-			for (int j = vec2.size() - 1; j >= start2; --j)
+			for (size_t j = vec2.size() - 1; j >= start2; --j)
 			{
 				unsigned long long n = resultBaseMaxInt[--start3] + (unsigned long long(vec1[i]) * unsigned long long(vec2[j])) + carry;
 				resultBaseMaxInt[start3] = n & longMask;
@@ -264,18 +264,18 @@ namespace mm {
 			}
 
 			if(carry != 0)
-				resultBaseMaxInt[--start3] = carry;
+				resultBaseMaxInt[--start3] = static_cast<unsigned int>(carry);
 		}
 	}
 
 	size_t convertToString_v2(vector<unsigned int>& resultBaseMaxInt, const int start)
 	{
-		int index = retVal.length() - 1;
+		size_t index = retVal.length() - 1;
 		//TODO: skip zeros at left
-		for (int i = start; i < resultBaseMaxInt.size(); )
+		for (size_t i = start; i < resultBaseMaxInt.size(); )
 		{
 			unsigned long long remainder = 0;
-			for (int j = i; j < resultBaseMaxInt.size(); ++j)
+			for (size_t j = i; j < resultBaseMaxInt.size(); ++j)
 			{
 				unsigned long long n = (remainder << bitsInBase) | resultBaseMaxInt[j];
 				if (j == i && n < maxValuePerDigit)
@@ -285,12 +285,12 @@ namespace mm {
 				}
 				else
 				{
-					resultBaseMaxInt[j] = n / maxValuePerDigit;
+					resultBaseMaxInt[j] = static_cast<unsigned int>(n / maxValuePerDigit);
 					remainder = n % maxValuePerDigit;
 				}
 			}
 
-			int k = index;
+			size_t k = index;
 			index = (index < numDigitsPerGroup ? 0 : index - numDigitsPerGroup);
 			for (; k > index /*&& remainder > 0*/; --k)
 			{
@@ -332,7 +332,7 @@ namespace mm {
 		durations[1] += std::chrono::duration_cast<std::chrono::nanoseconds>(endTime - startTime).count();
 
 		startTime = std::chrono::steady_clock::now();
-		int start3 = resultBaseMaxInt.size() - 1;
+		int start3 = static_cast<int>(resultBaseMaxInt.size() - 1);
 		multiply_v2(vec1, start1, vec2, start2, resultBaseMaxInt, start3);
 		endTime = std::chrono::steady_clock::now();
 		durations[2] += std::chrono::duration_cast<std::chrono::nanoseconds>(endTime - startTime).count();
@@ -355,7 +355,7 @@ namespace mm {
 		// TODO: Skip zeros at left
 		int firstNonZeroDigitIndex = 0;
 		unsigned long long carry = 0;
-		for (int i = vec.size() - 1; i >= start; --i)
+		for (size_t i = vec.size() - 1; i >= start; --i)
 		{
 			unsigned long long result = vec[i] * unsigned long long(singleDigit) + carry;
 			vec[i] = result & longMask;
@@ -363,12 +363,12 @@ namespace mm {
 		}
 
 		if(carry != 0)
-			vec[--start] = carry;
+			vec[--start] = static_cast<unsigned int>(carry);
 	}
 
 	void addSingleDigitBaseMaxInt_v3(vector<unsigned int>& vec, int& start, unsigned int singleDigit)
 	{
-		int lastDigitIndex = vec.size() - 1;
+		size_t lastDigitIndex = vec.size() - 1;
 		unsigned long long result = vec[lastDigitIndex] + unsigned long long(singleDigit);
 		vec[lastDigitIndex] = result & longMask;
 		if (lastDigitIndex - 1 < start)
@@ -396,12 +396,12 @@ namespace mm {
 		if (digitsInFirstGroup == 0)
 			digitsInFirstGroup = numDigitsPerGroup;
 		
-		start = vec.size();
+		start = static_cast<int>(vec.size());
 		vec[--start] = convertToNumber_v3(str1, 0, digitsInFirstGroup);
 
 		for (int strIndex = digitsInFirstGroup; strIndex < str1.length(); strIndex += numDigitsPerGroup)
 		{
-			multiplyBySingleDigitBaseMaxInt_v3(vec, start, maxValuePerDigit);
+			multiplyBySingleDigitBaseMaxInt_v3(vec, start, static_cast<unsigned int>(maxValuePerDigit));
 			addSingleDigitBaseMaxInt_v3(vec, start, convertToNumber_v3(str1, strIndex, strIndex + numDigitsPerGroup));
 		}
 	}
@@ -412,14 +412,14 @@ namespace mm {
 		for (int i = start1 + start2 - 1; i < resultBaseMaxInt.size(); ++i)
 			resultBaseMaxInt[i] = 0;
 
-		for (int i = vec1.size() - 1; i >= start1; --i)
+		for (size_t i = vec1.size() - 1; i >= start1; --i)
 		{
 			if (vec1[i] == 0)
 				continue;
 
-			start3 = resultBaseMaxInt.size() - (vec1.size() - i) + 1;
+			start3 = static_cast<int>(resultBaseMaxInt.size() - (vec1.size() - i) + 1);
 			unsigned long long carry = 0;
-			for (int j = vec2.size() - 1; j >= start2; --j)
+			for (size_t j = vec2.size() - 1; j >= start2; --j)
 			{
 				unsigned long long n = resultBaseMaxInt[--start3] + (unsigned long long(vec1[i]) * unsigned long long(vec2[j])) + carry;
 				resultBaseMaxInt[start3] = n & longMask;
@@ -427,27 +427,27 @@ namespace mm {
 			}
 
 			if(carry != 0)
-				resultBaseMaxInt[--start3] = carry;
+				resultBaseMaxInt[--start3] = static_cast<unsigned int>(carry);
 		}
 	}
 
 	void multiplyByAndAddSingleDigitBase10pow9_v3(vector<unsigned int>& resultBase10pow9, int& start2, unsigned int singleDigitToAdd)
 	{
 		unsigned long long carry = singleDigitToAdd;
-		int i = resultBase10pow9.size();
+		size_t i = resultBase10pow9.size();
 		for (; i > start2;)
 		{
 			--i;
 			unsigned long long n = (unsigned long long(resultBase10pow9[i]) << bitsInBase) | carry;
 			carry = n / maxValuePerDigit;
-			resultBase10pow9[i] = n % maxValuePerDigit;
+			resultBase10pow9[i] = static_cast<unsigned int>(n % maxValuePerDigit);
 			// Compiler generated code is more optimized than below implementation
 			//resultBase10pow9[i] = n - carry * maxValuePerDigit;
 		}
 
 		while (carry > 0)
 		{
-			resultBase10pow9[--i] = carry % maxValuePerDigit;
+			resultBase10pow9[--i] = static_cast<unsigned int>(carry % maxValuePerDigit);
 			carry /= maxValuePerDigit;
 			// Compiler generated code is more optimized than below implementation
 			//unsigned long long n = carry / maxValuePerDigit;
@@ -455,13 +455,13 @@ namespace mm {
 			//carry = n;
 		}
 
-		start2 = i;
+		start2 = static_cast<int>(i);
 	}
 
 	void convertToSmallerBase_v3(vector<unsigned int>& resultBaseMaxInt, const int start1, vector<unsigned int>& resultBase10pow9, int& start2)
 	{
 		// TODO: remove zeros at left in resultBaseMaxInt
-		start2 = resultBase10pow9.size() - 1;
+		start2 = static_cast<int>(resultBase10pow9.size() - 1);
 		resultBase10pow9[start2] = resultBaseMaxInt[start1];
 
 		for (int strIndex = start1 + 1; strIndex < resultBaseMaxInt.size(); ++strIndex)
@@ -484,7 +484,7 @@ namespace mm {
 		//Convert number into string
 		size_t strStart = retVal.size();
 		// Process all digits but last one
-		for (int i = resultBase10pow9.size(); i > start2 + 1;)
+		for (size_t i = resultBase10pow9.size(); i > start2 + 1;)
 		{
 			unsigned int remainder = resultBase10pow9[--i];
 			//for (int k = numDigitsPerGroup; k > 0 /*&& remainder > 0*/; --k)
@@ -547,7 +547,7 @@ namespace mm {
 		durations[1] += std::chrono::duration_cast<std::chrono::nanoseconds>(endTime - startTime).count();
 
 		startTime = std::chrono::steady_clock::now();
-		int start3 = resultBaseMaxInt.size() - 1;
+		int start3 = static_cast<int>(resultBaseMaxInt.size() - 1);
 		multiply_v3(vec1, start1, vec2, start2, resultBaseMaxInt, start3);
 		endTime = std::chrono::steady_clock::now();
 		durations[2] += std::chrono::duration_cast<std::chrono::nanoseconds>(endTime - startTime).count();

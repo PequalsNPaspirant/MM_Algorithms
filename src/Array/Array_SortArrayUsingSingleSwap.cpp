@@ -3,7 +3,7 @@
 #include "Array/Array_SmallestPositiveIntNotPresentInArray.h"
 #include "MM_UnitTestFramework/MM_UnitTestFramework.h"
 //#include "Others/PrintUtils.h"
-#include "Assert/MyAssert.h"
+#include "Utils/Utils_MM_Assert.h"
 
 namespace mm {
 

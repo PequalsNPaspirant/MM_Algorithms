@@ -204,7 +204,7 @@ namespace mm {
 		}
 		catch (std::ofstream::failure &writeErr)
 		{
-			cout << "\nERROR: Can not open file: " << filePath << endl;
+			cout << "\nERROR: Can not open file: " << filePath << " Error: " << writeErr.what() << endl;
 			return;
 		}
 		catch (...)

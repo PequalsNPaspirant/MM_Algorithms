@@ -132,7 +132,7 @@ namespace mm {
 		//Calculate exponent
 		int exponentBase2 = 0;
 		for (short i = lastExponentBitPosition; i > signBitPosition; i--)
-			exponentBase2 += bits[i] * pow(2, lastExponentBitPosition - i);
+			exponentBase2 += bits[i] * static_cast<int>(pow(2, lastExponentBitPosition - i));
 
 		const int biasedComponent = 1023;
 		int exponentBase2afterBiasAdjusted = exponentBase2 - biasedComponent;

@@ -121,7 +121,7 @@ namespace mm {
 		}
 		catch (std::ofstream::failure &writeErr)
 		{
-			cout << "\nERROR: Can not open file: " << fileName << endl;
+			cout << "\nERROR: Can not open file: " << fileName << " Error: " << writeErr.what() << endl;
 			return resultsFile;
 		}
 		catch (...)
@@ -189,7 +189,7 @@ namespace mm {
 
 	double DP_KnapsackProblem_0_1(const vector<double>& values, const vector<unsigned long long>& weights, unsigned long long knapsackCapacity, vector<unsigned int>& selectedItems, KnapsackProblemAlgo approach)
 	{
-		unsigned long long spaceComplexity = pow(2, values.size()); // Default/Worst case space complexity
+		unsigned long long spaceComplexity = static_cast<size_t>(pow(2, values.size())); // Default/Worst case space complexity
 		std::chrono::steady_clock::time_point startTime, endTime;
 		double maxValue = 0;
 		switch (approach)
@@ -632,21 +632,21 @@ namespace mm {
 	void runHardecodedSanityTest(ofstream& resultFile)
 	{
 		vector<Kanpsack_0_1_DataSet> testData = DP_KnapsackProblem_0_1_testDataGenerator::getHardecodedSanityTestCases();
-		KnapsackTest(testData, (1 << int(KnapsackProblemAlgo::max_approaches)) - 1);
+		KnapsackTest(testData, (1ULL << int(KnapsackProblemAlgo::max_approaches)) - 1);
 		writePerformanceTestResultsToCSVFile(testData, resultFile);
 	}
 
 	void runSanityTest(ofstream& resultFile)
 	{
 		vector<Kanpsack_0_1_DataSet> testData = DP_KnapsackProblem_0_1_testDataGenerator::readAllTestCasesFromFile(Kanpsack_0_1_testCaseType::sanityTestCases);
-		KnapsackTest(testData, (1 << int(KnapsackProblemAlgo::max_approaches)) - 1);
+		KnapsackTest(testData, (1ULL << int(KnapsackProblemAlgo::max_approaches)) - 1);
 		writePerformanceTestResultsToCSVFile(testData, resultFile);
 	}
 	
 	void runPerformanceTest_1K(ofstream& resultFile)
 	{
 		vector<Kanpsack_0_1_DataSet> testData = DP_KnapsackProblem_0_1_testDataGenerator::readAllTestCasesFromFile(Kanpsack_0_1_testCaseType::performanceTestCases_1K);
-		KnapsackTest(testData, (1 << int(KnapsackProblemAlgo::max_approaches)) - 1);
+		KnapsackTest(testData, (1ULL << int(KnapsackProblemAlgo::max_approaches)) - 1);
 		writePerformanceTestResultsToCSVFile(testData, resultFile);
 	}
 
@@ -654,7 +654,7 @@ namespace mm {
 	{
 		// n = 1000, W = 5,000,000, O(5 billion)    Takes 7 seconds
 		vector<Kanpsack_0_1_DataSet> testData = DP_KnapsackProblem_0_1_testDataGenerator::readAllTestCasesFromFile(Kanpsack_0_1_testCaseType::performanceTestCases_10K);
-		KnapsackTest(testData, (1 << int(KnapsackProblemAlgo::max_approaches)) - 1);
+		KnapsackTest(testData, (1ULL << int(KnapsackProblemAlgo::max_approaches)) - 1);
 
 		writePerformanceTestResultsToCSVFile(testData, resultFile);
 	}
@@ -664,7 +664,7 @@ namespace mm {
 		// n = 10,000, W = 5,000,000, O(50 billion)  
 		// n = 10,000, W = 10,000,000, O(100 billion)   
 		vector<Kanpsack_0_1_DataSet> testData = DP_KnapsackProblem_0_1_testDataGenerator::readAllTestCasesFromFile(Kanpsack_0_1_testCaseType::performanceTestCases_100K);
-		KnapsackTest(testData, (1 << int(KnapsackProblemAlgo::max_approaches)) - 1);
+		KnapsackTest(testData, (1ULL << int(KnapsackProblemAlgo::max_approaches)) - 1);
 
 		writePerformanceTestResultsToCSVFile(testData, resultFile);
 	}
@@ -680,7 +680,7 @@ namespace mm {
 				continue;
 
 			testData.push_back(data);
-			KnapsackTest(testData, (1 << int(KnapsackProblemAlgo::max_approaches)) - 1);
+			KnapsackTest(testData, (1ULL << int(KnapsackProblemAlgo::max_approaches)) - 1);
 
 			writePerformanceTestResultsToCSVFile(testData, resultFile);
 			testData.clear();

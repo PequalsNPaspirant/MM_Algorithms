@@ -3,127 +3,426 @@ obj/windows_gcc/Array/Array.o: src/Array/Array.cpp
 
 obj/windows_gcc/Array/Array_SmallestPositiveIntNotPresentInArray.o: src/Array/Array_SmallestPositiveIntNotPresentInArray.cpp \
  src/Array/Array_SmallestPositiveIntNotPresentInArray.h \
- ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
 
 obj/windows_gcc/Array/Array_SortArrayUsingSingleSwap.o: src/Array/Array_SortArrayUsingSingleSwap.cpp \
  src/Array/Array_SmallestPositiveIntNotPresentInArray.h \
- ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h \
- ../MM_CommonUtils/src/Assert/MyAssert.h
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ src/Utils/Utils_MM_Assert.h
 
 obj/windows_gcc/Backtracking/Backtracking.o: src/Backtracking/Backtracking.cpp
 
 obj/windows_gcc/Binary/Binary_ReverseBits.o: src/Binary/Binary_ReverseBits.cpp \
  src/Binary/Binary_ReverseBits.h \
- ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
 
 obj/windows_gcc/Binary/Binary_Toggle1bitForMaxAdjacency.o: src/Binary/Binary_Toggle1bitForMaxAdjacency.cpp \
  src/Array/Array_SmallestPositiveIntNotPresentInArray.h \
- ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
 
 obj/windows_gcc/BinarySearchTree_BST/BST_CheckIfPreorderTraversalIsBST.o: src/BinarySearchTree_BST/BST_CheckIfPreorderTraversalIsBST.cpp \
  src/BinarySearchTree_BST/BST_CheckIfPreorderTraversalIsBST.h \
- ../MM_CommonUtils/src/Others\PrintUtils.h \
- ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+ src/Utils\Utils_PrintUtils.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
 
 obj/windows_gcc/BinaryTree/BinaryTree_BuildFromArrayRepresentation.o: src/BinaryTree/BinaryTree_BuildFromArrayRepresentation.cpp \
  src/BinaryTree/BinaryTree_BuildFromArrayRepresentation.h \
- src/BinaryTree\BinaryTree_TestData.h \
- ../MM_CommonUtils/src/Others\PrintUtils.h \
- ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+ src/Utils\Utils_PrintUtils.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/BinaryTree/BinaryTree_CheckIfBST.o: src/BinaryTree/BinaryTree_CheckIfBST.cpp \
+ src/BinaryTree/BinaryTree_CreateBinaryTree.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ src/BinaryTree/BinaryTree_CheckIfBST.h
+
+obj/windows_gcc/BinaryTree/BinaryTree_CheckIfIdentical.o: src/BinaryTree/BinaryTree_CheckIfIdentical.cpp \
+ src/BinaryTree/BinaryTree_CheckIfIdentical.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
 
 obj/windows_gcc/BinaryTree/BinaryTree_MaxTree.o: src/BinaryTree/BinaryTree_MaxTree.cpp \
  src/BinaryTree/BinaryTree_MaxTree.h \
- ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h \
- ../MM_CommonUtils/src/Others/PrintUtils.h
-
-obj/windows_gcc/BinaryTree/BinaryTree_TestData.o: src/BinaryTree/BinaryTree_TestData.cpp \
- src/Binary/Binary_ReverseBits.h \
- ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ src/Utils/Utils_PrintUtils.h
 
 obj/windows_gcc/BinaryTree/BinaryTree_Traversals.o: src/BinaryTree/BinaryTree_Traversals.cpp \
  src/Binary/Binary_ReverseBits.h \
- ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/BitHacks/BitHacks.o: src/BitHacks/BitHacks.cpp src/BitHacks/BitHacks.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/C++/C++_atoi.o: src/C++/C++_atoi.cpp src/Timer/Timer_Timer.h \
+ src/Utils/Utils_MM_Assert.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/C++/C++_CastDerivedPtrToPtr.o: src/C++/C++_CastDerivedPtrToPtr.cpp
+
+obj/windows_gcc/C++/C++_DataTypes.o: src/C++/C++_DataTypes.cpp src/C++/C++_DataTypes.h \
+ src/Utils/Utils_MM_Assert.h
+
+obj/windows_gcc/C++/C++_Date.o: src/C++/C++_Date.cpp
+
+obj/windows_gcc/C++/C++_Excel.o: src/C++/C++_Excel.cpp
+
+obj/windows_gcc/C++/C++_FunctionOverloading.o: src/C++/C++_FunctionOverloading.cpp \
+ src/C++/C++_FunctionOverloading.h
+
+obj/windows_gcc/C++/C++_Miscellaneous.o: src/C++/C++_Miscellaneous.cpp
+
+obj/windows_gcc/C++/C++_OperatorOverloadingAllinOne.o: src/C++/C++_OperatorOverloadingAllinOne.cpp
+
+obj/windows_gcc/C++/C++_ReadWriteSubscriptOperators.o: src/C++/C++_ReadWriteSubscriptOperators.cpp \
+ src/C++\C++_ReadWriteSubscriptOperators.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/C++/C++_ReadWriteSubscriptOperatorsMatrix.o: src/C++/C++_ReadWriteSubscriptOperatorsMatrix.cpp \
+ src/C++/C++_ReadWriteSubscriptOperatorsMatrix.h \
+ src/Utils/Utils_MM_Assert.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/C++11_onwards/C++11_MoveSemantics.o: src/C++11_onwards/C++11_MoveSemantics.cpp
+
+obj/windows_gcc/C++11_onwards/C++11_RvalueReferenceAndMove.o: src/C++11_onwards/C++11_RvalueReferenceAndMove.cpp
+
+obj/windows_gcc/Cryptography/Cryptography_PasswordEncryption.o: src/Cryptography/Cryptography_PasswordEncryption.cpp
+
+obj/windows_gcc/Database/Database_Database.o: src/Database/Database_Database.cpp
+
+obj/windows_gcc/DataStructures/DS_BST.o: src/DataStructures/DS_BST.cpp
+
+obj/windows_gcc/DataStructures/DS_BST_AVL.o: src/DataStructures/DS_BST_AVL.cpp
+
+obj/windows_gcc/DataStructures/DS_BST_RedBlackTree.o: src/DataStructures/DS_BST_RedBlackTree.cpp
+
+obj/windows_gcc/DataStructures/DS_BST_splay.o: src/DataStructures/DS_BST_splay.cpp
+
+obj/windows_gcc/DataStructures/DS_BST_treap.o: src/DataStructures/DS_BST_treap.cpp
+
+obj/windows_gcc/DataStructures/DS_heap.o: src/DataStructures/DS_heap.cpp src/DataStructures/DS_heap.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/DataStructures/DS_LinkList.o: src/DataStructures/DS_LinkList.cpp
+
+obj/windows_gcc/DataStructures/DS_LRU.o: src/DataStructures/DS_LRU.cpp \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ src/DataStructures/DS_LRU.h
+
+obj/windows_gcc/DataStructures/DS_MM_shared_ptr.o: src/DataStructures/DS_MM_shared_ptr.cpp \
+ src/DataStructures/DS_MM_shared_ptr.h src/Timer/Timer_Timer.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/DataStructures/DS_MM_vector_bool.o: src/DataStructures/DS_MM_vector_bool.cpp
+
+obj/windows_gcc/DataStructures/DS_my_deque.o: src/DataStructures/DS_my_deque.cpp
+
+obj/windows_gcc/DataStructures/DS_my_vector.o: src/DataStructures/DS_my_vector.cpp
+
+obj/windows_gcc/DataStructures/DS_StackQueue.o: src/DataStructures/DS_StackQueue.cpp
 
 obj/windows_gcc/DivideAndConquer/DivideAndConquer.o: src/DivideAndConquer/DivideAndConquer.cpp
 
 obj/windows_gcc/DivideAndConquer/DivideAndConquer_BinarySearch.o: src/DivideAndConquer/DivideAndConquer_BinarySearch.cpp \
  src/DivideAndConquer/DivideAndConquer_BinarySearch.h \
- ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
 
 obj/windows_gcc/DynamicProgramming/DP_CoinChangeMakingProblem.o: src/DynamicProgramming/DP_CoinChangeMakingProblem.cpp \
  src/DynamicProgramming/DP_CoinChangeMakingProblem.h \
- ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
 
 obj/windows_gcc/DynamicProgramming/DP_Fibonacci.o: src/DynamicProgramming/DP_Fibonacci.cpp \
  src/DynamicProgramming/DP_Fibonacci.h
 
 obj/windows_gcc/DynamicProgramming/DP_Fibonacci_UnitTests.o: src/DynamicProgramming/DP_Fibonacci_UnitTests.cpp \
  src/DynamicProgramming/DP_Fibonacci.h \
- ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
 
 obj/windows_gcc/DynamicProgramming/DP_HouseRobbery.o: src/DynamicProgramming/DP_HouseRobbery.cpp \
- ../MM_CommonUtils/src/my_math_lib/Permutations.h \
- src/DynamicProgramming/DP_HouseRobbery.h
+ src/Maths/Maths_Permutations.h src/DynamicProgramming/DP_HouseRobbery.h
 
 obj/windows_gcc/DynamicProgramming/DP_HouseRobbery_UnitTests.o: src/DynamicProgramming/DP_HouseRobbery_UnitTests.cpp \
- ../MM_CommonUtils/src/my_math_lib/Permutations.h \
- src/DynamicProgramming/DP_HouseRobbery.h \
- ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+ src/Maths/Maths_Permutations.h src/DynamicProgramming/DP_HouseRobbery.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
 
-obj/windows_gcc/DynamicProgramming/DP_KnapsackProblem_0_1.o: src/DynamicProgramming/DP_KnapsackProblem_0_1.cpp \
- ../MM_CommonUtils/src/Others/PrintUtils.h \
+obj/windows_gcc/DynamicProgramming/DP_KnapsackProblem_0_1_bottom_up_no_capacity.o: src/DynamicProgramming/DP_KnapsackProblem_0_1_bottom_up_no_capacity.cpp \
+ src/Utils/Utils_PrintUtils.h \
  src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
- ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h \
- ../MM_CommonUtils/src/Assert/MyAssert.h
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ src/Utils/Utils_MM_Assert.h
+
+obj/windows_gcc/DynamicProgramming/DP_KnapsackProblem_0_1_bottom_up_no_capacity_space_efficient.o: src/DynamicProgramming/DP_KnapsackProblem_0_1_bottom_up_no_capacity_space_efficient.cpp \
+ src/Utils/Utils_PrintUtils.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ src/Utils/Utils_MM_Assert.h
+
+obj/windows_gcc/DynamicProgramming/DP_KnapsackProblem_0_1_bottom_up_space_efficient_set.o: src/DynamicProgramming/DP_KnapsackProblem_0_1_bottom_up_space_efficient_set.cpp \
+ src/Utils/Utils_PrintUtils.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ src/Utils/Utils_MM_Assert.h
+
+obj/windows_gcc/DynamicProgramming/DP_KnapsackProblem_0_1_bottom_up_space_efficient_v1.o: src/DynamicProgramming/DP_KnapsackProblem_0_1_bottom_up_space_efficient_v1.cpp \
+ src/Utils/Utils_PrintUtils.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ src/Utils/Utils_MM_Assert.h
+
+obj/windows_gcc/DynamicProgramming/DP_KnapsackProblem_0_1_bottom_up_space_efficient_v1a.o: src/DynamicProgramming/DP_KnapsackProblem_0_1_bottom_up_space_efficient_v1a.cpp \
+ src/Utils/Utils_PrintUtils.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ src/Utils/Utils_MM_Assert.h
+
+obj/windows_gcc/DynamicProgramming/DP_KnapsackProblem_0_1_bottom_up_space_efficient_v2.o: src/DynamicProgramming/DP_KnapsackProblem_0_1_bottom_up_space_efficient_v2.cpp \
+ src/Utils/Utils_PrintUtils.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ src/Utils/Utils_MM_Assert.h
+
+obj/windows_gcc/DynamicProgramming/DP_KnapsackProblem_0_1_bottom_up_space_efficient_v3.o: src/DynamicProgramming/DP_KnapsackProblem_0_1_bottom_up_space_efficient_v3.cpp \
+ src/Utils/Utils_PrintUtils.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ src/Utils/Utils_MM_Assert.h
+
+obj/windows_gcc/DynamicProgramming/DP_KnapsackProblem_0_1_bottom_up_space_efficient_v4.o: src/DynamicProgramming/DP_KnapsackProblem_0_1_bottom_up_space_efficient_v4.cpp \
+ src/Utils/Utils_PrintUtils.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ src/Utils/Utils_MM_Assert.h
+
+obj/windows_gcc/DynamicProgramming/DP_KnapsackProblem_0_1_bottom_up_v1.o: src/DynamicProgramming/DP_KnapsackProblem_0_1_bottom_up_v1.cpp \
+ src/Utils/Utils_PrintUtils.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ src/Utils/Utils_MM_Assert.h
+
+obj/windows_gcc/DynamicProgramming/DP_KnapsackProblem_0_1_bottom_up_v2.o: src/DynamicProgramming/DP_KnapsackProblem_0_1_bottom_up_v2.cpp \
+ src/Utils/Utils_PrintUtils.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ src/Utils/Utils_MM_Assert.h
+
+obj/windows_gcc/DynamicProgramming/DP_KnapsackProblem_0_1_branch_and_bound_todo.o: src/DynamicProgramming/DP_KnapsackProblem_0_1_branch_and_bound_todo.cpp \
+ src/Utils/Utils_PrintUtils.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ src/Utils/Utils_MM_Assert.h
+
+obj/windows_gcc/DynamicProgramming/DP_KnapsackProblem_0_1_branch_and_bound_v1.o: src/DynamicProgramming/DP_KnapsackProblem_0_1_branch_and_bound_v1.cpp \
+ src/Utils/Utils_PrintUtils.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ src/Utils/Utils_MM_Assert.h
+
+obj/windows_gcc/DynamicProgramming/DP_KnapsackProblem_0_1_branch_and_bound_v2.o: src/DynamicProgramming/DP_KnapsackProblem_0_1_branch_and_bound_v2.cpp \
+ src/Utils/Utils_PrintUtils.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ src/Utils/Utils_MM_Assert.h
+
+obj/windows_gcc/DynamicProgramming/DP_KnapsackProblem_0_1_branch_and_bound_v3.o: src/DynamicProgramming/DP_KnapsackProblem_0_1_branch_and_bound_v3.cpp \
+ src/Utils/Utils_PrintUtils.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ src/Utils/Utils_MM_Assert.h
+
+obj/windows_gcc/DynamicProgramming/DP_KnapsackProblem_0_1_branch_and_bound_v3a.o: src/DynamicProgramming/DP_KnapsackProblem_0_1_branch_and_bound_v3a.cpp \
+ src/Utils/Utils_PrintUtils.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ src/Utils/Utils_MM_Assert.h
+
+obj/windows_gcc/DynamicProgramming/DP_KnapsackProblem_0_1_branch_and_bound_v3b.o: src/DynamicProgramming/DP_KnapsackProblem_0_1_branch_and_bound_v3b.cpp \
+ src/Utils/Utils_PrintUtils.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ src/Utils/Utils_MM_Assert.h
+
+obj/windows_gcc/DynamicProgramming/DP_KnapsackProblem_0_1_branch_and_bound_v4.o: src/DynamicProgramming/DP_KnapsackProblem_0_1_branch_and_bound_v4.cpp \
+ src/Utils/Utils_PrintUtils.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ src/Utils/Utils_MM_Assert.h
+
+obj/windows_gcc/DynamicProgramming/DP_KnapsackProblem_0_1_branch_and_bound_v5.o: src/DynamicProgramming/DP_KnapsackProblem_0_1_branch_and_bound_v5.cpp \
+ src/Utils/Utils_PrintUtils.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ src/Utils/Utils_MM_Assert.h
+
+obj/windows_gcc/DynamicProgramming/DP_KnapsackProblem_0_1_branch_and_bound_v6.o: src/DynamicProgramming/DP_KnapsackProblem_0_1_branch_and_bound_v6.cpp \
+ src/Utils/Utils_PrintUtils.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ src/Utils/Utils_MM_Assert.h
+
+obj/windows_gcc/DynamicProgramming/DP_KnapsackProblem_0_1_branch_and_bound_v7.o: src/DynamicProgramming/DP_KnapsackProblem_0_1_branch_and_bound_v7.cpp \
+ src/Utils/Utils_PrintUtils.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ src/Utils/Utils_MM_Assert.h
+
+obj/windows_gcc/DynamicProgramming/DP_KnapsackProblem_0_1_branch_and_bound_v8.o: src/DynamicProgramming/DP_KnapsackProblem_0_1_branch_and_bound_v8.cpp \
+ src/Utils/Utils_PrintUtils.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ src/Utils/Utils_MM_Assert.h
+
+obj/windows_gcc/DynamicProgramming/DP_KnapsackProblem_0_1_branch_and_bound_v8b.o: src/DynamicProgramming/DP_KnapsackProblem_0_1_branch_and_bound_v8b.cpp \
+ src/Utils/Utils_PrintUtils.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ src/Utils/Utils_MM_Assert.h
+
+obj/windows_gcc/DynamicProgramming/DP_KnapsackProblem_0_1_branch_and_bound_v9b.o: src/DynamicProgramming/DP_KnapsackProblem_0_1_branch_and_bound_v9b.cpp \
+ src/Utils/Utils_PrintUtils.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ src/Utils/Utils_MM_Assert.h
+
+obj/windows_gcc/DynamicProgramming/DP_KnapsackProblem_0_1_greedy.o: src/DynamicProgramming/DP_KnapsackProblem_0_1_greedy.cpp \
+ src/Utils/Utils_PrintUtils.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ src/Utils/Utils_MM_Assert.h
+
+obj/windows_gcc/DynamicProgramming/DP_KnapsackProblem_0_1_naive_non_recursive_v1.o: src/DynamicProgramming/DP_KnapsackProblem_0_1_naive_non_recursive_v1.cpp \
+ src/Utils/Utils_PrintUtils.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ src/Utils/Utils_MM_Assert.h
+
+obj/windows_gcc/DynamicProgramming/DP_KnapsackProblem_0_1_naive_non_recursive_v2.o: src/DynamicProgramming/DP_KnapsackProblem_0_1_naive_non_recursive_v2.cpp \
+ src/Utils/Utils_PrintUtils.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ src/Utils/Utils_MM_Assert.h
+
+obj/windows_gcc/DynamicProgramming/DP_KnapsackProblem_0_1_naive_non_recursive_v3.o: src/DynamicProgramming/DP_KnapsackProblem_0_1_naive_non_recursive_v3.cpp \
+ src/Utils/Utils_PrintUtils.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ src/Utils/Utils_MM_Assert.h
+
+obj/windows_gcc/DynamicProgramming/DP_KnapsackProblem_0_1_naive_tail_recursive.o: src/DynamicProgramming/DP_KnapsackProblem_0_1_naive_tail_recursive.cpp \
+ src/Utils/Utils_PrintUtils.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ src/Utils/Utils_MM_Assert.h
+
+obj/windows_gcc/DynamicProgramming/DP_KnapsackProblem_0_1_naive_v1.o: src/DynamicProgramming/DP_KnapsackProblem_0_1_naive_v1.cpp \
+ src/Utils/Utils_PrintUtils.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ src/Utils/Utils_MM_Assert.h
+
+obj/windows_gcc/DynamicProgramming/DP_KnapsackProblem_0_1_naive_v2.o: src/DynamicProgramming/DP_KnapsackProblem_0_1_naive_v2.cpp \
+ src/Utils/Utils_PrintUtils.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ src/Utils/Utils_MM_Assert.h
+
+obj/windows_gcc/DynamicProgramming/DP_KnapsackProblem_0_1_test.o: src/DynamicProgramming/DP_KnapsackProblem_0_1_test.cpp \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1_testDataGenerator.h \
+ src/Utils/Utils_PrintUtils.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ src/Utils/Utils_MM_Assert.h src/Timer/Timer_Timer.h
+
+obj/windows_gcc/DynamicProgramming/DP_KnapsackProblem_0_1_testDataGenerator.o: src/DynamicProgramming/DP_KnapsackProblem_0_1_testDataGenerator.cpp \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1_testDataGenerator.h \
+ src/Utils/Utils_PrintUtils.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ src/Utils/Utils_MM_Assert.h
+
+obj/windows_gcc/DynamicProgramming/DP_KnapsackProblem_0_1_top_down_non_recursive.o: src/DynamicProgramming/DP_KnapsackProblem_0_1_top_down_non_recursive.cpp \
+ src/Utils/Utils_PrintUtils.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ src/Utils/Utils_MM_Assert.h
+
+obj/windows_gcc/DynamicProgramming/DP_KnapsackProblem_0_1_top_down_tail_recursive.o: src/DynamicProgramming/DP_KnapsackProblem_0_1_top_down_tail_recursive.cpp \
+ src/Utils/Utils_PrintUtils.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ src/Utils/Utils_MM_Assert.h
+
+obj/windows_gcc/DynamicProgramming/DP_KnapsackProblem_0_1_top_down_using_hashmap.o: src/DynamicProgramming/DP_KnapsackProblem_0_1_top_down_using_hashmap.cpp \
+ src/Utils/Utils_PrintUtils.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ src/Utils/Utils_MM_Assert.h
+
+obj/windows_gcc/DynamicProgramming/DP_KnapsackProblem_0_1_top_down_using_vector.o: src/DynamicProgramming/DP_KnapsackProblem_0_1_top_down_using_vector.cpp \
+ src/Utils/Utils_PrintUtils.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ src/Utils/Utils_MM_Assert.h
 
 obj/windows_gcc/DynamicProgramming/DP_LongestCommonSubsequenceLength.o: src/DynamicProgramming/DP_LongestCommonSubsequenceLength.cpp \
  src/DynamicProgramming/DP_LongestCommonSubsequenceLength.h \
  src/DynamicProgramming/DP_Common.h \
- ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
 
 obj/windows_gcc/DynamicProgramming/DP_LongestCommonSubsequenceLengthOfkStrings.o: src/DynamicProgramming/DP_LongestCommonSubsequenceLengthOfkStrings.cpp \
  src/DynamicProgramming/DP_LongestCommonSubsequenceLengthOfkStrings.h \
- src/DynamicProgramming/DP_Common.h \
- ../MM_CommonUtils/src/Others\PrintUtils.h \
- ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+ src/DynamicProgramming/DP_Common.h src/Utils\Utils_PrintUtils.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
 
 obj/windows_gcc/DynamicProgramming/DP_LongestCommonSubsequenceString.o: src/DynamicProgramming/DP_LongestCommonSubsequenceString.cpp \
  src/DynamicProgramming/DP_LongestCommonSubsequenceString.h \
  src/DynamicProgramming/DP_Common.h \
- ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
 
 obj/windows_gcc/DynamicProgramming/DP_LongestCommonSubsequenceString2.o: src/DynamicProgramming/DP_LongestCommonSubsequenceString2.cpp \
  src/DynamicProgramming/DP_LongestCommonSubsequenceString2.h \
  src/DynamicProgramming/DP_Common.h \
- ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
 
 obj/windows_gcc/DynamicProgramming/DP_LongestCommonSubsequenceStringsAll.o: src/DynamicProgramming/DP_LongestCommonSubsequenceStringsAll.cpp \
  src/DynamicProgramming/DP_LongestCommonSubsequenceStringsAll.h \
- src/DynamicProgramming/DP_Common.h \
- ../MM_CommonUtils/src/Others\PrintUtils.h \
- ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+ src/DynamicProgramming/DP_Common.h src/Utils\Utils_PrintUtils.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
 
 obj/windows_gcc/DynamicProgramming/DP_LongestCommonSubstring.o: src/DynamicProgramming/DP_LongestCommonSubstring.cpp \
  src/DynamicProgramming/DP_Common.h \
  src/DynamicProgramming/DP_LongestCommonSubstring.h \
- ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
 
 obj/windows_gcc/DynamicProgramming/DP_MaxProductRodCutting.o: src/DynamicProgramming/DP_MaxProductRodCutting.cpp \
  src/DynamicProgramming/DP_MaxProductRodCutting.h \
- ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
 
 obj/windows_gcc/DynamicProgramming/DP_MaxSumSequence.o: src/DynamicProgramming/DP_MaxSumSequence.cpp \
- ../MM_CommonUtils/src/my_math_lib/Permutations.h \
+ src/Maths/Maths_Permutations.h \
  src/DynamicProgramming/DP_MaxSumSequence.h
 
 obj/windows_gcc/DynamicProgramming/DP_RodCutting.o: src/DynamicProgramming/DP_RodCutting.cpp \
  src/DynamicProgramming/DP_RodCutting.h \
- ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
 
 obj/windows_gcc/DynamicProgramming/DP_WaysToClimbNSteps.o: src/DynamicProgramming/DP_WaysToClimbNSteps.cpp \
- ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
 
-obj/windows_gcc/Graphs/Graphs.o: src/Graphs/Graphs.cpp
+obj/windows_gcc/Geometry/Geom_AngleBetTwoLines.o: src/Geometry/Geom_AngleBetTwoLines.cpp \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/Geometry/Geom_AreaOverlappedRect.o: src/Geometry/Geom_AreaOverlappedRect.cpp \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/Geometry/Geom_IntersectionLineLine.o: src/Geometry/Geom_IntersectionLineLine.cpp \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/Geometry/Geom_IntersectionLinePlane.o: src/Geometry/Geom_IntersectionLinePlane.cpp \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/Graphs/Graph_FxRatesCache.o: src/Graphs/Graph_FxRatesCache.cpp
+
+obj/windows_gcc/Graphs/Graph_Representation.o: src/Graphs/Graph_Representation.cpp \
+ src/Graphs/Graph_Representation.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
 
 obj/windows_gcc/Greedy/Greedy.o: src/Greedy/Greedy.cpp
 
@@ -133,16 +432,82 @@ obj/windows_gcc/Heap/Heap_FirstKMaximumOccurringWords.o: src/Heap/Heap_FirstKMax
 
 obj/windows_gcc/Heap/Heap_FirstKNonRepeatingChars.o: src/Heap/Heap_FirstKNonRepeatingChars.cpp
 
+obj/windows_gcc/LinearProgramming/LPP_Sample.o: src/LinearProgramming/LPP_Sample.cpp \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/LinearProgramming/Sample_rename_me.o: src/LinearProgramming/Sample_rename_me.cpp \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/LinearRecurrenceRelations/LinearRecurrenceRelations_concept.o: src/LinearRecurrenceRelations/LinearRecurrenceRelations_concept.cpp
+
+obj/windows_gcc/LinearRecurrenceRelations/LRR_Fibonacci.o: src/LinearRecurrenceRelations/LRR_Fibonacci.cpp \
+ src/LinearRecurrenceRelations/LRR_Fibonacci.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
 obj/windows_gcc/LinkedList/LinkedList_AddNumbersInLinkListForm.o: src/LinkedList/LinkedList_AddNumbersInLinkListForm.cpp \
  src/LinkedList/LinkedList_AddNumbersInLinkListForm.h \
- ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
 
 obj/windows_gcc/LinkedList/LinkedList_ReverseSingleLinkedList.o: src/LinkedList/LinkedList_ReverseSingleLinkedList.cpp \
  src/LinkedList/LinkedList_ReverseSingleLinkedList.h \
- ../MM_CommonUtils/src/Others/PrintUtils.h \
- ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+ src/Utils/Utils_PrintUtils.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/Maths/Maths_ArithmeticOperations.o: src/Maths/Maths_ArithmeticOperations.cpp \
+ src/Maths/Maths_ArithmeticOperations.h src/Utils/Utils_MM_Assert.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ src/Utils/Utils_PrintUtils.h
+
+obj/windows_gcc/Maths/Maths_Maths.o: src/Maths/Maths_Maths.cpp
+
+obj/windows_gcc/Maths/Maths_Matrix.o: src/Maths/Maths_Matrix.cpp src/Maths/Maths_Matrix.h \
+ src/Utils/Utils_MM_Assert.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/Maths/Maths_Median.o: src/Maths/Maths_Median.cpp \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ src/Utils/Utils_PrintUtils.h src/Utils/Utils_TimerUtils.h
+
+obj/windows_gcc/Maths/Maths_NumberSystems.o: src/Maths/Maths_NumberSystems.cpp
+
+obj/windows_gcc/Maths/Maths_Permutations.o: src/Maths/Maths_Permutations.cpp \
+ src/Maths/Maths_Permutations.h src/Utils/Utils_PrintUtils.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/Maths/Maths_PrimeNumber.o: src/Maths/Maths_PrimeNumber.cpp \
+ src/Maths/Maths_PrimeNumber.h src/Maths/Maths_RandomNumber.h \
+ src/Timer/Timer_Timer.h src/Utils/Utils_MM_Assert.h
+
+obj/windows_gcc/Maths/Maths_RandomNumber.o: src/Maths/Maths_RandomNumber.cpp \
+ src/Maths/Maths_RandomNumber.h
 
 obj/windows_gcc/Matrix/Matrix.o: src/Matrix/Matrix.cpp
+
+obj/windows_gcc/Memory/Memory_Allocators_test.o: src/Memory/Memory_Allocators_test.cpp \
+ src/Memory/Memory_HeapAllocator_v1.h src/Timer/Timer_Timer.h \
+ src/Utils/Utils_MM_Assert.h src/Memory/Memory_HeapAllocator_v3.h \
+ src/Memory/Memory_StackAllocator_v1.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/Memory/Memory_HeapAllocator_v1.o: src/Memory/Memory_HeapAllocator_v1.cpp \
+ src/Memory/Memory_HeapAllocator_v1.h src/Timer/Timer_Timer.h \
+ src/Utils/Utils_MM_Assert.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/Memory/Memory_HeapAllocator_v2.o: src/Memory/Memory_HeapAllocator_v2.cpp \
+ src/Memory/Memory_HeapAllocator_v2.h src/Timer/Timer_Timer.h \
+ src/Utils/Utils_MM_Assert.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/Memory/Memory_HeapAllocator_v3.o: src/Memory/Memory_HeapAllocator_v3.cpp \
+ src/Memory/Memory_HeapAllocator_v3.h src/Timer/Timer_Timer.h \
+ src/Utils/Utils_MM_Assert.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/Memory/Memory_StackAllocator_v1.o: src/Memory/Memory_StackAllocator_v1.cpp \
+ src/Memory/Memory_StackAllocator_v1.h src/Timer/Timer_Timer.h \
+ src/Utils/Utils_MM_Assert.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
 
 obj/windows_gcc/Others/Others_BigIntegerMultiplicationTest.o: src/Others/Others_BigIntegerMultiplicationTest.cpp \
  src/Others\Others_BigIntegerMultiplicationTestData.h \
@@ -153,7 +518,7 @@ obj/windows_gcc/Others/Others_BigIntegerMultiplicationTest.o: src/Others/Others_
  src/Others\Others_BigIntegerMultiplication_v5.h \
  src/Others\Others_BigIntegerMultiplication_v6.h \
  src/Others\Others_BigIntegerMultiplication_v7.h \
- ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
 
 obj/windows_gcc/Others/Others_BigIntegerMultiplication_v1.o: src/Others/Others_BigIntegerMultiplication_v1.cpp \
  src/Others\Others_BigIntegerMultiplication_v1.h
@@ -176,20 +541,24 @@ obj/windows_gcc/Others/Others_BigIntegerMultiplication_v6.o: src/Others/Others_B
 obj/windows_gcc/Others/Others_BigIntegerMultiplication_v7.o: src/Others/Others_BigIntegerMultiplication_v7.cpp \
  src/Others\Others_BigIntegerMultiplication_v7.h
 
+obj/windows_gcc/Others/Others_CarRentalSystem.o: src/Others/Others_CarRentalSystem.cpp \
+ src/Others/Others_CarRentalSystem.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
 obj/windows_gcc/Others/Others_CheckIfNumberIsPalindrom.o: src/Others/Others_CheckIfNumberIsPalindrom.cpp \
  src/Others/Others_CheckIfNumberIsPalindrom.h \
- ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
 
 obj/windows_gcc/Others/Others_Date.o: src/Others/Others_Date.cpp src/Others/Others_Date.h \
- ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
 
 obj/windows_gcc/Others/Others_EquityOrderManagementSystemTest.o: src/Others/Others_EquityOrderManagementSystemTest.cpp \
- ../MM_CommonUtils/src/Others/PrintUtils.h \
- ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ src/Utils/Utils_PrintUtils.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h \
  src/Others/Others_EquityOrderManagementSystemTestData.h \
  src/Others/Others_EquityOrderManagementSystemTestDataGenerator.h \
  src/Others\Others_EquityOrderManagementSystem_v1a.h \
- ../MM_CommonUtils/src/Assert/MyAssert.h \
+ src/Utils/Utils_MM_Assert.h \
  src/Others/Others_EquityOrderManagementSystemTestDataReader.h \
  src/Others/Others_EquityOrderManagementSystem_v1b.h \
  src/Others/Others_EquityOrderManagementSystem_v1c.h \
@@ -209,89 +578,248 @@ obj/windows_gcc/Others/Others_EquityOrderManagementSystemTestData.o: src/Others/
  src/Others/Others_EquityOrderManagementSystemTestData.h
 
 obj/windows_gcc/Others/Others_EquityOrderManagementSystem_v1a.o: src/Others/Others_EquityOrderManagementSystem_v1a.cpp \
- ../MM_CommonUtils/src/Assert/MyAssert.h \
+ src/Utils/Utils_MM_Assert.h \
  src/Others\Others_EquityOrderManagementSystem_v1a.h
 
 obj/windows_gcc/Others/Others_EquityOrderManagementSystem_v1b.o: src/Others/Others_EquityOrderManagementSystem_v1b.cpp \
- ../MM_CommonUtils/src/Assert/MyAssert.h \
+ src/Utils/Utils_MM_Assert.h \
  src/Others\Others_EquityOrderManagementSystem_v1b.h
 
 obj/windows_gcc/Others/Others_EquityOrderManagementSystem_v1c.o: src/Others/Others_EquityOrderManagementSystem_v1c.cpp \
- ../MM_CommonUtils/src/Assert/MyAssert.h \
+ src/Utils/Utils_MM_Assert.h \
  src/Others\Others_EquityOrderManagementSystem_v1c.h
 
 obj/windows_gcc/Others/Others_EquityOrderManagementSystem_v2a.o: src/Others/Others_EquityOrderManagementSystem_v2a.cpp \
- ../MM_CommonUtils/src/Assert/MyAssert.h \
+ src/Utils/Utils_MM_Assert.h \
  src/Others\Others_EquityOrderManagementSystem_v2a.h
 
 obj/windows_gcc/Others/Others_EquityOrderManagementSystem_v3a.o: src/Others/Others_EquityOrderManagementSystem_v3a.cpp \
- ../MM_CommonUtils/src/Assert/MyAssert.h \
+ src/Utils/Utils_MM_Assert.h \
  src/Others\Others_EquityOrderManagementSystem_v3a.h \
  src/Others/Others_EquityOrderManagementSystemTestData.h
 
 obj/windows_gcc/Others/Others_EquityOrderManagementSystem_v3b.o: src/Others/Others_EquityOrderManagementSystem_v3b.cpp \
- ../MM_CommonUtils/src/Assert/MyAssert.h \
+ src/Utils/Utils_MM_Assert.h \
  src/Others\Others_EquityOrderManagementSystem_v3b.h \
  src/Others/Others_EquityOrderManagementSystemTestData.h
 
 obj/windows_gcc/Others/Others_EquityOrderManagementSystem_v3c.o: src/Others/Others_EquityOrderManagementSystem_v3c.cpp \
- ../MM_CommonUtils/src/Assert/MyAssert.h \
+ src/Utils/Utils_MM_Assert.h \
  src/Others\Others_EquityOrderManagementSystem_v3c.h \
  src/Others/Others_EquityOrderManagementSystemTestData.h
 
 obj/windows_gcc/Others/Others_EquityOrderManagementSystem_v4a.o: src/Others/Others_EquityOrderManagementSystem_v4a.cpp \
- ../MM_CommonUtils/src/Assert/MyAssert.h \
+ src/Utils/Utils_MM_Assert.h \
  src/Others\Others_EquityOrderManagementSystem_v4a.h \
  src/Others/Others_EquityOrderManagementSystemTestData.h
 
 obj/windows_gcc/Others/Others_EquityOrderManagementSystem_v4b.o: src/Others/Others_EquityOrderManagementSystem_v4b.cpp \
- ../MM_CommonUtils/src/Assert/MyAssert.h \
+ src/Utils/Utils_MM_Assert.h \
  src/Others\Others_EquityOrderManagementSystem_v4b.h \
  src/Others/Others_EquityOrderManagementSystemTestData.h
 
 obj/windows_gcc/Others/Others_EquityOrderManagementSystem_v4c.o: src/Others/Others_EquityOrderManagementSystem_v4c.cpp \
- ../MM_CommonUtils/src/Assert/MyAssert.h \
+ src/Utils/Utils_MM_Assert.h \
  src/Others\Others_EquityOrderManagementSystem_v4c.h \
  src/Others/Others_EquityOrderManagementSystemTestData.h
 
 obj/windows_gcc/Others/Others_EquityOrderManagementSystem_v4d.o: src/Others/Others_EquityOrderManagementSystem_v4d.cpp \
- ../MM_CommonUtils/src/Assert/MyAssert.h \
+ src/Utils/Utils_MM_Assert.h \
  src/Others\Others_EquityOrderManagementSystem_v4d.h \
  src/Others/Others_EquityOrderManagementSystemTestData.h
 
 obj/windows_gcc/Others/Others_EquityOrderManagementSystem_v4e.o: src/Others/Others_EquityOrderManagementSystem_v4e.cpp \
- ../MM_CommonUtils/src/Assert/MyAssert.h \
+ src/Utils/Utils_MM_Assert.h \
  src/Others\Others_EquityOrderManagementSystem_v4e.h \
  src/Others/Others_EquityOrderManagementSystemTestData.h
 
 obj/windows_gcc/Others/Others_EquityOrderManagementSystem_v4f.o: src/Others/Others_EquityOrderManagementSystem_v4f.cpp \
- ../MM_CommonUtils/src/Assert/MyAssert.h \
+ src/Utils/Utils_MM_Assert.h \
  src/Others\Others_EquityOrderManagementSystem_v4f.h \
  src/Others/Others_EquityOrderManagementSystemTestData.h
 
 obj/windows_gcc/Others/Others_EquityOrderManagementSystem_v4g.o: src/Others/Others_EquityOrderManagementSystem_v4g.cpp \
- ../MM_CommonUtils/src/Assert/MyAssert.h \
+ src/Utils/Utils_MM_Assert.h \
  src/Others\Others_EquityOrderManagementSystem_v4g.h \
  src/Others/Others_EquityOrderManagementSystemTestData.h
 
 obj/windows_gcc/Others/Others_FixedPriceInstrumentsPricing.o: src/Others/Others_FixedPriceInstrumentsPricing.cpp \
  src/Others/Others_FixedPriceInstrumentsPricing.h \
- ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h \
- ../MM_CommonUtils/src/Assert/MyAssert.h
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ src/Utils/Utils_MM_Assert.h
+
+obj/windows_gcc/Others/Others_FloatingPoint.o: src/Others/Others_FloatingPoint.cpp \
+ src/Others/Others_FloatingPoint.h src/Utils/Utils_MM_Assert.h \
+ src/C++/C++_DataTypes.h
+
+obj/windows_gcc/Others/Others_FxRatesCache.o: src/Others/Others_FxRatesCache.cpp \
+ src/Others/Others_FxRatesCache.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/Others/Others_FxSettlement_branch_and_bound_v1.o: src/Others/Others_FxSettlement_branch_and_bound_v1.cpp \
+ src/Others/Others_FxSettlement.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h
+
+obj/windows_gcc/Others/Others_FxSettlement_branch_and_bound_v10a.o: src/Others/Others_FxSettlement_branch_and_bound_v10a.cpp \
+ src/Others/Others_FxSettlement.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
+ src/Others/Others_FxSettlement_branch_and_bound_v10a.h
+
+obj/windows_gcc/Others/Others_FxSettlement_branch_and_bound_v11a.o: src/Others/Others_FxSettlement_branch_and_bound_v11a.cpp \
+ src/Others/Others_FxSettlement.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
+ src/Others/Others_FxSettlement_branch_and_bound_v11a.h
+
+obj/windows_gcc/Others/Others_FxSettlement_branch_and_bound_v12a.o: src/Others/Others_FxSettlement_branch_and_bound_v12a.cpp \
+ src/Others/Others_FxSettlement.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
+ src/Others/Others_FxSettlement_branch_and_bound_v12a.h
+
+obj/windows_gcc/Others/Others_FxSettlement_branch_and_bound_v13a.o: src/Others/Others_FxSettlement_branch_and_bound_v13a.cpp \
+ src/Others/Others_FxSettlement.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
+ src/Others/Others_FxSettlement_branch_and_bound_v13a.h
+
+obj/windows_gcc/Others/Others_FxSettlement_branch_and_bound_v13b.o: src/Others/Others_FxSettlement_branch_and_bound_v13b.cpp \
+ src/Others/Others_FxSettlement.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
+ src/Others/Others_FxSettlement_branch_and_bound_v13b.h
+
+obj/windows_gcc/Others/Others_FxSettlement_branch_and_bound_v14a.o: src/Others/Others_FxSettlement_branch_and_bound_v14a.cpp \
+ src/Others/Others_FxSettlement.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
+ src/Others/Others_FxSettlement_branch_and_bound_v14a.h
+
+obj/windows_gcc/Others/Others_FxSettlement_branch_and_bound_v2.o: src/Others/Others_FxSettlement_branch_and_bound_v2.cpp \
+ src/Others/Others_FxSettlement.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h
+
+obj/windows_gcc/Others/Others_FxSettlement_branch_and_bound_v3a.o: src/Others/Others_FxSettlement_branch_and_bound_v3a.cpp \
+ src/Others/Others_FxSettlement.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h
+
+obj/windows_gcc/Others/Others_FxSettlement_branch_and_bound_v3b.o: src/Others/Others_FxSettlement_branch_and_bound_v3b.cpp \
+ src/Others/Others_FxSettlement.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h
+
+obj/windows_gcc/Others/Others_FxSettlement_branch_and_bound_v4a.o: src/Others/Others_FxSettlement_branch_and_bound_v4a.cpp \
+ src/Others/Others_FxSettlement.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h
+
+obj/windows_gcc/Others/Others_FxSettlement_branch_and_bound_v4b.o: src/Others/Others_FxSettlement_branch_and_bound_v4b.cpp \
+ src/Others/Others_FxSettlement.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h
+
+obj/windows_gcc/Others/Others_FxSettlement_branch_and_bound_v5a.o: src/Others/Others_FxSettlement_branch_and_bound_v5a.cpp \
+ src/Others/Others_FxSettlement.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h
+
+obj/windows_gcc/Others/Others_FxSettlement_branch_and_bound_v5b.o: src/Others/Others_FxSettlement_branch_and_bound_v5b.cpp \
+ src/Others/Others_FxSettlement.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h
+
+obj/windows_gcc/Others/Others_FxSettlement_branch_and_bound_v6a.o: src/Others/Others_FxSettlement_branch_and_bound_v6a.cpp \
+ src/Others/Others_FxSettlement.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
+ src/Others/Others_FxSettlement_branch_and_bound_v6a.h
+
+obj/windows_gcc/Others/Others_FxSettlement_branch_and_bound_v7a.o: src/Others/Others_FxSettlement_branch_and_bound_v7a.cpp \
+ src/Others/Others_FxSettlement.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
+ src/Others/Others_FxSettlement_branch_and_bound_v7a.h
+
+obj/windows_gcc/Others/Others_FxSettlement_branch_and_bound_v8a.o: src/Others/Others_FxSettlement_branch_and_bound_v8a.cpp \
+ src/Others/Others_FxSettlement.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
+ src/Others/Others_FxSettlement_branch_and_bound_v8a.h
+
+obj/windows_gcc/Others/Others_FxSettlement_branch_and_bound_v9a.o: src/Others/Others_FxSettlement_branch_and_bound_v9a.cpp \
+ src/Others/Others_FxSettlement.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
+ src/Others/Others_FxSettlement_branch_and_bound_v9a.h
+
+obj/windows_gcc/Others/Others_FxSettlement_greedy_v1.o: src/Others/Others_FxSettlement_greedy_v1.cpp \
+ src/Others/Others_FxSettlement.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h
+
+obj/windows_gcc/Others/Others_FxSettlement_naive_v1.o: src/Others/Others_FxSettlement_naive_v1.cpp \
+ src/Others/Others_FxSettlement.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h
+
+obj/windows_gcc/Others/Others_FxSettlement_naive_v2.o: src/Others/Others_FxSettlement_naive_v2.cpp \
+ src/Others/Others_FxSettlement.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h
+
+obj/windows_gcc/Others/Others_FxSettlement_naive_v3.o: src/Others/Others_FxSettlement_naive_v3.cpp \
+ src/Others/Others_FxSettlement.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h
+
+obj/windows_gcc/Others/Others_FxSettlement_sequential.o: src/Others/Others_FxSettlement_sequential.cpp \
+ src/Others/Others_FxSettlement.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h
+
+obj/windows_gcc/Others/Others_FxSettlement_test.o: src/Others/Others_FxSettlement_test.cpp \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
+ src/Others/Others_FxSettlement.h src/Utils/Utils_PrintUtils.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ src/Others/Others_FxSettlement_branch_and_bound_v6a.h \
+ src/Others/Others_FxSettlement_branch_and_bound_v7a.h \
+ src/Others/Others_FxSettlement_branch_and_bound_v8a.h \
+ src/Others/Others_FxSettlement_branch_and_bound_v9a.h \
+ src/Others/Others_FxSettlement_branch_and_bound_v10a.h \
+ src/Others/Others_FxSettlement_branch_and_bound_v11a.h \
+ src/Others/Others_FxSettlement_branch_and_bound_v12a.h \
+ src/Others/Others_FxSettlement_branch_and_bound_v13a.h \
+ src/Others/Others_FxSettlement_branch_and_bound_v13b.h \
+ src/Others/Others_FxSettlement_branch_and_bound_v14a.h
+
+obj/windows_gcc/Others/Others_FxSettlement_testData.o: src/Others/Others_FxSettlement_testData.cpp \
+ src/Others/Others_FxSettlement.h \
+ src/DynamicProgramming/DP_KnapsackProblem_0_1.h \
+ src/Utils/Utils_PrintUtils.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/Others/Others_GTS.o: src/Others/Others_GTS.cpp src/Others/Others_GTS.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
 
 obj/windows_gcc/Others/Others_MaxProfitFromShareTrade.o: src/Others/Others_MaxProfitFromShareTrade.cpp \
  src/Others/Others_MaxProfitFromShareTrade.h \
- ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/Others/Others_PersonSort.o: src/Others/Others_PersonSort.cpp \
+ src/Others/Others_PersonSort.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/Others/Others_RankInSortedArray.o: src/Others/Others_RankInSortedArray.cpp \
+ src/Others/Others_RankInSortedArray.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/Others/Others_RankInSortedArray_test.o: src/Others/Others_RankInSortedArray_test.cpp \
+ src/Others/Others_RankInSortedArray.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
 
 obj/windows_gcc/Others/Others_SingleElevator.o: src/Others/Others_SingleElevator.cpp \
  src/Others/Others_SingleElevator.h \
- ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
 
 obj/windows_gcc/Others/Others_StockPriceHistory_v1.o: src/Others/Others_StockPriceHistory_v1.cpp \
  src/Others/Others_StockPriceHistory_v1.h \
- ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
 
-obj/windows_gcc/Puzzles/Puzzles_15_TowerOfHanoi.o: src/Puzzles/Puzzles_15_TowerOfHanoi.cpp
+obj/windows_gcc/Others_h/Others_h_DistinctNumbersGenerated.o: src/Others_h/Others_h_DistinctNumbersGenerated.cpp \
+ src/Others_h/Others_h_DistinctNumbersGenerated.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h \
+ src/Utils/Utils_TimerUtils.h
+
+obj/windows_gcc/Others_L/Others_L_MaxFrequencyStack.o: src/Others_L/Others_L_MaxFrequencyStack.cpp \
+ src/Others_h/Others_h_DistinctNumbersGenerated.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/PatternMatching/PatternMatching_Sample.o: src/PatternMatching/PatternMatching_Sample.cpp \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/PatternMatching/Sample_rename_me.o: src/PatternMatching/Sample_rename_me.cpp \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
 
 obj/windows_gcc/Puzzles/Puzzles_AddTwoNumbers.o: src/Puzzles/Puzzles_AddTwoNumbers.cpp \
  src/Puzzles/Puzzles_AddTwoNumbers.h
@@ -299,29 +827,114 @@ obj/windows_gcc/Puzzles/Puzzles_AddTwoNumbers.o: src/Puzzles/Puzzles_AddTwoNumbe
 obj/windows_gcc/Puzzles/Puzzles_ClockAngleProblem.o: src/Puzzles/Puzzles_ClockAngleProblem.cpp \
  src/Puzzles/Puzzles_ClockAngleProblem.h
 
+obj/windows_gcc/Puzzles/Puzzles_EggDropping.o: src/Puzzles/Puzzles_EggDropping.cpp \
+ src/Puzzles/Puzzles_EggDropping.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
 obj/windows_gcc/Puzzles/Puzzles_FindHeavierAmongNBalls.o: src/Puzzles/Puzzles_FindHeavierAmongNBalls.cpp
 
+obj/windows_gcc/Puzzles/Puzzles_JosephusProblem.o: src/Puzzles/Puzzles_JosephusProblem.cpp \
+ src/Puzzles/Puzzles_JosephusProblem.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/Puzzles/Puzzles_TowerOfHanoi.o: src/Puzzles/Puzzles_TowerOfHanoi.cpp \
+ src/Puzzles/Puzzles_TowerOfHanoi.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
 obj/windows_gcc/Queue/Queue.o: src/Queue/Queue.cpp
+
+obj/windows_gcc/Sample.o: src/Sample.cpp src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/ScottMeyers/ScottMeyers_EffectiveModernCPP.o: src/ScottMeyers/ScottMeyers_EffectiveModernCPP.cpp
 
 obj/windows_gcc/Sorting/Sorting.o: src/Sorting/Sorting.cpp
 
 obj/windows_gcc/Stack/Stack.o: src/Stack/Stack.cpp
 
+obj/windows_gcc/STL/STL_Concurrency.o: src/STL/STL_Concurrency.cpp
+
+obj/windows_gcc/STL/STL_Containers.o: src/STL/STL_Containers.cpp
+
+obj/windows_gcc/STL/STL_Lambda.o: src/STL/STL_Lambda.cpp
+
+obj/windows_gcc/STL/STL_Ratio.o: src/STL/STL_Ratio.cpp
+
+obj/windows_gcc/STL/STL_shared_ptr.o: src/STL/STL_shared_ptr.cpp src/STL/STL_shared_ptr.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/STL/STL_shared_ptr_cyclic_ref.o: src/STL/STL_shared_ptr_cyclic_ref.cpp \
+ src/STL/STL_shared_ptr_cyclic_ref.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/STL/STL_TypeTraits.o: src/STL/STL_TypeTraits.cpp
+
+obj/windows_gcc/STL/STL_unique_ptr.o: src/STL/STL_unique_ptr.cpp src/STL/STL_unique_ptr.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/STL/STL_unordered_map.o: src/STL/STL_unordered_map.cpp \
+ src/STL/STL_unordered_map.h src/Timer/Timer_Timer.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/STL/STL_vector.o: src/STL/STL_vector.cpp src/STL/STL_vector.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
 obj/windows_gcc/String/String_FirstKNonRepeatingChars.o: src/String/String_FirstKNonRepeatingChars.cpp \
  src/String/String_FirstKNonRepeatingChars.h \
- ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/Timer/Timer_MSDNTimeExample.o: src/Timer/Timer_MSDNTimeExample.cpp
+
+obj/windows_gcc/Timer/Timer_Timer.o: src/Timer/Timer_Timer.cpp src/Timer/Timer_Timer.h \
+ src/Utils/Utils_MM_Assert.h
+
+obj/windows_gcc/Timer/Timer_Timer2.o: src/Timer/Timer_Timer2.cpp src/Timer/Timer_Timer2.h
 
 obj/windows_gcc/ToBeArranged.o: src/ToBeArranged.cpp
 
 obj/windows_gcc/Trie/Trie_implementationUsingArray.o: src/Trie/Trie_implementationUsingArray.cpp \
  src/Trie/Trie_implementationUsingArray.h \
- ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
 
 obj/windows_gcc/Trie/Trie_implementationUsingHashMap.o: src/Trie/Trie_implementationUsingHashMap.cpp \
  src/Trie/Trie_implementationUsingHashMap.h \
- ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/Utils/Utils_MM_Assert.o: src/Utils/Utils_MM_Assert.cpp \
+ src/Utils/Utils_MM_Assert.h
+
+obj/windows_gcc/Utils/Utils_MM_Logger.o: src/Utils/Utils_MM_Logger.cpp src/Timer/Timer_Timer.h \
+ src/Utils/Utils_MM_Logger.h
+
+obj/windows_gcc/Utils/Utils_PrintUtils.o: src/Utils/Utils_PrintUtils.cpp \
+ src/Utils/Utils_PrintUtils.h
+
+obj/windows_gcc/Utils/Utils_StringUtils.o: src/Utils/Utils_StringUtils.cpp
+
+obj/windows_gcc/Utils/Utils_TimerUtils.o: src/Utils/Utils_TimerUtils.cpp \
+ src/Utils/Utils_TimerUtils.h
+
+obj/windows_gcc/Utils/Utils_WindowsUtils.o: src/Utils/Utils_WindowsUtils.cpp \
+ src/Utils/Utils_WindowsUtils.h
+
+obj/windows_gcc/_CPU_Friendly/CPU_accessMatrixRowWise.o: src/_CPU_Friendly/CPU_accessMatrixRowWise.cpp \
+ src/BinaryTree/BinaryTree_Traversals.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/_CPU_Friendly/CPU_branchPrediction.o: src/_CPU_Friendly/CPU_branchPrediction.cpp \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/_CPU_Friendly/CPU_cacheCoherency.o: src/_CPU_Friendly/CPU_cacheCoherency.cpp \
+ src/BinaryTree/BinaryTree_Traversals.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/_CPU_Friendly/CPU_falseSharing.o: src/_CPU_Friendly/CPU_falseSharing.cpp \
+ src/BinaryTree/BinaryTree_Traversals.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
+obj/windows_gcc/_CPU_Friendly/CPU_findCacheSize.o: src/_CPU_Friendly/CPU_findCacheSize.cpp \
+ src/BinaryTree/BinaryTree_Traversals.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
 
 obj/windows_gcc/_MM_Algorithms_main.o: src/_MM_Algorithms_main.cpp \
- ../MM_CommonUtils/src/WindowsUtils/WindowsUtils.h \
- ../MM_CommonUtils/src/Timer/Timer.h \
- ../MM_UnitTestFramework/src/MM_UnitTestFramework/MM_UnitTestFramework.h
+ src/Utils/Utils_WindowsUtils.h src/Timer/Timer_Timer.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h

@@ -205,16 +205,16 @@ get a desired change
 		const vector<int> coins1 = { 1, 2, 3, 4 };
 		int numCoins = 0;
 
-		MM_EXPECT_TRUE((numCoins = getMinCoinsChange_recursive_1(coins1, 0, coins1.size() - 1, 15)) == 4, numCoins);
+		MM_EXPECT_TRUE((numCoins = getMinCoinsChange_recursive_1(coins1, 0, static_cast<int>(coins1.size() - 1), 15)) == 4, numCoins);
 		MM_EXPECT_TRUE((numCoins = getMinCoinsChange_recursive_2(coins1, 15)) == 4, numCoins);
-		MM_EXPECT_TRUE((numCoins = getMinCoinsChange_DP_TopDown_1(coins1, 0, coins1.size() - 1, 15)) == 4, numCoins);
+		MM_EXPECT_TRUE((numCoins = getMinCoinsChange_DP_TopDown_1(coins1, 0, static_cast<int>(coins1.size() - 1), 15)) == 4, numCoins);
 		MM_EXPECT_TRUE((numCoins = getMinCoinsChange_DP_TopDown_2(coins1, 15)) == 4, numCoins);
 		MM_EXPECT_TRUE((numCoins = getMinCoinsChange_DP_BottomUp(coins1, 15)) == 4, numCoins);
 
 		const vector<int> coins2 = { 1, 3, 5, 7 };
-		MM_EXPECT_TRUE((numCoins = getMinCoinsChange_recursive_1(coins2, 0, coins2.size() - 1, 15)) == 3, numCoins);
+		MM_EXPECT_TRUE((numCoins = getMinCoinsChange_recursive_1(coins2, 0, static_cast<int>(coins2.size() - 1), 15)) == 3, numCoins);
 		MM_EXPECT_TRUE((numCoins = getMinCoinsChange_recursive_2(coins2, 15)) == 3, numCoins);
-		MM_EXPECT_TRUE((numCoins = getMinCoinsChange_DP_TopDown_1(coins2, 0, coins2.size() - 1, 15)) == 3, numCoins);
+		MM_EXPECT_TRUE((numCoins = getMinCoinsChange_DP_TopDown_1(coins2, 0, static_cast<int>(coins2.size() - 1), 15)) == 3, numCoins);
 		MM_EXPECT_TRUE((numCoins = getMinCoinsChange_DP_TopDown_2(coins2, 15)) == 3, numCoins);
 		MM_EXPECT_TRUE((numCoins = getMinCoinsChange_DP_BottomUp(coins2, 15)) == 3, numCoins);
 	}

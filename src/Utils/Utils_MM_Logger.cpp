@@ -19,9 +19,9 @@ namespace mm {
 			string fullFileNameWithTimestamp(logFileFullName + "_" + t.getCurrentLocalTimeInNanoSeconds() + ".cpplog");
 			m_logFile.open(fullFileNameWithTimestamp);
 		}
-		catch (std::ofstream::failure &writeErr)
+		catch (std::ofstream::failure& writeErr)
 		{
-			cout << "\nERROR: Can not open file: " << logFileFullName << endl;
+			cout << "\nERROR: Can not open file: " << logFileFullName << " Error: " << writeErr.what() << endl;
 		}
 		catch (...)
 		{

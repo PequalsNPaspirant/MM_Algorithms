@@ -196,12 +196,12 @@ namespace mm {
 
 	void getLongestCommonSubsequenceStringsAll_bottom_up(const string& str1, const string& str2, vector<string>& out)
 	{
-		int m = str1.size();
-		int n = str2.size();
+		size_t m = str1.size();
+		size_t n = str2.size();
 		vector< vector< vector<string> > > subseqStr(m + 1, vector< vector<string> >(n + 1, vector<string>()));
-		for (int i = 1; i <= m; ++i)
+		for (size_t i = 1; i <= m; ++i)
 		{
-			for (int j = 1; j <= n; ++j)
+			for (size_t j = 1; j <= n; ++j)
 			{
 				if (str1[i - 1] == str2[j - 1])
 				{
@@ -242,10 +242,10 @@ namespace mm {
 
 	void getLongestCommonSubsequenceStringsAll_bottom_up_space_efficient(const string& str1, const string& str2, vector<string>& out)
 	{
-		int m = str1.size();
-		int n = str2.size();
-		int minStrLength = min(m, n);
-		int maxStrLength = max(m, n);
+		size_t m = str1.size();
+		size_t n = str2.size();
+		size_t minStrLength = min(m, n);
+		size_t maxStrLength = max(m, n);
 		const string* pStr1 = &str1;
 		const string* pStr2 = &str2;
 		if (m != maxStrLength)
@@ -255,9 +255,9 @@ namespace mm {
 		}
 		vector< vector<string> > prevSubseqStrings(minStrLength + 1, vector<string>());
 		vector< vector<string> > currSubseqStrings(minStrLength + 1, vector<string>());
-		for (int i = 1; i <= maxStrLength; ++i)
+		for (size_t i = 1; i <= maxStrLength; ++i)
 		{
-			for (int j = 1; j <= minStrLength; ++j)
+			for (size_t j = 1; j <= minStrLength; ++j)
 			{
 				if ((*pStr1)[i - 1] == (*pStr2)[j - 1])
 				{
@@ -292,14 +292,14 @@ namespace mm {
 				}
 			}
 
-			for (int j = 1; j <= minStrLength; ++j)
+			for (size_t j = 1; j <= minStrLength; ++j)
 				prevSubseqStrings[j] = currSubseqStrings[j];
 		}
 
 		out = currSubseqStrings[minStrLength];
 	}
 
-	vector<string> getLongestCommonSubsequenceStringsAll_bottom_up_most_efficient(const string& str1, int m, const string& str2, int n, const vector< vector< int > >& LCSLength)
+	vector<string> getLongestCommonSubsequenceStringsAll_bottom_up_most_efficient(const string& str1, size_t m, const string& str2, size_t n, const vector< vector< int > >& LCSLength)
 	{
 		if (m < 0 || n < 0)
 			return vector<string>();
@@ -337,12 +337,12 @@ namespace mm {
 	void getLongestCommonSubsequenceStringsAll_bottom_up_most_efficient(const string& str1, const string& str2, vector<string>& out)
 	{
 		// First create a matrix with LCS lengths
-		int m = str1.size();
-		int n = str2.size();
+		size_t m = str1.size();
+		size_t n = str2.size();
 		vector< vector< int > > LCSLength(m + 1, vector< int >(n + 1, 0));
-		for (int i = 1; i <= m; ++i)
+		for (size_t i = 1; i <= m; ++i)
 		{
-			for (int j = 1; j <= n; ++j)
+			for (size_t j = 1; j <= n; ++j)
 			{
 				if (str1[i - 1] == str2[j - 1])
 					LCSLength[i][j] = LCSLength[i - 1][j - 1] + 1;
@@ -362,18 +362,18 @@ namespace mm {
 		switch (approach)
 		{
 			case DP_Approach::naive:
-				getLongestCommonSubsequenceStringsAll_naive(str1, str1.size() - 1, str2, str2.size() - 1, out);
+				getLongestCommonSubsequenceStringsAll_naive(str1, static_cast<int>(str1.size()) - 1, str2, static_cast<int>(str2.size()) - 1, out);
 				break;
 			case DP_Approach::top_down_using_vector:
 			{
 				vector< vector< vector<string> > > lookupVector(str1.size(), vector< vector<string> >(str2.size(), vector<string>()));
-				getLongestCommonSubsequenceStringsAll_top_down(str1, str1.size() - 1, str2, str2.size() - 1, lookupVector, out);
+				getLongestCommonSubsequenceStringsAll_top_down(str1, static_cast<int>(str1.size()) - 1, str2, static_cast<int>(str2.size()) - 1, lookupVector, out);
 				break;
 			}
 			case DP_Approach::top_down_using_map:
 			{
 				unordered_map<string, vector<string> > lookup;
-				getLongestCommonSubsequenceStringsAll_top_down(str1, str1.size() - 1, str2, str2.size() - 1, lookup, out);
+				getLongestCommonSubsequenceStringsAll_top_down(str1, static_cast<int>(str1.size()) - 1, str2, static_cast<int>(str2.size()) - 1, lookup, out);
 				break;
 			}
 			case DP_Approach::bottom_up:

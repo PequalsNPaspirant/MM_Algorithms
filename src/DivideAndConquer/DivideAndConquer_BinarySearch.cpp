@@ -21,7 +21,7 @@ namespace mm {
 	const std::array<int, 13> testSet13 = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130 };
 
 	template<typename ObjectType, typename ContainerType>
-	int BinarySearchTestCaseFormat(const ContainerType& container, ObjectType target)
+	size_t BinarySearchTestCaseFormat(const ContainerType& container, ObjectType target)
 	{
 		//int index = binarySearch_1(container, target);
 		//cout << "\nTarget " << target << " is present at index " << index << " in container";
@@ -45,8 +45,8 @@ namespace mm {
 	MM_UNIT_TEST(binarySearch_sanityTest8_n5, binarySearch_sanityTest) { MM_EXPECT_TRUE(-1 == BinarySearchTestCaseFormat(testSet8, 45)); }
 	MM_UNIT_TEST(binarySearch_sanityTest8_n6, binarySearch_sanityTest) { MM_EXPECT_TRUE(-1 == BinarySearchTestCaseFormat(testSet8, 55)); }
 	MM_UNIT_TEST(binarySearch_sanityTest8_n7, binarySearch_sanityTest) { MM_EXPECT_TRUE(-1 == BinarySearchTestCaseFormat(testSet8, 65)); }
-	MM_UNIT_TEST(binarySearch_sanityTest8_n8, binarySearch_sanityTest) { MM_EXPECT_TRUE(-1, BinarySearchTestCaseFormat(testSet8, 75)); }
-	MM_UNIT_TEST(binarySearch_sanityTest8_n9, binarySearch_sanityTest) { MM_EXPECT_TRUE(-1, BinarySearchTestCaseFormat(testSet8, 85)); }
+	MM_UNIT_TEST(binarySearch_sanityTest8_n8, binarySearch_sanityTest) { MM_EXPECT_TRUE(-1 == BinarySearchTestCaseFormat(testSet8, 75)); }
+	MM_UNIT_TEST(binarySearch_sanityTest8_n9, binarySearch_sanityTest) { MM_EXPECT_TRUE(-1 == BinarySearchTestCaseFormat(testSet8, 85)); }
 
 	MM_UNIT_TEST(binarySearch_sanityTest9_1, binarySearch_sanityTest) { MM_EXPECT_TRUE(0 == BinarySearchTestCaseFormat(testSet9, 10)); }
 	MM_UNIT_TEST(binarySearch_sanityTest9_2, binarySearch_sanityTest) { MM_EXPECT_TRUE(1 == BinarySearchTestCaseFormat(testSet9, 20)); }

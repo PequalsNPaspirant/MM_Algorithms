@@ -52,12 +52,12 @@ namespace mm {
 				}
 
 				//private:
-				int m_sum;
-				int m_start;
-				int m_end;
+				size_t m_sum;
+				size_t m_start;
+				size_t m_end;
 			};
 
-			Solution createSolution(int numIndex)
+			Solution createSolution(size_t numIndex)
 			{
 				Solution temp;
 				temp.m_start = numIndex - 1;
@@ -77,13 +77,13 @@ namespace mm {
 			//	return temp;
 			//}
 
-			Solution createSolution(const Solution& reference, int newEnd)
+			Solution createSolution(const Solution& reference, size_t newEnd)
 			{
 				Solution temp;
 				temp.m_start = reference.m_start;
 				temp.m_end = newEnd - 1;
 				temp.m_sum = reference.m_sum;
-				for (int i = reference.m_end + 1; i <= temp.m_end; i++)
+				for (size_t i = reference.m_end + 1; i <= temp.m_end; i++)
 					temp.m_sum += m_array[i];
 				return temp;
 			}

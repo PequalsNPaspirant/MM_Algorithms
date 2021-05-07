@@ -47,7 +47,7 @@ namespace mm {
 	};
 	
 	extern vector<testDataStats> vecTestDataStats;
-	extern int vecTestDataStatsIndex;
+	extern size_t vecTestDataStatsIndex;
 	extern constexpr const int clientNameLenMin = 10;
 	extern constexpr const int clientNameLenMax = 20;
 	extern constexpr const int minPrice = 100;
@@ -69,13 +69,13 @@ namespace mm {
 		{}
 
 #ifndef MM_DEBUG_OTHERS_EOMS
-		ClientSymbolPair(int clientIdIn, int symbolIdIn)
+		ClientSymbolPair(size_t clientIdIn, size_t symbolIdIn)
 			: clientId(clientIdIn),
 			symbolId(symbolIdIn)
 		{
 		}
 #else
-		ClientSymbolPair(int clientIdIn, int symbolIdIn, double orderPriceIn, double marketPriceIn, double offsetIn)
+		ClientSymbolPair(size_t clientIdIn, size_t symbolIdIn, double orderPriceIn, double marketPriceIn, double offsetIn)
 			: clientId(clientIdIn),
 			symbolId(symbolIdIn),
 			orderPrice(orderPriceIn),
@@ -116,8 +116,8 @@ namespace mm {
 			return o;
 		}
 
-		int clientId;
-		int symbolId;
+		size_t clientId;
+		size_t symbolId;
 
 #ifdef MM_DEBUG_OTHERS_EOMS
 		double orderPrice;
@@ -167,8 +167,8 @@ namespace mm {
 	extern vector<string> listOfClients;
 	extern vector<string> listOfSymbols;
 	extern vector<OperationData> operations;
-	extern unordered_map<string, int> clientNameToIdMap;
-	extern unordered_map<string, int> symbolNameToIdMap;
+	extern unordered_map<string, size_t> clientNameToIdMap;
+	extern unordered_map<string, size_t> symbolNameToIdMap;
 
 	extern const string filePath;
 	extern const string clientsEntry;

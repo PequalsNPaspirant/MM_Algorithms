@@ -11,7 +11,7 @@ using namespace std;
 
 namespace mm {
 
-	void readClientsOrSymbolsFromFile(ifstream& testDataFile, vector<string>& listOfClientsOrSymbols, unordered_map<string, int>& clientOrSymbolToIdMap)
+	void readClientsOrSymbolsFromFile(ifstream& testDataFile, vector<string>& listOfClientsOrSymbols, unordered_map<string, size_t>& clientOrSymbolToIdMap)
 	{
 		string line;
 		int count = -1;
@@ -94,7 +94,7 @@ namespace mm {
 				{
 					end = line.find_first_of(',', start);
 					string clientSymbolPair = line.substr(start, end - start);
-					int seperator = clientSymbolPair.find_first_of('-');
+					size_t seperator = clientSymbolPair.find_first_of('-');
 					int clientId = stoi(clientSymbolPair.substr(0, seperator));
 					int symblId = stoi(clientSymbolPair.substr(seperator + 1));
 #ifndef MM_DEBUG_OTHERS_EOMS
@@ -138,7 +138,7 @@ namespace mm {
 		}
 		catch (std::ifstream::failure &readErr)
 		{
-			cout << "\nERROR: Can not open file: " << filePath << endl;
+			cout << "\nERROR: Can not open file: " << filePath << " Error: " << readErr.what() << endl;
 			return;
 		}
 		catch (...)

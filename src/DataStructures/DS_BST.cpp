@@ -101,8 +101,8 @@ namespace mm {
 			printTree(str, m_root, 1, pos, unspecified);
 			//prepareToPrint(str);
 			cout << "\n\nTree:\n";
-			int size = str.size();
-			for (int i = 0; i < size; i++)
+			size_t size = str.size();
+			for (size_t i = 0; i < size; i++)
 			{
 				cout << *(str[i]) << endl;
 			}
@@ -110,7 +110,7 @@ namespace mm {
 
 		int getNumElements(int level)
 		{
-			return pow(2, level - 1);
+			return static_cast<int>(pow(2, level - 1));
 		}
 
 		int getRootPosition()
@@ -122,12 +122,12 @@ namespace mm {
 		{
 			if (node == nullptr) return;
 
-			int size = str.size();
+			size_t size = str.size();
 			int expectedSize = currentLevel;
 			if (size < expectedSize)
 			{
-				int reqNewStrs = expectedSize - size;
-				for (int i = 0; i < reqNewStrs; i++)
+				size_t reqNewStrs = expectedSize - size;
+				for (size_t i = 0; i < reqNewStrs; i++)
 				{
 					string* temp = new string;
 					str.push_back(temp);
@@ -160,7 +160,7 @@ namespace mm {
 		{
 			vector<string*> temp = str;
 			str.clear();
-			int size = temp.size();
+			size_t size = temp.size();
 			for (int i = 0; i < size; i++)
 			{
 				str.push_back(temp[i]);
@@ -188,7 +188,7 @@ namespace mm {
 			//int lastLevelLength = (getNumElements(m_level + 1) * (SPACES_BET_ELEMENTS + SIZE_OF_ELEMENT));
 			//int currentLevelElements = getNumElements(currentLevel + 1);
 			//return lastLevelLength / currentLevelElements;
-			return pow(2, (m_level - currentLevel)) * (SPACES_BET_ELEMENTS + SIZE_OF_ELEMENT);
+			return static_cast<int>(pow(2, (m_level - currentLevel)) * (SPACES_BET_ELEMENTS + SIZE_OF_ELEMENT));
 		}
 
 		int getElementPos(int currentLevel, int pos)
@@ -199,10 +199,10 @@ namespace mm {
 				return getSpaceBetElements(currentLevel) * 2;
 		}
 
-		string getSpaces(int n)
+		string getSpaces(size_t n)
 		{
 			string buffer;
-			for (int i = 0; i < n; i++)
+			for (size_t i = 0; i < n; i++)
 				buffer += " ";
 			return buffer;
 		}

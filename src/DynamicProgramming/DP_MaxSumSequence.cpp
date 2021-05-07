@@ -38,7 +38,7 @@ namespace mm {
 
 			cout << "\n\nProblm: MaxSumSequence\nTrying sets of size 1 to 20...";
 			//Generate sets of sizes from 1 to 20
-			srand(time(nullptr));
+			srand(static_cast<unsigned int>(time(nullptr)));
 			for (int i = 1; i <= numTestCases; i++)
 			{
 				//Generate random treasury
@@ -53,7 +53,7 @@ namespace mm {
 
 			cout << "\n\nTrying sets of size 20...";
 			//Generate various sets of size 20
-			srand(time(nullptr));
+			srand(static_cast<unsigned int>(time(nullptr)));
 			int size = 20;
 			array.resize(size);
 			for (int i = 0; i < numTestCases; i++)

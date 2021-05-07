@@ -54,7 +54,7 @@ namespace mm {
 
 		
 		//initialize random seed
-		srand(time(NULL));
+		srand(static_cast<unsigned int>(time(NULL)));
 		for (int index = 0; index < numTestCases; ++index)
 		{
 			vector<string> stocks{ "MSFT", "AAPL", "AMZN", "FB", "BRK", "GOOGL", "JPM", "JNJ", "XOM", "V", "BAC", "INTC", "PG", "CSCO", "DIS", "HD", "VZ", "CVX", "MA", "IBM", "TN", "ATT", "TWTR", "LNKD", "UBS" };

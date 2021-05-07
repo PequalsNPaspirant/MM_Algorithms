@@ -101,7 +101,7 @@ namespace mm {
 		//	sortedIndices[i] = i;
 
 		std::sort(sortedIndices.begin(), sortedIndices.begin() + values.size(),
-			[&valueToWeightsRatio](const unsigned int lhs, const unsigned int rhs) -> bool { return valueToWeightsRatio[lhs] > valueToWeightsRatio[rhs]; });
+			[&valueToWeightsRatio](const unsigned long long lhs, const unsigned long long rhs) -> bool { return valueToWeightsRatio[lhs] > valueToWeightsRatio[rhs]; });
 
 		//Testing
 		//vector<double> oldValues = values;
@@ -164,7 +164,7 @@ namespace mm {
 		double maxValue = 0.0; // set max value by greedy
 		vector<unsigned long long>::iterator iter = std::upper_bound(cumulativeWeights.begin(), cumulativeWeights.end(), knapsackCapacity);
 		//[&cumulativeWeights](unsigned long long targetCumulativeWeightIn, unsigned long long currentCumulativeWeight) { return targetCumulativeWeightIn < currentCumulativeWeight; });
-		unsigned int index = iter - cumulativeWeights.begin();
+		size_t index = iter - cumulativeWeights.begin();
 		if (index != 0)
 		{
 			--index;  //iter does not point to sortedIndices.begin(), so it is safe to go one step towards left
@@ -206,7 +206,7 @@ namespace mm {
 				{
 					heapObjectsGrowingPool.push_back(vector<decisionTreeNode_v9b>(values.size()));
 					maxHeap_v9b.reserve(maxHeap_v9b.capacity() + values.size());
-					int lastIndex = heapObjectsGrowingPool.size() - 1;
+					size_t lastIndex = heapObjectsGrowingPool.size() - 1;
 					for (int i = 0; i < values.size(); ++i)
 						maxHeap_v9b.addToData(&heapObjectsGrowingPool[lastIndex][i]);
 				}

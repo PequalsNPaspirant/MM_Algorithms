@@ -79,7 +79,7 @@ namespace mm {
 		//string retVal; //it creates a string with default size 16 bytes
 		string retVal(1, '0'); //create string with size zero
 		retVal.resize(digits + extraDigits);
-		for(int index = retVal.size(); number > 0; number /= 100)
+		for(size_t index = retVal.size(); number > 0; number /= 100)
 		{	
 			int i = number % 100;
 			retVal[--index] = buffer[i][1];

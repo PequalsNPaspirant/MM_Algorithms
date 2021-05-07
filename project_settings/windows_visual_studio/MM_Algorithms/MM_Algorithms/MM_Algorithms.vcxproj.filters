@@ -408,9 +408,6 @@
     <ClCompile Include="..\..\..\..\src\DataStructures\DS_MM_vector_bool.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\src\STL\STL_Allocators.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\src\STL\STL_Concurrency.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -667,6 +664,30 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\src\Maths\Maths_Median.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\DataStructures\DS_LRU.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\Geometry\Geom_AreaOverlappedRect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\Geometry\Geom_IntersectionLineLine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\Geometry\Geom_IntersectionLinePlane.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\Geometry\Geom_AngleBetTwoLines.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\Array\Array_SortArrayUsingSingleSwap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\PatternMatching\PatternMatching_Sample.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\LinearProgramming\LPP_Sample.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1049,9 +1070,6 @@
     <ClInclude Include="..\..\..\..\src\DataStructures\DS_MM_vector_bool.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\src\STL\STL_Allocators.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\src\STL\STL_Concurrency.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1146,6 +1164,30 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\src\Utils\Utils_TimerUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\DataStructures\DS_LRU.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\Geometry\Geom_AngleBetTwoLines.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\Geometry\Geom_AreaOverlappedRect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\Geometry\Geom_IntersectionLineLine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\Geometry\Geom_IntersectionLinePlane.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\Array\Array_SortArrayUsingSingleSwap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\PatternMatching\PatternMatching_Sample.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\LinearProgramming\LPP_Sample.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

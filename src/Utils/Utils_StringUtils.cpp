@@ -77,7 +77,7 @@ namespace mm {
 	void reverseString(string& str)
 	{
 		cout << endl << str << " <= reverse => ";
-		int len = str.length();
+		size_t len = str.length();
 		for (int i = 0; i < len / 2; i++)
 			std::swap(str[i], str[len - i - 1]);
 		cout << str;

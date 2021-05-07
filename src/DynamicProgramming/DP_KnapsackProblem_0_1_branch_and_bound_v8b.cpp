@@ -174,7 +174,7 @@ namespace mm {
 				{
 					heapObjectsGrowingPool.push_back(vector<decisionTreeNode_v8b>(values.size()));
 					maxHeap_v8b.reserve(maxHeap_v8b.capacity() + values.size());
-					int lastIndex = heapObjectsGrowingPool.size() - 1;
+					size_t lastIndex = heapObjectsGrowingPool.size() - 1;
 					for (int i = 0; i < values.size(); ++i)
 						maxHeap_v8b.addToData(&heapObjectsGrowingPool[lastIndex][i]);
 				}

@@ -21,6 +21,8 @@ namespace mm {
 			return (digitIn - '0');
 		else if (digitIn >= 'A' && digitIn <= 'Z')
 			return (digitIn - 'A' + 10);
+
+		return 0;
 	}
 
 	int convertDigitFromAnyToDecimal(char digitIn, int baseIn)
@@ -41,6 +43,8 @@ namespace mm {
 		else if (digitIn >= 10 && digitIn <= (10 + 'Z' - 'A'))
 			return ('A' + digitIn - 10);
 
+		return 0;
+
 		//OR
 		//static char[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D',..., 'Z'};
 		//return char[digitIn];
@@ -58,14 +62,14 @@ namespace mm {
 
 		//Convert from 'baseIn' to decimal
 		decimalVal = 0;
-		int lenIn = numIn.length();
+		int lenIn = static_cast<int>(numIn.length());
 		for (int i = lenIn - 1; i >= 0; i--)
-			decimalVal += convertDigitFromAnyToDecimal(numIn[i]) * pow(baseIn, lenIn - i - 1);
+			decimalVal += convertDigitFromAnyToDecimal(numIn[i]) * static_cast<unsigned long>(pow(baseIn, lenIn - i - 1));
 
 		numOut.clear();
 
 		//Use do-while to convert it when decimalVal = 0;
-		int copy = decimalVal;
+		unsigned long copy = decimalVal;
 		do
 		{
 			numOut = convertDigitFromDecimalToAny(copy % baseOut) + numOut;
