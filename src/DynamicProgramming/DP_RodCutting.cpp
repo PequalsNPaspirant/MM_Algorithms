@@ -11,7 +11,7 @@ namespace mm {
 	// ============================= Problem Statement =============================
 	/*
 		Given a rod of length n and list of prices of rod of length i where 1 <= i <= n, Find 
-		the optimal way to cut rod into smaller rods in order to maximize prot
+		the optimal way to cut rod into smaller rods in order to maximize product
 	*/
 
 	// ============================= Top-down (Recursive) =============================

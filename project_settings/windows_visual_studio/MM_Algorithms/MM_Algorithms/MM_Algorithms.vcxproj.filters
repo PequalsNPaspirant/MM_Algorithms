@@ -690,6 +690,9 @@
     <ClCompile Include="..\..\..\..\src\LinearProgramming\LPP_Sample.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_MinCutsStolenNecklaceKGems2People.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\src\Backtracking\Backtracking.h">
@@ -1188,6 +1191,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\src\LinearProgramming\LPP_Sample.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\DynamicProgramming\DP_MinCutsStolenNecklaceKGems2People.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
