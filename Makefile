@@ -51,7 +51,8 @@ CXXFLAGS_SET_3 := -std=c++1y -pedantic -Wall -Wextra -Wcast-align \
 -Wnoexcept -Wold-style-cast -Woverloaded-virtual -Wredundant-decls \
 -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-null-sentinel \
 -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused
-CXXFLAGS := $(CXXFLAGS_WARN)
+#CXXFLAGS := $(CXXFLAGS_WARN)
+CXXFLAGS := $(CXXFLAGS_NO_WARN)
 
 SRCFILES := $(shell find $(SRCDIR) -name "*.cpp")
 OBJECTS := $(patsubst $(SRCDIR)/%.cpp,$(OBJDIR)/%.o,$(SRCFILES))
