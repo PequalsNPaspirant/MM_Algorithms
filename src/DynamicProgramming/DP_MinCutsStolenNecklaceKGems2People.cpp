@@ -34,13 +34,6 @@ namespace mm {
 
 	struct MinCutsStolenNecklaceResults
 	{
-		//struct NecklacePiece
-		//{
-		//	int startIndex;
-		//	int endIndex;
-		//	int ownedBy; //personIndex who owns this necklace piece
-		//};
-
 		std::vector<int> owners;
 		int minCuts;
 
@@ -51,16 +44,6 @@ namespace mm {
 				if (owners[i - 1] != owners[i])
 					++minCuts;
 		}
-
-		//void reverseResults()
-		//{
-		//	size_t numHalfCuts = distribution.size() / 2;
-		//	for (size_t i = 0; i < numHalfCuts; ++i)
-		//	{
-		//		size_t rIndex = distribution.size() - i - 1;
-		//		std::swap(distribution[i], distribution[rIndex]);
-		//	}
-		//}
 	};
 
 	bool isFulfilled(const vector<unordered_map<GemType, Count>>& expectedDistribution)
@@ -78,81 +61,49 @@ namespace mm {
 		return true;
 	}
 	
-	void getMinCutsStolenNecklaceKGems2People_recursive(const vector<int>& necklace, int gemIndex, int numPeople,
+	int getMinCutsStolenNecklaceKGems2People_recursive(const vector<int>& necklace, int gemIndex, int numPeople,
 		vector<unordered_map<GemType, Count>>& expectedDistribution, MinCutsStolenNecklaceResults& currentResults, vector<MinCutsStolenNecklaceResults>& results)
 	{
-		//if (endIndex < 0)
-		//	return 0;
-
-		//int minCutsSoFar = numeric_limits<int>::max();
-		//for (int gemIndex = endIndex; gemIndex >= 0; --gemIndex)
-		//{
-			for (int personIndex = 0; personIndex < numPeople; ++personIndex)
+		//If this result is good, store it
+		if (gemIndex == 0)
+		{
+			if (isFulfilled(expectedDistribution))
 			{
-				//Cut the necklace before gemIndex and give the end portion of necklace to person at personIndex
-				//int cuts = 0;
-					
-				//All the gems of this portion should be added to current persons distribution set
-				//bool isCurrentCutValid = true;
-				//int j = gemIndex;
-				//for (; j <= endIndex; ++j)
-				//{
-					unordered_map<GemType, Count>& currPerDist = expectedDistribution[personIndex];
-					GemType type = necklace[gemIndex];
-					Count& c = currPerDist[type];
-					if (c > 0)
-					{
-						currentResults.owners[gemIndex] = personIndex;
-						--c;
-					}
-					else
-					{
-						continue;
-						//isCurrentCutValid = false;
-						//break;
-					}
-				//}
-				//if (!isCurrentCutValid) //If current cut is not valid, revert back the changes
-				//{
-				//	for (--j; j >= gemIndex; --j)
-				//	{
-				//		unordered_map<GemType, Count>& currPerDist = expectedDistribution[personIndex];
-				//		GemType type = necklace[j];
-				//		Count& c = currPerDist[type];
-				//		++c;
-				//	}
-				//	continue; //go to next person
-				//}
-				//currentResults.owners.push_back(personIndex);
+				currentResults.calculateMinCuts();
+				//Push to results if the current results are same or better
+				if(!results.empty() && currentResults.minCuts < results.front().minCuts)
+					results.clear(); //current result is better, so remove old results
 
-				if (gemIndex > 0)
-					getMinCutsStolenNecklaceKGems2People_recursive(necklace, gemIndex - 1, numPeople, expectedDistribution, currentResults, results);
-
-				//If this result is good, store it
-				if (isFulfilled(expectedDistribution))
-				{
-					currentResults.calculateMinCuts();
+				if (results.empty() || currentResults.minCuts == results.front().minCuts)
 					results.push_back(currentResults);
-				}
-
-				//backtrack
-				//for (int j = gemIndex; j <= endIndex; ++j)
-				//{
-				//	unordered_map<GemType, Count>& currPerDist = expectedDistribution[personIndex];
-				//	GemType type = necklace[j];
-				//	Count& c = currPerDist[type];
-				//	++c;
-				//}
-				//currentResults.owners.pop_back();
-				currentResults.owners[gemIndex] = -1;
-				++c;
-
-				//if (minCutsSoFar > currentResults.minCuts)
-				//	minCutsSoFar = currentResults.minCuts;
 			}
-		//}
+			
+			return currentResults.minCuts;
+		}
 
-		//return minCutsSoFar;
+		int minCutsSoFar = numeric_limits<int>::max();
+		GemType type = necklace[gemIndex - 1];
+		for (int personIndex = 0; personIndex < numPeople; ++personIndex)
+		{
+			unordered_map<GemType, Count>& currPerDist = expectedDistribution[personIndex];
+			Count& c = currPerDist[type];
+			if (c == 0)
+				continue;
+
+			currentResults.owners[gemIndex - 1] = personIndex;
+			--c;
+
+			int minCutsForSubinstance = getMinCutsStolenNecklaceKGems2People_recursive(necklace, gemIndex - 1, numPeople, expectedDistribution, currentResults, results);
+
+			if (minCutsSoFar > minCutsForSubinstance)
+				minCutsSoFar = minCutsForSubinstance;
+
+			//backtrack
+			currentResults.owners[gemIndex - 1] = -1;
+			++c;
+		}
+
+		return minCutsSoFar;
 	}
 
 
@@ -266,26 +217,15 @@ namespace mm {
 			}
 		}
 
-		//void reverseResults()
-		//{
-		//	for (size_t i = 0; i < results.size(); ++i)
-		//		results[i].reverseResults();
-		//}
-
 		bool isValidResult()
 		{
 			for (size_t resIndex = 0; resIndex < results.size(); ++resIndex)
 			{
-				const vector<int>& currentResults = results[resIndex].owners;
-				//int actualMinCuts = static_cast<int>(currentResults.distribution.size() - 1);
-				//if (actualMinCuts != currentResults.minCuts)
-				//	return false;
-
 				vector<unordered_map<GemType, Count>> copy = expectedDistribution;
-				for (size_t i = 0; i < currentResults.size(); ++i)
+				for (size_t i = 0; i < results[resIndex].owners.size(); ++i)
 				{
 					GemType type = necklace[i];
-					int ownerIndex = currentResults[i];
+					int ownerIndex = results[resIndex].owners[i];
 					unordered_map<GemType, Count>& currPerDist = copy[ownerIndex];
 					Count& c = currPerDist[type];
 					--c;
@@ -314,10 +254,10 @@ namespace mm {
 			testData[i].createRandomNecklace();
 			testData[i].createRandomExpectedDistribution(testData[i].numGemsInNecklace);
 
-			int endIndex = static_cast<int>(testData[i].necklace.size() - 1);
 			MinCutsStolenNecklaceResults currentResultsTemp;
 			currentResultsTemp.owners.resize(testData[i].necklace.size(), -1);
-			getMinCutsStolenNecklaceKGems2People_recursive(testData[i].necklace, endIndex, testData[i].numPeople, testData[i].expectedDistribution, currentResultsTemp, testData[i].results);
+			currentResultsTemp.minCuts = numeric_limits<int>::max();
+			int minCuts = getMinCutsStolenNecklaceKGems2People_recursive(testData[i].necklace, static_cast<int>(testData[i].necklace.size()), testData[i].numPeople, testData[i].expectedDistribution, currentResultsTemp, testData[i].results);
 			//testData[i].reverseResults();
 			bool result = testData[i].isValidResult();
 			MM_EXPECT_TRUE(result == true, result);
