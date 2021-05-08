@@ -27,7 +27,7 @@ namespace mm {
 		//MM_SET_PAUSE_ON_ERROR(true);
 
 		//generateAndPrintTestData();
-		vector<DataSet> testDataVector = getTestData();
+		vector<DataSet> testDataVector = getBigIntMultiplicationTestData();
 
 		typedef string(*multiplicationFunctionType)(const string&, const string&);
 		//struct

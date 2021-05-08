@@ -27,7 +27,7 @@ namespace mm {
 	class BinaryTree
 	{
 	public:
-		static const int Empty = std::numeric_limits<int>::min();
+		static const int Empty; // = std::numeric_limits<int>::min();
 
 		BinaryTree()
 			: root_{ nullptr }, levels_{ 0 }

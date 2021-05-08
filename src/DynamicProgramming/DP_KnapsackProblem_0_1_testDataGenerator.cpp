@@ -232,7 +232,7 @@ namespace mm {
 			string fileName(testCaseFullFileName.substr(testCaseFullFileName.find_last_of("/") + 1));
 			element.testFileName = fileName;
 			string line;
-			int numItems = 0;
+			size_t numItems = 0;
 			while (std::getline(testDataFile, line, '\n'))
 			{
 				if (line.empty())

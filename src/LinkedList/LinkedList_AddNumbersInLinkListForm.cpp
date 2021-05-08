@@ -328,7 +328,7 @@ namespace mm {
 	};
 
 	template<typename T>
-	vector<testSet<T>>& getTestData()
+	vector<testSet<T>>& getLinkListTestData()
 	{
 		static vector<testSet<T>> testData({
 			testSet<T>({ 1, 2, 3 }, { 4,5 }, { 1,6,8 }),
@@ -346,19 +346,19 @@ namespace mm {
 		std::list<int> result1;
 		std::forward_list<int> result2;
 		LinkList result3;
-		for (size_t i = 0; i < getTestData<std::list<int>>().size(); ++i)
+		for (size_t i = 0; i < getLinkListTestData<std::list<int>>().size(); ++i)
 		{
-			MM_EXPECT_TRUE((result1 = AddNumbersInLinkListForm_v1(getTestData<std::list<int>>()[i].lhs, getTestData<std::list<int>>()[i].rhs)) == getTestData<std::list<int>>()[i].result,
-				ListPrintHelper<std::list<int>>(getTestData<std::list<int>>()[i].lhs),
-				ListPrintHelper<std::list<int>>(getTestData<std::list<int>>()[i].rhs),
+			MM_EXPECT_TRUE((result1 = AddNumbersInLinkListForm_v1(getLinkListTestData<std::list<int>>()[i].lhs, getLinkListTestData<std::list<int>>()[i].rhs)) == getLinkListTestData<std::list<int>>()[i].result,
+				ListPrintHelper<std::list<int>>(getLinkListTestData<std::list<int>>()[i].lhs),
+				ListPrintHelper<std::list<int>>(getLinkListTestData<std::list<int>>()[i].rhs),
 					ListPrintHelper<std::list<int>>(result1));
-			MM_EXPECT_TRUE((result2 = AddNumbersInLinkListForm_v2(getTestData<std::forward_list<int>>()[i].lhs, getTestData<std::forward_list<int>>()[i].rhs)) == getTestData<std::forward_list<int>>()[i].result,
-				ListPrintHelper<std::forward_list<int>>(getTestData<std::forward_list<int>>()[i].lhs),
-				ListPrintHelper<std::forward_list<int>>(getTestData<std::forward_list<int>>()[i].rhs),
+			MM_EXPECT_TRUE((result2 = AddNumbersInLinkListForm_v2(getLinkListTestData<std::forward_list<int>>()[i].lhs, getLinkListTestData<std::forward_list<int>>()[i].rhs)) == getLinkListTestData<std::forward_list<int>>()[i].result,
+				ListPrintHelper<std::forward_list<int>>(getLinkListTestData<std::forward_list<int>>()[i].lhs),
+				ListPrintHelper<std::forward_list<int>>(getLinkListTestData<std::forward_list<int>>()[i].rhs),
 				ListPrintHelper<std::forward_list<int>>(result2));
-			MM_EXPECT_TRUE((result3 = AddNumbersInLinkListForm_v3(getTestData<LinkList>()[i].lhs, getTestData<LinkList>()[i].rhs)) == getTestData<LinkList>()[i].result,
-				ListPrintHelper<LinkList>(getTestData<LinkList>()[i].lhs),
-				ListPrintHelper<LinkList>(getTestData<LinkList>()[i].rhs),
+			MM_EXPECT_TRUE((result3 = AddNumbersInLinkListForm_v3(getLinkListTestData<LinkList>()[i].lhs, getLinkListTestData<LinkList>()[i].rhs)) == getLinkListTestData<LinkList>()[i].result,
+				ListPrintHelper<LinkList>(getLinkListTestData<LinkList>()[i].lhs),
+				ListPrintHelper<LinkList>(getLinkListTestData<LinkList>()[i].rhs),
 				ListPrintHelper<LinkList>(result3));
 		}
 	}

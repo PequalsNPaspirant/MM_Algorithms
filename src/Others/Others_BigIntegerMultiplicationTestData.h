@@ -131,7 +131,7 @@ namespace mm {
 		cin.get();
 	}
 
-	vector<DataSet> getTestData()
+	vector<DataSet> getBigIntMultiplicationTestData()
 	{
 		return vector<DataSet>({
 

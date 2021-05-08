@@ -7,6 +7,8 @@ using namespace std;
 
 namespace mm {
 
+	const int BinaryTree::Empty = std::numeric_limits<int>::min();
+
 	namespace 
 	{
 		namespace //unnamed namespace

@@ -12,11 +12,13 @@ APP_NAME := $(OUTDIR)/$(APP)_gcc.exe
 ## LDLIBS := MM_CommonUtils
 LDFLAGS := -static -L$(LIBPATH) -l$(LDLIBS) -lstdc++fs
 
+## https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html
+
 CXX := g++
-CXXFLAGS_DEBUG := -std=c++1y -Wall -g -m64
-CXXFLAGS_WARN := -std=c++1y -Wall -m64
+CXXFLAGS_DEBUG := -std=c++1y -m64 -g -Wall
+CXXFLAGS_WARN := -std=c++1y -m64 -Wall
 CXXFLAGS_NO_WARN := -std=c++1y -m64 
-GCC_COVERAGE_COMPILE_FLAGS := -std=c++1y -Wall -Weffc++ -pedantic  \
+CXXFLAGS_SET_1 := -std=c++1y -m64 -Wall -Weffc++ -pedantic  \
 -pedantic-errors -Wextra -Waggregate-return -Wcast-align \
 -Wcast-qual -Wconversion \
 -Wdisabled-optimization \
@@ -37,7 +39,19 @@ GCC_COVERAGE_COMPILE_FLAGS := -std=c++1y -Wall -Weffc++ -pedantic  \
 -Wunused-parameter \
 -Wvariadic-macros \
 -Wwrite-strings
-CXXFLAGS := $(CXXFLAGS_NO_WARN)
+CXXFLAGS_SET_2 := -std=c++1y -pedantic -Wall -Wextra -Wcast-align \
+-Wcast-qual -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 \
+-Winit-self -Wlogical-op -Wmissing-declarations -Wmissing-include-dirs \
+-Wnoexcept -Wold-style-cast -Woverloaded-virtual -Wredundant-decls \
+-Wshadow -Wsign-conversion -Wsign-promo -Wstrict-null-sentinel \
+-Wstrict-overflow=5 -Wswitch-default -Wundef -Werror -Wno-unused
+CXXFLAGS_SET_3 := -std=c++1y -pedantic -Wall -Wextra -Wcast-align \
+-Wcast-qual -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 \
+-Winit-self -Wlogical-op -Wmissing-declarations -Wmissing-include-dirs \
+-Wnoexcept -Wold-style-cast -Woverloaded-virtual -Wredundant-decls \
+-Wshadow -Wsign-conversion -Wsign-promo -Wstrict-null-sentinel \
+-Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused
+CXXFLAGS := $(CXXFLAGS_WARN)
 
 SRCFILES := $(shell find $(SRCDIR) -name "*.cpp")
 OBJECTS := $(patsubst $(SRCDIR)/%.cpp,$(OBJDIR)/%.o,$(SRCFILES))

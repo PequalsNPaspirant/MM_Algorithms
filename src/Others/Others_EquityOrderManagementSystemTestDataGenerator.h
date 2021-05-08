@@ -14,6 +14,8 @@ namespace mm {
 
 	void generateClientsOrSymbols(vector<string>& listOfClientsOrSymbols, char start, int numClientsOrSymbols, unordered_map<string, int>& map)
 	{
+		constexpr const int clientNameLenMin = 10;
+		constexpr const int clientNameLenMax = 20;
 		listOfClientsOrSymbols.resize(numClientsOrSymbols, string{});
 		for (int i = 0; i < numClientsOrSymbols; ++i)
 		{
@@ -30,6 +32,8 @@ namespace mm {
 
 	double getRandomPrice()
 	{
+		constexpr const int minPrice = 100;
+		constexpr const int maxPrice = 1000000;
 		return double(minPrice + rand() % (maxPrice - minPrice)) + double(1111 + rand() % 8888) / 10000.0; // to ensure decimal part is between 0.11111 to 0.99999
 		//return double(minPrice + rand() % (maxPrice - minPrice));  // Generate integer values
 	}
@@ -214,6 +218,7 @@ namespace mm {
 		}
 
 		std::stringstream buffer;
+		constexpr const int maxPrecision = 17;
 		cout.precision(maxPrecision);
 		buffer.precision(maxPrecision);
 		string str;
