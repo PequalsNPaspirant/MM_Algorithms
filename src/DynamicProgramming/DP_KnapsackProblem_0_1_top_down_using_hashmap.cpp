@@ -38,6 +38,7 @@
 #include <deque>
 #include <memory>
 #include <numeric> //For std::iota to generate the sequence of numbers
+#include <cmath>
 using namespace std;
 
 //#include "Utils/Utils_MM_Assert.h"

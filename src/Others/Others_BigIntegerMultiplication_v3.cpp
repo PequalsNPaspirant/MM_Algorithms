@@ -4,6 +4,7 @@
 #include <chrono>
 #include <locale> // For printing number as thousand separated string
 #include <climits> // For CHAR_BIT
+#include <cmath>
 using namespace std;
 
 //#include "Utils/Utils_MM_Assert.h"
@@ -41,7 +42,7 @@ namespace mm {
 		unsigned long long carry = 0;
 		for (size_t i = vec.size() - 1; i >= start; --i)
 		{
-			unsigned long long result = vec[i] * unsigned long long(singleDigit) + carry;
+			unsigned long long result = vec[i] * static_cast<unsigned long long>(singleDigit) + carry;
 			vec[i] = result & longMask;
 			carry = result >> bitsInBase;
 		}
@@ -53,7 +54,7 @@ namespace mm {
 	void addSingleDigitBaseMaxInt_v1(vector<unsigned int>& vec, int& start, unsigned int singleDigit)
 	{
 		size_t lastDigitIndex = vec.size() - 1;
-		unsigned long long result = vec[lastDigitIndex] + unsigned long long(singleDigit);
+		unsigned long long result = vec[lastDigitIndex] + static_cast<unsigned long long>(singleDigit);
 		vec[lastDigitIndex] = result & longMask;
 		if (lastDigitIndex - 1 < start)
 		{
@@ -105,7 +106,7 @@ namespace mm {
 			unsigned long long carry = 0;
 			for (size_t j = vec2.size() - 1; j >= start2; --j)
 			{
-				unsigned long long n = resultBaseMaxInt[--start3] + (unsigned long long(vec1[i]) * unsigned long long(vec2[j])) + carry;
+				unsigned long long n = resultBaseMaxInt[--start3] + (static_cast<unsigned long long>(vec1[i]) * static_cast<unsigned long long>(vec2[j])) + carry;
 				resultBaseMaxInt[start3] = n & longMask;
 				carry = n >> bitsInBase;
 			}
@@ -209,7 +210,7 @@ namespace mm {
 		unsigned long long carry = singleDigitToAdd;
 		for (size_t i = vec.size() - 1; i >= start; --i)
 		{
-			unsigned long long result = vec[i] * unsigned long long(singleDigitToMultiplyBy) + carry;
+			unsigned long long result = vec[i] * static_cast<unsigned long long>(singleDigitToMultiplyBy) + carry;
 			vec[i] = result & longMask;
 			carry = result >> bitsInBase;
 		}
@@ -258,7 +259,7 @@ namespace mm {
 			unsigned long long carry = 0;
 			for (size_t j = vec2.size() - 1; j >= start2; --j)
 			{
-				unsigned long long n = resultBaseMaxInt[--start3] + (unsigned long long(vec1[i]) * unsigned long long(vec2[j])) + carry;
+				unsigned long long n = resultBaseMaxInt[--start3] + (static_cast<unsigned long long>(vec1[i]) * static_cast<unsigned long long>(vec2[j])) + carry;
 				resultBaseMaxInt[start3] = n & longMask;
 				carry = n >> bitsInBase;
 			}
@@ -357,7 +358,7 @@ namespace mm {
 		unsigned long long carry = 0;
 		for (size_t i = vec.size() - 1; i >= start; --i)
 		{
-			unsigned long long result = vec[i] * unsigned long long(singleDigit) + carry;
+			unsigned long long result = vec[i] * static_cast<unsigned long long>(singleDigit) + carry;
 			vec[i] = result & longMask;
 			carry = result >> bitsInBase;
 		}
@@ -369,7 +370,7 @@ namespace mm {
 	void addSingleDigitBaseMaxInt_v3(vector<unsigned int>& vec, int& start, unsigned int singleDigit)
 	{
 		size_t lastDigitIndex = vec.size() - 1;
-		unsigned long long result = vec[lastDigitIndex] + unsigned long long(singleDigit);
+		unsigned long long result = vec[lastDigitIndex] + static_cast<unsigned long long>(singleDigit);
 		vec[lastDigitIndex] = result & longMask;
 		if (lastDigitIndex - 1 < start)
 		{
@@ -421,7 +422,7 @@ namespace mm {
 			unsigned long long carry = 0;
 			for (size_t j = vec2.size() - 1; j >= start2; --j)
 			{
-				unsigned long long n = resultBaseMaxInt[--start3] + (unsigned long long(vec1[i]) * unsigned long long(vec2[j])) + carry;
+				unsigned long long n = resultBaseMaxInt[--start3] + (static_cast<unsigned long long>(vec1[i]) * static_cast<unsigned long long>(vec2[j])) + carry;
 				resultBaseMaxInt[start3] = n & longMask;
 				carry = n >> bitsInBase;
 			}
@@ -438,7 +439,7 @@ namespace mm {
 		for (; i > start2;)
 		{
 			--i;
-			unsigned long long n = (unsigned long long(resultBase10pow9[i]) << bitsInBase) | carry;
+			unsigned long long n = (static_cast<unsigned long long>(resultBase10pow9[i]) << bitsInBase) | carry;
 			carry = n / maxValuePerDigit;
 			resultBase10pow9[i] = static_cast<unsigned int>(n % maxValuePerDigit);
 			// Compiler generated code is more optimized than below implementation

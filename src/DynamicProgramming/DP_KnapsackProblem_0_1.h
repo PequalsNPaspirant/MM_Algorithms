@@ -28,6 +28,7 @@
 
 #include <functional> //for std::less
 #include <queue>
+#include <algorithm>
 using namespace std;
 
 namespace mm {
@@ -233,7 +234,7 @@ namespace mm {
 			--count_;
 			std::swap(data_[index], data_[count_]);
 
-			--index_;
+			//--index_;
 			if(comparator_(data_[index], data_[count_]))
 				siftDown(index);
 			else

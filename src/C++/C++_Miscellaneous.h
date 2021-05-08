@@ -11,6 +11,7 @@
 #include <windows.h>
 #include <stdio.h>  /* defines FILENAME_MAX */
 #include <direct.h>
+#include <cmath>
 using namespace std;
 
 namespace mm {

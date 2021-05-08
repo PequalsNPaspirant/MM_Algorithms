@@ -1,6 +1,7 @@
 ﻿#include <stack>
 #include <vector>
 #include <cassert>
+#include <cmath>
 using namespace std;
 
 #include "Puzzles/Puzzles_TowerOfHanoi.h"

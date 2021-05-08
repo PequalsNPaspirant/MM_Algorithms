@@ -4,6 +4,7 @@
 #include <queue>
 #include <chrono>
 #include <locale> // For printing number as thousand separated string
+#include <cmath>
 using namespace std;
 
 #include "Utils/Utils_MM_Assert.h"
@@ -148,7 +149,8 @@ Changes over v3c: The following part is removed from v3c
 		}
 
 		OrderTable dummyOrder(0, symbolId, "", 0, 0);
-		for(auto it = OrderTableIndexSymbolId.lower_bound(&dummyOrder); it != OrderTableIndexSymbolId.upper_bound(&dummyOrder); ++it)
+		auto range = OrderTableIndexSymbolId.equal_range(&dummyOrder);
+		for(auto it = range.first; it != range.second; ++it)
 			(*it)->offset = 100 * fabs((*it)->orderPrice - currentMarketPrice) / currentMarketPrice;
 	}
 

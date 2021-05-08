@@ -4,6 +4,8 @@
 
 #include <vector>
 
+#include "Utils/Utils_MM_Assert.h"
+
 using namespace std;
 
 namespace mm {
@@ -49,15 +51,17 @@ namespace mm {
 			class Proxy
 			{
 			public:
-				Proxy(MM_Matrix_subscript& refMatrix, const unsigned int index)
-					:m_refData(refObject),
-					m_index(index)
+				Proxy(MM_Matrix_subscript& refMatrix, const unsigned int rowIn, const unsigned int columnIn)
+					: m_refMatrix(refMatrix),
+					row(rowIn),
+					column(columnIn)
 				{
 				}
 
 				Proxy(const Proxy& rhs)
-					: m_refData(rhs.m_refData)
-					m_index(rhs.m_index)
+					: m_refMatrix(rhs.m_refMatrix),
+					row(rhs.row),
+					column(rhs.column)
 				{
 
 				}
@@ -97,9 +101,9 @@ namespace mm {
 
 				Proxy& operator=(const T& rval)
 				{
-					m_refData.callMeWhileWriting();
-					++(m_refData.m_pWriteCount[m_index]);
-					m_refData.m_pData[m_index] = rval;
+					m_refMatrix.callMeWhileWriting();
+					++(m_refMatrix.writeCount_);
+					m_refMatrix.m_values[m_row * m_refMatrix.m_columns + column] = rval;
 					//return rval;
 					//return m_refData;
 					return *this;
@@ -109,9 +113,9 @@ namespace mm {
 				//operator const T&() const // const member function is not required, as no const Proxy objectes are created
 				operator const T&()
 				{
-					m_refData.callMeWhileReading();
-					++(m_refData.m_pReadCount[m_index]);
-					return m_refData.m_pData[m_index];
+					m_refMatrix.callMeWhileReading();
+					++(m_refMatrix.readCount_);
+					return m_refMatrix.m_values[m_row * m_refMatrix.m_columns + column];
 				}
 
 			private:

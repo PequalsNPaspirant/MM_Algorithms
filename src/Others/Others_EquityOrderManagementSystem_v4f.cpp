@@ -4,6 +4,7 @@
 #include <queue>
 #include <chrono>
 #include <locale> // For printing number as thousand separated string
+#include <cmath>
 using namespace std;
 
 #include "Utils/Utils_MM_Assert.h"
@@ -169,7 +170,7 @@ The following part is removed from algo v3c
 		}
 		else
 		{
-			OrderTableData[OrderTableDataIndex].clientSymbolPair.swap(clientName + "-" + symbolName);
+			OrderTableData[OrderTableDataIndex].clientSymbolPair = (clientName + "-" + symbolName);
 			OrderTableData[OrderTableDataIndex].orderPrice = newOrderPrice;
 			OrderTableData[OrderTableDataIndex].offset = 0.0;
 			OrderTableData[OrderTableDataIndex].updated = true;
@@ -393,7 +394,8 @@ Complexity:
 			OrderTableSortIndexOffsetMinHeapRest.clear();
 
 		OrderTableMaxHeapVectorIndex = -1;
-		size_t finalSortedListLen = std::min(100ULL, OrderTableDataIndex + 1);
+		//size_t finalSortedListLen = std::min(100ULL, OrderTableDataIndex + 1); //ERROR on gcc. It treats size_t and unsigned long long differently
+		size_t finalSortedListLen = std::min(static_cast<size_t>(100), OrderTableDataIndex + 1);
 		double previousMinOffset = minOffsetInSortestList;
 		numUpdatedFromTop100 = 0;
 
@@ -404,7 +406,8 @@ Complexity:
 			//OrderTable dummyOrder(0, UpdatedSymbolTableData[i]->symbolId, "", 0, 0);
 			dummyOrder.symbolId = UpdatedSymbolTableData[i]->symbolId;
 			//for (auto it = OrderTableIndexSymbolId.lower_bound(&dummyOrder); it != OrderTableIndexSymbolId.upper_bound(&dummyOrder); ++it)
-			for (auto it = OrderTableIndexSymbolId.lower_bound(&dummyOrder); it != OrderTableIndexSymbolId.end() && (*it)->symbolId == dummyOrder.symbolId; ++it)
+			auto range = OrderTableIndexSymbolId.equal_range(&dummyOrder);
+			for (auto it = range.first; it != range.second; ++it)
 			{
 				processUpdatedObject(*it, finalSortedListLen, currentMarketPrice, previousMinOffset);
 				(*it)->updated = false;

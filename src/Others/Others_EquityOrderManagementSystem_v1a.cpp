@@ -4,6 +4,7 @@
 #include <queue>
 #include <chrono>
 #include <locale> // For printing number as thousand separated string
+#include <cmath>
 using namespace std;
 
 #include "Utils/Utils_MM_Assert.h"
@@ -74,8 +75,8 @@ if the order is not present:
 		//if (it.second == false) // new key is not interted as old key already exists
 		//	(it.first)->second = currentMarketPrice;
 		symbolMarketPriceIndex[symbol] = currentMarketPrice;
-
-		for(auto it = symbolIndex.lower_bound(&symbol); it != symbolIndex.upper_bound(&symbol); ++it)
+		auto range = symbolIndex.equal_range(&symbol);
+		for(auto it = range.first; it != range.second; ++it)
 			it->second->offset = 100 * fabs(it->second->orderPrice - currentMarketPrice) / currentMarketPrice;
 	}
 

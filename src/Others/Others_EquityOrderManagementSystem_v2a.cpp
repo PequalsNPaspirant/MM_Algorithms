@@ -4,6 +4,7 @@
 #include <queue>
 #include <chrono>
 #include <locale> // For printing number as thousand separated string
+#include <cmath>
 using namespace std;
 
 #include "Utils/Utils_MM_Assert.h"

@@ -148,7 +148,8 @@ Complexity:
 		}
 
 		OrderTable dummyOrder(0, symbolId, "", 0, 0);
-		for (auto it = OrderTablePositionIndexSymbolId.lower_bound(&dummyOrder); it != OrderTablePositionIndexSymbolId.upper_bound(&dummyOrder); ++it)
+		auto range = OrderTablePositionIndexSymbolId.equal_range(&dummyOrder);
+		for (auto it = range.first; it != range.second; ++it)
 		{
 			double newOffset = 100 * fabs((*it)->orderPrice - currentMarketPrice) / currentMarketPrice;
 			OrderTableSortIndexOffset.erase(*it);

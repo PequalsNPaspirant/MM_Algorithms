@@ -26,6 +26,7 @@
 
 #include <vector>
 #include <queue>
+#include <cmath>
 using namespace std;
 
 #include "Others/Others_FxSettlement.h"

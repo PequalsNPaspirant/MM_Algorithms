@@ -13,6 +13,7 @@
 #include <functional> 
 #include <cctype>
 #include <locale>
+#include <cmath>
 using namespace std;
 
 namespace mm {

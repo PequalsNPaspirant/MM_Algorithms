@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <fstream> //for file read/write
 #include <sstream> // for std::stringstream
+#include <cmath>
 using namespace std;
 
 //#define GENERATE_TEST_DATA
@@ -48,13 +49,13 @@ namespace mm {
 	
 	extern vector<testDataStats> vecTestDataStats;
 	extern size_t vecTestDataStatsIndex;
-	extern constexpr const int clientNameLenMin = 10;
-	extern constexpr const int clientNameLenMax = 20;
-	extern constexpr const int minPrice = 100;
-	extern constexpr const int maxPrice = 1000000;
-	extern constexpr const double tolerance = 0.00001;
-	extern constexpr const int maxPrecision = 17;
-	extern constexpr const int finalSortedListLen = 100;
+	//extern int clientNameLenMin;
+	//extern int clientNameLenMax;
+	//extern int minPrice;
+	//extern int maxPrice;
+	//extern double tolerance;
+	//extern int maxPrecision;
+	//extern int finalSortedListLen;
 
 	enum APIs
 	{

@@ -32,7 +32,7 @@ namespace mm {
 			return true;
 
 		int index = 0;
-		return checkIfPreorderTraversalIsBST(elements, index, INT_MIN, INT_MAX);
+		return checkIfPreorderTraversalIsBST(elements, index, std::numeric_limits<int>::min(), std::numeric_limits<int>::max());
 	}
 
 

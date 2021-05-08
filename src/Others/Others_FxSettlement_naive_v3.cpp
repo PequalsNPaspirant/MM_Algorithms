@@ -25,6 +25,7 @@
 //=======================================================================================================//
 
 #include <vector>
+#include <cmath>
 using namespace std;
 
 #include "Others/Others_FxSettlement.h"

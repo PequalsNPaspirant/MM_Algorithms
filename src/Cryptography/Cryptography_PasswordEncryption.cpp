@@ -19,9 +19,12 @@
 #include <cwchar>
 #include <limits.h> //For PATH_MAX
 #include <limits>
+#include <cmath>
 
+#ifdef _MSC_VER
 #include <windows.h>
 #undef max
+#endif
 
 using namespace std;
 
@@ -61,13 +64,7 @@ namespace mm {
 
 	std::string getCurrentProgramName()
 	{
-		const int len = 256;
-		char pBuf[len];
-		int bytes = GetModuleFileName(NULL, pBuf, len);
-		if (bytes == 0)
-			return "";
-		else
-			return string(pBuf);
+		return "";
 	}
 
 	void printCurrentProgramName()
@@ -86,6 +83,8 @@ namespace mm {
 			buff[len] = '\0';
 			return std::string(buff);
 		}
+
+		return "";
 	}
 
 	void printCurrentProgramName()

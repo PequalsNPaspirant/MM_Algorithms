@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <iomanip> //for setw(n)
+#include <cmath>
 using namespace std;
 
 #include "Others/Others_FloatingPoint.h"

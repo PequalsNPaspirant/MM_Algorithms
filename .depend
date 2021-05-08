@@ -843,8 +843,6 @@ obj/windows_gcc/Puzzles/Puzzles_TowerOfHanoi.o: src/Puzzles/Puzzles_TowerOfHanoi
 
 obj/windows_gcc/Queue/Queue.o: src/Queue/Queue.cpp
 
-obj/windows_gcc/Sample.o: src/Sample.cpp src/MM_UnitTestFramework/MM_UnitTestFramework.h
-
 obj/windows_gcc/ScottMeyers/ScottMeyers_EffectiveModernCPP.o: src/ScottMeyers/ScottMeyers_EffectiveModernCPP.cpp
 
 obj/windows_gcc/Sorting/Sorting.o: src/Sorting/Sorting.cpp

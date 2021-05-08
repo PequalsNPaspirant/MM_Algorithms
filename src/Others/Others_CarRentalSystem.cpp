@@ -23,8 +23,7 @@ namespace mm {
 		{
 
 		}
-		virtual ~Car() = 0
-		{}
+		virtual ~Car() {}
 
 		virtual int getMaxPassangers() const = 0;
 		const string& getLicencePlateNumber() const

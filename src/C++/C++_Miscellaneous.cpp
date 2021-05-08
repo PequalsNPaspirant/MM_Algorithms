@@ -11,6 +11,7 @@
 #include <cmath>
 #include <limits.h> //For PATH_MAX
 #include <windows.h>
+#include <cmath>
 using namespace std;
 
 //-----------------------------------------------------------------------------------------------------

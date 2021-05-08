@@ -27,7 +27,7 @@ namespace mm {
 		std::uniform_real_distribution<double> dist1(1.0, 10.0);
 		double x1 = dist1(mt);
 		//uniform_real_distribution returns a number in the range[a, b), but if you want[a, b], our uniform_real_distibution should actually look like :
-		std::uniform_real_distribution<double> dist2(1, std::nextafter(10, DBL_MAX));
+		std::uniform_real_distribution<double> dist2(1, std::nextafter(10, std::numeric_limits<double>::max()));
 		double x2 = dist2(mt);
 
 		std::uniform_real_distribution<double> dist_double(100.0, 1000.0);
@@ -50,7 +50,7 @@ namespace mm {
 		//	std::uniform_real_distribution<T>       dist;
 		//};
 
-		//randomNumberGenerator<double> generator1{ 1, std::nextafter(10, DBL_MAX) };
+		//randomNumberGenerator<double> generator1{ 1, std::nextafter(10, std::numeric_limits<double>::max()) };
 
 		
 		//initialize random seed
@@ -93,7 +93,7 @@ namespace mm {
 		}
 	}
 
-	std::vector<vector<Data>> getTestData()
+	std::vector<vector<Data>> getRankInSortedArrayTestData()
 	{
 		return std::vector<vector<Data>>{
 			//{

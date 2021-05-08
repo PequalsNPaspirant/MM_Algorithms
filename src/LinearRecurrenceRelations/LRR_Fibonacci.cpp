@@ -1,5 +1,6 @@
 ﻿#include <vector>
 #include <limits>
+#include <cmath>
 using namespace std;
 
 #include "LinearRecurrenceRelations/LRR_Fibonacci.h"
@@ -421,7 +422,7 @@ namespace mm {
 		{ 90, 2880067194370816120 },
 		{ 91, 4660046610375530309 },
 		{ 92, 7540113804746346429 }, 
-		{ 93, 12'200'160'415'121'876'738 } //max 8 byte unsigned fibonnacci number < numeric_limit<unsigned long long>::max() 18'446'744'073'709'551'615
+		{ 93, 12'200'160'415'121'876'738ULL } //max 8 byte unsigned fibonnacci number < numeric_limit<unsigned long long>::max() 18'446'744'073'709'551'615
 		//{ 94, 1'293'530'146'158'671'551 }
 		};
 

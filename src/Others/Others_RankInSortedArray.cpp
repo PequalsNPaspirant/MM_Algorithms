@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cassert>
 #include <time.h>       /* time */
+#include <cmath>
 using namespace std;
 
 #include "Others/Others_RankInSortedArray.h"
@@ -284,13 +285,13 @@ namespace mm {
 	}
 
 	void generateRandomTestCases();
-	std::vector<vector<Data>> getTestData();
+	std::vector<vector<Data>> getRankInSortedArrayTestData();
 	
 	MM_UNIT_TEST(Others_RankInSortedArray_test_1, Others_RankInSortedArray)
 	{
 		//return generateRandomTestCases();
 
-		std::vector<vector<Data>> testData = getTestData();
+		std::vector<vector<Data>> testData = getRankInSortedArrayTestData();
 
 		for (int i = 0; i < testData.size(); ++i)
 		{

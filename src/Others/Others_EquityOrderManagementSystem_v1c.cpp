@@ -3,6 +3,7 @@
 #include <vector>
 #include <chrono>
 #include <locale> // For printing number as thousand separated string
+#include <cmath>
 using namespace std;
 
 #include "Utils/Utils_MM_Assert.h"
@@ -234,7 +235,8 @@ Complexity:
 		for (int i = 0; i <= updatedSymbolDataIndex; ++i)
 		{
 			SymbolData* pObj = updatedSymbolData[i];
-			for(auto it = symbolIdIndex.lower_bound(pObj->symbolId); it != symbolIdIndex.end() && it->first == pObj->symbolId; ++it)
+			auto range = symbolIdIndex.equal_range(pObj->symbolId);
+			for(auto it = range.first; it != range.second && it->first == pObj->symbolId; ++it)
 			{
 				sortedByOffsetSet.erase(it->second);
 				it->second->offset = 100 * fabs(it->second->orderPrice - pObj->symbolPrice) / pObj->symbolPrice;

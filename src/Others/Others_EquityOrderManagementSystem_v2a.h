@@ -8,6 +8,7 @@
 #include <memory>
 #include <functional> // to define lambda
 //#include <typeinfo>
+#include <cmath>
 using namespace std;
 
 namespace mm {

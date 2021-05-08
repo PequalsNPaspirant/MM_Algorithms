@@ -4,6 +4,7 @@
 #include <queue>
 #include <chrono>
 #include <locale> // For printing number as thousand separated string
+#include <cmath>
 using namespace std;
 
 #include "Utils/Utils_MM_Assert.h"
@@ -128,7 +129,9 @@ Complexity:
 		// OR just find lower bound and then keep on incrementing iterator until symbolId is not equal
 		//for(auto it = symbolIndex.lower_bound(symbolId); it != symbolIndex.upper_bound(symbolId); ++it)
 		//	it->second->offset = 100 * fabs(it->second->orderPrice - currentMarketPrice) / currentMarketPrice;
-		for(auto it = symbolIndex.lower_bound(symbolId); it != symbolIndex.end() && it->first == symbolId; ++it)
+		using UMapType = unordered_multimap <unsigned int, Others_OMS_v1b::DataSet_v1*>;
+		pair<UMapType::iterator, UMapType::iterator> range = symbolIndex.equal_range(symbolId);
+		for(auto it = range.first; it != range.second && it->first == symbolId; ++it)
 		{
 			it->second->offset = 100 * fabs(it->second->orderPrice - currentMarketPrice) / currentMarketPrice;
 		}

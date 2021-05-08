@@ -10,28 +10,54 @@ APP_NAME := $(OUTDIR)/$(APP)_gcc.exe
 ## LIBPATH := ../MM_CommonUtils/bin/windows_gcc
 ## LIBNAME := libMM_CommonUtils.a
 ## LDLIBS := MM_CommonUtils
-## LDFLAGS := -static -L$(LIBPATH) -l$(LDLIBS)
+LDFLAGS := -static -L$(LIBPATH) -l$(LDLIBS) -lstdc++fs
 
 CXX := g++
-CXXFLAGS_DEBUG := -Wall -g -m64 -std=c++1y
-CXXFLAGS_WARN := -Wall -m64 -std=c++1y
-CXXFLAGS_NO_WARN := -m64 -std=c++1y
+CXXFLAGS_DEBUG := -std=c++1y -Wall -g -m64
+CXXFLAGS_WARN := -std=c++1y -Wall -m64
+CXXFLAGS_NO_WARN := -std=c++1y -m64 
+GCC_COVERAGE_COMPILE_FLAGS := -std=c++1y -Wall -Weffc++ -pedantic  \
+-pedantic-errors -Wextra -Waggregate-return -Wcast-align \
+-Wcast-qual -Wconversion \
+-Wdisabled-optimization \
+-Werror -Wfloat-equal -Wformat=2 \
+-Wformat-nonliteral -Wformat-security  \
+-Wformat-y2k \
+-Wimplicit  -Wimport  -Winit-self  -Winline \
+-Winvalid-pch   \
+-Wlong-long \
+-Wmissing-field-initializers -Wmissing-format-attribute   \
+-Wmissing-include-dirs -Wmissing-noreturn \
+-Wpacked  -Wpadded -Wpointer-arith \
+-Wredundant-decls \
+-Wshadow -Wstack-protector \
+-Wstrict-aliasing=2 -Wswitch-default \
+-Wswitch-enum \
+-Wunreachable-code -Wunused \
+-Wunused-parameter \
+-Wvariadic-macros \
+-Wwrite-strings
 CXXFLAGS := $(CXXFLAGS_NO_WARN)
 
 SRCFILES := $(shell find $(SRCDIR) -name "*.cpp")
 OBJECTS := $(patsubst $(SRCDIR)/%.cpp,$(OBJDIR)/%.o,$(SRCFILES))
 
-.PHONY: all clean distclean
+.PHONY: depend all clean distclean
 
 all: $(APP_NAME)
 
-.depend: $(SRCFILES)
-	rm -rf $@
-	$(CXX) $(CXXFLAGS) -I$(INCLUDEDIR) $(THIRD_PARTY_INCLUDE) -MM $^ > $@ \
-	&& sed -zi 's/o: \\\n/o:/g' $@ \
-	&& sed -Ei 's#^(.*\.o: *)$(SRCDIR)/(.*/)?(.*\.cpp)#\n$(OBJDIR)/\2\1$(SRCDIR)/\2\3#g' $@
+##.depend: $(SRCFILES)
+##	rm -rf $@
+##	$(CXX) $(CXXFLAGS) -I$(INCLUDEDIR) $(THIRD_PARTY_INCLUDE) -MM $^ > $@ \
+##	&& sed -zi 's/o: \\\n/o:/g' $@ \
+##	&& sed -Ei 's#^(.*\.o: *)$(SRCDIR)/(.*/)?(.*\.cpp)#\n$(OBJDIR)/\2\1$(SRCDIR)/\2\3#g' $@
+##include .depend
 
-include .depend
+depend: $(SRCFILES)
+	rm -rf .depend
+	$(CXX) $(CXXFLAGS) -I$(INCLUDEDIR) $(THIRD_PARTY_INCLUDE) -MM $^ > .depend \
+	&& sed -zi 's/o: \\\n/o:/g' .depend \
+	&& sed -Ei 's#^(.*\.o: *)$(SRCDIR)/(.*/)?(.*\.cpp)#\n$(OBJDIR)/\2\1$(SRCDIR)/\2\3#g' .depend
 
 $(OBJECTS): $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 	@echo ""
@@ -42,7 +68,7 @@ $(OBJECTS): $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 $(LIBPATH)/$(LIBNAME):
 	cd ../MM_CommonUtils && make
 
-$(APP_NAME): $(OBJECTS) $(LIBPATH)/$(LIBNAME)
+$(APP_NAME): .depend $(OBJECTS) $(LIBPATH)/$(LIBNAME)
 	@echo ""
 	@echo "========== Linking =========="
 	$(CXX) -o $@ $(OBJECTS) $(LDFLAGS)

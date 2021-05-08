@@ -2,6 +2,7 @@
 #include <vector>
 #include <unordered_map>
 #include <cassert>
+#include <cmath>
 
 #include "Others/Others_FxRatesCache.h"
 #include "MM_UnitTestFramework/MM_UnitTestFramework.h"

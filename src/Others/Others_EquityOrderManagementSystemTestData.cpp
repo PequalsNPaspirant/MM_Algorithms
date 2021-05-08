@@ -1,5 +1,3 @@
-#pragma once
-
 #include <vector>
 #include <unordered_map>
 #include <fstream> //for file read/write
@@ -9,6 +7,14 @@ using namespace std;
 #include "Others/Others_EquityOrderManagementSystemTestData.h"
 
 namespace mm {
+
+	//int clientNameLenMin = 10;
+	//int clientNameLenMax = 20;
+	//int minPrice = 100;
+	//int maxPrice = 1000000;
+	//double tolerance = 0.00001;
+	//int maxPrecision = 17;
+	//int finalSortedListLen = 100;
 
 	vector<testDataStats> vecTestDataStats = {
 		{200, 200, 100000, 33, 33, 33},

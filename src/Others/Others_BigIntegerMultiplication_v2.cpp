@@ -3,6 +3,7 @@
 #include <vector>
 #include <chrono>
 #include <locale> // For printing number as thousand separated string
+#include <cmath>
 using namespace std;
 
 //#include "Utils/Utils_MM_Assert.h"
@@ -36,7 +37,7 @@ namespace mm {
 			unsigned long long carry = 0;
 			for (int j = 0; j < len2; ++j)
 			{
-				unsigned long long n = res[len3] + (unsigned long long(n1[i]) * unsigned long long(n2[j])) + carry;
+				unsigned long long n = res[len3] + (static_cast<unsigned long long>(n1[i]) * static_cast<unsigned long long>(n2[j])) + carry;
 				// We can avoid cost of devision, but not much preformance benefit observed, so lets not complicate the code
 				//if (n < base)
 				//{
@@ -139,7 +140,7 @@ namespace mm {
 			unsigned long long carry = 0;
 			for (int j = 0; j < len2; ++j)
 			{
-				unsigned long long n = res[len3] + (unsigned long long(n1[i]) * unsigned long long(n2[j])) + carry;
+				unsigned long long n = res[len3] + (static_cast<unsigned long long>(n1[i]) * static_cast<unsigned long long>(n2[j])) + carry;
 				// We can avoid cost of devision, but not much preformance benefit observed, so lets not complicate the code
 				//if (n < base)
 				//{
@@ -232,7 +233,7 @@ namespace mm {
 			unsigned long long carry = 0;
 			for (int j = 0; j < len2; ++j)
 			{
-				unsigned long long n = res[len3] + (unsigned long long(n1[i]) * unsigned long long(n2[j])) + carry;
+				unsigned long long n = res[len3] + (static_cast<unsigned long long>(n1[i]) * static_cast<unsigned long long>(n2[j])) + carry;
 				// We can avoid cost of devision, but not much preformance benefit observed, so lets not complicate the code
 				//if (n < base)
 				//{
@@ -485,7 +486,7 @@ namespace mm {
 			unsigned long long carry = 0;
 			for (int j = 0; j < len2; ++j)
 			{
-				unsigned long long n = res[len3] + (unsigned long long(n1[i]) * unsigned long long(n2[j])) + carry;
+				unsigned long long n = res[len3] + (static_cast<unsigned long long>(n1[i]) * static_cast<unsigned long long>(n2[j])) + carry;
 				// We can avoid cost of devision, but not much preformance benefit observed, so lets not complicate the code
 				//if (n < base)
 				//{
@@ -607,7 +608,7 @@ namespace mm {
 			unsigned long long carry = 0;
 			for (int j = 0; j < len2; ++j)
 			{
-				unsigned long long n = res[len3] + (unsigned long long(n1[i]) * unsigned long long(n2[j])) + carry;
+				unsigned long long n = res[len3] + (static_cast<unsigned long long>(n1[i]) * static_cast<unsigned long long>(n2[j])) + carry;
 				// We can avoid cost of devision, but not much preformance benefit observed, so lets not complicate the code
 				//if (n < base)
 				//{

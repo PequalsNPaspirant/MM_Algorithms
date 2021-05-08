@@ -2,6 +2,7 @@
 //Implement all operator overloading in one
 
 #include <iostream>
+#include <cmath>
 using namespace std;
 
 namespace mm {

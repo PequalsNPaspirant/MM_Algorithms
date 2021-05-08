@@ -8,6 +8,7 @@
 #include <functional> // to define lambda
 #include <queue>
 //#include <typeinfo>
+#include <cmath>
 using namespace std;
 
 namespace mm {

@@ -37,7 +37,8 @@
 #include <map>
 #include <fstream> //for file read/write
 #include <sstream> // for std::stringstream
-#include <filesystem>
+//#include <filesystem>
+#include <experimental/filesystem>
 using namespace std;
 
 #include "DynamicProgramming/DP_KnapsackProblem_0_1_testDataGenerator.h"
@@ -115,16 +116,16 @@ namespace mm {
 		base << "\n";
 		base << Kanpsack_0_1_tags::value_weight_pairs;
 		base << "\n";
-		for (int i = 0; i < data.values.size(); ++i)
+		for (size_t i = 0; i < data.values.size(); ++i)
 			base << data.values[i] << ", " << data.weights[i] << "\n";
 	}
 
 	void DP_KnapsackProblem_0_1_testDataGenerator::writeTestCaseToFile(const Kanpsack_0_1_DataSet& testData, const string& testCaseNamePrefix)
 	{
 		std::unordered_set<string> allFiles;
-		for (const auto & fileOrDirectory : std::experimental::filesystem::directory_iterator(testCaseDirectory))
+		for (const auto & fileOrDirectory : std::experimental::filesystem::v1::directory_iterator(testCaseDirectory))
 		{
-			if (std::experimental::filesystem::is_directory(fileOrDirectory))
+			if (std::experimental::filesystem::v1::is_directory(fileOrDirectory))
 				continue;
 
 			string fullFileName(fileOrDirectory.path().generic_u8string());
@@ -187,9 +188,9 @@ namespace mm {
 	vector<Kanpsack_0_1_DataSet> DP_KnapsackProblem_0_1_testDataGenerator::readAllTestCasesFromFile(const string& testCaseNamePrefix)
 	{
 		vector<Kanpsack_0_1_DataSet> testData;
-		for (const auto & fileOrDirectory : std::experimental::filesystem::directory_iterator(testCaseDirectory))
+		for (const auto & fileOrDirectory : std::experimental::filesystem::v1::directory_iterator(testCaseDirectory))
 		{
-			if (std::experimental::filesystem::is_directory(fileOrDirectory))
+			if (std::experimental::filesystem::v1::is_directory(fileOrDirectory))
 				continue;
 			
 			string fullFileName(fileOrDirectory.path().generic_u8string());

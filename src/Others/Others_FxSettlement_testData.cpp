@@ -34,6 +34,7 @@
 #include <unordered_map>
 #include <set>
 #include <cassert>
+#include <cmath>
 using namespace std;
 
 #include "Others/Others_FxSettlement.h"

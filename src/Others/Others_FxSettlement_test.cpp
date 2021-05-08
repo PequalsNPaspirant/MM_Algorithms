@@ -33,6 +33,7 @@
 #include <limits> // for std::numeric_limits<double>::digits10
 #include <chrono>
 #include <unordered_map>
+#include <cmath>
 using namespace std;
 
 #include "DynamicProgramming/DP_KnapsackProblem_0_1.h" //For class MM_Heap

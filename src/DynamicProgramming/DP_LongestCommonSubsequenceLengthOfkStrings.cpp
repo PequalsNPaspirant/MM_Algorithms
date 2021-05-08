@@ -40,7 +40,7 @@ namespace mm {
 		}
 		else
 		{
-			int max_len = INT_MIN;
+			int max_len = std::numeric_limits<int>::min();
 			for (int k = 0; k < index.size(); ++k)
 			{
 				--index[k];
@@ -110,7 +110,7 @@ namespace mm {
 			}
 			else
 			{
-				int max_len = INT_MIN;
+				int max_len = std::numeric_limits<int>::min();
 				for (int k = 0; k < index.size(); ++k)
 				{
 					--index[k];

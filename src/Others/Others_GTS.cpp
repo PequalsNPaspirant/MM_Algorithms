@@ -74,7 +74,11 @@ namespace mm {
 
 			//cout << "\nOutput: " << volume << " " << symbol << " @ " << std::fixed << std::setprecision(2) << actualPrice;
 			char buffer[256];
+#ifdef _MSC_VER
 			int len = sprintf_s(buffer, "%d %s @ %.2f\n", volume, symbol.c_str(), actualPrice);
+#else
+			int len = sprintf(buffer, "%d %s @ %.2f\n", volume, symbol.c_str(), actualPrice);
+#endif
 			string output(buffer, buffer + len);
 			//cout << "\nOutput: " << output;
 			if (outputFile.is_open())

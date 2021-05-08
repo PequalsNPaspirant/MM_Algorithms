@@ -4,6 +4,7 @@
 #include <limits>
 #include <locale>
 #include <random>
+#include <algorithm>
 
 #include "MM_UnitTestFramework/MM_UnitTestFramework.h"
 

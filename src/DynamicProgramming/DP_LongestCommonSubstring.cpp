@@ -37,7 +37,7 @@ namespace mm {
 	//MyString getLongestCommonSubstring(const MyString& str1, const MyString& str2)
 	string getLongestCommonSubstring_naive(const string& str1, const string& str2)
 	{
-		int maxLength = INT_MIN;
+		int maxLength = std::numeric_limits<int>::min();
 		string maxLenSubString;
 		for (int i = 0; i < str1.length(); i++)
 			for (int j = 0; j < str2.length(); j++)

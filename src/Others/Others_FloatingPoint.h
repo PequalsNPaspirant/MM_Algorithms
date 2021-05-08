@@ -12,6 +12,7 @@ Create a bit pattern from character array and cast it to double and compare its 
 #include <climits>
 #include <cmath>
 #include <cstring>
+#include <cmath>
 using namespace std;
 
 #include "Utils/Utils_MM_Assert.h"

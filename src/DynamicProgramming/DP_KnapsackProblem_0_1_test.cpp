@@ -38,6 +38,7 @@
 #include <sstream> // for std::stringstream
 #include <algorithm>
 #include <queue>
+#include <cmath>
 using namespace std;
 
 //#include "DynamicProgramming/DP_Common.h"
