@@ -399,6 +399,10 @@ obj/windows_gcc/DynamicProgramming/DP_MaxSumSequence.o: src/DynamicProgramming/D
  src/Maths/Maths_Permutations.h \
  src/DynamicProgramming/DP_MaxSumSequence.h
 
+obj/windows_gcc/DynamicProgramming/DP_MinCutsStolenNecklaceKGems2People.o: src/DynamicProgramming/DP_MinCutsStolenNecklaceKGems2People.cpp \
+ src/DynamicProgramming/DP_MinCutsStolenNecklaceKGems2People.h \
+ src/MM_UnitTestFramework/MM_UnitTestFramework.h
+
 obj/windows_gcc/DynamicProgramming/DP_RodCutting.o: src/DynamicProgramming/DP_RodCutting.cpp \
  src/DynamicProgramming/DP_RodCutting.h \
  src/MM_UnitTestFramework/MM_UnitTestFramework.h
@@ -433,9 +437,6 @@ obj/windows_gcc/Heap/Heap_FirstKMaximumOccurringWords.o: src/Heap/Heap_FirstKMax
 obj/windows_gcc/Heap/Heap_FirstKNonRepeatingChars.o: src/Heap/Heap_FirstKNonRepeatingChars.cpp
 
 obj/windows_gcc/LinearProgramming/LPP_Sample.o: src/LinearProgramming/LPP_Sample.cpp \
- src/MM_UnitTestFramework/MM_UnitTestFramework.h
-
-obj/windows_gcc/LinearProgramming/Sample_rename_me.o: src/LinearProgramming/Sample_rename_me.cpp \
  src/MM_UnitTestFramework/MM_UnitTestFramework.h
 
 obj/windows_gcc/LinearRecurrenceRelations/LinearRecurrenceRelations_concept.o: src/LinearRecurrenceRelations/LinearRecurrenceRelations_concept.cpp
@@ -816,9 +817,6 @@ obj/windows_gcc/Others_L/Others_L_MaxFrequencyStack.o: src/Others_L/Others_L_Max
  src/MM_UnitTestFramework/MM_UnitTestFramework.h
 
 obj/windows_gcc/PatternMatching/PatternMatching_Sample.o: src/PatternMatching/PatternMatching_Sample.cpp \
- src/MM_UnitTestFramework/MM_UnitTestFramework.h
-
-obj/windows_gcc/PatternMatching/Sample_rename_me.o: src/PatternMatching/Sample_rename_me.cpp \
  src/MM_UnitTestFramework/MM_UnitTestFramework.h
 
 obj/windows_gcc/Puzzles/Puzzles_AddTwoNumbers.o: src/Puzzles/Puzzles_AddTwoNumbers.cpp \
