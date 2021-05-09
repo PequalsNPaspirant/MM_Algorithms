@@ -56,3 +56,6 @@
 *.o
 /obj/windows_visual_studio/Debug_x64/*.enc
 v15
+.tgitconfig
+doc/*
+test/*

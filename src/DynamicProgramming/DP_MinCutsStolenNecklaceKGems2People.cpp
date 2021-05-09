@@ -334,6 +334,8 @@ namespace mm {
 
 	MM_UNIT_TEST(DP_MinCutsStolenNecklaceKGems2People_test_1, DP_MinCutsStolenNecklaceKGems2People)
 	{
+		MM_PRINT_TEST_CASE_NUMBER(false);
+
 		using TestDataShortName = MinCutsStolenNecklaceTestData;
 		vector<TestDataShortName> testData{
 			TestDataShortName{2, 1, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
@@ -389,7 +391,7 @@ namespace mm {
 			testData[i].createRandomExpectedDistribution(testData[i].numGemsToDistribute, 1);
 			minCuts = getMinCutsStolenNecklaceKGems2People_recursive(testData[i].numPeople, testData[i].necklace, testData[i].expectedDistribution, testData[i].results);
 			result = testData[i].isValidResult();
-			//MM_EXPECT_TRUE(result == true, result);
+			MM_EXPECT_TRUE(result == true, result);
 			testData[i].printResults();
 
 			//Create negative test cases
@@ -398,7 +400,7 @@ namespace mm {
 			testData[i].createRandomExpectedDistribution(testData[i].numGemsToDistribute, 3);
 			minCuts = getMinCutsStolenNecklaceKGems2People_recursive(testData[i].numPeople, testData[i].necklace, testData[i].expectedDistribution, testData[i].results);
 			result = testData[i].isValidResult();
-			//MM_EXPECT_TRUE(result == true, result);
+			MM_EXPECT_TRUE(result == true, result);
 			testData[i].printResults();
 		}
 	}
