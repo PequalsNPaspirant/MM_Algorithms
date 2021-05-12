@@ -10,6 +10,7 @@
 using namespace std;
 
 #include "DynamicProgramming/DP_MinCutsStolenNecklaceKGemsNPeople_recursive_v1.h"
+#include "DynamicProgramming/DP_MinCutsStolenNecklaceKGemsNPeople_recursive_v2.h"
 #include "MM_UnitTestFramework/MM_UnitTestFramework.h"
 
 namespace mm {
@@ -228,12 +229,14 @@ namespace mm {
 			//Create positive test cases
 			testData[i].createRandomExpectedDistribution(testData[i].numGemsToDistribute, 1);
 			executeTest("recursive_v1", i, MinCutsStolenNecklaceKGemsNPeople_recursive_v1::getMinCutsStolenNecklaceKGemsNPeople, testData[i]);
+			executeTest("recursive_v2", i, MinCutsStolenNecklaceKGemsNPeople_recursive_v2::getMinCutsStolenNecklaceKGemsNPeople, testData[i]);
 
 			//Create negative test cases
 			testData[i].expectedDistribution.clear();
 			testData[i].results.clear();
 			testData[i].createRandomExpectedDistribution(testData[i].numGemsToDistribute, 3);
 			executeTest("recursive_v1", i, MinCutsStolenNecklaceKGemsNPeople_recursive_v1::getMinCutsStolenNecklaceKGemsNPeople, testData[i]);
+			executeTest("recursive_v2", i, MinCutsStolenNecklaceKGemsNPeople_recursive_v2::getMinCutsStolenNecklaceKGemsNPeople, testData[i]);
 		}
 	}
 }

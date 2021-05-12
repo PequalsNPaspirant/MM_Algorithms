@@ -34,25 +34,25 @@ namespace mm {
 		int getMinCutsStolenNecklaceKGemsNPeople(int numPeople, const vector<int>& necklace, int gemIndex, int totalGemsToDistribute,
 			vector<unordered_map<GemType, Count>>& expectedDistribution, MinCutsStolenNecklaceResults& currentResults, vector<MinCutsStolenNecklaceResults>& results)
 		{
-			//if (gemIndex != 0 && totalGemsToDistribute == 0)
-			//	throw "something wrong";
+			if (gemIndex < totalGemsToDistribute)
+				return 0;
 
 			//If this result is good, store it
-			if (gemIndex == 0)
+			if (totalGemsToDistribute == 0)
 			{
-				if (totalGemsToDistribute == 0)
-				{
-					currentResults.calculateMinCuts();
-					//Push to results if the current results are same or better
-					if (!results.empty() && currentResults.minCuts < results.front().minCuts)
-						results.clear(); //current result is better, so remove old results
+				currentResults.calculateMinCuts();
+				//Push to results if the current results are same or better
+				if (!results.empty() && currentResults.minCuts < results.front().minCuts)
+					results.clear(); //current result is better, so remove old results
 
-					if (results.empty() || currentResults.minCuts == results.front().minCuts)
-						results.push_back(currentResults);
-				}
+				if (results.empty() || currentResults.minCuts == results.front().minCuts)
+					results.push_back(currentResults);
 
 				return currentResults.minCuts;
 			}
+
+			if (gemIndex == 0)
+				return 0;
 
 			int minCutsSoFar = numeric_limits<int>::max();
 
