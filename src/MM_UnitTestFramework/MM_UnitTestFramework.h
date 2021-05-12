@@ -279,7 +279,37 @@ Output:
 #define MM_RUN_UNIT_TESTS mm::runTests<dummyType>();
 
 
+	class MM_UnitTestManager
+	{
+	public:
+		//add static functions to make various flags on/off
 
+	};
+
+	template<typename RetType>
+	class MM_Measure
+	{
+	public:
+		template<typename Callable, typename... Args>
+		static RetType time(long long& timens, Callable f, const Args&... args)
+		{
+			std::chrono::steady_clock::time_point startTime = std::chrono::steady_clock::now();
+			RetType retVal = f(std::forward<Args>(args)...);
+			std::chrono::steady_clock::time_point endTime = std::chrono::steady_clock::now();
+			timens = std::chrono::duration_cast<std::chrono::nanoseconds>(endTime - startTime).count();
+			return retVal;
+		}
+
+		template<typename Callable, typename... Args>
+		static RetType time(long long& timens, Callable f, Args&&... args)
+		{
+			std::chrono::steady_clock::time_point startTime = std::chrono::steady_clock::now();
+			RetType retVal = f(std::forward<Args>(args)...);
+			std::chrono::steady_clock::time_point endTime = std::chrono::steady_clock::now();
+			timens = std::chrono::duration_cast<std::chrono::nanoseconds>(endTime - startTime).count();
+			return retVal;
+		}
+	};
 
 
 	//========================= below code is absolete ====================================

@@ -19,7 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_MinCutsStolenNecklaceKGems2People.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_MinCutsStolenNecklaceKGemsNPeopleTest.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_MinCutsStolenNecklaceKGemsNPeople_recursive_v2.cpp" />
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_MinCutsStolenNecklaceKGemsNPeople_recursive_v1.cpp" />
     <ClCompile Include="..\..\..\..\src\Array\Array_SortArrayUsingSingleSwap.cpp" />
     <ClCompile Include="..\..\..\..\src\Geometry\Geom_AngleBetTwoLines.cpp" />
     <ClCompile Include="..\..\..\..\src\Geometry\Geom_AreaOverlappedRect.cpp" />
@@ -247,7 +249,9 @@
     <ClCompile Include="..\..\..\..\src\_MM_Algorithms_main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\src\DynamicProgramming\DP_MinCutsStolenNecklaceKGems2People.h" />
+    <ClInclude Include="..\..\..\..\src\DynamicProgramming\DP_MinCutsStolenNecklaceKGemsNPeopleCommon.h" />
+    <ClInclude Include="..\..\..\..\src\DynamicProgramming\DP_MinCutsStolenNecklaceKGemsNPeople_recursive_v2.h" />
+    <ClInclude Include="..\..\..\..\src\DynamicProgramming\DP_MinCutsStolenNecklaceKGemsNPeople_recursive_v1.h" />
     <ClInclude Include="..\..\..\..\src\Array\Array_SortArrayUsingSingleSwap.h" />
     <ClInclude Include="..\..\..\..\src\Geometry\Geom_AngleBetTwoLines.h" />
     <ClInclude Include="..\..\..\..\src\Geometry\Geom_AreaOverlappedRect.h" />

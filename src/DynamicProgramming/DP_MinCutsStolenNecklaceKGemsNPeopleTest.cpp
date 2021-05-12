@@ -9,188 +9,10 @@
 #include <algorithm>
 using namespace std;
 
-#include "DynamicProgramming/DP_MinCutsStolenNecklaceKGems2People.h"
+#include "DynamicProgramming/DP_MinCutsStolenNecklaceKGemsNPeople_recursive_v1.h"
 #include "MM_UnitTestFramework/MM_UnitTestFramework.h"
 
 namespace mm {
-
-	// ============================= Problem Statement =============================
-	/*
-		Two thieves stole a necklace made up of k types of gems. Each type of gem has even number of gems in necklace.
-		Take a minimum number of cuts on necklace to divide it between the two thieves such that both gets equal number of gems of each type.
-	*/
-
-	// ============================= Top-down (Recursive) =============================
-	/*
-	Complexity: O(n^n)
-	Auxiliary space: O(1)
-
-	This can be converted into general (not 1-0) knapsack problem,
-	to pick the rod pieces of different length (we can pick multiple pieces of same length),
-	so that total length is less than or equal to given max rod length and total price is maximum
-	*/
-
-	using GemType = int;
-	using Count = int;
-
-	struct MinCutsStolenNecklaceResults
-	{
-		std::vector<int> owners;
-		int minCuts;
-
-		void calculateMinCuts()
-		{
-			minCuts = 0;
-			for (size_t i = 1; i < owners.size(); ++i)
-				if (owners[i - 1] != owners[i])
-					++minCuts;
-		}
-	};
-	
-	int getMinCutsStolenNecklaceKGems2People_recursive(int numPeople, const vector<int>& necklace, int gemIndex, int totalGemsToDistribute,
-		vector<unordered_map<GemType, Count>>& expectedDistribution, MinCutsStolenNecklaceResults& currentResults, vector<MinCutsStolenNecklaceResults>& results)
-	{
-		//If this result is good, store it
-		if (gemIndex == 0)
-		{
-			if (totalGemsToDistribute == 0)
-			{
-				currentResults.calculateMinCuts();
-				//Push to results if the current results are same or better
-				if(!results.empty() && currentResults.minCuts < results.front().minCuts)
-					results.clear(); //current result is better, so remove old results
-
-				if (results.empty() || currentResults.minCuts == results.front().minCuts)
-					results.push_back(currentResults);
-			}
-			
-			return currentResults.minCuts;
-		}
-
-		int minCutsSoFar = numeric_limits<int>::max();
-
-		//skip the current gem and try
-		int minCutsSkipCurrent = getMinCutsStolenNecklaceKGems2People_recursive(numPeople, necklace, gemIndex - 1, 
-			totalGemsToDistribute, expectedDistribution, currentResults, results);
-
-		GemType type = necklace[gemIndex - 1];
-		for (int personIndex = 0; personIndex < numPeople; ++personIndex)
-		{
-			unordered_map<GemType, Count>& currPerDist = expectedDistribution[personIndex];
-			Count& c = currPerDist[type];
-			if (c == 0)
-				continue;
-
-			currentResults.owners[gemIndex - 1] = personIndex;
-			--c;
-			//either backtrack i.e. reduce it here and increase after recursive call 
-			//OR do not change local value and pass a new value to recursive call
-			//--totalGemsToDistribute; 
-
-			int minCutsForSubinstance = getMinCutsStolenNecklaceKGems2People_recursive(numPeople, necklace, gemIndex - 1, 
-				totalGemsToDistribute - 1, expectedDistribution, currentResults, results);
-
-			if (minCutsSoFar > minCutsForSubinstance)
-				minCutsSoFar = minCutsForSubinstance;
-
-			//backtrack
-			currentResults.owners[gemIndex - 1] = -1;
-			++c;
-			//++totalGemsToDistribute
-		}
-
-		if (minCutsSoFar > minCutsSkipCurrent)
-			minCutsSoFar = minCutsSkipCurrent;
-
-		return minCutsSoFar;
-	}
-
-	int getMinCutsStolenNecklaceKGems2People_recursive(int numPeople, const vector<int>& necklace,
-		vector<unordered_map<GemType, Count>>& expectedDistribution, vector<MinCutsStolenNecklaceResults>& results)
-	{
-		MinCutsStolenNecklaceResults currentResultsTemp;
-		currentResultsTemp.owners.resize(necklace.size(), -1);
-		currentResultsTemp.minCuts = numeric_limits<int>::max();
-		int totalGemsToDistribute = 0;
-		for (size_t personIndex = 0; personIndex < expectedDistribution.size(); ++personIndex)
-		{
-			const unordered_map<GemType, Count>& currPerDist = expectedDistribution[personIndex];
-			for (auto it = currPerDist.begin(); it != currPerDist.end(); ++it)
-				totalGemsToDistribute += it->second;
-		}
-
-		return getMinCutsStolenNecklaceKGems2People_recursive(numPeople, necklace, static_cast<int>(necklace.size()), 
-			totalGemsToDistribute, expectedDistribution, currentResultsTemp, results);
-	}
-
-
-	// ============================= Top-down dynamic programming =============================
-	/*
-	Complexity: O(n*n)
-	Auxiliary space: O(n + 1)
-	Recurrence relation:
-		maxRevenue(n) = max( price(1) + maxRevenue(n - 1),
-								price(2) + maxRevenue(n - 2),
-								...
-								price(n))
-	*/
-	//int getMinCutsStolenNecklaceKGems2People_DP_TopDown(vector<int>& maxRevenueHashTable, const vector<int>& price, const int rodLength)
-	//{
-	//	if (rodLength == 0)
-	//		return 0;
-
-	//	int maxRevenue = 0;
-	//	for (int rodLen = 1; rodLen <= rodLength; ++rodLen)
-	//	{
-	//		if (maxRevenueHashTable[rodLength - rodLen] == -1)
-	//			maxRevenueHashTable[rodLength - rodLen] = getMaxRevenueRodCutting_DP_TopDown(maxRevenueHashTable, price, rodLength - rodLen);
-
-	//		int currentRevenue = price[rodLen - 1] + maxRevenueHashTable[rodLength - rodLen];
-	//		if (maxRevenue < currentRevenue)
-	//			maxRevenue = currentRevenue;
-	//	}
-
-	//	return maxRevenue;
-	//}
-
-	//int getMinCutsStolenNecklaceKGems2People_DP_TopDown(const vector<int>& price, const int rodLength)
-	//{
-	//	// Create a hash table to store results of subproblems
-	//	vector<int> maxRevenueHashTable(rodLength, -1);
-	//	return getMaxRevenueRodCutting_DP_TopDown(maxRevenueHashTable, price, rodLength);
-	//}
-
-	// ============================= bottom-up dynamic programming =============================
-	/*
-	Complexity: O(n*n)
-	Auxiliary space: O(n + 1)
-	Recurrence relation:
-		maxRevenue(n) = max( price(1) + maxRevenue(n - 1),
-								price(2) + maxRevenue(n - 2),
-								...
-								price(n))
-	*/
-
-	//int getMinCutsStolenNecklaceKGems2People_DP_BottomUp(const vector<int>& price, const int rodLength)
-	//{
-	//	vector<int> maxRevenueHashTable(rodLength + 1);
-	//	// initial condition:
-	//	maxRevenueHashTable[0] = 0; // Rod of length 0 will earn 0 revenue
-	//	for (int totalRodLen = 1; totalRodLen <= rodLength; ++totalRodLen)
-	//	{
-	//		for (int rodLen = 1; rodLen <= totalRodLen; ++rodLen)
-	//		{
-	//			int currentRevenue = price[rodLen - 1] + maxRevenueHashTable[totalRodLen - rodLen];
-	//			if (maxRevenueHashTable[totalRodLen] < currentRevenue)
-	//				maxRevenueHashTable[totalRodLen] = currentRevenue;
-	//		}
-
-	//	}
-
-	//	return maxRevenueHashTable[rodLength];
-	//}
-
-
 
 	// ============================= Unit Tests =============================
 
@@ -275,7 +97,7 @@ namespace mm {
 					Count& c = currPerDist[type];
 					--c;
 				}
-				
+
 				if (!isFulfilled(copy))
 					return false;
 			}
@@ -330,11 +152,29 @@ namespace mm {
 		}
 	};
 
+	template<typename Fun>
+	void executeTest(const std::string& str, size_t testCaseNo, Fun fun, MinCutsStolenNecklaceTestData& data)
+	{
+		//minCuts = MinCutsStolenNecklaceKGemsNPeople_v1::getMinCutsStolenNecklaceKGemsNPeople_recursive(data.numPeople, data.necklace, data.expectedDistribution, data.results);
+			//MM_TIMED_EXPECT_TRUE(MinCutsStolenNecklaceKGemsNPeople_v1::getMinCutsStolenNecklaceKGemsNPeople_recursive(data.numPeople, data.necklace, data.expectedDistribution, data.results));
+		long long timens;
+		int minCuts = MM_Measure<int>::time(timens, fun,
+			data.numPeople, data.necklace, data.expectedDistribution, data.results);
+		cout << "\n" << setw(15) << str
+			<< "   Test case: " << setw(4) << testCaseNo
+			<< "   time(ns): " << setw(20) << timens << " ns"
+			<< "   minCuts: " << (data.results.empty() ? -1 : data.results[0].minCuts);
+		bool result = data.isValidResult();
+		MM_EXPECT_TRUE(result == true, result);
+		//data.printResults();
+	}
+
 	MM_DECLARE_FLAG(DP_MinCutsStolenNecklaceKGems2People);
 
 	MM_UNIT_TEST(DP_MinCutsStolenNecklaceKGems2People_test_1, DP_MinCutsStolenNecklaceKGems2People)
 	{
 		MM_PRINT_TEST_CASE_NUMBER(false);
+		cout.imbue(std::locale(""));
 
 		using TestDataShortName = MinCutsStolenNecklaceTestData;
 		vector<TestDataShortName> testData{
@@ -384,24 +224,16 @@ namespace mm {
 		for (size_t i = 0; i < testData.size(); ++i)
 		{
 			testData[i].createRandomNecklace();
-			int minCuts;
-			bool result;
 
 			//Create positive test cases
 			testData[i].createRandomExpectedDistribution(testData[i].numGemsToDistribute, 1);
-			minCuts = getMinCutsStolenNecklaceKGems2People_recursive(testData[i].numPeople, testData[i].necklace, testData[i].expectedDistribution, testData[i].results);
-			result = testData[i].isValidResult();
-			MM_EXPECT_TRUE(result == true, result);
-			testData[i].printResults();
+			executeTest("recursive_v1", i, MinCutsStolenNecklaceKGemsNPeople_recursive_v1::getMinCutsStolenNecklaceKGemsNPeople, testData[i]);
 
 			//Create negative test cases
 			testData[i].expectedDistribution.clear();
 			testData[i].results.clear();
 			testData[i].createRandomExpectedDistribution(testData[i].numGemsToDistribute, 3);
-			minCuts = getMinCutsStolenNecklaceKGems2People_recursive(testData[i].numPeople, testData[i].necklace, testData[i].expectedDistribution, testData[i].results);
-			result = testData[i].isValidResult();
-			MM_EXPECT_TRUE(result == true, result);
-			testData[i].printResults();
+			executeTest("recursive_v1", i, MinCutsStolenNecklaceKGemsNPeople_recursive_v1::getMinCutsStolenNecklaceKGemsNPeople, testData[i]);
 		}
 	}
 }
