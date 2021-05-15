@@ -35,7 +35,7 @@ namespace mm {
 			vector<unordered_map<GemType, Count>>& expectedDistribution, MinCutsStolenNecklaceResults& currentResults, vector<MinCutsStolenNecklaceResults>& results)
 		{
 			if (gemIndex < totalGemsToDistribute)
-				return 0;
+				return numeric_limits<int>::max();
 
 			//If this result is good, store it
 			if (totalGemsToDistribute == 0)
@@ -52,7 +52,7 @@ namespace mm {
 			}
 
 			if (gemIndex == 0)
-				return 0;
+				return numeric_limits<int>::max();
 
 			int minCutsSoFar = numeric_limits<int>::max();
 
@@ -106,8 +106,10 @@ namespace mm {
 					totalGemsToDistribute += it->second;
 			}
 
-			return getMinCutsStolenNecklaceKGemsNPeople(numPeople, necklace, static_cast<int>(necklace.size()),
+			int minCuts = getMinCutsStolenNecklaceKGemsNPeople(numPeople, necklace, static_cast<int>(necklace.size()),
 				totalGemsToDistribute, expectedDistribution, currentResultsTemp, results);
+
+			return minCuts == numeric_limits<int>::max() ? -1 : minCuts;
 		}
 
 

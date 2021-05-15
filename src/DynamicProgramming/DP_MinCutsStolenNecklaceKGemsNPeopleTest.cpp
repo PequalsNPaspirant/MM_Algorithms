@@ -164,7 +164,8 @@ namespace mm {
 		cout << "\n" << setw(15) << str
 			<< "   Test case: " << setw(4) << testCaseNo
 			<< "   time(ns): " << setw(20) << timens << " ns"
-			<< "   minCuts: " << (data.results.empty() ? -1 : data.results[0].minCuts);
+			<< "   minCuts: " << setw(4) << (data.results.empty() ? -1 : data.results[0].minCuts)
+			<< "   minCuts(fun ret): " << setw(4) << minCuts;
 		bool result = data.isValidResult();
 		MM_EXPECT_TRUE(result == true, result);
 		//data.printResults();
@@ -179,6 +180,7 @@ namespace mm {
 
 		using TestDataShortName = MinCutsStolenNecklaceTestData;
 		vector<TestDataShortName> testData{
+			//numPeople, numGemTypes, necklace length, gems from necklace to distribute
 			TestDataShortName{2, 1, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
 			TestDataShortName{2, 2, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
 			TestDataShortName{2, 3, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},

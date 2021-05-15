@@ -34,12 +34,10 @@ namespace mm {
 		int getMinCutsStolenNecklaceKGemsNPeople(int numPeople, const vector<int>& necklace, int gemIndex, int totalGemsToDistribute,
 			vector<unordered_map<GemType, Count>>& expectedDistribution, MinCutsStolenNecklaceResults& currentResults, vector<MinCutsStolenNecklaceResults>& results)
 		{
-			//if (gemIndex != 0 && totalGemsToDistribute == 0)
-			//	throw "something wrong";
+			if (gemIndex < totalGemsToDistribute)
+				return numeric_limits<int>::max();
 
 			//If this result is good, store it
-			if (gemIndex == 0)
-			{
 				if (totalGemsToDistribute == 0)
 				{
 					currentResults.calculateMinCuts();
@@ -49,10 +47,12 @@ namespace mm {
 
 					if (results.empty() || currentResults.minCuts == results.front().minCuts)
 						results.push_back(currentResults);
-				}
 
 				return currentResults.minCuts;
 			}
+
+			if (gemIndex == 0)
+				return numeric_limits<int>::max();
 
 			int minCutsSoFar = numeric_limits<int>::max();
 
@@ -106,8 +106,10 @@ namespace mm {
 					totalGemsToDistribute += it->second;
 			}
 
-			return getMinCutsStolenNecklaceKGemsNPeople(numPeople, necklace, static_cast<int>(necklace.size()),
+			int minCuts = getMinCutsStolenNecklaceKGemsNPeople(numPeople, necklace, static_cast<int>(necklace.size()),
 				totalGemsToDistribute, expectedDistribution, currentResultsTemp, results);
+
+			return minCuts == numeric_limits<int>::max() ? -1 : minCuts;
 		}
 
 
