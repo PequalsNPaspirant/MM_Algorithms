@@ -38,15 +38,15 @@ namespace mm {
 				return numeric_limits<int>::max();
 
 			//If this result is good, store it
-				if (totalGemsToDistribute == 0)
-				{
-					currentResults.calculateMinCuts();
-					//Push to results if the current results are same or better
-					if (!results.empty() && currentResults.minCuts < results.front().minCuts)
-						results.clear(); //current result is better, so remove old results
+			if (totalGemsToDistribute == 0)
+			{
+				currentResults.calculateMinCuts();
+				//Push to results if the current results are same or better
+				if (!results.empty() && currentResults.minCuts < results.front().minCuts)
+					results.clear(); //current result is better, so remove old results
 
-					if (results.empty() || currentResults.minCuts == results.front().minCuts)
-						results.push_back(currentResults);
+				if (results.empty() || currentResults.minCuts == results.front().minCuts)
+					results.push_back(currentResults);
 
 				return currentResults.minCuts;
 			}
@@ -97,7 +97,7 @@ namespace mm {
 		{
 			MinCutsStolenNecklaceResults currentResultsTemp;
 			currentResultsTemp.owners.resize(necklace.size(), -1);
-			currentResultsTemp.minCuts = numeric_limits<int>::max();
+			currentResultsTemp.minCuts = 0;
 			int totalGemsToDistribute = 0;
 			for (size_t personIndex = 0; personIndex < expectedDistribution.size(); ++personIndex)
 			{

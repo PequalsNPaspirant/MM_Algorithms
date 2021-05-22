@@ -40,7 +40,7 @@ namespace mm {
 			//If this result is good, store it
 			if (totalGemsToDistribute == 0)
 			{
-				currentResults.calculateMinCuts();
+				//currentResults.calculateMinCuts();
 				//Push to results if the current results are same or better
 				if (!results.empty() && currentResults.minCuts < results.front().minCuts)
 					results.clear(); //current result is better, so remove old results
@@ -69,6 +69,8 @@ namespace mm {
 					continue;
 
 				currentResults.owners[gemIndex - 1] = personIndex;
+				if (gemIndex >= 2 && currentResults.owners[gemIndex - 2] != personIndex)
+					++currentResults.minCuts;
 				--c;
 				//either backtrack i.e. reduce it here and increase after recursive call 
 				//OR do not change local value and pass a new value to recursive call
@@ -82,6 +84,8 @@ namespace mm {
 
 				//backtrack
 				currentResults.owners[gemIndex - 1] = -1;
+				if (gemIndex >= 2 && currentResults.owners[gemIndex - 2] != personIndex)
+					--currentResults.minCuts;
 				++c;
 				//++totalGemsToDistribute
 			}
@@ -97,7 +101,7 @@ namespace mm {
 		{
 			MinCutsStolenNecklaceResults currentResultsTemp;
 			currentResultsTemp.owners.resize(necklace.size(), -1);
-			currentResultsTemp.minCuts = numeric_limits<int>::max();
+			currentResultsTemp.minCuts = 0;
 			int totalGemsToDistribute = 0;
 			for (size_t personIndex = 0; personIndex < expectedDistribution.size(); ++personIndex)
 			{
