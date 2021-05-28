@@ -11,6 +11,8 @@ using namespace std;
 
 #include "DynamicProgramming/DP_MinCutsStolenNecklaceKGemsNPeople_recursive_v1.h"
 #include "DynamicProgramming/DP_MinCutsStolenNecklaceKGemsNPeople_recursive_v2.h"
+#include "DynamicProgramming/DP_MinCutsStolenNecklaceKGemsNPeople_recursive_v3.h"
+
 #include "MM_UnitTestFramework/MM_UnitTestFramework.h"
 
 namespace mm {
@@ -154,21 +156,62 @@ namespace mm {
 	};
 
 	template<typename Fun>
-	void executeTest(const std::string& str, size_t testCaseNo, Fun fun, MinCutsStolenNecklaceTestData& data)
+	int executeTest(const std::string& str, size_t testCaseNo, Fun fun, MinCutsStolenNecklaceTestData& data)
 	{
 		//minCuts = MinCutsStolenNecklaceKGemsNPeople_v1::getMinCutsStolenNecklaceKGemsNPeople_recursive(data.numPeople, data.necklace, data.expectedDistribution, data.results);
 			//MM_TIMED_EXPECT_TRUE(MinCutsStolenNecklaceKGemsNPeople_v1::getMinCutsStolenNecklaceKGemsNPeople_recursive(data.numPeople, data.necklace, data.expectedDistribution, data.results));
 		long long timens;
+		data.results.clear();
 		int minCuts = MM_Measure<int>::time(timens, fun,
 			data.numPeople, data.necklace, data.expectedDistribution, data.results);
 		cout << "\n" << setw(15) << str
 			<< "   Test case: " << setw(4) << testCaseNo
 			<< "   time(ns): " << setw(20) << timens << " ns"
 			<< "   minCuts: " << setw(4) << (data.results.empty() ? -1 : data.results[0].minCuts)
-			<< "   minCuts(fun ret): " << setw(4) << minCuts;
+			<< "   minCuts(fun ret): " << setw(4) << minCuts
+			<< "   numSolutions: " << setw(4) << data.results.size();
 		bool result = data.isValidResult();
 		MM_EXPECT_TRUE(result == true, result);
 		//data.printResults();
+		return minCuts;
+	}
+
+	void testAlgo()
+	{
+		//int t = 2;
+		//std::vector<int> n{4, 6};
+		std::vector< std::vector<int> > testData{
+			{0,0,1,1},
+			{0,1,2,2,0,1}
+		};
+
+		//int t;
+		//cin >> t;
+		for (int ti = 0; ti < testData.size(); ++ti)
+		{
+			const std::vector<int>& data = testData[ti];
+			int n = data.size();
+			//cin >> n;
+			std::vector<int> cnt(500, 0), cut;
+			for (int i = 0, k = 0; i < n; ++i)
+			{
+				int s = data[i];
+				//cin >> s;
+				if ((cnt[s]&1) != (k&1))
+				{
+					cut.push_back(i);
+					++k;
+				}
+				++cnt[s];
+			}
+
+			cout << "\nCuts: " << cut.size() << "\n";
+
+			for (int i = 0; i < cut.size(); ++i)
+				cout << cut[i] << ' ';
+			cout << "\n";
+		}
+		
 	}
 
 	MM_DECLARE_FLAG(DP_MinCutsStolenNecklaceKGems2People);
@@ -177,6 +220,8 @@ namespace mm {
 	{
 		MM_PRINT_TEST_CASE_NUMBER(false);
 		cout.imbue(std::locale(""));
+
+		testAlgo();
 
 		using TestDataShortName = MinCutsStolenNecklaceTestData;
 		vector<TestDataShortName> testData{
@@ -224,21 +269,45 @@ namespace mm {
 			TestDataShortName{5, 5, 10, 9, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
 		};
 
+		auto compareResultsWithPrevRun = [](const vector<MinCutsStolenNecklaceResults>& results, int minCuts, bool initialize = false) {
+			static int prevMinCuts = -1;
+			static vector<MinCutsStolenNecklaceResults> prevRes{};
+			if (initialize)
+			{
+				prevRes = results;
+				prevMinCuts = minCuts;
+				return;
+			}
+
+			MM_EXPECT_TRUE(results == prevRes, results, prevRes);
+			MM_EXPECT_TRUE(minCuts == prevMinCuts, minCuts, prevMinCuts);
+		};
+
 		for (size_t i = 0; i < testData.size(); ++i)
 		{
 			testData[i].createRandomNecklace();
+			
+			int minCuts = -1;
 
 			//Create positive test cases
 			testData[i].createRandomExpectedDistribution(testData[i].numGemsToDistribute, 1);
-			executeTest("recursive_v1", i, MinCutsStolenNecklaceKGemsNPeople_recursive_v1::getMinCutsStolenNecklaceKGemsNPeople, testData[i]);
-			executeTest("recursive_v2", i, MinCutsStolenNecklaceKGemsNPeople_recursive_v2::getMinCutsStolenNecklaceKGemsNPeople, testData[i]);
+			minCuts = executeTest("recursive_v1", i + 1, MinCutsStolenNecklaceKGemsNPeople_recursive_v1::getMinCutsStolenNecklaceKGemsNPeople, testData[i]);
+			compareResultsWithPrevRun(testData[i].results, minCuts, true);
+			minCuts = executeTest("recursive_v2", i + 1, MinCutsStolenNecklaceKGemsNPeople_recursive_v2::getMinCutsStolenNecklaceKGemsNPeople, testData[i]);
+			compareResultsWithPrevRun(testData[i].results, minCuts);
+			minCuts = executeTest("recursive_v3", i + 1, MinCutsStolenNecklaceKGemsNPeople_recursive_v3::getMinCutsStolenNecklaceKGemsNPeople, testData[i]);
+			compareResultsWithPrevRun(testData[i].results, minCuts);
 
 			//Create negative test cases
 			testData[i].expectedDistribution.clear();
 			testData[i].results.clear();
 			testData[i].createRandomExpectedDistribution(testData[i].numGemsToDistribute, 3);
-			executeTest("recursive_v1", i, MinCutsStolenNecklaceKGemsNPeople_recursive_v1::getMinCutsStolenNecklaceKGemsNPeople, testData[i]);
-			executeTest("recursive_v2", i, MinCutsStolenNecklaceKGemsNPeople_recursive_v2::getMinCutsStolenNecklaceKGemsNPeople, testData[i]);
+			minCuts = executeTest("recursive_v1", i + 1, MinCutsStolenNecklaceKGemsNPeople_recursive_v1::getMinCutsStolenNecklaceKGemsNPeople, testData[i]);
+			compareResultsWithPrevRun(testData[i].results, minCuts, true);
+			minCuts = executeTest("recursive_v2", i + 1, MinCutsStolenNecklaceKGemsNPeople_recursive_v2::getMinCutsStolenNecklaceKGemsNPeople, testData[i]);
+			compareResultsWithPrevRun(testData[i].results, minCuts);
+			minCuts = executeTest("recursive_v3", i + 1, MinCutsStolenNecklaceKGemsNPeople_recursive_v3::getMinCutsStolenNecklaceKGemsNPeople, testData[i]);
+			compareResultsWithPrevRun(testData[i].results, minCuts);
 		}
 	}
 }

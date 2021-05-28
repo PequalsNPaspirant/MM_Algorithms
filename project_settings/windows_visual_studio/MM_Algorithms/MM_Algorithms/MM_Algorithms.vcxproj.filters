@@ -699,6 +699,9 @@
     <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_MinCutsStolenNecklaceKGemsNPeople_recursive_v2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_MinCutsStolenNecklaceKGemsNPeople_recursive_v3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\src\Backtracking\Backtracking.h">
@@ -1206,6 +1209,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\src\DynamicProgramming\DP_MinCutsStolenNecklaceKGemsNPeople_recursive_v2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\DynamicProgramming\DP_MinCutsStolenNecklaceKGemsNPeople_recursive_v3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

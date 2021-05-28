@@ -40,6 +40,9 @@ namespace mm {
 			//If this result is good, store it
 			if (totalGemsToDistribute == 0)
 			{
+				if (gemIndex != 0 && gemIndex < necklace.size() && currentResults.owners[gemIndex] != -1) //some excess gems are still remaining in necklace, we need to throw them away
+					++currentResults.minCuts;
+
 				//currentResults.calculateMinCuts();
 				//Push to results if the current results are same or better
 				if (!results.empty() && currentResults.minCuts < results.front().minCuts)
@@ -48,17 +51,25 @@ namespace mm {
 				if (results.empty() || currentResults.minCuts == results.front().minCuts)
 					results.push_back(currentResults);
 
-				return currentResults.minCuts;
+				int retVal = currentResults.minCuts;
+				if (gemIndex != 0 && gemIndex < necklace.size() && currentResults.owners[gemIndex] != -1)
+					--currentResults.minCuts;
+
+				return retVal;
 			}
 
 			if (gemIndex == 0)
 				return numeric_limits<int>::max();
 
-			int minCutsSoFar = numeric_limits<int>::max();
-
 			//skip the current gem and try
+			if (gemIndex < necklace.size() && currentResults.owners[gemIndex] != -1) //if last gem is not skipped
+				++currentResults.minCuts;
 			int minCutsSkipCurrent = getMinCutsStolenNecklaceKGemsNPeople(numPeople, necklace, gemIndex - 1,
 				totalGemsToDistribute, expectedDistribution, currentResults, results);
+			if (gemIndex < necklace.size() && currentResults.owners[gemIndex] != -1) //if last gem is not skipped
+				--currentResults.minCuts;
+
+			int minCutsSoFar = minCutsSkipCurrent;
 
 			GemType type = necklace[gemIndex - 1];
 			for (int personIndex = 0; personIndex < numPeople; ++personIndex)
@@ -69,35 +80,32 @@ namespace mm {
 					continue;
 
 				currentResults.owners[gemIndex - 1] = personIndex;
-				if (gemIndex >= 2 && currentResults.owners[gemIndex - 2] != personIndex)
+				if (gemIndex < necklace.size() && currentResults.owners[gemIndex] != personIndex)
 					++currentResults.minCuts;
 				--c;
 				//either backtrack i.e. reduce it here and increase after recursive call 
 				//OR do not change local value and pass a new value to recursive call
 				//--totalGemsToDistribute; 
 
-				int minCutsForSubinstance = getMinCutsStolenNecklaceKGemsNPeople(numPeople, necklace, gemIndex - 1,
+				int minCutsIncludeCurrent = getMinCutsStolenNecklaceKGemsNPeople(numPeople, necklace, gemIndex - 1,
 					totalGemsToDistribute - 1, expectedDistribution, currentResults, results);
 
-				if (minCutsSoFar > minCutsForSubinstance)
-					minCutsSoFar = minCutsForSubinstance;
+				if (minCutsSoFar > minCutsIncludeCurrent)
+					minCutsSoFar = minCutsIncludeCurrent;
 
 				//backtrack
 				currentResults.owners[gemIndex - 1] = -1;
-				if (gemIndex >= 2 && currentResults.owners[gemIndex - 2] != personIndex)
+				if (gemIndex < necklace.size() && currentResults.owners[gemIndex] != personIndex)
 					--currentResults.minCuts;
 				++c;
 				//++totalGemsToDistribute
 			}
 
-			if (minCutsSoFar > minCutsSkipCurrent)
-				minCutsSoFar = minCutsSkipCurrent;
-
 			return minCutsSoFar;
 		}
 
 		int getMinCutsStolenNecklaceKGemsNPeople(int numPeople, const vector<int>& necklace,
-			vector<unordered_map<GemType, Count>>& expectedDistribution, vector<MinCutsStolenNecklaceResults>& results)
+			const vector<unordered_map<GemType, Count>>& expectedDistribution, vector<MinCutsStolenNecklaceResults>& results)
 		{
 			MinCutsStolenNecklaceResults currentResultsTemp;
 			currentResultsTemp.owners.resize(necklace.size(), -1);
@@ -110,8 +118,9 @@ namespace mm {
 					totalGemsToDistribute += it->second;
 			}
 
+			auto expectedDistributionCopy = expectedDistribution;
 			int minCuts = getMinCutsStolenNecklaceKGemsNPeople(numPeople, necklace, static_cast<int>(necklace.size()),
-				totalGemsToDistribute, expectedDistribution, currentResultsTemp, results);
+				totalGemsToDistribute, expectedDistributionCopy, currentResultsTemp, results);
 
 			return minCuts == numeric_limits<int>::max() ? -1 : minCuts;
 		}
