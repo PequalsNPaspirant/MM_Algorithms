@@ -74,7 +74,6 @@ namespace mm {
 
 			int numGemsPerPerson = numGemsToDistribute / numPeople;
 			numGemsToDistribute = numGemsPerPerson * numPeople;
-			numGemsInNecklace = numGemsToDistribute;
 			unordered_map<GemType, Count> individualDist;
 			//vector<int> numGemsOfEachType;
 			//numGemsOfEachType.reserve(numGemTypes);
