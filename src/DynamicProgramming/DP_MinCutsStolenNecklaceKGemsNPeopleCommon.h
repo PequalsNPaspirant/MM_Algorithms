@@ -4,7 +4,9 @@
 
 namespace mm {
 
-	using GemType = int;
+constexpr const int MAX_SOLUTIONS = 10;
+
+	using GemType = char;
 	using Count = int;
 
 	struct MinCutsStolenNecklaceResults

@@ -12,6 +12,7 @@ using namespace std;
 #include "DynamicProgramming/DP_MinCutsStolenNecklaceKGemsNPeople_recursive_v1.h"
 #include "DynamicProgramming/DP_MinCutsStolenNecklaceKGemsNPeople_recursive_v2.h"
 #include "DynamicProgramming/DP_MinCutsStolenNecklaceKGemsNPeople_recursive_v3.h"
+#include "DynamicProgramming/DP_MinCutsStolenNecklaceKGemsNPeople_recursive_v4.h"
 
 #include "MM_UnitTestFramework/MM_UnitTestFramework.h"
 
@@ -34,30 +35,57 @@ namespace mm {
 		return true;
 	}
 
+	GemType getGemType(int index)
+	{
+		auto fillIn = []() {
+			vector<GemType> gemTypes;
+			gemTypes.reserve(100);
+
+			for (GemType i = 'a'; i <= 'z'; ++i)
+				gemTypes.push_back(i);
+			for (GemType i = 'A'; i <= 'Z'; ++i)
+				gemTypes.push_back(i);
+
+			return gemTypes;
+		};
+
+		static vector<GemType> gemTypes = fillIn();
+		if (index >= gemTypes.size())
+			throw std::out_of_range{ "index out of range" };
+
+		return gemTypes[index];
+	}
+
 	struct MinCutsStolenNecklaceTestData
 	{
 		int numPeople;
 		int numGemTypes;
 		int numGemsInNecklace;
 		int numGemsToDistribute;
-		vector<int> necklace;
+		vector<GemType> necklace;
 		vector<unordered_map<GemType, Count>> expectedDistribution;
 		vector<MinCutsStolenNecklaceResults> results;
 
 		void createRandomNecklace()
 		{
+			if (!necklace.empty())
+				return;
+
 			std::random_device rd;
 			std::mt19937 mt(rd());
 			std::uniform_int_distribution<int> dist(0, numGemTypes - 1);
 			necklace.reserve(numGemsInNecklace);
 			for (int i = 0; i < numGemsInNecklace; ++i)
 			{
-				necklace.push_back(dist(mt));
+				necklace.push_back(getGemType(dist(mt)));
 			}
 		}
 
 		void createRandomExpectedDistribution(int numGemsToDistribute, int increaseCountBy)
 		{
+			if (!expectedDistribution.empty())
+				return;
+
 			std::random_device rd;
 			std::mt19937 mt(rd());
 			std::uniform_int_distribution<int> distPersonIndex(0, numPeople - 1);
@@ -119,14 +147,18 @@ namespace mm {
 			constexpr const int colWidth = 8;
 			cout << "\n" << "expectedDistribution:";
 			cout << "\n" << setw(colWidth) << "GemTypes" << " : ";
-			for (GemType type = 0; type < numGemTypes; ++type)
+			for (int i = 0; i < numGemTypes; ++i)
+			{
+				GemType type = getGemType(i);
 				cout << setw(colWidth) << type;
+			}
 			cout << "\n" << setw(colWidth) << "PersonIndex" << " : ";
 			for (size_t personIndex = 0; personIndex < expectedDistribution.size(); ++personIndex)
 			{
 				cout << "\n" << setw(colWidth) << personIndex << " : ";
-				for (GemType type = 0; type < numGemTypes; ++type)
+				for (int i = 0; i < numGemTypes; ++i)
 				{
+					GemType type = getGemType(i);
 					unordered_map<GemType, Count>& currPerDist = expectedDistribution[personIndex];
 					Count& c = currPerDist[type];
 					cout << setw(colWidth) << c;
@@ -164,15 +196,27 @@ namespace mm {
 		data.results.clear();
 		int minCuts = MM_Measure<int>::time(timens, fun,
 			data.numPeople, data.necklace, data.expectedDistribution, data.results);
+		int maxCuts = (data.numPeople - 1) * data.numGemTypes; //(k - 1) * t
 		cout << "\n" << setw(15) << str
-			<< "   Test case: " << setw(4) << testCaseNo
-			<< "   time(ns): " << setw(20) << timens << " ns"
-			<< "   minCuts: " << setw(4) << (data.results.empty() ? -1 : data.results[0].minCuts)
-			<< "   minCuts(fun ret): " << setw(4) << minCuts
-			<< "   numSolutions: " << setw(4) << data.results.size();
+			<< " Test: " << setw(3) << testCaseNo
+			<< "  People: " << setw(4) << data.numPeople
+			<< "  GemTypes: " << setw(4) << data.numGemTypes
+			<< "  necklaceLen: " << setw(4) << data.necklace.size()
+			<< "  distribute: " << setw(4) << data.numGemsToDistribute
+			<< "  time: " << setw(14) << timens << " ns"
+			<< "  minCuts: " << setw(3) << (data.results.empty() ? -1 : data.results[0].minCuts)
+			<< "  minCuts(funRet): " << setw(3) << minCuts
+			<< "  maxCuts = (k-1)*t = " << setw(3) << maxCuts
+			<< "  Solutions: " << setw(3) << data.results.size();
 		bool result = data.isValidResult();
+		if(!result || minCuts > maxCuts)
+			data.printResults();
 		MM_EXPECT_TRUE(result == true, result);
-		//data.printResults();
+		if (data.necklace.size() == data.numGemsToDistribute)
+		{
+			MM_EXPECT_TRUE(minCuts <= maxCuts, minCuts, maxCuts);
+		}
+		
 		return minCuts;
 	}
 
@@ -223,51 +267,79 @@ namespace mm {
 
 		testAlgo();
 
-		using TestDataShortName = MinCutsStolenNecklaceTestData;
-		vector<TestDataShortName> testData{
-			//numPeople, numGemTypes, necklace length, gems from necklace to distribute
-			TestDataShortName{2, 1, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-			TestDataShortName{2, 2, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-			TestDataShortName{2, 3, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-			TestDataShortName{2, 4, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-			TestDataShortName{2, 5, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-			TestDataShortName{3, 1, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-			TestDataShortName{3, 2, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-			TestDataShortName{3, 3, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-			TestDataShortName{3, 4, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-			TestDataShortName{3, 5, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-			TestDataShortName{4, 1, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-			TestDataShortName{4, 2, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-			TestDataShortName{4, 3, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-			TestDataShortName{4, 4, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-			TestDataShortName{4, 5, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-			TestDataShortName{5, 1, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-			TestDataShortName{5, 2, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-			TestDataShortName{5, 3, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-			TestDataShortName{5, 4, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-			TestDataShortName{5, 5, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
+		using MCSNTD = MinCutsStolenNecklaceTestData;
+		vector<int> numPeopleVec{2, 3, 4, 5, 8, 10, 15, 20, 30, 50, 75, 100};
+		vector<GemType> numGemTypesVec{1, 2, 3, 4, 5, 10, 20, 50};
+		vector<int> necklaceLenVec{10, 20, 50, 75, 100, 150, 200, 300, 500};
+		vector<MCSNTD> testData;
 
-			TestDataShortName{2, 1, 10, 5, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-			TestDataShortName{2, 2, 10, 6, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-			TestDataShortName{2, 3, 10, 7, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-			TestDataShortName{2, 4, 10, 8, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-			TestDataShortName{2, 5, 10, 9, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-			TestDataShortName{3, 1, 10, 5, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-			TestDataShortName{3, 2, 10, 6, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-			TestDataShortName{3, 3, 10, 7, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-			TestDataShortName{3, 4, 10, 8, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-			TestDataShortName{3, 5, 10, 9, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-			TestDataShortName{4, 1, 10, 5, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-			TestDataShortName{4, 2, 10, 6, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-			TestDataShortName{4, 3, 10, 7, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-			TestDataShortName{4, 4, 10, 8, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-			TestDataShortName{4, 5, 10, 9, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-			TestDataShortName{5, 1, 10, 5, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-			TestDataShortName{5, 2, 10, 6, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-			TestDataShortName{5, 3, 10, 7, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-			TestDataShortName{5, 4, 10, 8, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-			TestDataShortName{5, 5, 10, 9, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-		};
+		//Special cases found during dev testing
+		testData.push_back({ 2, 2, 10, 10, vector<GemType>{'b',  'a',  'a',  'b',  'a',  'a',  'b',  'b',  'a',  'b'}, 
+			vector<unordered_map<GemType, Count>>{ { {'a', 2 }, {'b', 5 } }, { {'a', 3 }, {'b', 0 } } }, vector<MinCutsStolenNecklaceResults>{} });
+
+		for (int n : necklaceLenVec)
+		{
+			for (int k : numPeopleVec)
+			{
+				if (k > n)
+					continue;
+
+				for (int t : numGemTypesVec)
+				{
+					if (t > n)
+						continue;
+
+					testData.push_back({ k, t, n, n, vector<GemType>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{} });
+					//testData.push_back({ k, t, n, n/2, vector<GemType>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{} });
+					//testData.push_back({ k, t, n, n/3, vector<GemType>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{} });
+				}
+			}
+		}
+
+		//vector<MCSNTD> testData{
+		//	//numPeople, numGemTypes, necklace length, gems from necklace to distribute
+		//	MCSNTD{2, 1, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
+		//	MCSNTD{2, 2, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
+		//	MCSNTD{2, 3, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
+		//	MCSNTD{2, 4, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
+		//	MCSNTD{2, 5, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
+		//	MCSNTD{3, 1, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
+		//	MCSNTD{3, 2, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
+		//	MCSNTD{3, 3, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
+		//	MCSNTD{3, 4, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
+		//	MCSNTD{3, 5, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
+		//	MCSNTD{4, 1, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
+		//	MCSNTD{4, 2, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
+		//	MCSNTD{4, 3, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
+		//	MCSNTD{4, 4, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
+		//	MCSNTD{4, 5, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
+		//	MCSNTD{5, 1, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
+		//	MCSNTD{5, 2, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
+		//	MCSNTD{5, 3, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
+		//	MCSNTD{5, 4, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
+		//	MCSNTD{5, 5, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
+
+		//	MCSNTD{2, 1, 10, 5, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
+		//	MCSNTD{2, 2, 10, 6, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
+		//	MCSNTD{2, 3, 10, 7, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
+		//	MCSNTD{2, 4, 10, 8, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
+		//	MCSNTD{2, 5, 10, 9, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
+		//	MCSNTD{3, 1, 10, 5, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
+		//	MCSNTD{3, 2, 10, 6, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
+		//	MCSNTD{3, 3, 10, 7, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
+		//	MCSNTD{3, 4, 10, 8, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
+		//	MCSNTD{3, 5, 10, 9, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
+		//	MCSNTD{4, 1, 10, 5, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
+		//	MCSNTD{4, 2, 10, 6, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
+		//	MCSNTD{4, 3, 10, 7, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
+		//	MCSNTD{4, 4, 10, 8, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
+		//	MCSNTD{4, 5, 10, 9, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
+		//	MCSNTD{5, 1, 10, 5, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
+		//	MCSNTD{5, 2, 10, 6, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
+		//	MCSNTD{5, 3, 10, 7, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
+		//	MCSNTD{5, 4, 10, 8, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
+		//	MCSNTD{5, 5, 10, 9, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
+		//};
 
 		auto compareResultsWithPrevRun = [](const vector<MinCutsStolenNecklaceResults>& results, int minCuts, bool initialize = false) {
 			static int prevMinCuts = -1;
@@ -297,6 +369,8 @@ namespace mm {
 			compareResultsWithPrevRun(testData[i].results, minCuts);
 			minCuts = executeTest("recursive_v3", i + 1, MinCutsStolenNecklaceKGemsNPeople_recursive_v3::getMinCutsStolenNecklaceKGemsNPeople, testData[i]);
 			compareResultsWithPrevRun(testData[i].results, minCuts);
+			minCuts = executeTest("recursive_v4", i + 1, MinCutsStolenNecklaceKGemsNPeople_recursive_v4::getMinCutsStolenNecklaceKGemsNPeople, testData[i]);
+			compareResultsWithPrevRun(testData[i].results, minCuts);
 
 			//Create negative test cases
 			testData[i].expectedDistribution.clear();
@@ -307,6 +381,8 @@ namespace mm {
 			minCuts = executeTest("recursive_v2", i + 1, MinCutsStolenNecklaceKGemsNPeople_recursive_v2::getMinCutsStolenNecklaceKGemsNPeople, testData[i]);
 			compareResultsWithPrevRun(testData[i].results, minCuts);
 			minCuts = executeTest("recursive_v3", i + 1, MinCutsStolenNecklaceKGemsNPeople_recursive_v3::getMinCutsStolenNecklaceKGemsNPeople, testData[i]);
+			compareResultsWithPrevRun(testData[i].results, minCuts);
+			minCuts = executeTest("recursive_v4", i + 1, MinCutsStolenNecklaceKGemsNPeople_recursive_v4::getMinCutsStolenNecklaceKGemsNPeople, testData[i]);
 			compareResultsWithPrevRun(testData[i].results, minCuts);
 		}
 	}

@@ -31,9 +31,13 @@ namespace mm {
 		so that total length is less than or equal to given max rod length and total price is maximum
 		*/
 
-		int getMinCutsStolenNecklaceKGemsNPeople(int numPeople, const vector<int>& necklace, int gemIndex, int totalGemsToDistribute,
-			vector<unordered_map<GemType, Count>>& expectedDistribution, MinCutsStolenNecklaceResults& currentResults, vector<MinCutsStolenNecklaceResults>& results)
+		int getMinCutsStolenNecklaceKGemsNPeople(int numPeople, const vector<GemType>& necklace, int gemIndex, int totalGemsToDistribute,
+			vector<unordered_map<GemType, Count>>& expectedDistribution, MinCutsStolenNecklaceResults& currentResults, 
+			vector<MinCutsStolenNecklaceResults>& results, int maxSolutions)
 		{
+			if (results.size() >= maxSolutions)
+				return results.front().minCuts;
+
 			if (gemIndex < totalGemsToDistribute)
 				return numeric_limits<int>::max();
 
@@ -65,7 +69,7 @@ namespace mm {
 			if (gemIndex < necklace.size() && currentResults.owners[gemIndex] != -1) //if last gem is not skipped
 				++currentResults.minCuts;
 			int minCutsSkipCurrent = getMinCutsStolenNecklaceKGemsNPeople(numPeople, necklace, gemIndex - 1,
-				totalGemsToDistribute, expectedDistribution, currentResults, results);
+				totalGemsToDistribute, expectedDistribution, currentResults, results, maxSolutions);
 			if (gemIndex < necklace.size() && currentResults.owners[gemIndex] != -1) //if last gem is not skipped
 				--currentResults.minCuts;
 
@@ -88,7 +92,7 @@ namespace mm {
 				//--totalGemsToDistribute; 
 
 				int minCutsIncludeCurrent = getMinCutsStolenNecklaceKGemsNPeople(numPeople, necklace, gemIndex - 1,
-					totalGemsToDistribute - 1, expectedDistribution, currentResults, results);
+					totalGemsToDistribute - 1, expectedDistribution, currentResults, results, maxSolutions);
 
 				if (minCutsSoFar > minCutsIncludeCurrent)
 					minCutsSoFar = minCutsIncludeCurrent;
@@ -104,7 +108,7 @@ namespace mm {
 			return minCutsSoFar;
 		}
 
-		int getMinCutsStolenNecklaceKGemsNPeople(int numPeople, const vector<int>& necklace,
+		int getMinCutsStolenNecklaceKGemsNPeople(int numPeople, const vector<GemType>& necklace,
 			const vector<unordered_map<GemType, Count>>& expectedDistribution, vector<MinCutsStolenNecklaceResults>& results)
 		{
 			MinCutsStolenNecklaceResults currentResultsTemp;
@@ -119,8 +123,9 @@ namespace mm {
 			}
 
 			auto expectedDistributionCopy = expectedDistribution;
+			int maxSolutions = necklace.size() > totalGemsToDistribute ? 1 : numeric_limits<int>::max();
 			int minCuts = getMinCutsStolenNecklaceKGemsNPeople(numPeople, necklace, static_cast<int>(necklace.size()),
-				totalGemsToDistribute, expectedDistributionCopy, currentResultsTemp, results);
+				totalGemsToDistribute, expectedDistributionCopy, currentResultsTemp, results, maxSolutions);
 
 			return minCuts == numeric_limits<int>::max() ? -1 : minCuts;
 		}

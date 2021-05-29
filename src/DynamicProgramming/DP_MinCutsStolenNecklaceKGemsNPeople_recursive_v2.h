@@ -8,7 +8,7 @@ namespace mm {
 
 	namespace MinCutsStolenNecklaceKGemsNPeople_recursive_v2 {
 
-		int getMinCutsStolenNecklaceKGemsNPeople(int numPeople, const vector<int>& necklace,
+		int getMinCutsStolenNecklaceKGemsNPeople(int numPeople, const vector<GemType>& necklace,
 			const vector<unordered_map<GemType, Count>>& expectedDistribution, vector<MinCutsStolenNecklaceResults>& results);
 	}
 }
