@@ -64,6 +64,7 @@ namespace mm {
 		int numGemsToDistribute;
 		vector<GemType> necklace;
 		vector<unordered_map<GemType, Count>> expectedDistribution;
+		bool symmetricDistribution;
 		vector<MinCutsStolenNecklaceResults> results;
 
 		void createRandomNecklace()
@@ -212,7 +213,7 @@ namespace mm {
 		if(!result || minCuts > maxCuts)
 			data.printResults();
 		MM_EXPECT_TRUE(result == true, result);
-		if (data.necklace.size() == data.numGemsToDistribute)
+		if (data.symmetricDistribution && data.necklace.size() == data.numGemsToDistribute)
 		{
 			MM_EXPECT_TRUE(minCuts <= maxCuts, minCuts, maxCuts);
 		}
@@ -275,7 +276,7 @@ namespace mm {
 
 		//Special cases found during dev testing
 		testData.push_back({ 2, 2, 10, 10, vector<GemType>{'b',  'a',  'a',  'b',  'a',  'a',  'b',  'b',  'a',  'b'}, 
-			vector<unordered_map<GemType, Count>>{ { {'a', 2 }, {'b', 5 } }, { {'a', 3 }, {'b', 0 } } }, vector<MinCutsStolenNecklaceResults>{} });
+			vector<unordered_map<GemType, Count>>{ { {'a', 2 }, {'b', 5 } }, { {'a', 3 }, {'b', 0 } } }, false, vector<MinCutsStolenNecklaceResults>{} });
 
 		for (int n : necklaceLenVec)
 		{
@@ -289,7 +290,7 @@ namespace mm {
 					if (t > n)
 						continue;
 
-					testData.push_back({ k, t, n, n, vector<GemType>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{} });
+					testData.push_back({ k, t, n, n, vector<GemType>{}, vector<unordered_map<GemType, Count>>{}, false, vector<MinCutsStolenNecklaceResults>{} });
 					//testData.push_back({ k, t, n, n/2, vector<GemType>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{} });
 					//testData.push_back({ k, t, n, n/3, vector<GemType>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{} });
 				}
@@ -361,7 +362,7 @@ namespace mm {
 			
 			int minCuts = -1;
 
-			//Create positive test cases
+			//Create asymmetric distribution
 			testData[i].createRandomExpectedDistribution(testData[i].numGemsToDistribute, 1);
 			minCuts = executeTest("recursive_v1", i + 1, MinCutsStolenNecklaceKGemsNPeople_recursive_v1::getMinCutsStolenNecklaceKGemsNPeople, testData[i]);
 			compareResultsWithPrevRun(testData[i].results, minCuts, true);
@@ -371,6 +372,9 @@ namespace mm {
 			compareResultsWithPrevRun(testData[i].results, minCuts);
 			minCuts = executeTest("recursive_v4", i + 1, MinCutsStolenNecklaceKGemsNPeople_recursive_v4::getMinCutsStolenNecklaceKGemsNPeople, testData[i]);
 			compareResultsWithPrevRun(testData[i].results, minCuts);
+
+			//Create symmetric distribution
+
 
 			//Create negative test cases
 			testData[i].expectedDistribution.clear();
