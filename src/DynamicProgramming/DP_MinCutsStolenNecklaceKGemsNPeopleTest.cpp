@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include <iomanip>
 #include <string>
 #include <vector>
@@ -7,6 +7,7 @@
 #include <random>
 #include <utility>
 #include <algorithm>
+//#include <cwchar>
 using namespace std;
 
 #include "DynamicProgramming/DP_MinCutsStolenNecklaceKGemsNPeople_recursive_v1.h"
@@ -117,7 +118,7 @@ namespace mm {
 			//Generate random permutation
 			for (int i = 0; i < necklace.size(); ++i)
 			{
-				std::uniform_int_distribution<int> dist(i, necklace.size() - 1);
+				std::uniform_int_distribution<int> dist(i, static_cast<int>(necklace.size()) - 1);
 				int j = dist(mt);
 				std::swap(necklace[i], necklace[j]);
 			}
@@ -250,22 +251,25 @@ namespace mm {
 	};
 
 	template<typename Fun>
-	int executeTest(const std::string& str, size_t testCaseNo, Fun fun, MinCutsStolenNecklaceTestData& data)
+	int executeTest(const std::string& str, size_t testCaseNo, Fun fun, MinCutsStolenNecklaceTestData& data, long long& timens)
 	{
 		//minCuts = MinCutsStolenNecklaceKGemsNPeople_v1::getMinCutsStolenNecklaceKGemsNPeople_recursive(data.numPeople, data.necklace, data.expectedDistribution, data.results);
 			//MM_TIMED_EXPECT_TRUE(MinCutsStolenNecklaceKGemsNPeople_v1::getMinCutsStolenNecklaceKGemsNPeople_recursive(data.numPeople, data.necklace, data.expectedDistribution, data.results));
-		long long timens;
 		data.results.clear();
-		int minCuts = MM_Measure<int>::time(timens, fun,
+		long long timeoutmillisec = 5 * 1000; //10 sec
+		int minCuts = MM_Measure<int>::getInstance().time(timens, timeoutmillisec, fun,
 			data.numPeople, data.necklace, data.expectedDistribution, data.results);
 		int maxCuts = (data.numPeople - 1) * data.numGemTypes; //(k - 1) * t
-		cout << "\n" << setw(15) << str
-			<< " Test: " << setw(3) << testCaseNo
+		//wchar_t microsec = L'μ';
+		cout << "\n"
+			<< "Test#" << setw(3) << testCaseNo
+			<< setw(15) << str
 			<< "  People: " << setw(4) << data.numPeople
 			<< "  GemTypes: " << setw(4) << data.numGemTypes
 			<< "  necklaceLen: " << setw(4) << data.necklace.size()
 			<< "  distribute: " << setw(4) << data.numGemsToDistribute
-			<< "  time: " << setw(14) << timens << " ns"
+			<< "  time: " << setw(14) << timens / 1000 << " ms"
+		//std::wcout << microsec; cout << "s";
 			<< "  minCuts: " << setw(3) << (data.results.empty() ? -1 : data.results[0].minCuts)
 			<< "  minCuts(funRet): " << setw(3) << minCuts
 			<< "  maxCuts = (k-1)*t = " << setw(3) << maxCuts
@@ -296,7 +300,7 @@ namespace mm {
 		for (int ti = 0; ti < testData.size(); ++ti)
 		{
 			const std::vector<int>& data = testData[ti];
-			int n = data.size();
+			int n = static_cast<int>(data.size());
 			//cin >> n;
 			std::vector<int> cnt(500, 0), cut;
 			for (int i = 0, k = 0; i < n; ++i)
@@ -449,20 +453,21 @@ namespace mm {
 				}
 				
 				int minCuts = -1;
-				minCuts = executeTest("recursive_v1", i + 1, MinCutsStolenNecklaceKGemsNPeople_recursive_v1::getMinCutsStolenNecklaceKGemsNPeople, testData[i]);
-				compareResultsWithPrevRun(testData[i].results, minCuts, true);
+				long long timens;
+				minCuts = executeTest("recursive_v1", i + 1, MinCutsStolenNecklaceKGemsNPeople_recursive_v1::getMinCutsStolenNecklaceKGemsNPeople, testData[i], timens);
+				if(timens > 0) compareResultsWithPrevRun(testData[i].results, minCuts, true);
 				testData[i].results.clear();
 
-				minCuts = executeTest("recursive_v2", i + 1, MinCutsStolenNecklaceKGemsNPeople_recursive_v2::getMinCutsStolenNecklaceKGemsNPeople, testData[i]);
-				compareResultsWithPrevRun(testData[i].results, minCuts);
+				minCuts = executeTest("recursive_v2", i + 1, MinCutsStolenNecklaceKGemsNPeople_recursive_v2::getMinCutsStolenNecklaceKGemsNPeople, testData[i], timens);
+				if (timens > 0) compareResultsWithPrevRun(testData[i].results, minCuts);
 				testData[i].results.clear();
 
-				minCuts = executeTest("recursive_v3", i + 1, MinCutsStolenNecklaceKGemsNPeople_recursive_v3::getMinCutsStolenNecklaceKGemsNPeople, testData[i]);
-				compareResultsWithPrevRun(testData[i].results, minCuts);
+				minCuts = executeTest("recursive_v3", i + 1, MinCutsStolenNecklaceKGemsNPeople_recursive_v3::getMinCutsStolenNecklaceKGemsNPeople, testData[i], timens);
+				if (timens > 0) compareResultsWithPrevRun(testData[i].results, minCuts);
 				testData[i].results.clear();
 
-				minCuts = executeTest("recursive_v4", i + 1, MinCutsStolenNecklaceKGemsNPeople_recursive_v4::getMinCutsStolenNecklaceKGemsNPeople, testData[i]);
-				compareResultsWithPrevRun(testData[i].results, minCuts);
+				minCuts = executeTest("recursive_v4", i + 1, MinCutsStolenNecklaceKGemsNPeople_recursive_v4::getMinCutsStolenNecklaceKGemsNPeople, testData[i], timens);
+				if (timens > 0) compareResultsWithPrevRun(testData[i].results, minCuts);
 				testData[i].results.clear();
 
 				testData[i].necklace.clear();

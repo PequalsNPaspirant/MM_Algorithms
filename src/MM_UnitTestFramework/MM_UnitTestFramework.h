@@ -31,6 +31,10 @@
 #include <string>
 #include <iomanip>
 #include <chrono>
+#include <thread>
+#include <atomic>
+#include <condition_variable>
+#include <mutex>
 using namespace std;
 
 namespace mm {
@@ -290,25 +294,122 @@ Output:
 	class MM_Measure
 	{
 	public:
-		template<typename Callable, typename... Args>
-		static RetType time(long long& timens, Callable f, const Args&... args)
+		static MM_Measure<RetType>& getInstance()
 		{
+			static MM_Measure<RetType> instance;
+			return instance;
+		}
+
+		MM_Measure() : 
+			keepWaiting_{ false },
+			timeoutmillisec_{ 0 },
+			timedOut_{ false },
+			threadAlive_{ true },
+			th_{ &MM_Measure<RetType>::threadFun, this}
+		{}
+
+		~MM_Measure()
+		{
+			threadAlive_.store(false, std::memory_order_release);
+			cv_.notify_one();
+			if (th_.joinable())
+				th_.join();
+		}
+
+		bool isTimedOut() { return timedOut_.load(std::memory_order_acquire);  }
+
+		template<typename Callable, typename... Args>
+		RetType time(long long& timens, long long timeoutmillisec, Callable f, const Args&... args)
+		{
+			startWait(timeoutmillisec);
 			std::chrono::steady_clock::time_point startTime = std::chrono::steady_clock::now();
 			RetType retVal = f(std::forward<Args>(args)...);
 			std::chrono::steady_clock::time_point endTime = std::chrono::steady_clock::now();
-			timens = std::chrono::duration_cast<std::chrono::nanoseconds>(endTime - startTime).count();
+			if (isTimedOut())
+				timens = 0;
+			else
+			{
+				timens = std::chrono::duration_cast<std::chrono::nanoseconds>(endTime - startTime).count();
+				finishWait();
+			}
 			return retVal;
 		}
 
 		template<typename Callable, typename... Args>
-		static RetType time(long long& timens, Callable f, Args&&... args)
+		RetType time(long long& timens, long long timeoutmillisec, Callable f, Args&&... args)
 		{
+			startWait(timeoutmillisec);
 			std::chrono::steady_clock::time_point startTime = std::chrono::steady_clock::now();
 			RetType retVal = f(std::forward<Args>(args)...);
 			std::chrono::steady_clock::time_point endTime = std::chrono::steady_clock::now();
-			timens = std::chrono::duration_cast<std::chrono::nanoseconds>(endTime - startTime).count();
+			if (isTimedOut())
+				timens = 0;
+			else
+			{
+				timens = std::chrono::duration_cast<std::chrono::nanoseconds>(endTime - startTime).count();
+				finishWait();
+			}
 			return retVal;
 		}
+
+	private:
+		void startWait(long long timeoutmillisec)
+		{
+			timedOut_.store(false, std::memory_order_release);
+			std::unique_lock<std::mutex> lk{m_};
+			keepWaiting_ = true;
+			timeoutmillisec_ = timeoutmillisec;
+			lk.unlock();
+
+			cv_.notify_one();
+		}
+
+		void finishWait()
+		{
+			std::unique_lock<std::mutex> lk{ m_ };
+			keepWaiting_ = false;
+			lk.unlock();
+
+			cv_.notify_one();
+		}
+
+		void threadFun()
+		{
+			while (threadAlive_.load(std::memory_order_acquire))
+			{
+				std::unique_lock<std::mutex> lk1{ m_ };
+				while (!keepWaiting_ && threadAlive_.load(std::memory_order_acquire))
+				{
+					cv_.wait(lk1);
+				}
+				lk1.unlock();
+
+				std::unique_lock<std::mutex> lk2{ m_ };
+				std::chrono::steady_clock::time_point startTime = std::chrono::steady_clock::now();
+				while (keepWaiting_ && threadAlive_.load(std::memory_order_acquire))
+				{
+					std::chrono::milliseconds remainingTime = std::chrono::milliseconds(timeoutmillisec_)
+						- std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - startTime);
+					
+					//std::cv_status status = cv_.wait_for(lk2, remainingTime);
+					if (remainingTime.count() <= 0 ||
+						std::cv_status::timeout == cv_.wait_for(lk2, remainingTime))
+					{
+						timedOut_.store(true, std::memory_order_release);
+						keepWaiting_ = false;
+					}
+				}
+				lk2.unlock();
+			}
+		};
+
+		std::mutex m_;
+		std::condition_variable cv_;
+		bool keepWaiting_;
+		long long timeoutmillisec_;
+		std::atomic<bool> timedOut_;
+		std::atomic<bool> threadAlive_;
+		std::thread th_;
 	};
 
 

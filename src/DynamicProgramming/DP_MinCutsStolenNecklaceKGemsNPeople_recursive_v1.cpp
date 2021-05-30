@@ -10,6 +10,7 @@
 using namespace std;
 
 #include "DynamicProgramming/DP_MinCutsStolenNecklaceKGemsNPeople_recursive_v1.h"
+#include "MM_UnitTestFramework/MM_UnitTestFramework.h"
 
 namespace mm {
 
@@ -35,6 +36,9 @@ namespace mm {
 			vector<unordered_map<GemType, Count>>& expectedDistribution, MinCutsStolenNecklaceResults& currentResults, 
 			vector<MinCutsStolenNecklaceResults>& results, int maxSolutions)
 		{
+			if(MM_Measure<int>::getInstance().isTimedOut())
+				return numeric_limits<int>::max();
+
 			if (results.size() >= maxSolutions)
 				return results.front().minCuts;
 
