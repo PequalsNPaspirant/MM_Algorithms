@@ -87,8 +87,12 @@ namespace mm {
 			int minCutsSoFar = minCutsSkipCurrent;
 
 			GemType type = necklace[gemIndex - 1];
-			for (int personIndex = 0; personIndex < numPeople; ++personIndex)
+			int lastGemOwner = (gemIndex < necklace.size()) ? currentResults.owners[gemIndex] : 0;
+			int skipPersonIndex = -1;
+			for (int i = 0; i < numPeople; ++i)
 			{
+				int personIndex = (i + lastGemOwner) % numPeople; //start with lastGemOwner
+
 				unordered_map<GemType, Count>& currPerDist = expectedDistribution[personIndex];
 				Count& c = currPerDist[type];
 				if (c == 0)

@@ -22,6 +22,23 @@ constexpr const int MAX_SOLUTIONS = 10;
 					++minCuts;
 		}
 
+		friend bool operator<(const MinCutsStolenNecklaceResults& lhs, const MinCutsStolenNecklaceResults& rhs)
+		{
+			if (lhs.minCuts != rhs.minCuts)
+				return lhs.minCuts < rhs.minCuts;
+
+			if (lhs.owners.size() != rhs.owners.size())
+				return lhs.owners.size() < rhs.owners.size();
+
+			for (int i = 0; i < lhs.owners.size(); ++i)
+			{
+				if (lhs.owners[i] != rhs.owners[i])
+					return lhs.owners[i] < rhs.owners[i];
+			}
+
+			return false;
+		}
+
 		friend ostream& operator<<(ostream& o, const MinCutsStolenNecklaceResults& results)
 		{
 			o << "owners: " << results.owners;

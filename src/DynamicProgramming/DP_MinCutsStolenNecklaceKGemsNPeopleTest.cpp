@@ -199,7 +199,7 @@ namespace mm {
 			return true;
 		}
 
-		void printResults()
+		void printResults() const
 		{
 			cout << "\n\n";
 			cout << "numPeople: " << numPeople;
@@ -221,10 +221,14 @@ namespace mm {
 				cout << "\n" << setw(colWidth) << personIndex << " : ";
 				for (int i = 0; i < numGemTypes; ++i)
 				{
+					const unordered_map<GemType, Count>& currPerDist = expectedDistribution[personIndex];
 					GemType type = getGemType(i);
-					unordered_map<GemType, Count>& currPerDist = expectedDistribution[personIndex];
-					Count& c = currPerDist[type];
-					cout << setw(colWidth) << c;
+					auto it = currPerDist.find(type);
+					if (it != currPerDist.end())
+					{
+						const Count& c = it->second;
+						cout << setw(colWidth) << c;
+					}
 				}
 			}
 
@@ -365,55 +369,12 @@ namespace mm {
 			}
 		}
 
-		//vector<MCSNTD> testData{
-		//	//numPeople, numGemTypes, necklace length, gems from necklace to distribute
-		//	MCSNTD{2, 1, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-		//	MCSNTD{2, 2, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-		//	MCSNTD{2, 3, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-		//	MCSNTD{2, 4, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-		//	MCSNTD{2, 5, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-		//	MCSNTD{3, 1, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-		//	MCSNTD{3, 2, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-		//	MCSNTD{3, 3, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-		//	MCSNTD{3, 4, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-		//	MCSNTD{3, 5, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-		//	MCSNTD{4, 1, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-		//	MCSNTD{4, 2, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-		//	MCSNTD{4, 3, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-		//	MCSNTD{4, 4, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-		//	MCSNTD{4, 5, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-		//	MCSNTD{5, 1, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-		//	MCSNTD{5, 2, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-		//	MCSNTD{5, 3, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-		//	MCSNTD{5, 4, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-		//	MCSNTD{5, 5, 10, 10, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-
-		//	MCSNTD{2, 1, 10, 5, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-		//	MCSNTD{2, 2, 10, 6, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-		//	MCSNTD{2, 3, 10, 7, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-		//	MCSNTD{2, 4, 10, 8, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-		//	MCSNTD{2, 5, 10, 9, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-		//	MCSNTD{3, 1, 10, 5, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-		//	MCSNTD{3, 2, 10, 6, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-		//	MCSNTD{3, 3, 10, 7, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-		//	MCSNTD{3, 4, 10, 8, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-		//	MCSNTD{3, 5, 10, 9, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-		//	MCSNTD{4, 1, 10, 5, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-		//	MCSNTD{4, 2, 10, 6, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-		//	MCSNTD{4, 3, 10, 7, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-		//	MCSNTD{4, 4, 10, 8, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-		//	MCSNTD{4, 5, 10, 9, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-		//	MCSNTD{5, 1, 10, 5, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-		//	MCSNTD{5, 2, 10, 6, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-		//	MCSNTD{5, 3, 10, 7, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-		//	MCSNTD{5, 4, 10, 8, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-		//	MCSNTD{5, 5, 10, 9, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
-		//};
-
 		bool needToInitialize = true;
-		auto compareResultsWithPrevRun = [&needToInitialize](const vector<MinCutsStolenNecklaceResults>& results, int minCuts) {
+		auto compareResultsWithPrevRun = [&needToInitialize](const MinCutsStolenNecklaceTestData& data, int minCuts) {
 			static int prevMinCuts = -1;
 			static vector<MinCutsStolenNecklaceResults> prevRes{};
+			vector<MinCutsStolenNecklaceResults> results = data.results;
+			std::sort(results.begin(), results.end());
 			if (needToInitialize)
 			{
 				needToInitialize = false;
@@ -421,6 +382,9 @@ namespace mm {
 				prevMinCuts = minCuts;
 				return;
 			}
+
+			if (results != prevRes || minCuts != prevMinCuts)
+				data.printResults();
 
 			MM_EXPECT_TRUE(results == prevRes, results, prevRes);
 			MM_EXPECT_TRUE(minCuts == prevMinCuts, minCuts, prevMinCuts);
@@ -457,20 +421,21 @@ namespace mm {
 				needToInitialize = true; //initialize results on next first successful solution
 				int minCuts = -1;
 				long long timens;
-				minCuts = executeTest("recursive_v1", i + 1, MinCutsStolenNecklaceKGemsNPeople_recursive_v1::getMinCutsStolenNecklaceKGemsNPeople, testData[i], timens);
-				if(timens > 0) compareResultsWithPrevRun(testData[i].results, minCuts);
-				testData[i].results.clear();
 
-				minCuts = executeTest("recursive_v2", i + 1, MinCutsStolenNecklaceKGemsNPeople_recursive_v2::getMinCutsStolenNecklaceKGemsNPeople, testData[i], timens);
-				if (timens > 0) compareResultsWithPrevRun(testData[i].results, minCuts);
-				testData[i].results.clear();
+				//minCuts = executeTest("recursive_v1", i + 1, MinCutsStolenNecklaceKGemsNPeople_recursive_v1::getMinCutsStolenNecklaceKGemsNPeople, testData[i], timens);
+				//if(timens > 0) compareResultsWithPrevRun(testData[i], minCuts);
+				//testData[i].results.clear();
+
+				//minCuts = executeTest("recursive_v2", i + 1, MinCutsStolenNecklaceKGemsNPeople_recursive_v2::getMinCutsStolenNecklaceKGemsNPeople, testData[i], timens);
+				//if (timens > 0) compareResultsWithPrevRun(testData[i], minCuts);
+				//testData[i].results.clear();
 
 				minCuts = executeTest("recursive_v3", i + 1, MinCutsStolenNecklaceKGemsNPeople_recursive_v3::getMinCutsStolenNecklaceKGemsNPeople, testData[i], timens);
-				if (timens > 0) compareResultsWithPrevRun(testData[i].results, minCuts);
+				if (timens > 0) compareResultsWithPrevRun(testData[i], minCuts);
 				testData[i].results.clear();
 
 				minCuts = executeTest("recursive_v4", i + 1, MinCutsStolenNecklaceKGemsNPeople_recursive_v4::getMinCutsStolenNecklaceKGemsNPeople, testData[i], timens);
-				if (timens > 0) compareResultsWithPrevRun(testData[i].results, minCuts);
+				if (timens > 0) compareResultsWithPrevRun(testData[i], minCuts);
 				testData[i].results.clear();
 
 				testData[i].necklace.clear();
