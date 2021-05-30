@@ -335,12 +335,12 @@ namespace mm {
 
 		using MCSNTD = MinCutsStolenNecklaceTestData;
 		vector<int> necklaceLenVec{ 10, 20, 50, 75, 100, 150, 200, 300, 500 };
-		vector<int> numPeopleVec{2, 3, 4, 5, 8, 10, 15, 20, 30, 50, 75, 100};
-		vector<GemType> numGemTypesVec{1, 2, 3, 4, 5, 10, 20, 50};
+		vector<int> numPeopleVec{ 2, 3, 4, 5, 8, 10, 15, 20, 30, 50, 75, 100 };
+		vector<GemType> numGemTypesVec{ 1, 2, 3, 4, 5, 10, 20, 50 };
 		vector<MCSNTD> testData;
 
 		//Special cases found during dev testing
-		testData.push_back({ 2, 2, 10, 10, vector<GemType>{'b',  'a',  'a',  'b',  'a',  'a',  'b',  'b',  'a',  'b'}, 
+		testData.push_back({ 2, 2, 10, 10, vector<GemType>{'b',  'a',  'a',  'b',  'a',  'a',  'b',  'b',  'a',  'b'},
 			vector<unordered_map<GemType, Count>>{ { {'a', 2 }, {'b', 5 } }, { {'a', 3 }, {'b', 0 } } }, false, vector<MinCutsStolenNecklaceResults>{} });
 
 		for (int n : necklaceLenVec)
@@ -410,11 +410,13 @@ namespace mm {
 		//	MCSNTD{5, 5, 10, 9, vector<int>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{}},
 		//};
 
-		auto compareResultsWithPrevRun = [](const vector<MinCutsStolenNecklaceResults>& results, int minCuts, bool initialize = false) {
+		bool needToInitialize = true;
+		auto compareResultsWithPrevRun = [&needToInitialize](const vector<MinCutsStolenNecklaceResults>& results, int minCuts) {
 			static int prevMinCuts = -1;
 			static vector<MinCutsStolenNecklaceResults> prevRes{};
-			if (initialize)
+			if (needToInitialize)
 			{
+				needToInitialize = false;
 				prevRes = results;
 				prevMinCuts = minCuts;
 				return;
@@ -452,10 +454,11 @@ namespace mm {
 					break;
 				}
 				
+				needToInitialize = true; //initialize results on next first successful solution
 				int minCuts = -1;
 				long long timens;
 				minCuts = executeTest("recursive_v1", i + 1, MinCutsStolenNecklaceKGemsNPeople_recursive_v1::getMinCutsStolenNecklaceKGemsNPeople, testData[i], timens);
-				if(timens > 0) compareResultsWithPrevRun(testData[i].results, minCuts, true);
+				if(timens > 0) compareResultsWithPrevRun(testData[i].results, minCuts);
 				testData[i].results.clear();
 
 				minCuts = executeTest("recursive_v2", i + 1, MinCutsStolenNecklaceKGemsNPeople_recursive_v2::getMinCutsStolenNecklaceKGemsNPeople, testData[i], timens);
@@ -472,7 +475,6 @@ namespace mm {
 
 				testData[i].necklace.clear();
 				testData[i].expectedDistribution.clear();
-				
 			}
 		}
 	}

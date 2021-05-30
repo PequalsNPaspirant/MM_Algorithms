@@ -69,6 +69,9 @@ namespace mm {
 			if (gemIndex == 0)
 				return numeric_limits<int>::max();
 
+			if (!results.empty() && results.front().minCuts < currentResults.minCuts)
+				return numeric_limits<int>::max();
+
 			//skip the current gem and try if there are any excess gems
 			int minCutsSkipCurrent = numeric_limits<int>::max();
 			if (gemIndex > totalGemsToDistribute)
