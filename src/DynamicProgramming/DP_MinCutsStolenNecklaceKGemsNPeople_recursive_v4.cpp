@@ -86,7 +86,6 @@ namespace mm {
 
 			GemType type = necklace[gemIndex - 1];
 			int lastGemOwner = (gemIndex < necklace.size()) ? currentResults.owners[gemIndex] : 0;
-			int skipPersonIndex = -1;
 			for (int i = 0; i < numPeople; ++i)
 			{
 				int personIndex = i + lastGemOwner;
