@@ -85,7 +85,7 @@ namespace mm {
 		case FP_NORMAL:    cout << "Double Value Classification: Normal"; break;
 		case FP_SUBNORMAL: cout << "Double Value Classification: Subnormal"; break;
 		case FP_ZERO:      cout << "Double Value Classification: Zero"; break;
-		default:           cout << "Double Value Classification: Unknown"; MyAssert::myRunTimeAssert(false);
+		default:           cout << "Double Value Classification: Unknown"; MM_Assert::mmRunTimeAssert(false);
 		}
 
 		double myZero = 1.0E-10;
@@ -109,7 +109,7 @@ namespace mm {
 		while ((n = bitStr2.find_first_of(" _", n)) != std::string::npos)
 			bitStr2.erase(n++, 1);
 
-		MyAssert::myRunTimeAssert(bitStr == bitStr2);
+		MM_Assert::mmRunTimeAssert(bitStr == bitStr2);
 
 		// METHOD 2 ==================================
 		cout << "\n";
@@ -140,16 +140,16 @@ namespace mm {
 		//cout << "\nIn other form: " << std::scientific << std::setprecision(std::numeric_limits<double>::digits) << significand << " x 2^ " << exponentBase2afterBiasAdjusted;
 		double val4 = significand * pow(2, exponentBase2afterBiasAdjusted);
 		if (compareResults)
-			MyAssert::myRunTimeAssert(fabs(value - val4) < myZero, "Tally failed");
-		//MyAssert::myRunTimeAssert(FloatngPointComparison::checkIfAlmostEqual(value, val4, myZero), "Tally failed");
+			MM_Assert::mmRunTimeAssert(fabs(value - val4) < myZero, "Tally failed");
+		//MM_Assert::mmRunTimeAssert(FloatngPointComparison::checkIfAlmostEqual(value, val4, myZero), "Tally failed");
 
 		double base2To10conversionFactor = log(2.0) / log(10.0);
 		double exponentBase10 = exponentBase2afterBiasAdjusted * base2To10conversionFactor;
 		//cout << "\nIn other form: " << std::scientific << std::setprecision(std::numeric_limits<double>::digits) << significand << " E " << exponentBase10;
 		double val5 = significand * pow(10.0, exponentBase10);
-		//MyAssert::myRunTimeAssert(fabs(value - val5) < myZero, "Tally failed");
+		//MM_Assert::mmRunTimeAssert(fabs(value - val5) < myZero, "Tally failed");
 		if (compareResults)
-			MyAssert::myRunTimeAssert(FloatngPointComparison::checkIfAlmostEqual(value, val5, myZero), "Tally failed");
+			MM_Assert::mmRunTimeAssert(FloatngPointComparison::checkIfAlmostEqual(value, val5, myZero), "Tally failed");
 
 		// METHOD 3 ==================================
 		unsigned long long* ptr = (unsigned long long*)&value;
@@ -159,14 +159,14 @@ namespace mm {
 		double mntsa = (1 + m * pow(2, -52));
 		double val2 = pow(-1, s) * mntsa * pow(2, (e - 1023));
 		if (compareResults)
-			MyAssert::myRunTimeAssert(fabs(value - val2) < myZero, "Tally failed");
+			MM_Assert::mmRunTimeAssert(fabs(value - val2) < myZero, "Tally failed");
 
 		// METHOD 4 ==================================
 		int exp;
 		double mantissa = std::frexp(value, &exp);
 		double val = std::ldexp(mantissa, exp);
 		if (compareResults)
-			MyAssert::myRunTimeAssert(fabs(value - val) < myZero, "Tally failed");
+			MM_Assert::mmRunTimeAssert(fabs(value - val) < myZero, "Tally failed");
 
 		// METHOD 5 ==================================
 		//typedef union {
@@ -182,7 +182,7 @@ namespace mm {
 		//d1.d = value;
 		//double mantissa2 = (1 + d1.parts.mantissa * pow(2, -52));
 		//double val3 = pow(-1, d1.parts.sign) * mantissa2 * pow(2, (d1.parts.exponent - 1023));
-		//MyAssert::myRunTimeAssert(fabs(value - val3) < myZero, "Tally failed");
+		//MM_Assert::mmRunTimeAssert(fabs(value - val3) < myZero, "Tally failed");
 
 	}
 

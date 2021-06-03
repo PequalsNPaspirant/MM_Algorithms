@@ -96,7 +96,7 @@ Complexity:
 		else
 		{
 			pair<decltype(ClientTablePrimaryKeyClientId)::iterator, bool> result2 = ClientTablePrimaryKeyClientId.insert(&ClientTableData[clientId]);
-			MyAssert::myRunTimeAssert(result2.second == true);
+			MM_Assert::mmRunTimeAssert(result2.second == true);
 		}
 		
 		SymbolTable dummySymbol(0, symbolName, 0);
@@ -170,7 +170,7 @@ Complexity:
 		else
 		{
 			pair<decltype(SymbolTablePrimaryKeySymbolId)::iterator, bool> result2 = SymbolTablePrimaryKeySymbolId.insert(&SymbolTableData[symbolId]);
-			MyAssert::myRunTimeAssert(result2.second == true);
+			MM_Assert::mmRunTimeAssert(result2.second == true);
 		}
 
 		OrderTable dummyOrder(0, symbolId, "", 0, 0);
@@ -256,7 +256,7 @@ Complexity:
 #endif
 		}
 
-		//MyAssert::myRunTimeAssert(index == finalSortedListLen);
+		//MM_Assert::mmRunTimeAssert(index == finalSortedListLen);
 
 		return retVal;
 	}
@@ -304,7 +304,7 @@ Complexity:
 #endif
 		}
 
-		//MyAssert::myRunTimeAssert(index == finalSortedListLen);
+		//MM_Assert::mmRunTimeAssert(index == finalSortedListLen);
 
 		//return retVal;
 	}

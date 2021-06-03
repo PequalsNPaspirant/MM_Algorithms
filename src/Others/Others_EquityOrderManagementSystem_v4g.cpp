@@ -146,7 +146,7 @@ The following part is removed from algo v3c
 		else
 		{
 			pair<decltype(ClientTablePrimaryKeyClientId)::iterator, bool> result2 = ClientTablePrimaryKeyClientId.insert(&ClientTableData[clientId]);
-			//MyAssert::myRunTimeAssert(result2.second == true);
+			//MM_Assert::mmRunTimeAssert(result2.second == true);
 		}
 		
 		//SymbolTable dummySymbol(0, symbolName, 0);
@@ -239,7 +239,7 @@ The following part is removed from v3c
 		else
 		{
 			pair<decltype(SymbolTablePrimaryKeySymbolId)::iterator, bool> result2 = SymbolTablePrimaryKeySymbolId.insert(&SymbolTableData[symbolId]);
-			//MyAssert::myRunTimeAssert(result2.second == true);
+			//MM_Assert::mmRunTimeAssert(result2.second == true);
 		}
 	}
 
@@ -353,7 +353,7 @@ Complexity:
 #endif
 		}
 
-		//MyAssert::myRunTimeAssert(index == finalSortedListLen);
+		//MM_Assert::mmRunTimeAssert(index == finalSortedListLen);
 		return retVal;
 	}
 #endif
@@ -362,7 +362,7 @@ Complexity:
 	{
 		for (int i = 0; i < OrderTableSortIndexOffsetMinHeapTop100.size(); ++i)
 		{
-			MyAssert::myRunTimeAssert(OrderTableSortIndexOffsetMinHeapTop100.get(i)->indexInMinHeap == i);
+			MM_Assert::mmRunTimeAssert(OrderTableSortIndexOffsetMinHeapTop100.get(i)->indexInMinHeap == i);
 		}
 
 		/*
@@ -380,7 +380,7 @@ Complexity:
 			OrderTableSortIndexOffsetMinHeapTop100Copy.pop();
 		}
 		for (int iTest = 1; iTest < test.size(); ++iTest)
-			MyAssert::myRunTimeAssert(comparator(test[iTest], test[iTest - 1])); // Should be in descending order
+			MM_Assert::mmRunTimeAssert(comparator(test[iTest], test[iTest - 1])); // Should be in descending order
 		//Test End
 		*/
 	}
@@ -541,7 +541,7 @@ Complexity:
 			retVal[index] = &sortedTop100Orders[index]->clientSymbolPair;
 		}
 
-		//MyAssert::myRunTimeAssert(index == finalSortedListLen);
+		//MM_Assert::mmRunTimeAssert(index == finalSortedListLen);
 	}
 
 
@@ -639,7 +639,7 @@ Complexity:
 		}
 
 		count = finalSortedListLen;
-		//MyAssert::myRunTimeAssert(index == finalSortedListLen);
+		//MM_Assert::mmRunTimeAssert(index == finalSortedListLen);
 
 		//return retVal;
 	}

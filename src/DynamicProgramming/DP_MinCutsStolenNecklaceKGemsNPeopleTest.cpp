@@ -14,8 +14,10 @@ using namespace std;
 #include "DynamicProgramming/DP_MinCutsStolenNecklaceKGemsNPeople_recursive_v2.h"
 #include "DynamicProgramming/DP_MinCutsStolenNecklaceKGemsNPeople_recursive_v3.h"
 #include "DynamicProgramming/DP_MinCutsStolenNecklaceKGemsNPeople_recursive_v4.h"
+#include "DynamicProgramming/DP_MinCutsStolenNecklaceKGemsNPeople_recursive_v5.h"
 
 #include "MM_UnitTestFramework/MM_UnitTestFramework.h"
+#include "Utils/Utils_MM_Assert.h"
 
 namespace mm {
 
@@ -57,6 +59,16 @@ namespace mm {
 		return gemTypes[index];
 	}
 
+	int getGemIndex(GemType gem)
+	{
+		if (gem >= 'a')
+			return gem - 'a';
+		else if (gem >= 'A')
+			return gem - 'A';
+
+		return -1;
+	}
+
 	struct MinCutsStolenNecklaceTestData
 	{
 		int numPeople;
@@ -73,6 +85,7 @@ namespace mm {
 			if (!necklace.empty())
 				return;
 
+			symmetricDistribution = true;
 			int numGemsPerPerson = numGemsToDistribute / numPeople;
 			numGemsToDistribute = numGemsPerPerson * numPeople;
 			numGemsInNecklace = numGemsToDistribute;
@@ -134,6 +147,7 @@ namespace mm {
 			if (!necklace.empty())
 				return;
 
+			symmetricDistribution = false;
 			std::random_device rd;
 			std::mt19937 mt(rd());
 			std::uniform_int_distribution<int> dist(0, numGemTypes - 1);
@@ -254,6 +268,114 @@ namespace mm {
 		}
 	};
 
+
+
+	int getMinCuts_v1(int numPeople, const vector<GemType>& necklace,
+		const vector<unordered_map<GemType, Count>>& expectedDistribution, vector<MinCutsStolenNecklaceResults>& results)
+	{
+		//int t;
+		//cin >> t;
+		//for (int i = 0; i < t; ++i) 
+		{
+			int n;
+			//cin >> n;
+			n = necklace.size();
+			vector<int> cnt(500, 0), cut;
+			for (int i = 0, k = 0; i < n; ++i)
+			{
+				int s;
+				//cin >> s;
+				s = getGemIndex(necklace[i]);
+				if ((cnt[s] & 1) != (k & 1))
+				{
+					cut.push_back(i);
+					++k;
+				}
+				++cnt[s];
+			}
+			//cout << cut.size() << endl;
+			results.resize(1);
+			results[0].minCuts = cut.size();
+			int owner = 0;
+			int j = 0;
+			for (int i = 0; i < cut.size(); ++i)
+			{
+				//cout << cut[i] << (i + 1 == cut.size() ? '\n' : ' ');
+				for (; j < cut[i]; ++j)
+					results[0].owners.push_back(owner);
+
+				owner = 1 - owner;
+			}
+			for (; j < necklace.size(); ++j)
+				results[0].owners.push_back(owner);
+		}
+
+		return results[0].minCuts;
+	}
+
+	int getMinCuts_v2(int numPeople, const vector<GemType>& necklace,
+		const vector<unordered_map<GemType, Count>>& expectedDistribution, vector<MinCutsStolenNecklaceResults>& results)
+	{
+		const int MAXN = 1002;
+		int n, a[MAXN], b[MAXN], need[2][MAXN];
+		int sol[MAXN];
+
+		int runs;
+		//scanf("%d", &runs);
+		runs = 1;
+		//assert(1 <= runs && runs <= 30);
+		MM_Assert::mmRunTimeAssert(1 <= runs && runs <= 30);
+		while (runs--)
+		{
+			//scanf("%d", &n);
+			n = necklace.size();
+			//assert(2 <= n && n <= 1000 && n % 2 == 0);
+			MM_Assert::mmRunTimeAssert(2 <= n && n <= 1000 && n % 2 == 0);
+			for (int i = 0; i < n; i++)
+			{
+				//scanf("%d", &a[i]);
+				a[i] = getGemIndex(necklace[i]) + 1;
+				//assert(1 <= a[i] && a[i] <= 500);
+				MM_Assert::mmRunTimeAssert(1 <= a[i] && a[i] <= 500);
+			}
+			memset(b, 0, sizeof b);
+			for (int i = 0; i < n; i++) b[a[i]]++;
+			for (int i = 1; i <= 500; i++) need[0][i] = need[1][i] = b[i] / 2;
+			int p = 0, sz = 0;
+			for (int i = 0; i < n; i++)
+			{
+				if (need[p][a[i]] > 0) need[p][a[i]]--;
+				else
+				{
+					sol[sz++] = i;
+					p = 1 - p;
+					i--;
+				}
+			}
+			//printf("%d\n", sz);
+			results.resize(1);
+			results[0].minCuts = sz;
+			int owner = 0;
+			int j = 0;
+			for (int i = 0; i < sz; i++)
+			{
+				//if (i > 0) printf(" ");
+				//printf("%d", sol[i]);
+				for (; j < sol[i]; ++j)
+					results[0].owners.push_back(owner);
+
+				owner = 1 - owner;
+			}
+			for (; j < necklace.size(); ++j)
+				results[0].owners.push_back(owner);
+			//printf("\n");
+		}
+
+		return results[0].minCuts;
+	}
+
+
+
 	template<typename Fun>
 	int executeTest(const std::string& str, size_t testCaseNo, Fun fun, MinCutsStolenNecklaceTestData& data, long long& timens)
 	{
@@ -290,52 +412,12 @@ namespace mm {
 		return minCuts;
 	}
 
-	void testAlgo()
-	{
-		//int t = 2;
-		//std::vector<int> n{4, 6};
-		std::vector< std::vector<int> > testData{
-			{0,0,1,1},
-			{0,1,2,2,0,1}
-		};
-
-		//int t;
-		//cin >> t;
-		for (int ti = 0; ti < testData.size(); ++ti)
-		{
-			const std::vector<int>& data = testData[ti];
-			int n = static_cast<int>(data.size());
-			//cin >> n;
-			std::vector<int> cnt(500, 0), cut;
-			for (int i = 0, k = 0; i < n; ++i)
-			{
-				int s = data[i];
-				//cin >> s;
-				if ((cnt[s]&1) != (k&1))
-				{
-					cut.push_back(i);
-					++k;
-				}
-				++cnt[s];
-			}
-
-			cout << "\nCuts: " << cut.size() << "\n";
-
-			for (int i = 0; i < cut.size(); ++i)
-				cout << cut[i] << ' ';
-			cout << "\n";
-		}
-		
-	}
-
 	MM_DECLARE_FLAG(DP_MinCutsStolenNecklaceKGems2People);
 
 	MM_UNIT_TEST(DP_MinCutsStolenNecklaceKGems2People_test_1, DP_MinCutsStolenNecklaceKGems2People)
 	{
 		MM_PRINT_TEST_CASE_NUMBER(false);
 		cout.imbue(std::locale(""));
-
-		testAlgo();
 
 		using MCSNTD = MinCutsStolenNecklaceTestData;
 		vector<int> necklaceLenVec{ 10, 20, 50, 75, 100, 150, 200, 300, 500 };
@@ -422,6 +504,8 @@ namespace mm {
 				int minCuts = -1;
 				long long timens;
 
+				std::cout << "\n" << "-------------------------------------------------------------------------------------";
+
 				//minCuts = executeTest("recursive_v1", i + 1, MinCutsStolenNecklaceKGemsNPeople_recursive_v1::getMinCutsStolenNecklaceKGemsNPeople, testData[i], timens);
 				//if(timens > 0) compareResultsWithPrevRun(testData[i], minCuts);
 				//testData[i].results.clear();
@@ -437,6 +521,29 @@ namespace mm {
 				minCuts = executeTest("recursive_v4", i + 1, MinCutsStolenNecklaceKGemsNPeople_recursive_v4::getMinCutsStolenNecklaceKGemsNPeople, testData[i], timens);
 				if (timens > 0) compareResultsWithPrevRun(testData[i], minCuts);
 				testData[i].results.clear();
+
+				//Branch and bound
+				//minCuts = executeTest("recursive_v5", i + 1, MinCutsStolenNecklaceKGemsNPeople_recursive_v5::getMinCutsStolenNecklaceKGemsNPeople, testData[i], timens);
+				//if (timens > 0) compareResultsWithPrevRun(testData[i], minCuts);
+				//testData[i].results.clear();
+
+				if (testData[i].numPeople == 2 
+					&& testData[i].numGemsInNecklace == testData[i].numGemsToDistribute
+					&& testData[i].symmetricDistribution)
+				{
+					minCuts = executeTest("getMinCuts_v1", i + 1, getMinCuts_v1, testData[i], timens);
+					if (timens > 0) compareResultsWithPrevRun(testData[i], minCuts);
+					testData[i].results.clear();
+				}
+
+				if (testData[i].numPeople == 2
+					&& testData[i].numGemsInNecklace == testData[i].numGemsToDistribute
+					&& testData[i].symmetricDistribution)
+				{
+					minCuts = executeTest("getMinCuts_v2", i + 1, getMinCuts_v2, testData[i], timens);
+					if (timens > 0) compareResultsWithPrevRun(testData[i], minCuts);
+					testData[i].results.clear();
+				}
 
 				testData[i].necklace.clear();
 				testData[i].expectedDistribution.clear();

@@ -99,7 +99,7 @@ Changes over v3c: The following part is removed from algo v3c
 		else
 		{
 			pair<decltype(ClientTablePrimaryKeyClientId)::iterator, bool> result2 = ClientTablePrimaryKeyClientId.insert(&ClientTableData[clientId]);
-			MyAssert::myRunTimeAssert(result2.second == true);
+			MM_Assert::mmRunTimeAssert(result2.second == true);
 		}
 		
 		SymbolTable dummySymbol(0, symbolName, 0);
@@ -145,7 +145,7 @@ Changes over v3c: The following part is removed from v3c
 		else
 		{
 			pair<decltype(SymbolTablePrimaryKeySymbolId)::iterator, bool> result2 = SymbolTablePrimaryKeySymbolId.insert(&SymbolTableData[symbolId]);
-			MyAssert::myRunTimeAssert(result2.second == true);
+			MM_Assert::mmRunTimeAssert(result2.second == true);
 		}
 
 		OrderTable dummyOrder(0, symbolId, "", 0, 0);
@@ -220,7 +220,7 @@ Complexity:
 			ret.pop();
 		}
 
-		//MyAssert::myRunTimeAssert(index == 0);
+		//MM_Assert::mmRunTimeAssert(index == 0);
 
 		return retVal;
 	}
@@ -286,7 +286,7 @@ Complexity:
 			ret.pop();
 		}
 
-		//MyAssert::myRunTimeAssert(index == 0);
+		//MM_Assert::mmRunTimeAssert(index == 0);
 
 		//return retVal;
 	}

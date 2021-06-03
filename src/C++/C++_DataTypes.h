@@ -68,7 +68,7 @@ namespace mm {
 			for (size_t k = 0; k < sizeof(int) * 8; ++k)
 				bitStr[++counter] = ((*start) & (1 << k)) > 0 ? '1' : '0';
 
-		MyAssert::myRunTimeAssert(counter == sizeof(value) * 8 - 1);
+		MM_Assert::mmRunTimeAssert(counter == sizeof(value) * 8 - 1);
 
 		//If system is little-endian, reverse the bit sequence
 		int num = 1;
@@ -105,7 +105,7 @@ namespace mm {
 				bitStr[++counter] = (((*start) << (bitsInInt - 1 - k)) >> (bitsInInt - 1)) == 1 ? '1' : '0';
 			}
 		}
-		MyAssert::myRunTimeAssert(counter == strSize - 1);
+		MM_Assert::mmRunTimeAssert(counter == strSize - 1);
 
 		//If system is little-endian, reverse the bit sequence
 		int num = 1;
@@ -235,7 +235,7 @@ namespace mm {
 		const int bitsInByte = 8;
 		size_t sizeOfData = sizeof(data);
 		const size_t bitsInData = sizeOfData * bitsInByte;
-		MyAssert::myRunTimeAssert(bitsInData >= bitIndex, "data size is smaller than bitIndex");
+		MM_Assert::mmRunTimeAssert(bitsInData >= bitIndex, "data size is smaller than bitIndex");
 
 		size_t sizeOfInt = sizeof(unsigned int);
 		const size_t bitsInInt = sizeOfInt * bitsInByte;
@@ -288,7 +288,7 @@ namespace mm {
 	{
 		int numBits = sizeof(obj) * 8;
 		for (int i = 1; i <= numBits; i++)
-			MyAssert::myRunTimeAssert(Bits::isBitOFF(obj, i), "Source data is wrong");
+			MM_Assert::mmRunTimeAssert(Bits::isBitOFF(obj, i), "Source data is wrong");
 
 		cout << "\n\nCurrent Object Type: " << typeid(obj).name();
 		cout << "\nCurrent Object: " << obj << " ";
@@ -299,8 +299,8 @@ namespace mm {
 		DataTypes::ShowBitwiseMemoryRepresentation((char*)&obj, sizeof(obj));
 		if (!isFloating)
 		{
-			MyAssert::myRunTimeAssert(Bits::isBitON(obj, 3), "Source data is wrong");
-			MyAssert::myRunTimeAssert(obj == static_cast<int>(pow(2, 3 - 1)), "Source data is wrong");
+			MM_Assert::mmRunTimeAssert(Bits::isBitON(obj, 3), "Source data is wrong");
+			MM_Assert::mmRunTimeAssert(obj == static_cast<int>(pow(2, 3 - 1)), "Source data is wrong");
 		}
 
 		Bits::makeBitON(obj, 5);
@@ -308,8 +308,8 @@ namespace mm {
 		DataTypes::ShowBitwiseMemoryRepresentation((char*)&obj, sizeof(obj));
 		if (!isFloating)
 		{
-			MyAssert::myRunTimeAssert(Bits::isBitON(obj, 5), "Source data is wrong");
-			MyAssert::myRunTimeAssert(obj == static_cast<int>(pow(2, 3 - 1) + pow(2, 5 - 1)), "Source data is wrong");
+			MM_Assert::mmRunTimeAssert(Bits::isBitON(obj, 5), "Source data is wrong");
+			MM_Assert::mmRunTimeAssert(obj == static_cast<int>(pow(2, 3 - 1) + pow(2, 5 - 1)), "Source data is wrong");
 		}
 
 		Bits::makeBitOFF(obj, 3);
@@ -317,8 +317,8 @@ namespace mm {
 		DataTypes::ShowBitwiseMemoryRepresentation((char*)&obj, sizeof(obj));
 		if (!isFloating)
 		{
-			MyAssert::myRunTimeAssert(Bits::isBitOFF(obj, 3), "Source data is wrong");
-			MyAssert::myRunTimeAssert(obj == static_cast<int>(pow(2, 5 - 1)), "Source data is wrong");
+			MM_Assert::mmRunTimeAssert(Bits::isBitOFF(obj, 3), "Source data is wrong");
+			MM_Assert::mmRunTimeAssert(obj == static_cast<int>(pow(2, 5 - 1)), "Source data is wrong");
 		}
 
 		Bits::makeBitOFF(obj, 5);
@@ -326,8 +326,8 @@ namespace mm {
 		DataTypes::ShowBitwiseMemoryRepresentation((char*)&obj, sizeof(obj));
 		if (!isFloating)
 		{
-			MyAssert::myRunTimeAssert(Bits::isBitOFF(obj, 5), "Source data is wrong");
-			MyAssert::myRunTimeAssert(obj == 0, "Source data is wrong");
+			MM_Assert::mmRunTimeAssert(Bits::isBitOFF(obj, 5), "Source data is wrong");
+			MM_Assert::mmRunTimeAssert(obj == 0, "Source data is wrong");
 		}
 
 		Bits::makeBitON(obj, numBits - 3 + 1);
@@ -335,8 +335,8 @@ namespace mm {
 		DataTypes::ShowBitwiseMemoryRepresentation((char*)&obj, sizeof(obj));
 		if (!isFloating)
 		{
-			MyAssert::myRunTimeAssert(Bits::isBitON(obj, numBits - 3 + 1), "Source data is wrong");
-			MyAssert::myRunTimeAssert(obj == static_cast<int>(pow(2, numBits - 3)), "Source data is wrong");
+			MM_Assert::mmRunTimeAssert(Bits::isBitON(obj, numBits - 3 + 1), "Source data is wrong");
+			MM_Assert::mmRunTimeAssert(obj == static_cast<int>(pow(2, numBits - 3)), "Source data is wrong");
 		}
 
 		Bits::makeBitON(obj, numBits - 5 + 1);
@@ -344,8 +344,8 @@ namespace mm {
 		DataTypes::ShowBitwiseMemoryRepresentation((char*)&obj, sizeof(obj));
 		if (!isFloating)
 		{
-			MyAssert::myRunTimeAssert(Bits::isBitON(obj, numBits - 5 + 1), "Source data is wrong");
-			MyAssert::myRunTimeAssert(obj == static_cast<int>(pow(2, numBits - 3) + pow(2, numBits - 5)), "Source data is wrong");
+			MM_Assert::mmRunTimeAssert(Bits::isBitON(obj, numBits - 5 + 1), "Source data is wrong");
+			MM_Assert::mmRunTimeAssert(obj == static_cast<int>(pow(2, numBits - 3) + pow(2, numBits - 5)), "Source data is wrong");
 		}
 	}
 

@@ -193,7 +193,7 @@ namespace mm {
 		auto binarySearch = [](const long long& days, const vector<int>& daysVector) -> size_t {
 			size_t start = 0;
 			size_t end = daysVector.size() - 1;
-			MyAssert::myRunTimeAssert(days >= 0 && days <= daysVector[end], "Year out of range");
+			MM_Assert::mmRunTimeAssert(days >= 0 && days <= daysVector[end], "Year out of range");
 
 			while (end - start > 1)
 			{

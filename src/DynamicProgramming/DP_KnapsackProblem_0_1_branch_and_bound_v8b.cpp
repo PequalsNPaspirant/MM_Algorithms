@@ -121,7 +121,7 @@ namespace mm {
 		for (int i = 1; i < values.size(); ++i)
 			cumulativeValues[sortedIndices[i]] = cumulativeValues[sortedIndices[i - 1]] + values[sortedIndices[i]];
 
-		MyAssert::myRunTimeAssert(maxHeap_v8b.capacity() > maxHeap_v8b.size());
+		MM_Assert::mmRunTimeAssert(maxHeap_v8b.capacity() > maxHeap_v8b.size());
 		decisionTreeNode_v8b* pObj = maxHeap_v8b.getNextAvailableElement();
 		pObj->level = 0;
 		pObj->maxValue = 0.0;

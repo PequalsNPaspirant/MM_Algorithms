@@ -42,6 +42,9 @@ namespace mm {
 			if (results.size() >= maxSolutions)
 				return results.front().minCuts;
 
+			if (!results.empty() && results.front().minCuts < currentResults.minCuts)
+				return numeric_limits<int>::max();
+
 			if (gemIndex < totalGemsToDistribute)
 				return numeric_limits<int>::max();
 
@@ -69,22 +72,17 @@ namespace mm {
 			if (gemIndex == 0)
 				return numeric_limits<int>::max();
 
-			if (!results.empty() && results.front().minCuts < currentResults.minCuts)
-				return numeric_limits<int>::max();
-
 			//skip the current gem and try if there are any excess gems
-			int minCutsSkipCurrent = numeric_limits<int>::max();
+			int minCutsSoFar = numeric_limits<int>::max();
 			if (gemIndex > totalGemsToDistribute)
 			{
 				if (gemIndex < necklace.size() && currentResults.owners[gemIndex] != -1) //if last gem is not skipped
 					++currentResults.minCuts;
-				minCutsSkipCurrent = getMinCutsStolenNecklaceKGemsNPeople(numPeople, necklace, gemIndex - 1,
+				minCutsSoFar = getMinCutsStolenNecklaceKGemsNPeople(numPeople, necklace, gemIndex - 1,
 					totalGemsToDistribute, expectedDistribution, currentResults, results, maxSolutions);
 				if (gemIndex < necklace.size() && currentResults.owners[gemIndex] != -1) //if last gem is not skipped
 					--currentResults.minCuts;
 			}
-
-			int minCutsSoFar = minCutsSkipCurrent;
 
 			GemType type = necklace[gemIndex - 1];
 			for (int personIndex = 0; personIndex < numPeople; ++personIndex)

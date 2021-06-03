@@ -145,7 +145,7 @@ namespace mm {
 			mask = mask >> 1;
 		}
 
-		MyAssert::myRunTimeAssert(exp == exponent, "exp not matching exponent");
+		MM_Assert::mmRunTimeAssert(exp == exponent, "exp not matching exponent");
 
 		return result;
 	}
@@ -180,7 +180,7 @@ namespace mm {
 			mask = mask >> 1;
 		}
 
-		MyAssert::myRunTimeAssert(exp == exponent, "exp not matching exponent");
+		MM_Assert::mmRunTimeAssert(exp == exponent, "exp not matching exponent");
 
 		return result;
 	}
@@ -215,7 +215,7 @@ namespace mm {
 			mask = mask >> 1;
 		}
 
-		MyAssert::myRunTimeAssert(exp == exponent, "exp not matching exponent");
+		MM_Assert::mmRunTimeAssert(exp == exponent, "exp not matching exponent");
 
 		return result;
 	}

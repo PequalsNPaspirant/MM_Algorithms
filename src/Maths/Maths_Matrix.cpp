@@ -31,7 +31,7 @@ namespace mm {
 
 	const MM_Matrix& MM_Matrix::operator=(const MM_Matrix& rhs)
 	{
-		MyAssert::myRunTimeAssert(m_rows == rhs.m_rows && m_columns == rhs.m_columns);
+		MM_Assert::mmRunTimeAssert(m_rows == rhs.m_rows && m_columns == rhs.m_columns);
 		m_values = rhs.m_values;
 
 		return *this;
@@ -39,7 +39,7 @@ namespace mm {
 
 	const MM_Matrix& MM_Matrix::operator=(MM_Matrix&& rhs)
 	{
-		MyAssert::myRunTimeAssert(m_rows == rhs.m_rows && m_columns == rhs.m_columns);
+		MM_Assert::mmRunTimeAssert(m_rows == rhs.m_rows && m_columns == rhs.m_columns);
 		m_values = std::move(rhs.m_values);
 
 		return *this;
@@ -47,7 +47,7 @@ namespace mm {
 
 	const MM_Matrix MM_Matrix::operator*(const MM_Matrix& rhs)
 	{
-		MyAssert::myRunTimeAssert(m_columns == rhs.m_rows);
+		MM_Assert::mmRunTimeAssert(m_columns == rhs.m_rows);
 
 		MM_Matrix result(m_rows, rhs.m_columns);
 		for (unsigned int i = 0; i < m_rows; ++i)
@@ -185,7 +185,7 @@ namespace mm {
 	// The algorithm is same as function "double power_iterative(double base, int exponent)" in file "my_math_lib/ArithmeticOperations.cpp"
 	const MM_Matrix MM_Matrix::raiseToPower(int exponent)
 	{
-		MyAssert::myRunTimeAssert(m_rows == m_columns, "This should be square matrix");
+		MM_Assert::mmRunTimeAssert(m_rows == m_columns, "This should be square matrix");
 
 		MM_Matrix result(m_rows, m_columns);
 		result.makeUniqueMatrix();
@@ -207,7 +207,7 @@ namespace mm {
 
 	void MM_Matrix::makeUniqueMatrix()
 	{
-		MyAssert::myRunTimeAssert(m_rows == m_columns, "This should be square matrix");
+		MM_Assert::mmRunTimeAssert(m_rows == m_columns, "This should be square matrix");
 
 		for (unsigned int i = 0; i < m_rows; ++i)
 		{

@@ -44,7 +44,7 @@ namespace mm {
 			instruIdToIteratorMap[instrument_id] = dataSet.insert(std::move(temp));
 		}
 		else
-			MyAssert::myRunTimeAssert(false, "updating non existing instrument type");
+			MM_Assert::mmRunTimeAssert(false, "updating non existing instrument type");
 	}
 
 	MM_DECLARE_FLAG(FixedPriceInstrumentsPricingUnitTest);
@@ -92,7 +92,7 @@ namespace mm {
 					instruIdToIteratorMap[d.instrument_id] = dataMultiSet.insert(res.first);
 			}
 			else
-				MyAssert::myRunTimeAssert(false, "duplicate entry for instrument id " + to_string(d.instrument_id));
+				MM_Assert::mmRunTimeAssert(false, "duplicate entry for instrument id " + to_string(d.instrument_id));
 		}
 	}
 
@@ -127,7 +127,7 @@ namespace mm {
 				instruIdToIteratorMap[instrument_id] = dataMultiSet.insert(it1);
 		}
 		else
-			MyAssert::myRunTimeAssert(false, "entry for instrument id " + to_string(instrument_id) + " not found in master table");
+			MM_Assert::mmRunTimeAssert(false, "entry for instrument id " + to_string(instrument_id) + " not found in master table");
 	}
 
 

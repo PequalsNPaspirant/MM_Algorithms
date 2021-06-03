@@ -9,12 +9,12 @@
 #include <algorithm>
 using namespace std;
 
-#include "DynamicProgramming/DP_MinCutsStolenNecklaceKGemsNPeople_recursive_v4.h"
+#include "DynamicProgramming/DP_MinCutsStolenNecklaceKGemsNPeople_recursive_v5.h"
 #include "MM_UnitTestFramework/MM_UnitTestFramework.h"
 
 namespace mm {
 
-	namespace MinCutsStolenNecklaceKGemsNPeople_recursive_v4 {
+	namespace MinCutsStolenNecklaceKGemsNPeople_recursive_v5 {
 
 		// ============================= Problem Statement =============================
 		/*

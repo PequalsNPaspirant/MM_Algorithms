@@ -136,8 +136,8 @@ namespace mm {
 		//Testing
 		//for (int i = 0; i < values.size(); ++i)
 		//{
-		//	MyAssert::myRunTimeAssert(values[i] == oldValues[ oldSortedIndices[i] ]);
-		//	MyAssert::myRunTimeAssert(weights[i] == oldWeights[ oldSortedIndices[i] ]);
+		//	MM_Assert::mmRunTimeAssert(values[i] == oldValues[ oldSortedIndices[i] ]);
+		//	MM_Assert::mmRunTimeAssert(weights[i] == oldWeights[ oldSortedIndices[i] ]);
 		//}
 
 		//Store cumulative weights
@@ -152,7 +152,7 @@ namespace mm {
 		for (int i = 1; i < values.size(); ++i)
 			cumulativeValues[i] = cumulativeValues[i - 1] + values[i];
 
-		MyAssert::myRunTimeAssert(maxHeap_v9b.capacity() > maxHeap_v9b.size());
+		MM_Assert::mmRunTimeAssert(maxHeap_v9b.capacity() > maxHeap_v9b.size());
 		decisionTreeNode_v9b* pObj = maxHeap_v9b.getNextAvailableElement();
 		pObj->level = 0;
 		pObj->maxValue = 0.0;

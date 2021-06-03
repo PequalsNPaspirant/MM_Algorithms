@@ -13,7 +13,7 @@ namespace mm {
 	//}
 
 
-	void MyAssert::myRunTimeAssert(bool expression, const string& msg /* = "" */)
+	void MM_Assert::mmRunTimeAssert(bool expression, const string& msg /* = "" */)
 	{
 		if (!expression)
 		{

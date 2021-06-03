@@ -146,7 +146,7 @@ namespace mm {
 			}
 		}
 
-		MyAssert::myRunTimeAssert(!fullFileName.empty());
+		MM_Assert::mmRunTimeAssert(!fullFileName.empty());
 
 		ofstream testDataFile;
 
@@ -258,7 +258,7 @@ namespace mm {
 				}
 			}
 
-			MyAssert::myRunTimeAssert(numItems == element.values.size() && numItems == element.weights.size());
+			MM_Assert::mmRunTimeAssert(numItems == element.values.size() && numItems == element.weights.size());
 		}
 
 		return element;

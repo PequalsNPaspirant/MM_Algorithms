@@ -86,7 +86,7 @@ namespace mm {
 			return deterministic_BruteForcePrimalityTest(number);
 
 		default:
-			MyAssert::myRunTimeAssert(false, "Unknown PrimalityTest");
+			MM_Assert::mmRunTimeAssert(false, "Unknown PrimalityTest");
 		}
 
 		return false;

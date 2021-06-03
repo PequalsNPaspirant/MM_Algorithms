@@ -89,7 +89,7 @@ namespace mm {
 	template <typename Type>
 	Type ModularOperations::doModularExponentiation(Type base, Type exponent, Type modulus)
 	{
-		MyAssert::myRunTimeAssert(modulus > 0);
+		MM_Assert::mmRunTimeAssert(modulus > 0);
 		if (modulus == 1) return 0;
 		Type result = 1;
 		base = base % modulus;

@@ -96,7 +96,7 @@ Complexity:
 			clientSymbolPairIndex[clientSymbolId] = pObj;
 			symbolIdIndex.insert(decltype(symbolIdIndex)::value_type(symbolData->symbolId, pObj));
 			std::pair<decltype(sortedByOffsetSet)::iterator, bool> result = sortedByOffsetSet.insert(pObj);
-			//MyAssert::myRunTimeAssert(result.second == true);
+			//MM_Assert::mmRunTimeAssert(result.second == true);
 		}
 	}
 
@@ -169,14 +169,14 @@ Others_OMS_getTop100v1() is not updated for new data structure. Take a look at O
 		}
 
 		int index = finalSortedListLen;
-		MyAssert::myRunTimeAssert(ret.size() <= 100);
+		MM_Assert::mmRunTimeAssert(ret.size() <= 100);
 		while (!ret.empty() && ret.top() != nullptr)
 		{
 			retVal[++index] = ret.top()->clientSymbolPair;
 			ret.pop();
 		}
 
-		//MyAssert::myRunTimeAssert(index == 0);
+		//MM_Assert::mmRunTimeAssert(index == 0);
 
 		return retVal;
 	}
@@ -188,7 +188,7 @@ Complexity:
 */
 	void Others_OMS_v1c::Others_OMS_getTop100v2(vector<const string*>& retVal)
 	{ 
-		//MyAssert::myRunTimeAssert(sortedByOffsetSet.size() == data_index + 1);
+		//MM_Assert::mmRunTimeAssert(sortedByOffsetSet.size() == data_index + 1);
 		//for (auto it = sortedByOffsetSet.begin(); it != sortedByOffsetSet.end();)
 		//{
 		//	OrderData* pObj = (*it);
@@ -245,7 +245,7 @@ Complexity:
 			pObj->updated = false;
 		}
 		updatedSymbolDataIndex = -1;
-		//MyAssert::myRunTimeAssert(sortedByOffsetSet.size() == data_index + 1);
+		//MM_Assert::mmRunTimeAssert(sortedByOffsetSet.size() == data_index + 1);
 
 		int finalSortedListLen = std::min(100, data_index + 1);
 		//vector<const string*> retVal(finalSortedListLen);
@@ -253,7 +253,7 @@ Complexity:
 		for (auto it = sortedByOffsetSet.begin(); it != sortedByOffsetSet.end() && index < finalSortedListLen - 1; ++it)
 			retVal[++index] = &(*it)->clientSymbolPair;
 
-		//MyAssert::myRunTimeAssert(index == finalSortedListLen - 1);
+		//MM_Assert::mmRunTimeAssert(index == finalSortedListLen - 1);
 
 		//return retVal;
 	}

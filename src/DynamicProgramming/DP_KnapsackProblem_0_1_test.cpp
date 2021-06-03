@@ -525,7 +525,7 @@ namespace mm {
 			spaceComplexity = values.size();
 			break;
 		default:
-			MyAssert::myRunTimeAssert(false, "Unknown DP approach");
+			MM_Assert::mmRunTimeAssert(false, "Unknown DP approach");
 		}
 
 		knapsack_duration = std::chrono::duration_cast<std::chrono::nanoseconds>(endTime - startTime).count();

@@ -286,7 +286,7 @@ namespace mm {
 		float close_rel(float a, float b, float epsilon)
 		{
 			// assume small positive epsilon
-			MyAssert::myRunTimeAssert(epsilon >= 0.0f && epsilon <= 1.0f);
+			MM_Assert::mmRunTimeAssert(epsilon >= 0.0f && epsilon <= 1.0f);
 
 			float diff = abs(a - b);
 			float maxab = fmax(abs(a), abs(b));
@@ -379,7 +379,7 @@ namespace mm {
 		{
 			// Make sure maxUlps is non-negative and small enough that the    
 			// default NAN won't compare as equal to anything.    
-			MyAssert::myRunTimeAssert(maxUlps > 0 && maxUlps < 4 * 1024 * 1024, "");
+			MM_Assert::mmRunTimeAssert(maxUlps > 0 && maxUlps < 4 * 1024 * 1024, "");
 			int aInt = *(alias_cast<float*, int*>(&A));
 			// Make aInt lexicographically ordered as a twos-complement int    
 			if (aInt < 0)

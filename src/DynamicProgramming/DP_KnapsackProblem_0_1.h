@@ -318,12 +318,12 @@ namespace mm {
 		}
 		T& front()
 		{
-			//MyAssert::myRunTimeAssert(!empty());
+			//MM_Assert::mmRunTimeAssert(!empty());
 			return data_[start_];
 		}
 		void pop()
 		{
-			//MyAssert::myRunTimeAssert(!empty());
+			//MM_Assert::mmRunTimeAssert(!empty());
 			--count_;
 			++start_;
 			if (start_ >= data_.capacity())

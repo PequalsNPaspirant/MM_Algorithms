@@ -201,19 +201,19 @@ namespace mm {
 
 			inline void push(const T& obj)
 			{
-				//MyAssert::myRunTimeAssert(index_ < int(data_.size() - 1));
+				//MM_Assert::mmRunTimeAssert(index_ < int(data_.size() - 1));
 				data_[++index_] = obj;
 				//std::push_heap(data_.begin(), data_.begin() + index_ + 1, comparator_);
 				siftUp(index_);
 			}
 			inline const T& top()
 			{
-				//MyAssert::myRunTimeAssert(index_ > -1);
+				//MM_Assert::mmRunTimeAssert(index_ > -1);
 				return data_[0];
 			}
 			inline void pop()
 			{
-				//MyAssert::myRunTimeAssert(index_ > -1 && index_ < data_.size());
+				//MM_Assert::mmRunTimeAssert(index_ > -1 && index_ < data_.size());
 				//std::pop_heap(data_.begin(), data_.begin() + index_ + 1, comparator_);
 				std::swap(data_[0], data_[index_]);
 				--index_;
@@ -233,7 +233,7 @@ namespace mm {
 			}
 			inline const T& get(int index)
 			{
-				//MyAssert::myRunTimeAssert(index_ > -1 && index <= index_);
+				//MM_Assert::mmRunTimeAssert(index_ > -1 && index <= index_);
 				return data_[index];
 			}
 			inline void remove(int index)

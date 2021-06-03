@@ -26,7 +26,7 @@ namespace mm {
 			for (int size = 0; size < iterations; ++size)
 				container.pop_front();
 			//container.clear();
-			MyAssert::myRunTimeAssert(container.empty());
+			MM_Assert::mmRunTimeAssert(container.empty());
 		}
 	};
 
@@ -42,7 +42,7 @@ namespace mm {
 			for (int size = 0; size < iterations; ++size)
 				container.pop_back();
 			//container.clear();
-			MyAssert::myRunTimeAssert(container.empty());
+			MM_Assert::mmRunTimeAssert(container.empty());
 		}
 	};
 
@@ -58,7 +58,7 @@ namespace mm {
 			for (int size = 0; size < iterations; ++size)
 				container.erase(--size);
 			//container.clear();
-			MyAssert::myRunTimeAssert(container.empty());
+			MM_Assert::mmRunTimeAssert(container.empty());
 		}
 	};
 
@@ -74,7 +74,7 @@ namespace mm {
 			for (int size = 0; size < iterations; ++size)
 				container.erase(--size);
 			//container.clear();
-			MyAssert::myRunTimeAssert(container.empty());
+			MM_Assert::mmRunTimeAssert(container.empty());
 		}
 	};
 

@@ -67,7 +67,7 @@ namespace mm {
 			}
 		}
 
-		MyAssert::myRunTimeAssert(isSorted == true);
+		MM_Assert::mmRunTimeAssert(isSorted == true);
 
 		//Revert the state of the original array
 		std::swap(A[first], A[second]);

@@ -109,7 +109,7 @@ namespace mm {
 			}
 				break;
 			default:
-				MyAssert::myRunTimeAssert(false, "Unknown API");
+				MM_Assert::mmRunTimeAssert(false, "Unknown API");
 				break;
 			}
 

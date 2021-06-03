@@ -9,11 +9,11 @@ using namespace std;
 
 namespace mm {
 
-	class MyAssert
+	class MM_Assert
 	{
 	public:
 		//static inline void myCompileTimeAssert(const bool expression);
-		static void myRunTimeAssert(bool expression, const string& msg = "");
+		static void mmRunTimeAssert(bool expression, const string& msg = "");
 	};
 
 }

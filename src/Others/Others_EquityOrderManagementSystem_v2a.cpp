@@ -46,7 +46,7 @@ Complexity:
 		{
 			mapIt->second.orderPrice = newOrderPrice;
 			auto setIt = it->second.offsetClientSymbolPairMap.find(&mapIt->second);
-			MyAssert::myRunTimeAssert(setIt != it->second.offsetClientSymbolPairMap.end());
+			MM_Assert::mmRunTimeAssert(setIt != it->second.offsetClientSymbolPairMap.end());
 			//clientSymbolPair = std::move(setIt->second);
 			it->second.offsetClientSymbolPairMap.erase(setIt);
 			mapIt->second.offset = 100 * fabs(newOrderPrice - it->second.marketPrice) / it->second.marketPrice;
@@ -54,7 +54,7 @@ Complexity:
 		else
 		{
 			auto result = it->second.clientHashMap.insert(unordered_map<string, DataSet_v1>::value_type(clientName, DataSet_v1(newOrderPrice, it->second.marketPrice, clientName + "-" + symbolName)));
-			MyAssert::myRunTimeAssert(result.second == true);
+			MM_Assert::mmRunTimeAssert(result.second == true);
 			mapIt = result.first;
 			//clientSymbolPair = clientName + "-" + symbolName;
 		}
@@ -62,7 +62,7 @@ Complexity:
 		//it->second.offsetClientSymbolPairMap[mapIt->second.offset] = std::move(clientSymbolPair);
 		//auto result = it->second.offsetClientSymbolPairMap.insert(map<double, string, std::greater<double>>::value_type(mapIt->second.offset, std::move(clientSymbolPair)));
 		auto result = it->second.offsetClientSymbolPairMap.insert(&mapIt->second);
-		MyAssert::myRunTimeAssert(result.second == true);
+		MM_Assert::mmRunTimeAssert(result.second == true);
 	}
 
 	/*
@@ -80,14 +80,14 @@ Complexity:
 			for (auto mapIt = it->second.clientHashMap.begin(); mapIt != it->second.clientHashMap.end(); ++mapIt)
 			{
 				auto setIt = it->second.offsetClientSymbolPairMap.find(&mapIt->second);
-				MyAssert::myRunTimeAssert(setIt != it->second.offsetClientSymbolPairMap.end());
+				MM_Assert::mmRunTimeAssert(setIt != it->second.offsetClientSymbolPairMap.end());
 				//string clientSymbolPair = std::move(setIt->second);
 				it->second.offsetClientSymbolPairMap.erase(setIt);
 				mapIt->second.offset = 100 * fabs(mapIt->second.orderPrice - currentMarketPrice) / currentMarketPrice;
 				//it->second.offsetClientSymbolPairMap[mapIt->second.offset] = std::move(clientSymbolPair);
 				//auto result = it->second.offsetClientSymbolPairMap.insert(map<double, string, std::greater<double>>::value_type(mapIt->second.offset, std::move(clientSymbolPair)));
 				auto result = it->second.offsetClientSymbolPairMap.insert(&mapIt->second);
-				MyAssert::myRunTimeAssert(result.second == true);
+				MM_Assert::mmRunTimeAssert(result.second == true);
 			}
 		}
 		else
@@ -114,7 +114,7 @@ Complexity:
 				if ((*setIt)->offset >= minOffset)
 				{
 					auto result = returnData.insert(*setIt);
-					MyAssert::myRunTimeAssert(result.second == true);
+					MM_Assert::mmRunTimeAssert(result.second == true);
 					if (returnData.size() > 100)
 						returnData.erase(--returnData.end());
 					if (returnData.size() == 100)
@@ -123,14 +123,14 @@ Complexity:
 			}
 		}
 
-		MyAssert::myRunTimeAssert(returnData.size() <= 100);
+		MM_Assert::mmRunTimeAssert(returnData.size() <= 100);
 
 		vector<string> retVal(returnData.size(), "");
 		int index = -1;
 		for (auto setIt = returnData.begin(); setIt != returnData.end(); ++setIt)
 			retVal[++index] = (*setIt)->clientSymbolPair;
 		
-		//MyAssert::myRunTimeAssert(index == 0);
+		//MM_Assert::mmRunTimeAssert(index == 0);
 
 		return retVal;
 	}
@@ -147,7 +147,7 @@ Complexity:
 				if ((*setIt)->offset >= minOffset)
 				{
 					auto result = returnData.insert(*setIt);
-					MyAssert::myRunTimeAssert(result.second == true);
+					MM_Assert::mmRunTimeAssert(result.second == true);
 					if (returnData.size() > 100)
 						returnData.erase(--returnData.end());
 					if (returnData.size() == 100)
@@ -156,14 +156,14 @@ Complexity:
 			}
 		}
 
-		MyAssert::myRunTimeAssert(returnData.size() <= 100);
+		MM_Assert::mmRunTimeAssert(returnData.size() <= 100);
 
 		//vector<const string*> retVal(returnData.size());
 		int index = -1;
 		for (auto setIt = returnData.begin(); setIt != returnData.end(); ++setIt)
 			retVal[++index] = &(*setIt)->clientSymbolPair;
 		
-		//MyAssert::myRunTimeAssert(index == 0);
+		//MM_Assert::mmRunTimeAssert(index == 0);
 
 		//return retVal;
 	}

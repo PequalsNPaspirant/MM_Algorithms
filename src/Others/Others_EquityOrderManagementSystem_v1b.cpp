@@ -181,7 +181,7 @@ Complexity:
 		}
 
 		int index = finalSortedListLen;
-		MyAssert::myRunTimeAssert(ret.size() <= 100);
+		MM_Assert::mmRunTimeAssert(ret.size() <= 100);
 		while (!ret.empty() && ret.top() != nullptr)
 		{
 			//unsigned int clientSymbolId = ret.top()->clientSymbolId;
@@ -193,7 +193,7 @@ Complexity:
 			ret.pop();
 		}
 
-		//MyAssert::myRunTimeAssert(index == 0);
+		//MM_Assert::mmRunTimeAssert(index == 0);
 
 		return retVal;
 	}
@@ -237,7 +237,7 @@ Complexity:
 		}
 
 		int index = finalSortedListLen;
-		MyAssert::myRunTimeAssert(ret.size() <= 100);
+		MM_Assert::mmRunTimeAssert(ret.size() <= 100);
 		while (!ret.empty() && ret.top() != nullptr)
 		{
 			//unsigned int clientSymbolId = ret.top()->clientSymbolId;
@@ -249,7 +249,7 @@ Complexity:
 			ret.pop();
 		}
 
-		//MyAssert::myRunTimeAssert(index == 0);
+		//MM_Assert::mmRunTimeAssert(index == 0);
 
 		//return retVal;
 	}

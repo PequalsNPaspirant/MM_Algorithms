@@ -119,7 +119,7 @@ if the order is not present:
 			ret.pop();
 		}
 
-		//MyAssert::myRunTimeAssert(index == 0);
+		//MM_Assert::mmRunTimeAssert(index == 0);
 
 		return retVal;
 	}
@@ -159,7 +159,7 @@ if the order is not present:
 			ret.pop();
 		}
 
-		//MyAssert::myRunTimeAssert(index == 0);
+		//MM_Assert::mmRunTimeAssert(index == 0);
 
 		//return retVal;
 	}
@@ -202,7 +202,7 @@ if the order is not present:
 			ret.pop();
 		}
 
-		//MyAssert::myRunTimeAssert(index == 0);
+		//MM_Assert::mmRunTimeAssert(index == 0);
 
 		//return retVal;
 	}

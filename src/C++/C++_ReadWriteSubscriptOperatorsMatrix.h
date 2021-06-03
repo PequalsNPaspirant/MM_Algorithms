@@ -236,7 +236,7 @@ namespace mm {
 	template<typename T>
 	const MM_Matrix_subscript<T>& MM_Matrix_subscript<T>::operator=(const MM_Matrix_subscript<T>& rhs)
 	{
-		MyAssert::myRunTimeAssert(m_rows == rhs.m_rows && m_columns == rhs.m_columns);
+		MM_Assert::mmRunTimeAssert(m_rows == rhs.m_rows && m_columns == rhs.m_columns);
 		m_values = rhs.m_values;
 
 		return *this;
@@ -245,7 +245,7 @@ namespace mm {
 	template<typename T>
 	const MM_Matrix_subscript<T>& MM_Matrix_subscript<T>::operator=(MM_Matrix_subscript<T>&& rhs)
 	{
-		MyAssert::myRunTimeAssert(m_rows == rhs.m_rows && m_columns == rhs.m_columns);
+		MM_Assert::mmRunTimeAssert(m_rows == rhs.m_rows && m_columns == rhs.m_columns);
 		m_values = std::move(rhs.m_values);
 
 		return *this;
@@ -255,7 +255,7 @@ namespace mm {
 	template<typename T>
 	const MM_Matrix_subscript<T> MM_Matrix_subscript<T>::operator*(const MM_Matrix_subscript<T>& rhs)
 	{
-		MyAssert::myRunTimeAssert(m_columns == rhs.m_rows);
+		MM_Assert::mmRunTimeAssert(m_columns == rhs.m_rows);
 
 		MM_Matrix_subscript result(m_rows, rhs.m_columns);
 		for (int i = 0; i < m_rows; ++i)
@@ -405,7 +405,7 @@ namespace mm {
 	template<typename T>
 	const MM_Matrix_subscript<T> MM_Matrix_subscript<T>::raiseToPower(int exponent)
 	{
-		MyAssert::myRunTimeAssert(m_rows == m_columns, "This should be square matrix");
+		MM_Assert::mmRunTimeAssert(m_rows == m_columns, "This should be square matrix");
 
 		MM_Matrix_subscript<T> result(m_rows, m_columns);
 		result.makeUniqueMatrix();
@@ -428,7 +428,7 @@ namespace mm {
 	template<typename T>
 	void MM_Matrix_subscript<T>::makeUniqueMatrix()
 	{
-		MyAssert::myRunTimeAssert(m_rows == m_columns, "This should be square matrix");
+		MM_Assert::mmRunTimeAssert(m_rows == m_columns, "This should be square matrix");
 
 		for (int i = 0; i < m_rows; ++i)
 		{
