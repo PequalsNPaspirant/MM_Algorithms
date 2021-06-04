@@ -104,6 +104,12 @@ namespace mm {
 				if (results.size() >= maxSolutions)
 					return results.front().minCuts;
 
+				if (!results.empty() && results.front().minCuts < states.top().currentResults.minCuts)
+				{
+					states.pop();
+					continue;
+				}
+
 				StolenNecklaceDistributionState curr = states.top();
 				states.pop();
 
@@ -151,20 +157,35 @@ namespace mm {
 					//	personIndex -= numPeople; //start with lastGemOwner
 
 					unordered_map<GemType, Count>& currPerDist = curr.expectedDistribution[personIndex];
-					Count& c = currPerDist[type];
-					if (c == 0)
-						continue;
+					unordered_map<GemType, Count>::iterator currIt = currPerDist.find(type);
+					if (currIt != currPerDist.end())
+					{
+						Count& c = currIt->second;
+						if (c == 0)
+							continue;
+					}
+					else
+						continue;					
 
 					StolenNecklaceDistributionState s = curr;
+					unordered_map<GemType, Count>& sPerDist = s.expectedDistribution[personIndex];
+					unordered_map<GemType, Count>::iterator sIt = sPerDist.find(type);
+					//if (sIt != sPerDist.end())
+					//{
+						Count& sc = sIt->second;
+						--sc;
+						if (sc == 0)
+							sPerDist.erase(sIt); //erase this entry as count is zero
+					//}
+					//else
+					//	continue;
+
 					--s.gemIndex;
 					--s.gemsToDistribute;
 					s.currentResults.owners[s.gemIndex] = personIndex;
 					if (curr.gemIndex < necklace.size() && curr.currentResults.owners[curr.gemIndex] != personIndex)
 						++s.currentResults.minCuts;
-					unordered_map<GemType, Count>& sPerDist = s.expectedDistribution[personIndex];
-					Count& sc = sPerDist[type];
-					--sc;
-
+					
 					//If this result is good, store it
 					if (s.gemsToDistribute == 0)
 					{
