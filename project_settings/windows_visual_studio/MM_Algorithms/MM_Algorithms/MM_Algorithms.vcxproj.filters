@@ -708,6 +708,9 @@
     <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_MinCutsStolenNecklaceKGemsNPeople_branchAndBounds_v1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_MinCutsStolenNecklaceKGemsNPeople_branchAndBounds_v2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\src\Backtracking\Backtracking.h">
@@ -1226,7 +1229,10 @@
     <ClInclude Include="..\..\..\..\src\DynamicProgramming\DP_MinCutsStolenNecklaceKGemsNPeople_branchAndBounds_v1.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\..\%40_Programming\Everything\MM_Algorithms\src\DataStructures\DS_MM_Heap.h">
+    <ClInclude Include="..\..\..\..\src\DataStructures\DS_MM_Heap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\DynamicProgramming\DP_MinCutsStolenNecklaceKGemsNPeople_branchAndBounds_v2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

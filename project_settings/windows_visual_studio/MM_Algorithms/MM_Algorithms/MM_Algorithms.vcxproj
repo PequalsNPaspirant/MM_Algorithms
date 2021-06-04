@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_MinCutsStolenNecklaceKGemsNPeople_branchAndBounds_v2.cpp" />
     <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_MinCutsStolenNecklaceKGemsNPeople_branchAndBounds_v1.cpp" />
     <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_MinCutsStolenNecklaceKGemsNPeople_recursive_v4.cpp" />
     <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_MinCutsStolenNecklaceKGemsNPeople_recursive_v3.cpp" />
@@ -252,7 +253,8 @@
     <ClCompile Include="..\..\..\..\src\_MM_Algorithms_main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\..\..\%40_Programming\Everything\MM_Algorithms\src\DataStructures\DS_MM_Heap.h" />
+    <ClInclude Include="..\..\..\..\src\DataStructures\DS_MM_Heap.h" />
+    <ClInclude Include="..\..\..\..\src\DynamicProgramming\DP_MinCutsStolenNecklaceKGemsNPeople_branchAndBounds_v2.h" />
     <ClInclude Include="..\..\..\..\src\DynamicProgramming\DP_MinCutsStolenNecklaceKGemsNPeople_branchAndBounds_v1.h" />
     <ClInclude Include="..\..\..\..\src\DynamicProgramming\DP_MinCutsStolenNecklaceKGemsNPeople_recursive_v4.h" />
     <ClInclude Include="..\..\..\..\src\DynamicProgramming\DP_MinCutsStolenNecklaceKGemsNPeople_recursive_v3.h" />

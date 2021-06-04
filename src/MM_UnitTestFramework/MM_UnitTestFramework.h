@@ -343,7 +343,7 @@ Output:
 			RetType retVal = f(std::forward<Args>(args)...);
 			std::chrono::steady_clock::time_point endTime = std::chrono::steady_clock::now();
 			if (isTimedOut())
-				timens = 0;
+				timens = -1;
 			else
 			{
 				timens = std::chrono::duration_cast<std::chrono::nanoseconds>(endTime - startTime).count();

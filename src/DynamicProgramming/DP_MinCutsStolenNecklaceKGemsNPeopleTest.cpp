@@ -15,6 +15,7 @@ using namespace std;
 #include "DynamicProgramming/DP_MinCutsStolenNecklaceKGemsNPeople_recursive_v3.h"
 #include "DynamicProgramming/DP_MinCutsStolenNecklaceKGemsNPeople_recursive_v4.h"
 #include "DynamicProgramming/DP_MinCutsStolenNecklaceKGemsNPeople_branchAndBounds_v1.h"
+#include "DynamicProgramming/DP_MinCutsStolenNecklaceKGemsNPeople_branchAndBounds_v2.h"
 
 #include "MM_UnitTestFramework/MM_UnitTestFramework.h"
 #include "Utils/Utils_MM_Assert.h"
@@ -382,7 +383,7 @@ namespace mm {
 		//minCuts = MinCutsStolenNecklaceKGemsNPeople_v1::getMinCutsStolenNecklaceKGemsNPeople_recursive(data.numPeople, data.necklace, data.expectedDistribution, data.results);
 			//MM_TIMED_EXPECT_TRUE(MinCutsStolenNecklaceKGemsNPeople_v1::getMinCutsStolenNecklaceKGemsNPeople_recursive(data.numPeople, data.necklace, data.expectedDistribution, data.results));
 		data.results.clear();
-		long long timeoutmillisec = 5000 * 1000; //10 sec
+		long long timeoutmillisec = 5 * 1000; //10 sec
 		int minCuts = MM_Measure<int>::getInstance().time(timens, timeoutmillisec, fun,
 			data.numPeople, data.necklace, data.expectedDistribution, data.results);
 		int maxCuts = (data.numPeople - 1) * data.numGemTypes; //(k - 1) * t
@@ -394,19 +395,23 @@ namespace mm {
 			<< "  GemTypes: " << setw(4) << data.numGemTypes
 			<< "  necklaceLen: " << setw(4) << data.necklace.size()
 			<< "  distribute: " << setw(4) << data.numGemsToDistribute
-			<< "  time: " << setw(14) << timens / 1000 << " ms"
+			<< "  time: " << setw(14) << timens / 1000 << " us"
 		//std::wcout << microsec; cout << "s";
 			<< "  minCuts: " << setw(3) << (data.results.empty() ? -1 : data.results[0].minCuts)
 			<< "  minCuts(funRet): " << setw(3) << minCuts
 			<< "  maxCuts = (k-1)*t = " << setw(3) << maxCuts
 			<< "  Solutions: " << setw(3) << data.results.size();
-		bool result = data.isValidResult();
-		if(!result || (data.symmetricDistribution && minCuts > maxCuts))
-			data.printResults();
-		MM_EXPECT_TRUE(result == true, result);
-		if (data.symmetricDistribution && data.necklace.size() == data.numGemsToDistribute)
+		
+		if (timens > 0)
 		{
-			MM_EXPECT_TRUE(minCuts <= maxCuts, minCuts, maxCuts);
+			bool result = data.isValidResult();
+			if (!result || (data.symmetricDistribution && minCuts > maxCuts))
+				data.printResults();
+			MM_EXPECT_TRUE(result == true, result);
+			if (data.symmetricDistribution && data.necklace.size() == data.numGemsToDistribute)
+			{
+				MM_EXPECT_TRUE(minCuts <= maxCuts, minCuts, maxCuts);
+			}
 		}
 		
 		return minCuts;
@@ -524,6 +529,10 @@ namespace mm {
 
 				//Branch and bound
 				minCuts = executeTest("brnch&Bnd_v1", i + 1, MinCutsStolenNecklaceKGemsNPeople_branchAndBounds_v1::getMinCutsStolenNecklaceKGemsNPeople, testData[i], timens);
+				if (timens > 0) compareResultsWithPrevRun(testData[i], minCuts);
+				testData[i].results.clear();
+
+				minCuts = executeTest("brnch&Bnd_v2", i + 1, MinCutsStolenNecklaceKGemsNPeople_branchAndBounds_v2::getMinCutsStolenNecklaceKGemsNPeople, testData[i], timens);
 				if (timens > 0) compareResultsWithPrevRun(testData[i], minCuts);
 				testData[i].results.clear();
 

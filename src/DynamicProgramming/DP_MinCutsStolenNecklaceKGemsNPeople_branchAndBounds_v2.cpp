@@ -9,13 +9,13 @@
 #include <algorithm>
 using namespace std;
 
-#include "DynamicProgramming/DP_MinCutsStolenNecklaceKGemsNPeople_branchAndBounds_v1.h"
+#include "DynamicProgramming/DP_MinCutsStolenNecklaceKGemsNPeople_branchAndBounds_v2.h"
 #include "MM_UnitTestFramework/MM_UnitTestFramework.h"
 #include "DataStructures/DS_MM_Heap.h"
 
 namespace mm {
 
-	namespace MinCutsStolenNecklaceKGemsNPeople_branchAndBounds_v1 {
+	namespace MinCutsStolenNecklaceKGemsNPeople_branchAndBounds_v2 {
 
 		// ============================= Problem Statement =============================
 		/*
