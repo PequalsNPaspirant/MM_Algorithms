@@ -101,7 +101,8 @@ namespace mm {
 				return 0;
 
 			StolenNecklaceDistributionState s{ gemIndex, gemsToDistribute, expectedDistribution, currentResults, numeric_limits<int>::max() };
-			s.maxPossibleCuts = s.currentResults.minCuts + getMinCutsStolenNecklaceKGemsNPeople_Greedy(numPeople, necklace, gemIndex, gemsToDistribute, expectedDistribution, -1);
+			s.maxPossibleCuts = s.currentResults.minCuts + 
+				MinCutsStolenNecklaceKGemsNPeople_branchAndBounds_v2::getMinCutsStolenNecklaceKGemsNPeople_Greedy(numPeople, necklace, gemIndex, gemsToDistribute, expectedDistribution, -1);
 			states.push(std::move(s));
 
 			//int minCutsSoFar = numeric_limits<int>::max();
@@ -148,7 +149,8 @@ namespace mm {
 
 					if (pushToStates)
 					{
-						s.maxPossibleCuts = s.currentResults.minCuts + getMinCutsStolenNecklaceKGemsNPeople_Greedy(numPeople, necklace, s.gemIndex, s.gemsToDistribute, s.expectedDistribution, lastGemOwner);
+						s.maxPossibleCuts = s.currentResults.minCuts + 
+							MinCutsStolenNecklaceKGemsNPeople_branchAndBounds_v2::getMinCutsStolenNecklaceKGemsNPeople_Greedy(numPeople, necklace, s.gemIndex, s.gemsToDistribute, s.expectedDistribution, lastGemOwner);
 						states.push(std::move(s));
 					}
 
@@ -229,7 +231,8 @@ namespace mm {
 
 						if (pushToStates)
 						{
-							s.maxPossibleCuts = s.currentResults.minCuts + getMinCutsStolenNecklaceKGemsNPeople_Greedy(numPeople, necklace, s.gemIndex, s.gemsToDistribute, s.expectedDistribution, lastGemOwner);
+							s.maxPossibleCuts = s.currentResults.minCuts + 
+								MinCutsStolenNecklaceKGemsNPeople_branchAndBounds_v2::getMinCutsStolenNecklaceKGemsNPeople_Greedy(numPeople, necklace, s.gemIndex, s.gemsToDistribute, s.expectedDistribution, lastGemOwner);
 							states.push(std::move(s));
 						}
 					}

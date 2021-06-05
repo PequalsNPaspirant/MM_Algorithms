@@ -88,8 +88,7 @@ namespace mm {
 
 			symmetricDistribution = true;
 			int numGemsPerPerson = numGemsToDistribute / numPeople;
-			numGemsToDistribute = numGemsPerPerson * numPeople;
-			numGemsInNecklace = numGemsToDistribute;
+			MM_Assert::mmRunTimeAssert(numGemsToDistribute == numGemsPerPerson * numPeople);
 			unordered_map<GemType, Count> individualDist;
 			//vector<int> numGemsOfEachType;
 			//numGemsOfEachType.reserve(numGemTypes);
@@ -422,36 +421,43 @@ namespace mm {
 	MM_UNIT_TEST(DP_MinCutsStolenNecklaceKGems2People_test_1, DP_MinCutsStolenNecklaceKGems2People)
 	{
 		MM_PRINT_TEST_CASE_NUMBER(false);
+		MM_SET_PAUSE_ON_ERROR(false);
 		cout.imbue(std::locale(""));
 
 		using MCSNTD = MinCutsStolenNecklaceTestData;
-		vector<int> necklaceLenVec{ 10, 20, 50, 75, 100, 150, 200, 300, 500 };
 		vector<int> numPeopleVec{ 2, 3, 4, 5, 8, 10, 15, 20, 30, 50, 75, 100 };
 		vector<GemType> numGemTypesVec{ 1, 2, 3, 4, 5, 10, 20, 50 };
+		vector<int> necklaceLenVec{ 10, 20, 50, 75, 100, 150, 200, 300, 500 };
 		vector<MCSNTD> testData;
 
 		//Special cases found during dev testing
 		testData.push_back({ 2, 2, 10, 10, vector<GemType>{'b',  'a',  'a',  'b',  'a',  'a',  'b',  'b',  'a',  'b'},
 			vector<unordered_map<GemType, Count>>{ { {'a', 2 }, {'b', 5 } }, { {'a', 3 }, {'b', 0 } } }, false, vector<MinCutsStolenNecklaceResults>{} });
 
-		for (int n : necklaceLenVec)
+		for (int k : numPeopleVec)
 		{
-			for (int k : numPeopleVec)
+			for (int t : numGemTypesVec)
 			{
-				if (k >= n)
-					continue;
-
-				//Make n divisible by k
-				n = (n / k) * k;
-
-				for (int t : numGemTypesVec)
+				for (int n : necklaceLenVec)
 				{
-					if (t >= n)
+					if (n <= k)
+						continue;
+
+					//Make n divisible by k
+					n = (n / k) * k;
+
+					if (n <= t)
 						continue;
 
 					testData.push_back({ k, t, n, n, vector<GemType>{}, vector<unordered_map<GemType, Count>>{}, false, vector<MinCutsStolenNecklaceResults>{} });
-					//testData.push_back({ k, t, n, n/2, vector<GemType>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{} });
-					//testData.push_back({ k, t, n, n/3, vector<GemType>{}, vector<unordered_map<GemType, Count>>{}, vector<MinCutsStolenNecklaceResults>{} });
+					int gemsToDustribute = n / 2;
+					//Make gemsToDustribute divisible by k
+					gemsToDustribute = (gemsToDustribute / k) * k;
+					testData.push_back({ k, t, n, gemsToDustribute, vector<GemType>{}, vector<unordered_map<GemType, Count>>{}, false, vector<MinCutsStolenNecklaceResults>{} });
+					gemsToDustribute = n / 3;
+					//Make gemsToDustribute divisible by k
+					gemsToDustribute = (gemsToDustribute / k) * k;
+					testData.push_back({ k, t, n, gemsToDustribute, vector<GemType>{}, vector<unordered_map<GemType, Count>>{}, false, vector<MinCutsStolenNecklaceResults>{} });
 				}
 			}
 		}
@@ -511,23 +517,24 @@ namespace mm {
 
 				std::cout << "\n" << "-------------------------------------------------------------------------------------";
 
-				//minCuts = executeTest("recursive_v1", i + 1, MinCutsStolenNecklaceKGemsNPeople_recursive_v1::getMinCutsStolenNecklaceKGemsNPeople, testData[i], timens);
-				//if(timens > 0) compareResultsWithPrevRun(testData[i], minCuts);
-				//testData[i].results.clear();
+				//Recursive (exponential)
+				minCuts = executeTest("recursive_v1", i + 1, MinCutsStolenNecklaceKGemsNPeople_recursive_v1::getMinCutsStolenNecklaceKGemsNPeople, testData[i], timens);
+				if(timens > 0) compareResultsWithPrevRun(testData[i], minCuts);
+				testData[i].results.clear();
 
-				//minCuts = executeTest("recursive_v2", i + 1, MinCutsStolenNecklaceKGemsNPeople_recursive_v2::getMinCutsStolenNecklaceKGemsNPeople, testData[i], timens);
-				//if (timens > 0) compareResultsWithPrevRun(testData[i], minCuts);
-				//testData[i].results.clear();
+				minCuts = executeTest("recursive_v2", i + 1, MinCutsStolenNecklaceKGemsNPeople_recursive_v2::getMinCutsStolenNecklaceKGemsNPeople, testData[i], timens);
+				if (timens > 0) compareResultsWithPrevRun(testData[i], minCuts);
+				testData[i].results.clear();
 
-				//minCuts = executeTest("recursive_v3", i + 1, MinCutsStolenNecklaceKGemsNPeople_recursive_v3::getMinCutsStolenNecklaceKGemsNPeople, testData[i], timens);
-				//if (timens > 0) compareResultsWithPrevRun(testData[i], minCuts);
-				//testData[i].results.clear();
+				minCuts = executeTest("recursive_v3", i + 1, MinCutsStolenNecklaceKGemsNPeople_recursive_v3::getMinCutsStolenNecklaceKGemsNPeople, testData[i], timens);
+				if (timens > 0) compareResultsWithPrevRun(testData[i], minCuts);
+				testData[i].results.clear();
 
 				minCuts = executeTest("recursive_v4", i + 1, MinCutsStolenNecklaceKGemsNPeople_recursive_v4::getMinCutsStolenNecklaceKGemsNPeople, testData[i], timens);
 				if (timens > 0) compareResultsWithPrevRun(testData[i], minCuts);
 				testData[i].results.clear();
 
-				//Branch and bound
+				//Branch and bound (exponential)
 				minCuts = executeTest("brnch&Bnd_v1", i + 1, MinCutsStolenNecklaceKGemsNPeople_branchAndBounds_v1::getMinCutsStolenNecklaceKGemsNPeople, testData[i], timens);
 				if (timens > 0) compareResultsWithPrevRun(testData[i], minCuts);
 				testData[i].results.clear();
@@ -536,25 +543,25 @@ namespace mm {
 				if (timens > 0) compareResultsWithPrevRun(testData[i], minCuts);
 				testData[i].results.clear();
 
-				//Greedy
-				//if (testData[i].numPeople == 2 
-				//	&& testData[i].numGemsInNecklace == testData[i].numGemsToDistribute
-				//	&& testData[i].symmetricDistribution)
-				//{
-				//	minCuts = executeTest("getMinCuts_v1", i + 1, getMinCuts_v1, testData[i], timens);
-				//	if (timens > 0) compareResultsWithPrevRun(testData[i], minCuts);
-				//	testData[i].results.clear();
-				//}
+				//Greedy_v1 splitting for 2 persons
+				if (testData[i].numPeople == 2 
+					&& testData[i].numGemsInNecklace == testData[i].numGemsToDistribute
+					&& testData[i].symmetricDistribution)
+				{
+					minCuts = executeTest("getMinCuts_v1", i + 1, getMinCuts_v1, testData[i], timens);
+					if (timens > 0) compareResultsWithPrevRun(testData[i], minCuts);
+					testData[i].results.clear();
+				}
 
-				//Greedy
-				//if (testData[i].numPeople == 2
-				//	&& testData[i].numGemsInNecklace == testData[i].numGemsToDistribute
-				//	&& testData[i].symmetricDistribution)
-				//{
-				//	minCuts = executeTest("getMinCuts_v2", i + 1, getMinCuts_v2, testData[i], timens);
-				//	if (timens > 0) compareResultsWithPrevRun(testData[i], minCuts);
-				//	testData[i].results.clear();
-				//}
+				//Greedy_v2 (much better than Greedy_v1) splitting for 2 persons
+				if (testData[i].numPeople == 2
+					&& testData[i].numGemsInNecklace == testData[i].numGemsToDistribute
+					&& testData[i].symmetricDistribution)
+				{
+					minCuts = executeTest("getMinCuts_v2", i + 1, getMinCuts_v2, testData[i], timens);
+					if (timens > 0) compareResultsWithPrevRun(testData[i], minCuts);
+					testData[i].results.clear();
+				}
 
 				testData[i].necklace.clear();
 				testData[i].expectedDistribution.clear();
