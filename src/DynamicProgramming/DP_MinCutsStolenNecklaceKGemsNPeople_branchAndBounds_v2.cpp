@@ -55,6 +55,15 @@ namespace mm {
 		int getMinCutsStolenNecklaceKGemsNPeople_Greedy(int numPeople, const vector<GemType>& necklace, int gemIndex, int gemsToDistribute,
 			vector<unordered_map<GemType, Count>> expectedDistribution, int lastGemOwner)
 		{
+			//int numPersons = 0;
+			//for (int i = 0; i < expectedDistribution.size(); ++i)
+			//{
+			//	unordered_map<GemType, Count>& currPerDist = expectedDistribution[i];
+			//	if (!currPerDist.empty())
+			//		++numPersons;
+			//}
+			//return numPersons - 1;
+
 			int minCutsGreedy = 0;
 			for (; gemIndex > 0 && gemsToDistribute > 0; --gemIndex)
 			{
@@ -110,8 +119,8 @@ namespace mm {
 					continue;
 				}
 
-				StolenNecklaceDistributionState curr = states.top();
-				states.pop();
+				StolenNecklaceDistributionState curr = std::move(states.topAndPopUnsafe());
+				//states.pop();
 
 				int lastGemOwner = curr.gemIndex < necklace.size() ? curr.currentResults.owners[curr.gemIndex] : -1;
 

@@ -19,7 +19,7 @@ namespace mm {
 			data_.reserve(maxSize);
 		}
 
-		inline void push(const T& obj)
+		inline void push(T&& obj)
 		{
 			if (data_.size() == size())
 			{
@@ -29,12 +29,18 @@ namespace mm {
 			//MM_Assert::mmRunTimeAssert(index_ < int(data_.size() - 1));
 			++index_;
 			if(index_ < data_.size())
-				data_[index_] = obj;
+				data_[index_] = std::move(obj);
 			else
-				data_.push_back(obj);
+				data_.push_back(std::move(obj));
 
 			//std::push_heap(data_.begin(), data_.begin() + index_ + 1, comparator_);
 			siftUp(index_);
+		}
+
+		inline void push(const T& obj)
+		{
+			T copy = obj;
+			push(std::move(copy));
 		}
 
 		inline void pop(bool updateIndex = true)
@@ -60,6 +66,14 @@ namespace mm {
 		{
 			//MM_Assert::mmRunTimeAssert(index_ > -1);
 			return data_[0];
+		}
+
+		inline T topAndPopUnsafe() //If move ctor of T throws exception, the state of heap is undefined
+		{
+			//MM_Assert::mmRunTimeAssert(index_ > -1);
+			T retVal = std::move(data_[0]);
+			pop();
+			return std::move(retVal);
 		}
 
 		//inline void addNext(const T& obj)
