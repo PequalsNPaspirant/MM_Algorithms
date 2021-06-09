@@ -418,6 +418,14 @@ namespace mm {
 					data.symmetricDistribution, exactSolution, data.necklace.size(), data.numGemsToDistribute, minCuts, maxCuts);
 			}
 
+			if (!data.results.empty())
+			{
+				MM_EXPECT_TRUE(minCuts == data.results[0].minCuts, minCuts, data.results[0].minCuts);
+				int minCutsBackup = data.results[0].minCuts;
+				data.results[0].calculateMinCuts();
+				MM_EXPECT_TRUE(minCutsBackup == data.results[0].minCuts, minCutsBackup, data.results[0].minCuts);
+				data.results[0].minCuts = minCutsBackup; //restore it back in case its different
+			}
 			//data.printResults();
 		}
 		
