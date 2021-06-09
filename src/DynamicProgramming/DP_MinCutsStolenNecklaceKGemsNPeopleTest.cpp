@@ -384,7 +384,7 @@ namespace mm {
 		//minCuts = MinCutsStolenNecklaceKGemsNPeople_v1::getMinCutsStolenNecklaceKGemsNPeople_recursive(data.numPeople, data.necklace, data.expectedDistribution, data.results);
 			//MM_TIMED_EXPECT_TRUE(MinCutsStolenNecklaceKGemsNPeople_v1::getMinCutsStolenNecklaceKGemsNPeople_recursive(data.numPeople, data.necklace, data.expectedDistribution, data.results));
 		data.results.clear();
-		long long timeoutmillisec = 5 * 1000; //10 sec
+		long long timeoutmillisec = 10 * 1000; //10 sec
 		int minCuts = MM_Measure<int>::getInstance().time(timens, timeoutmillisec, fun,
 			data.numPeople, data.necklace, data.expectedDistribution, data.results);
 		int maxCuts = (data.numPeople - 1) * data.numGemTypes; //(k - 1) * t
@@ -482,8 +482,8 @@ namespace mm {
 		}
 
 		bool needToInitialize = true;
-		auto compareResultsWithPrevRun = [&needToInitialize](const MinCutsStolenNecklaceTestData& data, int minCuts) {
-			static int prevMinCuts = -1;
+		auto compareResultsWithPrevRun = [&needToInitialize](const MinCutsStolenNecklaceTestData& data, int minCutsFunRet) {
+			static int prevMinCutsFunRet = -1;
 			static vector<MinCutsStolenNecklaceResults> prevRes{};
 			vector<MinCutsStolenNecklaceResults> results = data.results;
 			std::sort(results.begin(), results.end());
@@ -491,15 +491,19 @@ namespace mm {
 			{
 				needToInitialize = false;
 				prevRes = results;
-				prevMinCuts = minCuts;
+				prevMinCutsFunRet = minCutsFunRet;
 				return;
 			}
 
-			if (results != prevRes || minCuts != prevMinCuts)
+			if (minCutsFunRet != prevMinCutsFunRet)
+				data.printResults();
+
+			MM_EXPECT_TRUE(minCutsFunRet == prevMinCutsFunRet, minCutsFunRet, prevMinCutsFunRet);
+
+			if (results != prevRes)
 				data.printResults();
 
 			MM_EXPECT_TRUE(results == prevRes, results, prevRes);
-			MM_EXPECT_TRUE(minCuts == prevMinCuts, minCuts, prevMinCuts);
 		};
 
 		for (size_t i = 0; i < testData.size(); ++i)
@@ -531,38 +535,39 @@ namespace mm {
 				}
 				
 				needToInitialize = true; //initialize results on next first successful solution
-				int minCuts = -1;
+				int minCutsFunRet = -1;
 				long long timens;
+				bool compare = (testData[i].numGemsInNecklace == testData[i].numGemsToDistribute);
 
 				std::cout << "\n" << "-------------------------------------------------------------------------------------";
 
 				//Recursive (exponential)
-				minCuts = executeTest("recursive_v1", i + 1, MinCutsStolenNecklaceKGemsNPeople_recursive_v1::getMinCutsStolenNecklaceKGemsNPeople, testData[i], timens, true);
-				if(timens > 0 && testData[i].numGemsInNecklace == testData[i].numGemsToDistribute) compareResultsWithPrevRun(testData[i], minCuts);
+				minCutsFunRet = executeTest("recursive_v1", i + 1, MinCutsStolenNecklaceKGemsNPeople_recursive_v1::getMinCutsStolenNecklaceKGemsNPeople, testData[i], timens, true);
+				if(timens > 0 && compare) compareResultsWithPrevRun(testData[i], minCutsFunRet);
 
-				minCuts = executeTest("recursive_v2", i + 1, MinCutsStolenNecklaceKGemsNPeople_recursive_v2::getMinCutsStolenNecklaceKGemsNPeople, testData[i], timens, true);
-				if (timens > 0 && testData[i].numGemsInNecklace == testData[i].numGemsToDistribute) compareResultsWithPrevRun(testData[i], minCuts);
+				minCutsFunRet = executeTest("recursive_v2", i + 1, MinCutsStolenNecklaceKGemsNPeople_recursive_v2::getMinCutsStolenNecklaceKGemsNPeople, testData[i], timens, true);
+				if (timens > 0 && compare) compareResultsWithPrevRun(testData[i], minCutsFunRet);
 
-				minCuts = executeTest("recursive_v3", i + 1, MinCutsStolenNecklaceKGemsNPeople_recursive_v3::getMinCutsStolenNecklaceKGemsNPeople, testData[i], timens, true);
-				if (timens > 0 && testData[i].numGemsInNecklace == testData[i].numGemsToDistribute) compareResultsWithPrevRun(testData[i], minCuts);
+				minCutsFunRet = executeTest("recursive_v3", i + 1, MinCutsStolenNecklaceKGemsNPeople_recursive_v3::getMinCutsStolenNecklaceKGemsNPeople, testData[i], timens, true);
+				if (timens > 0 && compare) compareResultsWithPrevRun(testData[i], minCutsFunRet);
 
-				minCuts = executeTest("recursive_v4", i + 1, MinCutsStolenNecklaceKGemsNPeople_recursive_v4::getMinCutsStolenNecklaceKGemsNPeople, testData[i], timens, true);
-				if (timens > 0 && testData[i].numGemsInNecklace == testData[i].numGemsToDistribute) compareResultsWithPrevRun(testData[i], minCuts);
+				minCutsFunRet = executeTest("recursive_v4", i + 1, MinCutsStolenNecklaceKGemsNPeople_recursive_v4::getMinCutsStolenNecklaceKGemsNPeople, testData[i], timens, true);
+				if (timens > 0 && compare) compareResultsWithPrevRun(testData[i], minCutsFunRet);
 
 				//Branch and bound (exponential)
-				minCuts = executeTest("brnch&Bnd_v1", i + 1, MinCutsStolenNecklaceKGemsNPeople_branchAndBounds_v1::getMinCutsStolenNecklaceKGemsNPeople, testData[i], timens, true);
-				if (timens > 0 && testData[i].numGemsInNecklace == testData[i].numGemsToDistribute) compareResultsWithPrevRun(testData[i], minCuts);
+				minCutsFunRet = executeTest("brnch&Bnd_v1", i + 1, MinCutsStolenNecklaceKGemsNPeople_branchAndBounds_v1::getMinCutsStolenNecklaceKGemsNPeople, testData[i], timens, true);
+				if (timens > 0 && compare) compareResultsWithPrevRun(testData[i], minCutsFunRet);
 
-				minCuts = executeTest("brnch&Bnd_v2", i + 1, MinCutsStolenNecklaceKGemsNPeople_branchAndBounds_v2::getMinCutsStolenNecklaceKGemsNPeople, testData[i], timens, true);
-				if (timens > 0 && testData[i].numGemsInNecklace == testData[i].numGemsToDistribute) compareResultsWithPrevRun(testData[i], minCuts);
+				minCutsFunRet = executeTest("brnch&Bnd_v2", i + 1, MinCutsStolenNecklaceKGemsNPeople_branchAndBounds_v2::getMinCutsStolenNecklaceKGemsNPeople, testData[i], timens, true);
+				if (timens > 0 && compare) compareResultsWithPrevRun(testData[i], minCutsFunRet);
 
 				//Greedy_v1 splitting for 2 persons
 				if (testData[i].numPeople == 2 
 					&& testData[i].numGemsInNecklace == testData[i].numGemsToDistribute
 					&& testData[i].symmetricDistribution)
 				{
-					minCuts = executeTest("getMinCuts_v1", i + 1, getMinCuts_v1, testData[i], timens, false);
-					//if (timens > 0) compareResultsWithPrevRun(testData[i], minCuts); //can not compare since this is not exact solution
+					minCutsFunRet = executeTest("getMinCuts_v1", i + 1, getMinCuts_v1, testData[i], timens, false);
+					//if (timens > 0 && compare) compareResultsWithPrevRun(testData[i], minCutsFunRet); //can not compare since this is not exact solution
 				}
 
 				//Greedy_v2 (much better than Greedy_v1) splitting for 2 persons
@@ -570,8 +575,8 @@ namespace mm {
 					&& testData[i].numGemsInNecklace == testData[i].numGemsToDistribute
 					&& testData[i].symmetricDistribution)
 				{
-					minCuts = executeTest("getMinCuts_v2", i + 1, getMinCuts_v2, testData[i], timens, false);
-					//if (timens > 0) compareResultsWithPrevRun(testData[i], minCuts); //can not compare since this is not exact solution
+					minCutsFunRet = executeTest("getMinCuts_v2", i + 1, getMinCuts_v2, testData[i], timens, false);
+					//if (timens > 0 && compare) compareResultsWithPrevRun(testData[i], minCutsFunRet); //can not compare since this is not exact solution
 				}
 
 				testData[i].necklace.clear();
