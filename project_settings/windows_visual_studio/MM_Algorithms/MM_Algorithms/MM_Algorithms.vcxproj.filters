@@ -1247,6 +1247,12 @@
     <ClInclude Include="..\..\..\..\src\Matrix\Matrix_FindAllPossibleZeroMatrices_v5.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\src\Matrix\Matrix_FindAllPossibleZeroMatrices_v6.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\Matrix\Matrix_FindAllPossibleZeroMatrices_v7.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\..\..\src\Others\Others_EquityOrderManagementSystem_v1.data">

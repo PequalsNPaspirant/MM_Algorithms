@@ -253,6 +253,8 @@
     <ClCompile Include="..\..\..\..\src\_MM_Algorithms_main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\src\Matrix\Matrix_FindAllPossibleZeroMatrices_v6.h" />
+    <ClInclude Include="..\..\..\..\src\Matrix\Matrix_FindAllPossibleZeroMatrices_v7.h" />
     <ClInclude Include="..\..\..\..\src\Matrix\Matrix_FindAllPossibleZeroMatrices_v3.h" />
     <ClInclude Include="..\..\..\..\src\Matrix\Matrix_FindAllPossibleZeroMatrices_v4.h" />
     <ClInclude Include="..\..\..\..\src\Matrix\Matrix_FindAllPossibleZeroMatrices_v5.h" />

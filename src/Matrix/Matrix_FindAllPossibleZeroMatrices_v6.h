@@ -4,7 +4,7 @@
 
 namespace mm {
 
-	namespace Matrix_FindAllPossibleZeroMatrices_v5
+	namespace Matrix_FindAllPossibleZeroMatrices_v6
 	{
 		int findAllPossibleZeroMatrices(const std::vector< std::vector<int> >& matrix)
 		{

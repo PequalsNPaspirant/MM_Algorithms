@@ -7,6 +7,8 @@
 #include "Matrix/Matrix_FindAllPossibleZeroMatrices_v3.h"
 #include "Matrix/Matrix_FindAllPossibleZeroMatrices_v4.h"
 #include "Matrix/Matrix_FindAllPossibleZeroMatrices_v5.h"
+#include "Matrix/Matrix_FindAllPossibleZeroMatrices_v6.h"
+#include "Matrix/Matrix_FindAllPossibleZeroMatrices_v7.h"
 
 #include "MM_UnitTestFramework/MM_UnitTestFramework.h"
 #include "Utils/Utils_MM_Assert.h"
@@ -71,6 +73,7 @@ namespace mm {
 					expectedValue = testEachAlgo(Matrix_FindAllPossibleZeroMatrices_v2::findAllPossibleZeroMatrices, inMatrix, expectedValue);
 					expectedValue = testEachAlgo(Matrix_FindAllPossibleZeroMatrices_v3::findAllPossibleZeroMatrices, inMatrix, expectedValue);
 					expectedValue = testEachAlgo(Matrix_FindAllPossibleZeroMatrices_v4::findAllPossibleZeroMatrices, inMatrix, expectedValue);
+					expectedValue = testEachAlgo(Matrix_FindAllPossibleZeroMatrices_v5::findAllPossibleZeroMatrices, inMatrix, expectedValue);
 				}
 			}
 		}

@@ -39,7 +39,6 @@ namespace mm {
 								cumulativeSum[endRow][endColumn] = cumulativeSum[endRow - 1][endColumn] + currentRowSum[endColumn];
 
 							if (cumulativeSum[endRow][endColumn] == 0)
-								//++solution[endRow][endColumn];
 								++totalMatrices;
 
 						}
