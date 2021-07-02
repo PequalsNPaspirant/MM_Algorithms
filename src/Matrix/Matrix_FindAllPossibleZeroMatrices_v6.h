@@ -21,13 +21,9 @@ namespace mm {
 						for (int endColumn = startColumn; endColumn < lastSearchColumn; ++endColumn)
 						{
 							if (matrix[endRow][endColumn] == 1)
-							{
 								lastSearchColumn = endColumn;
-								break;
-							}
-
-							++totalMatrices;
-
+							else
+								++totalMatrices;
 						}
 
 					}
