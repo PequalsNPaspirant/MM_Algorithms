@@ -3,6 +3,10 @@
 #include <iomanip>
 
 #include "Matrix/Matrix_FindAllPossibleZeroMatrices_v1.h"
+#include "Matrix/Matrix_FindAllPossibleZeroMatrices_v2.h"
+#include "Matrix/Matrix_FindAllPossibleZeroMatrices_v3.h"
+#include "Matrix/Matrix_FindAllPossibleZeroMatrices_v4.h"
+#include "Matrix/Matrix_FindAllPossibleZeroMatrices_v5.h"
 
 #include "MM_UnitTestFramework/MM_UnitTestFramework.h"
 #include "Utils/Utils_MM_Assert.h"
@@ -26,8 +30,8 @@ namespace mm {
 
 		void testAll()
 		{
-			int numRows = 5;
-			int numColumns = 5;
+			int numRows = 10;
+			int numColumns = 10;
 
 			std::random_device rd;
 			std::mt19937 mt(rd());
@@ -64,6 +68,8 @@ namespace mm {
 					//call all algorithms
 					int expectedValue = -1;
 					expectedValue = testEachAlgo(Matrix_FindAllPossibleZeroMatrices_v1::findAllPossibleZeroMatrices, inMatrix, expectedValue);
+					expectedValue = testEachAlgo(Matrix_FindAllPossibleZeroMatrices_v2::findAllPossibleZeroMatrices, inMatrix, expectedValue);
+					expectedValue = testEachAlgo(Matrix_FindAllPossibleZeroMatrices_v3::findAllPossibleZeroMatrices, inMatrix, expectedValue);
 				}
 			}
 		}

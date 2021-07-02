@@ -253,6 +253,10 @@
     <ClCompile Include="..\..\..\..\src\_MM_Algorithms_main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\src\Matrix\Matrix_FindAllPossibleZeroMatrices_v3.h" />
+    <ClInclude Include="..\..\..\..\src\Matrix\Matrix_FindAllPossibleZeroMatrices_v4.h" />
+    <ClInclude Include="..\..\..\..\src\Matrix\Matrix_FindAllPossibleZeroMatrices_v5.h" />
+    <ClInclude Include="..\..\..\..\src\Matrix\Matrix_FindAllPossibleZeroMatrices_v2.h" />
     <ClInclude Include="..\..\..\..\src\DataStructures\DS_MM_Heap.h" />
     <ClInclude Include="..\..\..\..\src\DynamicProgramming\DP_MinCutsStolenNecklaceKGemsNPeople_branchAndBounds_v2.h" />
     <ClInclude Include="..\..\..\..\src\DynamicProgramming\DP_MinCutsStolenNecklaceKGemsNPeople_branchAndBounds_v1.h" />
