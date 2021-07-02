@@ -39,7 +39,7 @@ namespace mm {
 	MM_DEFINE_FLAG(false, DP_RodCutting);
 	MM_DEFINE_FLAG(false, DP_MaxProductRodCutting);
 	MM_DEFINE_FLAG(false, DP_MinCoinsChange);
-	MM_DEFINE_FLAG(true, DP_MinCutsStolenNecklaceKGems2People);
+	MM_DEFINE_FLAG(false, DP_MinCutsStolenNecklaceKGems2People);
 	//Greedy
 	//Trie
 	MM_DEFINE_FLAG(false, Trie_implementationUsingArray);
@@ -65,6 +65,7 @@ namespace mm {
 	MM_DEFINE_FLAG(false, String_FirstKNonRepeatingChars);
 	MM_DEFINE_FLAG(false, String_FirstKNonRepeatingChars_optimized);
 	//Matrix
+	MM_DEFINE_FLAG(true, Matrix_FindAllPossibleZeroMatrices);
 	//Graphs
 	MM_DEFINE_FLAG(false, Graphs_RepresentationUnitTest);
 	//Array

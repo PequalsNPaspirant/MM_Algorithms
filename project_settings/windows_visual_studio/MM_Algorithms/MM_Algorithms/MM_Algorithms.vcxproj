@@ -243,7 +243,7 @@
     <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_MaxProductRodCutting.cpp" />
     <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_CoinChangeMakingProblem.cpp" />
     <ClCompile Include="..\..\..\..\src\Greedy\Greedy.cpp" />
-    <ClCompile Include="..\..\..\..\src\Matrix\Matrix.cpp" />
+    <ClCompile Include="..\..\..\..\src\Matrix\Matrix_FindAllPossibleZeroMatricesTest.cpp" />
     <ClCompile Include="..\..\..\..\src\Puzzles\Puzzles_ClockAngleProblem.cpp" />
     <ClCompile Include="..\..\..\..\src\Puzzles\Puzzles_AddTwoNumbers.cpp" />
     <ClCompile Include="..\..\..\..\src\Queue\Queue.cpp" />
@@ -420,7 +420,7 @@
     <ClInclude Include="..\..\..\..\src\DynamicProgramming\DP_MaxProductRodCutting.h" />
     <ClInclude Include="..\..\..\..\src\DynamicProgramming\DP_CoinChangeMakingProblem.h" />
     <ClInclude Include="..\..\..\..\src\Greedy\Greedy.h" />
-    <ClInclude Include="..\..\..\..\src\Matrix\Matrix.h" />
+    <ClInclude Include="..\..\..\..\src\Matrix\Matrix_FindAllPossibleZeroMatrices_v1.h" />
     <ClInclude Include="..\..\..\..\src\Puzzles\Puzzles_ClockAngleProblem.h" />
     <ClInclude Include="..\..\..\..\src\Puzzles\Puzzles_AddTwoNumbers.h" />
     <ClInclude Include="..\..\..\..\src\Queue\Queue.h" />

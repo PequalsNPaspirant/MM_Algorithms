@@ -30,9 +30,6 @@
     <ClCompile Include="..\..\..\..\src\Greedy\Greedy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\src\Matrix\Matrix.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\src\Queue\Queue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -711,6 +708,9 @@
     <ClCompile Include="..\..\..\..\src\DynamicProgramming\DP_MinCutsStolenNecklaceKGemsNPeople_branchAndBounds_v2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\src\Matrix\Matrix_FindAllPossibleZeroMatricesTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\src\Backtracking\Backtracking.h">
@@ -726,9 +726,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\src\Greedy\Greedy.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\src\Matrix\Matrix.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\src\Queue\Queue.h">
@@ -1233,6 +1230,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\src\DynamicProgramming\DP_MinCutsStolenNecklaceKGemsNPeople_branchAndBounds_v2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\Matrix\Matrix_FindAllPossibleZeroMatrices_v1.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
