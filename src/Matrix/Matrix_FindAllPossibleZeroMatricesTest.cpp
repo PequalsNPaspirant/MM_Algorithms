@@ -70,6 +70,7 @@ namespace mm {
 					expectedValue = testEachAlgo(Matrix_FindAllPossibleZeroMatrices_v1::findAllPossibleZeroMatrices, inMatrix, expectedValue);
 					expectedValue = testEachAlgo(Matrix_FindAllPossibleZeroMatrices_v2::findAllPossibleZeroMatrices, inMatrix, expectedValue);
 					expectedValue = testEachAlgo(Matrix_FindAllPossibleZeroMatrices_v3::findAllPossibleZeroMatrices, inMatrix, expectedValue);
+					expectedValue = testEachAlgo(Matrix_FindAllPossibleZeroMatrices_v4::findAllPossibleZeroMatrices, inMatrix, expectedValue);
 				}
 			}
 		}

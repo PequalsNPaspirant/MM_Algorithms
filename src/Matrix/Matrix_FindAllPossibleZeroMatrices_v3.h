@@ -17,7 +17,7 @@ namespace mm {
 				for (int startColumn = 0; startColumn < matrix[startRow].size(); ++startColumn)
 				{
 
-					int lastSearchColumn = static_cast<int>(matrix[startRow].size();
+					int lastSearchColumn = static_cast<int>(matrix[startRow].size());
 					for (int endRow = startRow; endRow < matrix.size() && startColumn < lastSearchColumn; ++endRow)
 					{
 						for (int endColumn = startColumn; endColumn < lastSearchColumn; ++endColumn)
