@@ -4,33 +4,66 @@
 
 namespace mm {
 
+	/*
+	m = number of rows in Matrix
+	n = number of columns in Matrix
+
+	Time Complexity: O(m*n)
+
+	Space Complexity: O(m*n)
+	*/
+
 	namespace Matrix_FindAllPossibleZeroMatrices_v6
 	{
 		int findAllPossibleZeroMatrices(const std::vector< std::vector<int> >& matrix)
 		{
+			std::vector< std::vector<int> > rowWizeSum(matrix.size(), std::vector<int>((matrix.empty() ? 0 : static_cast<int>(matrix[0].size())), 0));
+			//std::vector<int> currentRowMultiplier((matrix.empty() ? 0 : static_cast<int>(matrix[0].size())), 0);
+			//std::vector<int> prevRow((matrix.empty() ? 0 : static_cast<int>(matrix[0].size())), 0);
+
 			int totalMatrices = 0;
-
-			for (int startRow = 0; startRow < matrix.size(); ++startRow)
+			for (int currRow = 0; currRow < matrix.size(); ++currRow)
 			{
-				for (int startColumn = 0; startColumn < matrix[startRow].size(); ++startColumn)
+				int numMatrices = 0;
+				for (int currColumn = 0; currColumn < matrix[currRow].size(); ++currColumn)
 				{
+					
 
-					int lastSearchColumn = static_cast<int>(matrix[startRow].size());
-					for (int endRow = startRow; endRow < matrix.size() && startColumn < lastSearchColumn; ++endRow)
+					if (matrix[currRow][currColumn] == 0)
 					{
-						for (int endColumn = startColumn; endColumn < lastSearchColumn; ++endColumn)
+					//	++currentRowMultiplier[currColumn];
+						++numMatrices;
+					//	int prevRowShort = (currRow == 0 ? 0 : solution[currRow - 1][currColumn]) + numMatrices;
+					//	int currRowShort = currentRowMultiplier[currColumn] * numMatrices;
+					//	solution[currRow][currColumn] = std::min(prevRowShort, currRowShort);
+
+					//	prevRow[currColumn] = numMatrices;
+
+						rowWizeSum[currRow][currColumn] = numMatrices;
+						int minSum = rowWizeSum[currRow][currColumn];
+						for (int row = currRow; row >= 0 && matrix[row][currColumn] == 0; --row)
 						{
-							if (matrix[endRow][endColumn] == 1)
-								lastSearchColumn = endColumn;
-							else
-								++totalMatrices;
+							minSum = std::min(minSum, rowWizeSum[row][currColumn]);
+							totalMatrices += minSum;
 						}
-
 					}
-
+					else
+					{
+					//	currentRowMultiplier[currColumn] = 0;
+						numMatrices = 0;
+					}
 
 				}
 			}
+
+			
+			//for (int currRow = 0; currRow < matrix.size(); ++currRow)
+			//{
+			//	for (int currColumn = 0; currColumn < matrix[currRow].size(); ++currColumn)
+			//	{
+			//		totalMatrices += solution[currRow][currColumn];
+			//	}
+			//}
 
 			return totalMatrices;
 

@@ -4,6 +4,16 @@
 
 namespace mm {
 
+	/*
+	m = number of rows in Matrix
+	n = number of columns in Matrix
+
+	Time Complexity: O(m*n * m*n)
+
+	Space Complexity: O(m*n + m)
+
+	*/
+
 	namespace Matrix_FindAllPossibleZeroMatrices_v4
 	{
 		int findAllPossibleZeroMatrices(const std::vector< std::vector<int> >& matrix)
