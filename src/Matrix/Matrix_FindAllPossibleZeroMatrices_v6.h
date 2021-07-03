@@ -17,53 +17,33 @@ namespace mm {
 	{
 		int findAllPossibleZeroMatrices(const std::vector< std::vector<int> >& matrix)
 		{
-			std::vector< std::vector<int> > rowWizeSum(matrix.size(), std::vector<int>((matrix.empty() ? 0 : static_cast<int>(matrix[0].size())), 0));
-			//std::vector<int> currentRowMultiplier((matrix.empty() ? 0 : static_cast<int>(matrix[0].size())), 0);
-			//std::vector<int> prevRow((matrix.empty() ? 0 : static_cast<int>(matrix[0].size())), 0);
+			std::vector< std::vector<int> > height1MatricesEndingAt(matrix.size(), std::vector<int>((matrix.empty() ? 0 : static_cast<int>(matrix[0].size())), 0));
 
 			int totalMatrices = 0;
 			for (int currRow = 0; currRow < matrix.size(); ++currRow)
 			{
-				int numMatrices = 0;
+				int numMatricesOfHeight1 = 0;
 				for (int currColumn = 0; currColumn < matrix[currRow].size(); ++currColumn)
 				{
-					
-
+					//Find total possible matrices ending at matrix[currRow][currColumn]
 					if (matrix[currRow][currColumn] == 0)
 					{
-					//	++currentRowMultiplier[currColumn];
-						++numMatrices;
-					//	int prevRowShort = (currRow == 0 ? 0 : solution[currRow - 1][currColumn]) + numMatrices;
-					//	int currRowShort = currentRowMultiplier[currColumn] * numMatrices;
-					//	solution[currRow][currColumn] = std::min(prevRowShort, currRowShort);
-
-					//	prevRow[currColumn] = numMatrices;
-
-						rowWizeSum[currRow][currColumn] = numMatrices;
-						int minSum = rowWizeSum[currRow][currColumn];
+						++numMatricesOfHeight1;
+						height1MatricesEndingAt[currRow][currColumn] = numMatricesOfHeight1;
+						int minSum = height1MatricesEndingAt[currRow][currColumn];
 						for (int row = currRow; row >= 0 && matrix[row][currColumn] == 0; --row)
 						{
-							minSum = std::min(minSum, rowWizeSum[row][currColumn]);
+							minSum = std::min(minSum, height1MatricesEndingAt[row][currColumn]);
 							totalMatrices += minSum;
 						}
 					}
 					else
 					{
-					//	currentRowMultiplier[currColumn] = 0;
-						numMatrices = 0;
+						numMatricesOfHeight1 = 0;
 					}
 
 				}
 			}
-
-			
-			//for (int currRow = 0; currRow < matrix.size(); ++currRow)
-			//{
-			//	for (int currColumn = 0; currColumn < matrix[currRow].size(); ++currColumn)
-			//	{
-			//		totalMatrices += solution[currRow][currColumn];
-			//	}
-			//}
 
 			return totalMatrices;
 
