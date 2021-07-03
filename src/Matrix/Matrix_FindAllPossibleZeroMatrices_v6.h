@@ -8,7 +8,7 @@ namespace mm {
 	m = number of rows in Matrix
 	n = number of columns in Matrix
 
-	Time Complexity: O(m*n)
+	Time Complexity: O(m*n * m)
 
 	Space Complexity: O(m*n)
 	*/
